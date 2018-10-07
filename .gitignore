@@ -1,3 +1,6 @@
 .idea/
 target/
 tile-rummy.iml
+.classpath
+.project
+.settings/
