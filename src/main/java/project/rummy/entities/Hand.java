@@ -41,45 +41,10 @@ public class Hand {
    *   - Increasing value number
    */
   public void sort() {
-    List<Tile> sortedList = new ArrayList<>();
+      Collections.sort(tiles, (tile1, tile2) -> tile1.color() != tile2.color()
+              ? tile1.color().compareTo(tile2.color())
+              : tile1.value() - tile2.value());
 
-    //sort tiles list in the increasing order of tile values
-    Collections.sort(tiles, new Comparator<Tile>() {
-      @Override
-      public int compare(Tile tile1, Tile tile2) {
-        return tile1.value() - tile2.value();
-      }
-    });
-
-    //RED tiles come first
-    for (Tile tile : tiles) {
-      if(tile.color().equals(Color.RED)){
-        sortedList.add(tile);
-      }
-    }
-
-    //BLACK tiles next
-    for (Tile tile : tiles) {
-      if(tile.color().equals(Color.BLACK)){
-        sortedList.add(tile);
-      }
-    }
-
-    //GREEN tiles
-    for (Tile tile : tiles) {
-      if(tile.color().equals(Color.GREEN)){
-        sortedList.add(tile);
-      }
-    }
-
-    //ORANGE tiles to the last
-    for (Tile tile : tiles) {
-      if(tile.color().equals(Color.ORANGE)){
-        sortedList.add(tile);
-      }
-    }
-
-    tiles = sortedList;
   }
 
   /**
