@@ -18,8 +18,8 @@ public class Hand {
   }
 
   /**
+   * Add a new Tile into a player hand
    * @TODO: Write tests and then implement the method
-   * @param tile
    */
   public void addTile(Tile tile) {
     throw new UnsupportedOperationException();

@@ -306,7 +306,7 @@
 											"top": 308,
 											"width": 225.53857421875,
 											"height": 13,
-											"text": "+getColor(): Color",
+											"text": "+color(): Color",
 											"horizontalAlignment": 0
 										},
 										{
@@ -323,7 +323,7 @@
 											"top": 323,
 											"width": 225.53857421875,
 											"height": 13,
-											"text": "+getValue(): int",
+											"text": "+value(): int",
 											"horizontalAlignment": 0
 										},
 										{
@@ -910,7 +910,7 @@
 											"top": 187,
 											"width": 223,
 											"height": 13,
-											"text": "+addMeld(meld: List<Tile>): void",
+											"text": "+addMeld(meld: Meld): void",
 											"horizontalAlignment": 0
 										},
 										{
@@ -927,7 +927,7 @@
 											"top": 202,
 											"width": 223,
 											"height": 13,
-											"text": "+removeMeld(int id): List<Tile>",
+											"text": "+removeMeld(int id): Meld",
 											"horizontalAlignment": 0
 										},
 										{
@@ -1847,7 +1847,7 @@
 											"top": 468,
 											"width": 182.19677734375,
 											"height": 13,
-											"text": "+addTiles(tiles: List<Tile>): void",
+											"text": "+addTile(tile: Tile): void",
 											"horizontalAlignment": 0
 										},
 										{
@@ -2132,7 +2132,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFmQJbbmt42KVM="
 									},
-									"name": "getColor",
+									"name": "color",
 									"parameters": [
 										{
 											"_type": "UMLParameter",
@@ -2153,7 +2153,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFmQJbbmt42KVM="
 									},
-									"name": "getValue",
+									"name": "value",
 									"parameters": [
 										{
 											"_type": "UMLParameter",
@@ -2424,7 +2424,9 @@
 												"$ref": "AAAAAAFmQML5B75nMSo="
 											},
 											"name": "meld",
-											"type": "List<Tile>"
+											"type": {
+												"$ref": "AAAAAAFmQMlfMr7trKs="
+											}
 										},
 										{
 											"_type": "UMLParameter",
@@ -2460,7 +2462,9 @@
 											"_parent": {
 												"$ref": "AAAAAAFmQMRjd751kyI="
 											},
-											"type": "List<Tile>",
+											"type": {
+												"$ref": "AAAAAAFmQMlfMr7trKs="
+											},
 											"direction": "return"
 										}
 									]
@@ -2681,7 +2685,7 @@
 							"_parent": {
 								"$ref": "AAAAAAFmQOFr18AQzEs="
 							},
-							"name": "addTiles",
+							"name": "addTile",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -2689,8 +2693,10 @@
 									"_parent": {
 										"$ref": "AAAAAAFmQORWt8BTal4="
 									},
-									"name": "tiles",
-									"type": "List<Tile>"
+									"name": "tile",
+									"type": {
+										"$ref": "AAAAAAFmQJbbmt42KVM="
+									}
 								},
 								{
 									"_type": "UMLParameter",
