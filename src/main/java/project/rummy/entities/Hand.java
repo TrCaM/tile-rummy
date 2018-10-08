@@ -24,7 +24,7 @@ public class Hand {
    * @TODO: Write tests and then implement the method
    */
   public void addTile(Tile tile) {
-    throw new UnsupportedOperationException();
+    tiles.add(tile);
   }
 
   public Tile removeTile(int index) {
