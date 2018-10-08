@@ -1,5 +1,6 @@
 package project.rummy.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -8,8 +9,12 @@ import java.util.List;
 public class Hand {
   private List<Tile> tiles;
 
-  public List<Tile> getTiles() {
-    return this.tiles;
+  public Hand() {
+    tiles = new ArrayList<>();
+  }
+
+  Hand(List<Tile> tiles) {
+    this.tiles = tiles;
   }
 
   /**
@@ -22,6 +27,10 @@ public class Hand {
 
   public Tile removeTile(int index) {
     return tiles.remove(index);
+  }
+
+  public List<Tile> getTiles() {
+    return this.tiles;
   }
 
   /**
@@ -43,9 +52,12 @@ public class Hand {
 
   /**
    * Get the score added up from the tiles in hand
-   * TODO: Write tests and then implement the method
    */
   public int getScore() {
-    throw new UnsupportedOperationException();
+    int sum = 0;
+    for (Tile tile : tiles) {
+      sum += tile.value();
+    }
+    return sum;
   }
 }
