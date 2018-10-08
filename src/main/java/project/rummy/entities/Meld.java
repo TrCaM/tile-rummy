@@ -28,10 +28,12 @@ public class Meld {
     return this.type;
   }
 
-  /**
-   *  @TODO: Write tests then implement this method
-   */
+
   public int getScore() {
-    throw new UnsupportedOperationException();
+    int score = 0;
+    for (Tile tile : tiles) {
+      score += tile.value();
+    }
+    return score;
   }
 }
