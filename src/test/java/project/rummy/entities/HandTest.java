@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.junit.Assert.*;
 
 public class HandTest {
@@ -23,7 +24,15 @@ public class HandTest {
   private Hand hand;
 
   @Before
-  public void setUp() throws Exception {
+  public void setUp() {
+  }
+
+  @Test
+  public void addTile_shouldSucceed() {
+    hand = new Hand();
+    hand.addTile(O5);
+
+    assertThat(hand.getTiles(), hasItem(O5));
   }
 
   @Test
