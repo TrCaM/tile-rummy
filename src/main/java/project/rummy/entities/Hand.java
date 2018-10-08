@@ -21,7 +21,6 @@ public class Hand {
 
   /**
    * Add a new Tile into a player hand
-   * @TODO: Write tests and then implement the method
    */
   public void addTile(Tile tile) {
     tiles.add(tile);
@@ -41,9 +40,9 @@ public class Hand {
    *   - Increasing value number
    */
   public void sort() {
-      Collections.sort(tiles, (tile1, tile2) -> tile1.color() != tile2.color()
-              ? tile1.color().compareTo(tile2.color())
-              : tile1.value() - tile2.value());
+      tiles.sort((tile1, tile2) -> tile1.color() != tile2.color()
+          ? tile1.color().compareTo(tile2.color())
+          : tile1.value() - tile2.value());
 
   }
 
