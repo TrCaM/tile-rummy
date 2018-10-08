@@ -1,6 +1,8 @@
 package project.rummy.entities;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -35,12 +37,14 @@ public class Hand {
 
   /**
    * Sort the tiles in hand in this particular order:
-   *   - RED, BLACK, GREEN, ORDER
+   *   - RED, BLACK, GREEN, ORANGE
    *   - Increasing value number
-   * TODO: Write tests and then implement the method
    */
   public void sort() {
-    throw new UnsupportedOperationException();
+      Collections.sort(tiles, (tile1, tile2) -> tile1.color() != tile2.color()
+              ? tile1.color().compareTo(tile2.color())
+              : tile1.value() - tile2.value());
+
   }
 
   /**
