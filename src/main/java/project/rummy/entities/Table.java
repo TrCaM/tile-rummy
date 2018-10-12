@@ -33,6 +33,14 @@ public class Table {
     }
   }
 
+  /**
+   * Copy the current table object.
+   * TODO: write tests and implement
+   */
+  Table copy() {
+    throw new UnsupportedOperationException();
+  }
+
 
   public List<Tile> getFreeTiles(){
     return this.freeTiles;

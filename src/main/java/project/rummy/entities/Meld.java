@@ -14,9 +14,31 @@ public class Meld {
     this.type = type;
   }
 
+  /**
+   * Create a meld or a portion of meld by grouping a list of tiles. The creation is valid when:
+   *  + There's only tile in the meld: It is a SINGLE meld tyle
+   *  + There's two tiles in the meld: isValidMeldPart should return true, but not isValidMeld
+   *  + There's three tiles in the meld: isValidMeldPart and isValidMeld both return true.
+   */
   public static Meld createMeld(Tile ...tiles) {
     /* @TODO: write tests and implement this method to that it can detect the MeldType */
     // return new Meld(Arrays.asList(tiles), MeldType.RUN);
+    throw new UnsupportedOperationException();
+  }
+
+  /**
+   * Check if this is a valid partial meld.
+   */
+  private boolean isValidMeldPart() {
+    // TODO: Write tests and implement the method
+    throw new UnsupportedOperationException();
+  }
+
+  /**
+   * Check if this a valid meld that can be played on the table.
+   */
+  public boolean isValidMeld() {
+    // TODO: Write tests and implement the method
     throw new UnsupportedOperationException();
   }
 
