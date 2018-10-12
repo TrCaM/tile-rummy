@@ -37,7 +37,7 @@ public class Table {
    * Copy the current table object.
    * TODO: write tests and implement
    */
-  Table copy() {
+  public Table copy() {
     throw new UnsupportedOperationException();
   }
 
