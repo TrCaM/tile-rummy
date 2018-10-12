@@ -8,6 +8,7 @@ import java.util.List;
 public class Meld {
   private List<Tile> tiles;
   private MeldType type;
+  private MeldSource source;
 
   private Meld(List<Tile> tiles, MeldType type) {
     this.tiles = tiles;
@@ -42,14 +43,17 @@ public class Meld {
     throw new UnsupportedOperationException();
   }
 
-  public List<Tile> getTiles() {
+  public List<Tile> tiles() {
     return this.tiles;
   }
 
-  public MeldType getType() {
+  public MeldType type() {
     return this.type;
   }
 
+  public MeldSource source() {
+    return this.source;
+  }
 
   public int getScore() {
     int score = 0;
