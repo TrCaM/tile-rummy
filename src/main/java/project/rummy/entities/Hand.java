@@ -1,22 +1,22 @@
 package project.rummy.entities;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Entities class for hand, which contains the tiles belong to a specific player
  */
 public class Hand {
   private List<Tile> tiles;
+  private List<Meld> melds;
 
   public Hand() {
     tiles = new ArrayList<>();
+    melds = new ArrayList<>();
   }
 
   Hand(List<Tile> tiles) {
-    this.tiles = tiles;
+    this();
+    this.tiles.addAll(tiles);
   }
 
   /**
@@ -24,6 +24,10 @@ public class Hand {
    */
   public void addTile(Tile tile) {
     tiles.add(tile);
+  }
+
+  public void addTiles(Tile ...tiles) {
+    this.tiles.addAll(Arrays.asList(tiles));
   }
 
   public Tile removeTile(int index) {
@@ -34,16 +38,31 @@ public class Hand {
     return this.tiles;
   }
 
+  public List<Meld> getMelds() {
+    return melds;
+  }
+
+  public void formMeld(int ...tileIndexes) {
+    Arrays.sort(tileIndexes);
+    Tile[] meldTiles = new Tile[tileIndexes.length];
+    for (int i = tileIndexes.length - 1; i >= 0; i--) {
+      if (tileIndexes[i] < 0 || tileIndexes[i] >= tiles.size()) {
+        throw new IllegalArgumentException("Invalid tile index!");
+      }
+      meldTiles[i] = tiles.remove(tileIndexes[i]);
+    }
+    melds.add(Meld.createMeld(meldTiles));
+  }
+
   /**
    * Sort the tiles in hand in this particular order:
-   *   - RED, BLACK, GREEN, ORANGE
-   *   - Increasing value number
+   * - RED, BLACK, GREEN, ORANGE
+   * - Increasing value number
    */
   public void sort() {
-      tiles.sort((tile1, tile2) -> tile1.color() != tile2.color()
-          ? tile1.color().compareTo(tile2.color())
-          : tile1.value() - tile2.value());
-
+    tiles.sort((tile1, tile2) -> tile1.color() != tile2.color()
+        ? tile1.color().compareTo(tile2.color())
+        : tile1.value() - tile2.value());
   }
 
   /**
