@@ -24,7 +24,6 @@ public class Table {
     this.freeTiles = new ArrayList<>();
   }
 
-
   public void initTiles() {
     createDeck();
   }

@@ -22,8 +22,7 @@ public class ActionHandler {
   }
 
   public void draw() {
-    // TODO: write tests and implement
-    throw new UnsupportedOperationException();
+    hand.addTile(table.drawTile());
   }
 
   public void playFromHand(Meld meld) {
