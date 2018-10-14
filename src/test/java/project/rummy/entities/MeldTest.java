@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class MeldScoreTest {
+public class MeldTest {
     private Meld meld;
 
     private final Tile O5 = Tile.createTile(Color.ORANGE, 5);
@@ -16,7 +16,6 @@ public class MeldScoreTest {
     private final Tile G3 = Tile.createTile(Color.GREEN, 3);
     private final Tile B3 = Tile.createTile(Color.BLACK, 3);
     private final Tile O3 = Tile.createTile(Color.ORANGE, 3);
-
 
     @Test
     //testing score of a run
