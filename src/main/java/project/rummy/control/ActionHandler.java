@@ -14,7 +14,7 @@ public class ActionHandler {
 
   public ActionHandler(Player player, Table table) {
     this.player = player;
-    this.copiedTable = table.copy();
+  //  this.copiedTable = table.copy();
     this.manipulationTable = new ManipulationTable();
   }
 
