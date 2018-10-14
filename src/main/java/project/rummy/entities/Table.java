@@ -48,7 +48,11 @@ public class Table {
    * of each turn.
    */
   public void backupMelds() {
-    throw new UnsupportedOperationException();
+    for (Meld meld : melds) {
+      Tile[] tiles = new Tile[meld.tiles().size()];
+      meld.tiles().toArray(tiles);
+      backupMelds.add(Meld.createMeld(tiles));
+    }
   }
 
 
@@ -58,6 +62,10 @@ public class Table {
 
   public List<Meld> getPlayingMelds() {
     return this.melds;
+  }
+
+  public List<Meld> getBackupMelds() {
+    return this.backupMelds;
   }
   /**
    * Add meld into the table if the input meld is a valid meld and return true. Otherwise not add
