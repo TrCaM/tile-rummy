@@ -12,7 +12,7 @@ public class Tile {
     this.value = value;
   }
 
-  static Tile createTile(Color color, int value) {
+  public static Tile createTile(Color color, int value) {
     return new Tile(color, value);
   }
 
