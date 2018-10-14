@@ -55,6 +55,13 @@ public class Table {
     }
   }
 
+  /**
+   * Restore the state of the table as in the backup melds.
+   */
+  public void restoreFromBackup() {
+    this.melds = backupMelds;
+  }
+
 
   public List<Tile> getFreeTiles() {
     return this.freeTiles;
