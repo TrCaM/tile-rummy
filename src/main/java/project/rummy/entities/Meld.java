@@ -78,8 +78,7 @@ public class Meld {
    * Check if this a valid meld that can be played on the table.
    */
   public boolean isValidMeld() {
-    // TODO: Write tests and implement the method
-    throw new UnsupportedOperationException();
+    return tiles.size() >= 3;
   }
 
   public List<Tile> tiles() {
