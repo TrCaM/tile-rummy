@@ -10,8 +10,8 @@ import java.util.List;
 public class Table {
   private List<Tile> freeTiles;
   private List<Meld> melds;
-  private int MAX_VALUE = 13;
-  private int DECKS_AMOUNT = 2;
+  static final int MAX_VALUE = 13;
+  static final int DECKS_AMOUNT = 2;
 
 
 
@@ -35,7 +35,6 @@ public class Table {
 
   /**
    * Copy the current table object.
-   * TODO: write tests and implement
    */
   public Table copy() {
     throw new UnsupportedOperationException();
