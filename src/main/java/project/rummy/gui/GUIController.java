@@ -115,9 +115,6 @@ public class GUIController {
 
         stage.setScene(new Scene(tempPane, getScene_width(), getScene_height()));
         stage.show();
-
-
-        
     }
 
 
