@@ -26,19 +26,20 @@ public class Table {
 
 
   public void initTiles() {
-      createDeck();
+    createDeck();
   }
+
   public void shuffle() {
-      Collections.shuffle(freeTiles);
+    Collections.shuffle(freeTiles);
   }
 
   private void createDeck() {
     for (int j = 0; j < DECKS_AMOUNT; j++) {
-        for (Color color : Color.values()) {
-            for (int i = 1; i <= MAX_VALUE; i++) {
-                this.freeTiles.add(Tile.createTile(color, i));
-            }
+      for (Color color : Color.values()) {
+        for (int i = 1; i <= MAX_VALUE; i++) {
+          this.freeTiles.add(Tile.createTile(color, i));
         }
+      }
     }
   }
 
@@ -51,12 +52,23 @@ public class Table {
   }
 
 
-  public List<Tile> getFreeTiles(){
+  public List<Tile> getFreeTiles() {
     return this.freeTiles;
   }
 
-  public void addMeld(Meld meld) {
+  public List<Meld> getPlayingMelds() {
+    return this.melds;
+  }
+  /**
+   * Add meld into the table if the input meld is a valid meld and return true. Otherwise not add
+   * and return false.
+   */
+  public boolean addMeld(Meld meld) {
+    if (!meld.isValidMeld()) {
+      return false;
+    }
     melds.add(meld);
+    return true;
   }
 
   public Meld removeMeld(int index) {
