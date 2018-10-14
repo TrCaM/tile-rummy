@@ -153,4 +153,18 @@ public class TableTest {
     assertThat(table.getPlayingMelds(), contains(validMeld1, validMeld2));
     assertThat(table.getPlayingMelds(), not(contains(invalidMeld)));
   }
+
+  @Test
+  public void backupMelds_shouldStoreMelds() {
+    Meld validMeld1 = Meld.createMeld(O5, O6, O7, O8);
+    Meld validMeld2 = Meld.createMeld(R3, B3, G3);
+    table.addMeld(validMeld1);
+    table.addMeld(validMeld2);
+    table.backupMelds();
+
+    List<Meld> backupMeld = table.getBackupMelds();
+    assertEquals(table.getBackupMelds().size(), 2);
+    assertThat(backupMeld.get(0).tiles(), contains(O5, O6, O7, O8));
+    assertThat(backupMeld.get(1).tiles(), contains(R3, B3, G3));
+  }
 }
