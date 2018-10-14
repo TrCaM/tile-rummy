@@ -36,7 +36,7 @@ public class MeldTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void createMeld_invalidSet_shouldThrow() {
-    Meld.createMeld(R3dub, R3);
+    Meld.createMeld(R3, R3);
   }
 
   @Test
@@ -101,7 +101,6 @@ public class MeldTest {
   }
 
   @Test
-  //testing score of a run
   public void getScore_Run() {
     meld = Meld.createMeld(O5, O6, O7);
     assertEquals(meld.getScore(), 18);
@@ -111,12 +110,23 @@ public class MeldTest {
   }
 
   @Test
-  //testing score of a set
   public void getScore_Set() {
     meld = Meld.createMeld(R3, G3, B3);
     assertEquals(meld.getScore(), 9);
 
     meld = Meld.createMeld(R3, G3, B3, O3);
     assertEquals(meld.getScore(), 12);
+  }
+
+  @Test
+  public void isValidMeld_shouldReturnTrue() {
+    meld = Meld.createMeld(R3, G3, B3);
+    assertTrue(meld.isValidMeld());
+  }
+
+  @Test
+  public void isValidMeld_shouldReturnFalse() {
+    meld = Meld.createMeld(R3, B3);
+    assertFalse(meld.isValidMeld());
   }
 }
