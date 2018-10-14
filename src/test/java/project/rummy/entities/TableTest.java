@@ -3,17 +3,24 @@ package project.rummy.entities;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.internal.matchers.NotNull;
 
-import java.lang.reflect.Array;
-import java.util.Collections;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.junit.Assert.*;
 
 public class TableTest {
+  private static final Tile O5 = Tile.createTile(Color.ORANGE, 5);
+  private static final Tile O6 = Tile.createTile(Color.ORANGE, 6);
+  private static final Tile O7 = Tile.createTile(Color.ORANGE, 7);
+  private static final Tile O8 = Tile.createTile(Color.ORANGE, 8);
+  private static final Tile R3 = Tile.createTile(Color.RED, 3);
+  private static final Tile G3 = Tile.createTile(Color.GREEN, 3);
+  private static final Tile B3 = Tile.createTile(Color.BLACK, 3);
+
   private Table table = new Table();
   private Table shuffleTable = new Table();
 
@@ -56,9 +63,9 @@ public class TableTest {
     int sets = 0;
 
     System.out.println("EV  |  RV");
-    for (int i = 0; i < tiles.size(); i++) {
-      System.out.println(tile_value + "   |   " + tiles.get(i).value());
-      assertEquals(tiles.get(i).value(), tile_value);
+    for (Tile tile : tiles) {
+      System.out.println(tile_value + "   |   " + tile.value());
+      assertEquals(tile.value(), tile_value);
 
       tile_value++;
       if (tile_value > 13) {
@@ -72,7 +79,6 @@ public class TableTest {
 
   @Test
   public void check_Tiles_Colors() {
-    table.getFreeTiles();
     int[] amount = new int[4];
 
     int[] expected_amount = new int[4];
@@ -132,6 +138,19 @@ public class TableTest {
       assertThat(tile.value(), lessThanOrEqualTo(Table.MAX_VALUE));
       assertNotNull(tile.color());
     }
+  }
 
+  @Test
+  public void addMeld_shouldSucceed() {
+    Meld validMeld1 = Meld.createMeld(O5, O6, O7, O8);
+    Meld validMeld2 = Meld.createMeld(R3, B3, G3);
+    Meld invalidMeld = Meld.createMeld(R3, B3);
+
+    assertTrue(table.addMeld(validMeld1));
+    assertTrue(table.addMeld(validMeld2));
+    assertFalse(table.addMeld(invalidMeld));
+
+    assertThat(table.getPlayingMelds(), contains(validMeld1, validMeld2));
+    assertThat(table.getPlayingMelds(), not(contains(invalidMeld)));
   }
 }
