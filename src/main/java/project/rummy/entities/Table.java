@@ -10,13 +10,22 @@ import java.util.List;
 public class Table {
   private List<Tile> freeTiles;
   private List<Meld> melds;
+  /**
+   * Note for back up melds: It is used for restoring the table before each turn.
+   */
+  private List<Meld> backupMelds;
+
   static final int MAX_VALUE = 13;
   static final int DECKS_AMOUNT = 2;
 
+  public Table() {
+    this.melds = new ArrayList<>();
+    this.backupMelds = new ArrayList<>();
+    this.freeTiles = new ArrayList<>();
+  }
 
 
   public void initTiles() {
-      freeTiles = new ArrayList<>();
       createDeck();
   }
   public void shuffle() {
@@ -34,9 +43,10 @@ public class Table {
   }
 
   /**
-   * Copy the current table object.
+   * Storing the current list of melds so that we can restore the table as it was at the beginning
+   * of each turn.
    */
-  public Table copy() {
+  public void backupMelds() {
     throw new UnsupportedOperationException();
   }
 
