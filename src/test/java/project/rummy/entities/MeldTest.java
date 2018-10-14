@@ -14,7 +14,6 @@ public class MeldTest {
   private static final Tile O8 = Tile.createTile(Color.ORANGE, 8);
   private static final Tile O9 = Tile.createTile(Color.ORANGE, 9);
   private static final Tile R3 = Tile.createTile(Color.RED, 3);
-  private static final Tile R3dub = Tile.createTile(Color.RED, 3);
   private static final Tile G3 = Tile.createTile(Color.GREEN, 3);
   private static final Tile B3 = Tile.createTile(Color.BLACK, 3);
   private static final Tile O3 = Tile.createTile(Color.ORANGE, 3);
