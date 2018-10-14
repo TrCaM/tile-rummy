@@ -1,5 +1,6 @@
 package project.rummy.control;
 
+import project.rummy.entities.Hand;
 import project.rummy.entities.ManipulationTable;
 import project.rummy.entities.Meld;
 import project.rummy.entities.Table;
@@ -8,13 +9,15 @@ import project.rummy.entities.Table;
  * This class handles all player's interaction with the game.
  */
 public class ActionHandler {
-  private Player player;
-  private Table copiedTable;
+  private Hand hand;
+  private boolean canUseTable;
+  private Table table;
   private ManipulationTable manipulationTable;
 
   public ActionHandler(Player player, Table table) {
-    this.player = player;
-    this.copiedTable = table.copy();
+    this.hand = player.getHand();
+    this.canUseTable = player.getStatus() != PlayerStatus.START;
+    this.table = table;
     this.manipulationTable = new ManipulationTable();
   }
 
