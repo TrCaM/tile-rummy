@@ -132,6 +132,19 @@ public class ManipulationTable {
    * false.
    */
   public boolean submit(Table table) {
-    throw new UnsupportedOperationException();
+
+      //all meld should be valid before adding
+      for(Meld e: melds){
+          if(!e.isValidMeld()){
+              return false;
+          }
+      }
+
+      //add all meld to table
+      for(Meld m: melds){
+          table.addMeld(m);
+      }
+
+      return true;
   }
 }
