@@ -151,4 +151,27 @@ public class HandTest {
 
     hand.formMeld(1, 0);
   }
+
+  @Test
+  public void removeMeld_shouldSucceed() {
+    List<Tile> tiles = Arrays.asList(B13, O5, B7, G11, R3, B5, G5);
+    hand = new Hand(tiles);
+    hand.formMeld(1, 6);
+    hand.formMeld(0);
+
+    Meld expectedMeld = hand.removeMeld(1);
+
+    assertThat(expectedMeld.tiles(), contains(B13));
+    assertEquals(hand.getMelds().size(), 1);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void removeMeld_invalidIndex_shouldThrow() {
+    List<Tile> tiles = Arrays.asList(B13, O5, B7, G11, R3, B5, G5);
+    hand = new Hand(tiles);
+    hand.formMeld(1, 6);
+    hand.formMeld(0);
+
+    Meld expectedMeld = hand.removeMeld(3);
+  }
 }
