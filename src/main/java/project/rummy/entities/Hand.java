@@ -54,6 +54,13 @@ public class Hand {
     melds.add(Meld.createMeld(meldTiles));
   }
 
+  public Meld removeMeld(int index) {
+    if (index >= 0  && index < melds.size()) {
+      return melds.remove(index);
+    }
+    throw new IllegalArgumentException("Invalid meld index!");
+  }
+
   /**
    * Sort the tiles in hand in this particular order:
    * - RED, BLACK, GREEN, ORANGE
