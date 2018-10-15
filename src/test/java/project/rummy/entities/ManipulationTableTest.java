@@ -99,7 +99,7 @@ public class ManipulationTableTest {
         ManipulationTable table = new ManipulationTable();
 
         table.add(Meld.createMeld(O5, O6, O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
-        table.split(0, 1, 4);
+        table.split(0, 4, 1);
         table.split(0, 2);
 
         assertEquals(5,table.getMelds().size());
@@ -127,6 +127,14 @@ public class ManipulationTableTest {
 
         table.add(Meld.createMeld(O5, O6), Meld.createMeld(O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
         table.combineMelds(1, 1,2);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void combine_invalidMeld_shouldThrow(){
+        ManipulationTable table = new ManipulationTable();
+
+        table.add(Meld.createMeld(O6), Meld.createMeld(O8, O9), Meld.createMeld(R3, G3, B3, O3));
+        table.combineMelds(0, 1);
     }
 
 
@@ -168,5 +176,19 @@ public class ManipulationTableTest {
 
         assertThat(table.getMelds().get(0).tiles(), contains(O5, O6, O7, O8, O9));
         assertThat(table.getMelds().get(1).tiles(), contains(B3, O3, R3, G3));
+    }
+
+    @Test
+    public void combine_runWith2Tiles(){
+        ManipulationTable table = new ManipulationTable();
+
+        table.add(Meld.createMeld(O5), Meld.createMeld(B3, O3), Meld.createMeld(R3, G3), Meld.createMeld(O6));
+        table.combineMelds(3, 0);
+
+        assertEquals(3,table.getMelds().size());
+
+        assertThat(table.getMelds().get(0).tiles(), contains(B3, O3));
+        assertThat(table.getMelds().get(1).tiles(), contains(R3, G3));
+        assertThat(table.getMelds().get(2).tiles(), contains(O5, O6));
     }
 }
