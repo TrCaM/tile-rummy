@@ -11,6 +11,10 @@ public class Player {
     this.status = PlayerStatus.START;
   }
 
+  public  void setStatus(PlayerStatus status) {
+    this.status = status;
+  }
+
   public Hand getHand() {
     return hand;
   }

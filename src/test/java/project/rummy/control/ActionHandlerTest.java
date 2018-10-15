@@ -7,8 +7,11 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import project.rummy.entities.Color;
+import project.rummy.entities.Meld;
 import project.rummy.entities.Table;
 import project.rummy.entities.Tile;
+
+import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.contains;
@@ -23,11 +26,9 @@ public class ActionHandlerTest {
   private static final Tile O6 = Tile.createTile(Color.ORANGE, 6);
   private static final Tile O7 = Tile.createTile(Color.ORANGE, 7);
   private static final Tile O8 = Tile.createTile(Color.ORANGE, 8);
-  private static final Tile O9 = Tile.createTile(Color.ORANGE, 9);
   private static final Tile R3 = Tile.createTile(Color.RED, 3);
   private static final Tile G3 = Tile.createTile(Color.GREEN, 3);
   private static final Tile B3 = Tile.createTile(Color.BLACK, 3);
-  private static final Tile O3 = Tile.createTile(Color.ORANGE, 3);
 
   @Rule
   public MockitoRule mockitoRule = MockitoJUnit.rule();
@@ -75,8 +76,36 @@ public class ActionHandlerTest {
     handler.playFromHand(1);
   }
 
+  @Test(expected =  IllegalAccessException.class)
+  public void takeTableMeld_cannotUseTable_shouldThrow() throws IllegalAccessException {
+    handler.takeTableMeld(0);
+  }
+
+  @Test(expected =  IllegalArgumentException.class)
+  public void takeTableMeld_invalidIndex_shouldThrow() throws IllegalAccessException {
+    player.setStatus(PlayerStatus.ICE_BROKEN);
+    handler = new ActionHandler(player, table);
+    Meld meld1 = Meld.createMeld(O5, O6, O7, O8);
+    Meld meld2 = Meld.createMeld(R3, G3, B3);
+    when(table.getPlayingMelds()).thenReturn(Arrays.asList(meld1, meld2));
+
+    handler.takeTableMeld(3);
+  }
+
   @Test
-  public void manipulateMeld() {
+  public void takeTableMeld_shouldSucceed() throws IllegalAccessException {
+    player.setStatus(PlayerStatus.ICE_BROKEN);
+    handler = new ActionHandler(player, table);
+    Meld meld1 = Meld.createMeld(O5, O6, O7, O8);
+    Meld meld2 = Meld.createMeld(R3, G3, B3);
+    when(table.getPlayingMelds()).thenReturn(Arrays.asList(meld1, meld2));
+    when(table.removeMeld(1)).thenReturn(meld2);
+
+    handler.takeTableMeld(1);
+
+    assertThat(handler.getManipulationTable().getMelds().get(0).tiles(), contains(R3, G3, B3));
+    verify(table).getPlayingMelds();
+    verify(table).removeMeld(1);
   }
 
   @Test
