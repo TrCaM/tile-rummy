@@ -43,8 +43,8 @@ public class ActionHandler {
     }
   }
 
-  public void endTurn() {
-    throw new UnsupportedOperationException();
+  public boolean endTurn() {
+    return manipulationTable.submit(table);
   }
 
   public ManipulationTable getManipulationTable() {

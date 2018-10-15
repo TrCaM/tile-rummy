@@ -107,8 +107,4 @@ public class ActionHandlerTest {
     verify(table).getPlayingMelds();
     verify(table).removeMeld(1);
   }
-
-  @Test
-  public void endTurn() {
-  }
 }

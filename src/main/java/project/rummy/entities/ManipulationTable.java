@@ -53,4 +53,12 @@ public class ManipulationTable {
   public void combineMelds(int ...meldIndexes) {
    throw new UnsupportedOperationException();
   }
+
+  /**
+   * Submit the melds to the table, if all melds are valid (has more than 3 tiles). Otherwise return
+   * false.
+   */
+  public boolean submit(Table table) {
+    throw new UnsupportedOperationException();
+  }
 }
