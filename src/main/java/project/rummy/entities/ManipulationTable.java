@@ -13,38 +13,76 @@ import java.util.List;
  * table, so that all the melds that a player borrows from table to manipulate are returned on the table.
  */
 public class ManipulationTable {
-  private List<Meld> melds;
+    private List<Meld> melds;
 
-  public ManipulationTable() {
-    melds = new ArrayList<>();
-  }
+    public ManipulationTable() {
+        melds = new ArrayList<>();
+    }
 
-  public void add(Meld ...melds) {
-    this.melds.addAll(Arrays.asList(melds));
-  }
+    public void add(Meld ...melds) {
+        this.melds.addAll(Arrays.asList(melds));
+    }
 
-  public List<Meld> getMelds() {
-    return Collections.unmodifiableList(melds);
-  }
-  /**
-   * Remove a meld from this temporary table. Note that a meld should be in it original form since when it was added to
-   * be able to be removed.
-   */
-  public Meld remove(int meldIndex) {
-    //TODO: Write test and implement, note that we need to check if the MeldSource is not MANIPULATION for a meld to be
-    // able to be removed
-    return melds.remove(meldIndex);
-  }
+    public List<Meld> getMelds() {
+        return Collections.unmodifiableList(melds);
+    }
+    /**
+     * Remove a meld from this temporary table. Note that a meld should be in it original form since when it was added to
+     * be able to be removed.
+     */
+    public Meld remove(int meldIndex) {
+        //TODO: Write test and implement, note that we need to check if the MeldSource is not MANIPULATION for a meld to be
+        // able to be removed
+        return melds.remove(meldIndex);
+    }
 
-  /**
-   * split the meld into small parts, decided by the list of breakPoints.
-   * Throw {@link IllegalArgumentException} if any of the passed in {@code breakPoints} is invalid.
-   * @param meldIndex the index of the meld to be split
-   * @param breakPoints the index of the last meld of each partial meld.
-   */
-  public void split(int meldIndex, int ...breakPoints) {
-    throw new UnsupportedOperationException();
-  }
+    /**
+     * split the meld into small parts, decided by the list of breakPoints.
+     * Throw {@link IllegalArgumentException} if any of the passed in {@code breakPoints} is invalid.
+     * @param meldIndex the index of the meld to be split
+     * @param breakPoints the index of the last meld of each partial meld.
+     */
+    public void split(int meldIndex, int ...breakPoints) {
+
+        int meldSize = melds.get(meldIndex).tiles().size();
+        int numBreakPoints = breakPoints.length;
+
+        ///checking for invalid breakpoints
+        for(int i=0; i<numBreakPoints; i++){
+            if(breakPoints[i] <= 0 || breakPoints[i] >= meldSize){
+                throw new IllegalArgumentException("Invalid breakpoint");
+            }
+            for(int h=i+1; h<numBreakPoints; h++){
+                if(breakPoints[i] == breakPoints[h]){
+                    throw new IllegalArgumentException("Invalid breakpoint");
+                }
+            }
+        }
+
+        List<Meld> meldsList = new ArrayList<>();
+
+        List<Tile> tilesList = melds.get(meldIndex).tiles();
+        List<Tile> temp;
+
+
+
+        temp = tilesList.subList(0, breakPoints[0]);
+        meldsList.add(Meld.createMeld(temp.toArray(new Tile[temp.size()])));
+
+        for(int i=1; i<numBreakPoints; i++){
+            temp = tilesList.subList(breakPoints[i-1], breakPoints[i]);
+            meldsList.add(Meld.createMeld(temp.toArray(new Tile[temp.size()])));
+        }
+
+        temp = tilesList.subList(breakPoints[numBreakPoints-1],meldSize);
+        meldsList.add(Meld.createMeld(temp.toArray(new Tile[temp.size()])));
+
+
+        remove(meldIndex);
+
+        add(meldsList.toArray(new Meld[meldsList.size()]));
+
+    }
 
   /**
    * Combine melds into a single big meld.
