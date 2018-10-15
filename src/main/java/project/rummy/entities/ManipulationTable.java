@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Comparator;
 
 /**
  * {@link ManipulationTable} is a temporary holder of melds that will be create each turn. During a turn, this table is
@@ -38,9 +39,10 @@ public class ManipulationTable {
 
     /**
      * split the meld into small parts, decided by the list of breakPoints.
+     * after splitting, the original meld will be removed, and new melds will be added to the end of list
      * Throw {@link IllegalArgumentException} if any of the passed in {@code breakPoints} is invalid.
      * @param meldIndex the index of the meld to be split
-     * @param breakPoints the index of the last meld of each partial meld.
+     * @param breakPoints the index of the right-hand meld.
      */
     public void split(int meldIndex, int ...breakPoints) {
 
@@ -64,8 +66,6 @@ public class ManipulationTable {
         List<Tile> tilesList = melds.get(meldIndex).tiles();
         List<Tile> temp;
 
-
-
         temp = tilesList.subList(0, breakPoints[0]);
         meldsList.add(Meld.createMeld(temp.toArray(new Tile[temp.size()])));
 
@@ -77,19 +77,55 @@ public class ManipulationTable {
         temp = tilesList.subList(breakPoints[numBreakPoints-1],meldSize);
         meldsList.add(Meld.createMeld(temp.toArray(new Tile[temp.size()])));
 
-
         remove(meldIndex);
 
         add(meldsList.toArray(new Meld[meldsList.size()]));
-
     }
 
   /**
    * Combine melds into a single big meld.
+   * after combining, the original melds will be removed, and new meld will be added to the end of list
    * @param meldIndexes the indexes of the melds to be combined.
    */
   public void combineMelds(int ...meldIndexes) {
-   throw new UnsupportedOperationException();
+
+      Arrays.sort(meldIndexes);
+      List<Tile> tilesFromMelds = new ArrayList<>();
+
+
+      //checking for invalid indexes
+      if(meldIndexes.length < 2){
+          throw new IllegalArgumentException("Invalid indexes input");
+      }
+
+      for(int i=0; i<meldIndexes.length; i++){
+          if(meldIndexes[i] < 0 || meldIndexes[i] >= melds.size()){
+              throw new IllegalArgumentException("Invalid indexes input");
+          }
+          for(int k = i+1; k<meldIndexes.length; k++){
+              if(meldIndexes[k] == meldIndexes[i]){
+                  throw new IllegalArgumentException("Invalid indexes input");
+              }
+          }
+
+          //add tiles from melds to a list of tiles
+          tilesFromMelds.addAll(melds.get(meldIndexes[i]).tiles());
+      }
+
+      //sort list of tiles in increasing order
+      tilesFromMelds.sort(Comparator.comparing(Tile:: value));
+
+      //create new meld from those tiles
+      Meld newMeld = Meld.createMeld(tilesFromMelds.toArray(new Tile[tilesFromMelds.size()]));
+
+      if(newMeld.isValidMeld()) {
+          for (int i = meldIndexes.length-1; i >= 0; i--) {
+              remove(meldIndexes[i]);
+          }
+          melds.add(newMeld);
+      }else{
+          throw new IllegalArgumentException("Invalid MELD");
+      }
   }
 
   /**
