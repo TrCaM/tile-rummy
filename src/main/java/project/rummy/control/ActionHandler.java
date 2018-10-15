@@ -2,7 +2,6 @@ package project.rummy.control;
 
 import project.rummy.entities.Hand;
 import project.rummy.entities.ManipulationTable;
-import project.rummy.entities.Meld;
 import project.rummy.entities.Table;
 
 /**
@@ -25,9 +24,12 @@ public class ActionHandler {
     hand.addTile(table.drawTile());
   }
 
-  public void playFromHand(Meld meld) {
-    // TODO: write tests and implement, remember to remove tiles from hand and add to manipulation table.
-    throw new UnsupportedOperationException();
+  public void playFromHand(int meldIndex) {
+    if (meldIndex >=0 && meldIndex < hand.getMelds().size()) {
+      manipulationTable.add(hand.removeMeld(meldIndex));
+    } else {
+      throw new IllegalArgumentException("Invalid meld index");
+    }
   }
 
   public void manipulateMeld(int meldIndex) {
