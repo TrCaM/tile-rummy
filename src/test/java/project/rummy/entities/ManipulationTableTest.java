@@ -43,6 +43,8 @@ public class ManipulationTableTest {
         table.add(Meld.createMeld(O5, O6, O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
         table.split(0, 3);
 
+        assertEquals(3,table.getMelds().size());
+
         assertThat(table.getMelds().get(0).tiles(), contains(R3, G3, B3, O3));
         assertThat(table.getMelds().get(1).tiles(), contains(O5, O6, O7));
         assertThat(table.getMelds().get(2).tiles(), contains(O8, O9));
@@ -54,6 +56,8 @@ public class ManipulationTableTest {
 
         table.add(Meld.createMeld(O5, O6, O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
         table.split(1, 3);
+
+        assertEquals(3,table.getMelds().size());
 
         assertThat(table.getMelds().get(0).tiles(), contains(O5, O6, O7, O8, O9));
         assertThat(table.getMelds().get(1).tiles(), contains(R3, G3, B3));
@@ -67,6 +71,8 @@ public class ManipulationTableTest {
         table.add(Meld.createMeld(O5, O6, O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
         table.split(0, 2, 4);
 
+        assertEquals(4,table.getMelds().size());
+
         assertThat(table.getMelds().get(0).tiles(), contains(R3, G3, B3, O3));
         assertThat(table.getMelds().get(1).tiles(), contains(O5, O6));
         assertThat(table.getMelds().get(2).tiles(), contains(O7, O8));
@@ -79,6 +85,8 @@ public class ManipulationTableTest {
 
         table.add(Meld.createMeld(O5, O6, O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
         table.split(1, 1, 2);
+
+        assertEquals(4,table.getMelds().size());
 
         assertThat(table.getMelds().get(0).tiles(), contains(O5, O6, O7, O8, O9));
         assertThat(table.getMelds().get(1).tiles(), contains(R3));
@@ -94,10 +102,71 @@ public class ManipulationTableTest {
         table.split(0, 1, 4);
         table.split(0, 2);
 
+        assertEquals(5,table.getMelds().size());
+
         assertThat(table.getMelds().get(0).tiles(), contains(O5));
         assertThat(table.getMelds().get(1).tiles(), contains(O6, O7, O8));
         assertThat(table.getMelds().get(2).tiles(), contains(O9));
         assertThat(table.getMelds().get(3).tiles(), contains(R3, G3));
         assertThat(table.getMelds().get(4).tiles(), contains(B3, O3));
+    }
+
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void combine_invalidIndexes_shouldThrow(){
+        ManipulationTable table = new ManipulationTable();
+
+        table.add(Meld.createMeld(O5, O6), Meld.createMeld(O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
+        table.combineMelds(0, 3);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void combine_duplicateIndexes_shouldThrow(){
+        ManipulationTable table = new ManipulationTable();
+
+        table.add(Meld.createMeld(O5, O6), Meld.createMeld(O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
+        table.combineMelds(1, 1,2);
+    }
+
+
+    @Test
+    public void combine_TwoRuns(){
+        ManipulationTable table = new ManipulationTable();
+
+        table.add(Meld.createMeld(O5, O6), Meld.createMeld(O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
+        table.combineMelds(0, 1);
+
+        assertEquals(2,table.getMelds().size());
+
+        assertThat(table.getMelds().get(0).tiles(), contains(R3, G3, B3, O3));
+        assertThat(table.getMelds().get(1).tiles(), contains(O5, O6, O7, O8, O9));
+    }
+
+    @Test
+    public void combine_TwoSets(){
+        ManipulationTable table = new ManipulationTable();
+
+        table.add(Meld.createMeld(O5, O6, O7, O8, O9), Meld.createMeld(B3, O3), Meld.createMeld(R3, G3));
+        table.combineMelds(2, 1);
+
+        assertEquals(2,table.getMelds().size());
+
+        assertThat(table.getMelds().get(0).tiles(), contains(O5, O6, O7, O8, O9));
+        assertThat(table.getMelds().get(1).tiles(), contains(B3, O3, R3, G3));
+    }
+
+    @Test
+    public void combine_SetAndRun(){
+        ManipulationTable table = new ManipulationTable();
+
+        table.add(Meld.createMeld(O5), Meld.createMeld(B3, O3), Meld.createMeld(R3, G3), Meld.createMeld(O6, O7, O8, O9));
+        table.combineMelds(3, 0);
+        table.combineMelds(0, 1);
+
+        assertEquals(2,table.getMelds().size());
+
+        assertThat(table.getMelds().get(0).tiles(), contains(O5, O6, O7, O8, O9));
+        assertThat(table.getMelds().get(1).tiles(), contains(B3, O3, R3, G3));
     }
 }
