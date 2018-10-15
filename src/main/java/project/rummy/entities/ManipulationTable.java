@@ -42,19 +42,20 @@ public class ManipulationTable {
      * after splitting, the original meld will be removed, and new melds will be added to the end of list
      * Throw {@link IllegalArgumentException} if any of the passed in {@code breakPoints} is invalid.
      * @param meldIndex the index of the meld to be split
-     * @param breakPoints the index of the right-hand meld.
+     * @param breakPoints the index of the first tile from the right-hand meld.
      */
     public void split(int meldIndex, int ...breakPoints) {
 
+        Arrays.sort(breakPoints);
+
         int meldSize = melds.get(meldIndex).tiles().size();
-        int numBreakPoints = breakPoints.length;
 
         ///checking for invalid breakpoints
-        for(int i=0; i<numBreakPoints; i++){
+        for(int i=0; i<breakPoints.length; i++){
             if(breakPoints[i] <= 0 || breakPoints[i] >= meldSize){
                 throw new IllegalArgumentException("Invalid breakpoint");
             }
-            for(int h=i+1; h<numBreakPoints; h++){
+            for(int h=i+1; h<breakPoints.length; h++){
                 if(breakPoints[i] == breakPoints[h]){
                     throw new IllegalArgumentException("Invalid breakpoint");
                 }
@@ -69,12 +70,12 @@ public class ManipulationTable {
         temp = tilesList.subList(0, breakPoints[0]);
         meldsList.add(Meld.createMeld(temp.toArray(new Tile[temp.size()])));
 
-        for(int i=1; i<numBreakPoints; i++){
+        for(int i=1; i<breakPoints.length; i++){
             temp = tilesList.subList(breakPoints[i-1], breakPoints[i]);
             meldsList.add(Meld.createMeld(temp.toArray(new Tile[temp.size()])));
         }
 
-        temp = tilesList.subList(breakPoints[numBreakPoints-1],meldSize);
+        temp = tilesList.subList(breakPoints[breakPoints.length-1],meldSize);
         meldsList.add(Meld.createMeld(temp.toArray(new Tile[temp.size()])));
 
         remove(meldIndex);
@@ -118,14 +119,12 @@ public class ManipulationTable {
       //create new meld from those tiles
       Meld newMeld = Meld.createMeld(tilesFromMelds.toArray(new Tile[tilesFromMelds.size()]));
 
-      if(newMeld.isValidMeld()) {
-          for (int i = meldIndexes.length-1; i >= 0; i--) {
-              remove(meldIndexes[i]);
-          }
-          melds.add(newMeld);
-      }else{
-          throw new IllegalArgumentException("Invalid MELD");
+
+      for (int i = meldIndexes.length-1; i >= 0; i--) {
+          remove(meldIndexes[i]);
       }
+      melds.add(newMeld);
+
   }
 
   /**
