@@ -32,13 +32,18 @@ public class ActionHandler {
     }
   }
 
-  public void manipulateMeld(int meldIndex) {
-    // TODO: write tests and implement, add meld from table to the manipulation table.
-    throw new UnsupportedOperationException();
+  public void takeTableMeld(int meldIndex) throws IllegalAccessException {
+    if (!canUseTable) {
+      throw new IllegalAccessException("Cannot manipulate table");
+    }
+    if (meldIndex >=0 && meldIndex < table.getPlayingMelds().size()) {
+      manipulationTable.add(table.removeMeld(meldIndex));
+    } else {
+      throw new IllegalArgumentException("Invalid meld index");
+    }
   }
 
   public void endTurn() {
-    // TODO: write tests and implement
     throw new UnsupportedOperationException();
   }
 
