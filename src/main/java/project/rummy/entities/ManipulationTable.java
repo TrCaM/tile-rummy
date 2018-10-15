@@ -2,6 +2,7 @@ package project.rummy.entities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,6 +23,9 @@ public class ManipulationTable {
     this.melds.addAll(Arrays.asList(melds));
   }
 
+  public List<Meld> getMelds() {
+    return Collections.unmodifiableList(melds);
+  }
   /**
    * Remove a meld from this temporary table. Note that a meld should be in it original form since when it was added to
    * be able to be removed.

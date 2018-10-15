@@ -35,11 +35,11 @@ public class Hand {
   }
 
   public List<Tile> getTiles() {
-    return this.tiles;
+    return Collections.unmodifiableList(tiles);
   }
 
   public List<Meld> getMelds() {
-    return melds;
+    return Collections.unmodifiableList(melds);
   }
 
   public void formMeld(int ...tileIndexes) {
