@@ -191,4 +191,36 @@ public class ManipulationTableTest {
         assertThat(table.getMelds().get(1).tiles(), contains(R3, G3));
         assertThat(table.getMelds().get(2).tiles(), contains(O5, O6));
     }
+
+    @Test
+    public void submit_withInvalidRun(){
+        ManipulationTable t = new ManipulationTable();
+        Table realTable = new Table();
+
+        t.add(Meld.createMeld(B3, O3, G3), Meld.createMeld(O6, O7));
+
+        assertFalse(t.submit(realTable));
+        assertEquals(0, realTable.getPlayingMelds().size());
+    }
+
+    @Test
+    public void submit_withInvalidSet(){
+        ManipulationTable t = new ManipulationTable();
+        Table realTable = new Table();
+
+        t.add(Meld.createMeld(B3, O3), Meld.createMeld(R3, G3), Meld.createMeld(O6, O7, O8));
+
+        assertFalse(t.submit(realTable));
+        assertEquals(0, realTable.getPlayingMelds().size());
+    }
+
+    @Test
+    public void submit_withValidMelds(){
+        ManipulationTable t = new ManipulationTable();
+        Table realTable = new Table();
+
+        t.add(Meld.createMeld(B3, R3, G3, O3), Meld.createMeld(O6, O7, O8, O9));
+        assertTrue(t.submit(realTable));
+        assertEquals(2, realTable.getPlayingMelds().size());
+    }
 }
