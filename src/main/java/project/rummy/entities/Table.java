@@ -24,7 +24,6 @@ public class Table {
     this.freeTiles = new ArrayList<>();
   }
 
-
   public void initTiles() {
     createDeck();
   }
@@ -64,15 +63,15 @@ public class Table {
 
 
   public List<Tile> getFreeTiles() {
-    return this.freeTiles;
+    return Collections.unmodifiableList(freeTiles);
   }
 
   public List<Meld> getPlayingMelds() {
-    return this.melds;
+    return Collections.unmodifiableList(melds);
   }
 
   public List<Meld> getBackupMelds() {
-    return this.backupMelds;
+    return Collections.unmodifiableList(backupMelds);
   }
   /**
    * Add meld into the table if the input meld is a valid meld and return true. Otherwise not add

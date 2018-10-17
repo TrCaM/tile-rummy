@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.junit.Assert.*;
 
@@ -36,10 +38,17 @@ public class HandTest {
   }
 
   @Test
+  public void addTiles_shouldSucceed() {
+    hand = new Hand();
+    hand.addTiles(O5, R3, R8, B13);
+
+    assertThat(hand.getTiles(), contains(O5, R3, R8, B13));
+  }
+
+  @Test
   public void getScore_emptyHand() {
     hand = new Hand();
     assertEquals(hand.getScore(), 0);
-    //assertThat(hand.getScore(), is(0));
   }
 
   @Test
@@ -57,7 +66,6 @@ public class HandTest {
 
     assertEquals(hand.getScore(), 24);
   }
-
 
   @Test
   public void sort_sameColor() {
@@ -114,5 +122,56 @@ public class HandTest {
     assertTrue(t2.value()==B13.value() && t2.color().equals(B13.color()));
     assertTrue(t3.value()==G11.value() && t3.color().equals(G11.color()));
     assertTrue(t4.value()==O5.value() && t4.color().equals(O5.color()));
+  }
+
+  @Test
+  public void formMeld_shouldSucceed() {
+    List<Tile> tiles = Arrays.asList(B13, O5, B7, G11, R3, B5, G5);
+    hand = new Hand(tiles);
+
+    hand.formMeld(1, 5);
+
+    assertThat(hand.getMelds().get(0).tiles(), contains(O5, B5));
+    assertEquals(hand.getTiles().size(), 5);
+    assertThat(hand.getTiles(), not(contains(O5, B5)));
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void formMeld_invalidIndex_shouldThrow() {
+    List<Tile> tiles = Arrays.asList(B13, O5, B7, G11, R3, B5, G5);
+    hand = new Hand(tiles);
+
+    hand.formMeld(1, 10);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void formMeld_invalidMeld_shouldThrow() {
+    List<Tile> tiles = Arrays.asList(B13, O5, B7, G11, R3, B5, G5);
+    hand = new Hand(tiles);
+
+    hand.formMeld(1, 0);
+  }
+
+  @Test
+  public void removeMeld_shouldSucceed() {
+    List<Tile> tiles = Arrays.asList(B13, O5, B7, G11, R3, B5, G5);
+    hand = new Hand(tiles);
+    hand.formMeld(1, 6);
+    hand.formMeld(0);
+
+    Meld expectedMeld = hand.removeMeld(1);
+
+    assertThat(expectedMeld.tiles(), contains(B13));
+    assertEquals(hand.getMelds().size(), 1);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void removeMeld_invalidIndex_shouldThrow() {
+    List<Tile> tiles = Arrays.asList(B13, O5, B7, G11, R3, B5, G5);
+    hand = new Hand(tiles);
+    hand.formMeld(1, 6);
+    hand.formMeld(0);
+
+    Meld expectedMeld = hand.removeMeld(3);
   }
 }

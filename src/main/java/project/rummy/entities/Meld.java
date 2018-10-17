@@ -82,7 +82,7 @@ public class Meld {
   }
 
   public List<Tile> tiles() {
-    return this.tiles;
+    return Collections.unmodifiableList(tiles);
   }
 
   public MeldType type() {
