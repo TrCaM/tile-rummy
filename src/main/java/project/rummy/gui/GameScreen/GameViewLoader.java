@@ -45,7 +45,7 @@ public class GameViewLoader extends GUIController{
 **/
 
     public void LoadGame(Stage stage) throws Exception {
-            BorderPane pane = new BorderPane();
+        BorderPane pane = new BorderPane();
 
         GridPane gridPane = ViewTiles(stage);
         BorderPane.setMargin(gridPane, new Insets(40, 40, 40, 40));
@@ -60,15 +60,7 @@ public class GameViewLoader extends GUIController{
         stage.setScene(new Scene(pane, getScene_width(), getScene_height()));
         stage.show();
 
-        stage.getScene().addEventHandler(KeyEvent.KEY_PRESSED,new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.SHIFT) {
-                    PauseGame(stage);
-                }
-            }
-        });
-
+        PauseGame(stage);
 
     }
 

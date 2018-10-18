@@ -2,18 +2,11 @@ package project.rummy.gui.StartScreen;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import project.rummy.entities.Table;
 import project.rummy.gui.GUIController;
-import project.rummy.gui.tile.TileView;
 
 
 public class StartView {
@@ -67,7 +60,7 @@ public class StartView {
         quit.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
-        quitGame(event);
+         gui.exitGame();
       }
      });
     }
@@ -81,9 +74,5 @@ public class StartView {
         gui.gameView(stage);
     }
 
-
-    public void quitGame(ActionEvent event) {
-      System.exit(0);
-    }
 
 }
