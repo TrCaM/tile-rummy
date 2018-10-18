@@ -97,8 +97,8 @@ public class TileView extends Pane{
             compNodeBound = compNode.localToScene(compNode.getBoundsInLocal());
             if (compNodeBound.intersects(curNodeBound)) {
                 if (compNodeBound.getMinY() < curNodeBound.getMinY() ) {
-                    node.setTranslateY(node.getTranslateX() + event.getX() - width/2);
-                    return true;
+    //                node.setTranslateY(node.getTranslateX() + event.getX() - width/2);
+    //                return true;
                 }
                 if (compNodeBound.getMaxX() > curNodeBound.getMinX()) {
     //                node.setTranslateY(compNodeBound.getMaxX() - event.getX());
