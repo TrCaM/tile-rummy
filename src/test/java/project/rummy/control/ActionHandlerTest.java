@@ -68,6 +68,18 @@ public class ActionHandlerTest {
     assertEquals(player.getHand().getTiles().size(), 4);
   }
 
+  @Test
+  public void playFromHand_byMeld_shouldSucceed() {
+    player.getHand().addTiles(O5, O6, O7, O8, R3, G3, B3);
+    Meld meld = player.getHand().formMeld(0, 1, 2);
+
+    handler.playFromHand(meld);
+
+    assertThat(player.getHand().getTiles(), not(contains(O5, O6, O7)));
+    assertThat(handler.getManipulationTable().getMelds().get(0).tiles(), contains(O5, O6, O7));
+    assertEquals(player.getHand().getTiles().size(), 4);
+  }
+
   @Test(expected = IllegalArgumentException.class)
   public void playFromHand_invalidIndex_shouldThrow() {
     player.getHand().addTiles(O5, O6, O7, O8, R3, G3, B3);
