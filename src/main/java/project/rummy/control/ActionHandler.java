@@ -4,6 +4,7 @@ import project.rummy.entities.Hand;
 import project.rummy.entities.ManipulationTable;
 import project.rummy.entities.Meld;
 import project.rummy.entities.Table;
+import project.rummy.player.Player;
 
 /**
  * This class handles all player's interaction with the game.

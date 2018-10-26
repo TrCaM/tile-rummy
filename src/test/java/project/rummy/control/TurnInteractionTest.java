@@ -2,6 +2,7 @@ package project.rummy.control;
 
 import org.junit.Test;
 import project.rummy.entities.*;
+import project.rummy.player.Player;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.contains;
