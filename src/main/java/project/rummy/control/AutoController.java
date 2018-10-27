@@ -1,13 +1,14 @@
 package project.rummy.control;
 
+import project.rummy.commands.CommandProcessor;
 import project.rummy.entities.PlayerStatus;
 import project.rummy.strategies.Strategy;
 
 public class AutoController extends Controller {
   private Strategy strategy;
 
-  public AutoController(Strategy strategy) {
-    super();
+  public AutoController(CommandProcessor processor, Strategy strategy) {
+    super(processor);
     this.strategy = strategy;
   }
 

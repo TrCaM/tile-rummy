@@ -13,8 +13,8 @@ public class Player {
     this.controller = controller.setPlayer(this);
   }
 
-  public void playTurn() {
-    controller.playTurn();
+  public Controller getController() {
+    return this.controller;
   }
 
   public Hand hand() {

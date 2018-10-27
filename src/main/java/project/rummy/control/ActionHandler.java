@@ -10,6 +10,7 @@ public class ActionHandler {
   private boolean canUseTable;
   private Table table;
   private ManipulationTable manipulationTable;
+  private boolean isTurnEnd;
 
   public ActionHandler(Player player, Table table) {
     this.hand = player.hand();
@@ -17,6 +18,11 @@ public class ActionHandler {
     this.table = table;
     this.manipulationTable = ManipulationTable.getInstance();
     manipulationTable.clear();
+    this.isTurnEnd = false;
+  }
+
+  public boolean isExpired() {
+    return this.isTurnEnd;
   }
 
   public void draw() {
@@ -47,7 +53,8 @@ public class ActionHandler {
   }
 
   public boolean endTurn() {
-    return manipulationTable.submit(table);
+    isTurnEnd = manipulationTable.submit(table);
+    return isTurnEnd;
   }
 
   public ManipulationTable getManipulationTable() {
