@@ -11,12 +11,21 @@ import java.util.Comparator;
  * the place to store all the melds that need to be modified from the table, melds that going to play from hand. Unlike
  * {@link Table} where melds must not be modified, we can split and combine melds in this table freely during the turn.
  * However, when the turn is finished, this table must contain only valid melds that is playable to the
- * table, so that all the melds that a player borrows from table to manipulate are returned on the table.
+ * table, so that all the melds that a controllers borrows from table to manipulate are returned on the table.
  */
 public class ManipulationTable {
   private List<Meld> melds;
 
-  public ManipulationTable() {
+  /**
+   * Singleton approach for manipulation table
+   */
+  private static final ManipulationTable INSTANCE = new ManipulationTable();
+
+  public static ManipulationTable getInstance() {
+    return INSTANCE;
+  }
+
+  private ManipulationTable() {
     melds = new ArrayList<>();
   }
 
@@ -191,5 +200,9 @@ public class ManipulationTable {
       }
 
       return true;
+    }
+
+    public void clear() {
+      this.melds.clear();
     }
   }

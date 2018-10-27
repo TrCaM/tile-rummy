@@ -1,5 +1,6 @@
 package project.rummy.entities;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
@@ -18,9 +19,15 @@ public class ManipulationTableTest {
   private static final Tile B3 = Tile.createTile(Color.BLACK, 3);
   private static final Tile O3 = Tile.createTile(Color.ORANGE, 3);
 
+  private ManipulationTable table = ManipulationTable.getInstance();
+
+  @Before
+  public void setUp() {
+    table.clear();
+  }
+
   @Test(expected = IllegalArgumentException.class)
   public void split_invalidBreakpoint_shouldThrow() {
-    ManipulationTable table = new ManipulationTable();
 
     table.add(Meld.createMeld(O5, O6, O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
     table.split(0, 5);
@@ -28,7 +35,6 @@ public class ManipulationTableTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void split_duplicateBreakpoint_shouldThrow() {
-    ManipulationTable table = new ManipulationTable();
 
     table.add(Meld.createMeld(O5, O6, O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
     table.split(0, 2, 2);
@@ -36,7 +42,6 @@ public class ManipulationTableTest {
 
   @Test
   public void split_Run_WithSingleBreakPoint() {
-    ManipulationTable table = new ManipulationTable();
 
     table.add(Meld.createMeld(O5, O6, O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
     table.split(0, 3);
@@ -50,7 +55,6 @@ public class ManipulationTableTest {
 
   @Test
   public void split_Set_WithSingleBreakPoint() {
-    ManipulationTable table = new ManipulationTable();
 
     table.add(Meld.createMeld(O5, O6, O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
     table.split(1, 3);
@@ -64,7 +68,6 @@ public class ManipulationTableTest {
 
   @Test
   public void split_Run_With2BreakPoints() {
-    ManipulationTable table = new ManipulationTable();
 
     table.add(Meld.createMeld(O5, O6, O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
     table.split(0, 2, 4);
@@ -79,7 +82,6 @@ public class ManipulationTableTest {
 
   @Test
   public void split_Set_With2BreakPoints() {
-    ManipulationTable table = new ManipulationTable();
 
     table.add(Meld.createMeld(O5, O6, O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
     table.split(1, 1, 2);
@@ -94,7 +96,6 @@ public class ManipulationTableTest {
 
   @Test
   public void split_RunAndSet() {
-    ManipulationTable table = new ManipulationTable();
 
     table.add(Meld.createMeld(O5, O6, O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
     table.split(0, 4, 1);
@@ -111,7 +112,6 @@ public class ManipulationTableTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void detach_invalidMeldIndex_shouldThrow() {
-    ManipulationTable table = new ManipulationTable();
 
     table.add(Meld.createMeld(R3, G3, B3, O3));
     table.detach(-1, 2, 2);
@@ -119,7 +119,6 @@ public class ManipulationTableTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void detach_duplicateTileIndexes_shouldThrow() {
-    ManipulationTable table = new ManipulationTable();
 
     table.add(Meld.createMeld(O5, O6, O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
     table.detach(1, 2, 2);
@@ -127,7 +126,6 @@ public class ManipulationTableTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void detach_invalidTileIndex_shouldThrow() {
-    ManipulationTable table = new ManipulationTable();
 
     table.add(Meld.createMeld(O5, O6, O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
     table.detach(1, 2, 10);
@@ -135,7 +133,6 @@ public class ManipulationTableTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void detach_tryToDetachRun_shouldThrow() {
-    ManipulationTable table = new ManipulationTable();
 
     table.add(Meld.createMeld(O5, O6, O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
     table.detach(0, 2, 3);
@@ -143,7 +140,6 @@ public class ManipulationTableTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void detach_canNotDetachSingleMeld_shouldThrow() {
-    ManipulationTable table = new ManipulationTable();
 
     table.add(Meld.createMeld(O5), Meld.createMeld(R3, G3, B3, O3));
     table.detach(0, 0);
@@ -151,7 +147,6 @@ public class ManipulationTableTest {
 
   @Test
   public void detach_shouldSucceed() {
-    ManipulationTable table = new ManipulationTable();
 
     table.add(Meld.createMeld(O5, O6, O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
     table.detach(1, 3);
@@ -165,7 +160,6 @@ public class ManipulationTableTest {
 
   @Test
   public void detach_case2_shouldSucceed() {
-    ManipulationTable table = new ManipulationTable();
 
     table.add(Meld.createMeld(O5, O6, O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
     table.detach(1, 0, 1, 3);
@@ -179,7 +173,6 @@ public class ManipulationTableTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void combine_invalidIndexes_shouldThrow() {
-    ManipulationTable table = new ManipulationTable();
 
     table.add(Meld.createMeld(O5, O6), Meld.createMeld(O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
     table.combineMelds(0, 3);
@@ -187,7 +180,6 @@ public class ManipulationTableTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void combine_duplicateIndexes_shouldThrow() {
-    ManipulationTable table = new ManipulationTable();
 
     table.add(Meld.createMeld(O5, O6), Meld.createMeld(O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
     table.combineMelds(1, 1, 2);
@@ -195,7 +187,6 @@ public class ManipulationTableTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void combine_invalidMeld_shouldThrow() {
-    ManipulationTable table = new ManipulationTable();
 
     table.add(Meld.createMeld(O6), Meld.createMeld(O8, O9), Meld.createMeld(R3, G3, B3, O3));
     table.combineMelds(0, 1);
@@ -204,7 +195,6 @@ public class ManipulationTableTest {
 
   @Test
   public void combine_TwoRuns() {
-    ManipulationTable table = new ManipulationTable();
 
     table.add(Meld.createMeld(O5, O6), Meld.createMeld(O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
     table.combineMelds(0, 1);
@@ -217,7 +207,6 @@ public class ManipulationTableTest {
 
   @Test
   public void combine_TwoSets() {
-    ManipulationTable table = new ManipulationTable();
 
     table.add(Meld.createMeld(O5, O6, O7, O8, O9), Meld.createMeld(B3, O3), Meld.createMeld(R3, G3));
     table.combineMelds(2, 1);
@@ -230,7 +219,6 @@ public class ManipulationTableTest {
 
   @Test
   public void combine_SetAndRun() {
-    ManipulationTable table = new ManipulationTable();
 
     table.add(Meld.createMeld(O5), Meld.createMeld(B3, O3), Meld.createMeld(R3, G3), Meld.createMeld(O6, O7, O8, O9));
     table.combineMelds(3, 0);
@@ -244,7 +232,6 @@ public class ManipulationTableTest {
 
   @Test
   public void combine_runWith2Tiles() {
-    ManipulationTable table = new ManipulationTable();
 
     table.add(Meld.createMeld(O5), Meld.createMeld(B3, O3), Meld.createMeld(R3, G3), Meld.createMeld(O6));
     table.combineMelds(3, 0);
@@ -258,33 +245,30 @@ public class ManipulationTableTest {
 
   @Test
   public void submit_withInvalidRun() {
-    ManipulationTable t = new ManipulationTable();
     Table realTable = new Table();
 
-    t.add(Meld.createMeld(B3, O3, G3), Meld.createMeld(O6, O7));
+    table.add(Meld.createMeld(B3, O3, G3), Meld.createMeld(O6, O7));
 
-    assertFalse(t.submit(realTable));
+    assertFalse(table.submit(realTable));
     assertEquals(0, realTable.getPlayingMelds().size());
   }
 
   @Test
   public void submit_withInvalidSet() {
-    ManipulationTable t = new ManipulationTable();
     Table realTable = new Table();
 
-    t.add(Meld.createMeld(B3, O3), Meld.createMeld(R3, G3), Meld.createMeld(O6, O7, O8));
+    table.add(Meld.createMeld(B3, O3), Meld.createMeld(R3, G3), Meld.createMeld(O6, O7, O8));
 
-    assertFalse(t.submit(realTable));
+    assertFalse(table.submit(realTable));
     assertEquals(0, realTable.getPlayingMelds().size());
   }
 
   @Test
   public void submit_withValidMelds() {
-    ManipulationTable t = new ManipulationTable();
     Table realTable = new Table();
 
-    t.add(Meld.createMeld(B3, R3, G3, O3), Meld.createMeld(O6, O7, O8, O9));
-    assertTrue(t.submit(realTable));
+    table.add(Meld.createMeld(B3, R3, G3, O3), Meld.createMeld(O6, O7, O8, O9));
+    assertTrue(table.submit(realTable));
     assertEquals(2, realTable.getPlayingMelds().size());
   }
 }
