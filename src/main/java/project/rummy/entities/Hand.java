@@ -42,7 +42,7 @@ public class Hand {
     return Collections.unmodifiableList(melds);
   }
 
-  public void formMeld(int ...tileIndexes) {
+  public Meld formMeld(int ...tileIndexes) {
     Arrays.sort(tileIndexes);
     Tile[] meldTiles = new Tile[tileIndexes.length];
     for (int i = tileIndexes.length - 1; i >= 0; i--) {
@@ -51,7 +51,9 @@ public class Hand {
       }
       meldTiles[i] = tiles.remove(tileIndexes[i]);
     }
-    melds.add(Meld.createMeld(meldTiles));
+    Meld newMeld = Meld.createMeld(meldTiles);
+    melds.add(newMeld);
+    return newMeld;
   }
 
   public Meld removeMeld(int index) {

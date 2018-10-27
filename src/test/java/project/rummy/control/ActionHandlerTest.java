@@ -10,6 +10,7 @@ import project.rummy.entities.Color;
 import project.rummy.entities.Meld;
 import project.rummy.entities.Table;
 import project.rummy.entities.Tile;
+import project.rummy.player.Player;
 
 import java.util.Arrays;
 
@@ -62,6 +63,18 @@ public class ActionHandlerTest {
     player.getHand().formMeld(0, 1, 2);
 
     handler.playFromHand(0);
+
+    assertThat(player.getHand().getTiles(), not(contains(O5, O6, O7)));
+    assertThat(handler.getManipulationTable().getMelds().get(0).tiles(), contains(O5, O6, O7));
+    assertEquals(player.getHand().getTiles().size(), 4);
+  }
+
+  @Test
+  public void playFromHand_byMeld_shouldSucceed() {
+    player.getHand().addTiles(O5, O6, O7, O8, R3, G3, B3);
+    Meld meld = player.getHand().formMeld(0, 1, 2);
+
+    handler.playFromHand(meld);
 
     assertThat(player.getHand().getTiles(), not(contains(O5, O6, O7)));
     assertThat(handler.getManipulationTable().getMelds().get(0).tiles(), contains(O5, O6, O7));

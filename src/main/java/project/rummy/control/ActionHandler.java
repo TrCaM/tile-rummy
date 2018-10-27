@@ -2,7 +2,9 @@ package project.rummy.control;
 
 import project.rummy.entities.Hand;
 import project.rummy.entities.ManipulationTable;
+import project.rummy.entities.Meld;
 import project.rummy.entities.Table;
+import project.rummy.player.Player;
 
 /**
  * This class handles all player's interaction with the game.
@@ -30,6 +32,10 @@ public class ActionHandler {
     } else {
       throw new IllegalArgumentException("Invalid meld index");
     }
+  }
+
+  public void playFromHand(Meld meld) {
+    playFromHand(hand.getMelds().indexOf(meld));
   }
 
   public void takeTableMeld(int meldIndex) throws IllegalAccessException {
