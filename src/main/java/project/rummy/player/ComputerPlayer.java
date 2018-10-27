@@ -2,7 +2,7 @@ package project.rummy.player;
 
 import project.rummy.control.ActionHandler;
 import project.rummy.control.PlayerStatus;
-import project.rummy.control.Strategy;
+import project.rummy.strategies.Strategy;
 
 public class ComputerPlayer extends Player{
   private Strategy strategy;
