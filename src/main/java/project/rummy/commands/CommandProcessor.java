@@ -5,7 +5,13 @@ import project.rummy.control.ActionHandler;
 public class CommandProcessor {
   private ActionHandler handler;
 
-  public CommandProcessor() {
+  private static CommandProcessor INSTANCE = new CommandProcessor();
+
+  public static CommandProcessor getInstance() {
+    return new CommandProcessor();
+  }
+
+  private CommandProcessor() {
     handler = null;
   }
 

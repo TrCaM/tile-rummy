@@ -24,7 +24,7 @@ public class CommandProcessorTest {
 
   @Before
   public void setUp() {
-    processor = new CommandProcessor();
+    processor = CommandProcessor.getInstance();
   }
 
   @Test(expected = IllegalStateException.class)

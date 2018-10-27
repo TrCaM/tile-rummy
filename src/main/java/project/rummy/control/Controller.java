@@ -8,9 +8,10 @@ public abstract class Controller {
   protected Player player;
   private CommandProcessor processor;
 
-  public Controller(CommandProcessor processor) {
-    this.processor = processor;
+  protected Controller() {
+    processor = CommandProcessor.getInstance();
   }
+
   /**
    * play the turn. the method contains all the logic to play a turn, and it should be able to
    * effect the player's hand and the table itself
