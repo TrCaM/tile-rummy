@@ -34,6 +34,29 @@ public class ManipulationTableTest {
     table.split(0, 2, 2);
   }
 
+  @Test(expected = IllegalArgumentException.class)
+  public void split_invalidMeldIndex_shouldThrow() {
+    ManipulationTable table = new ManipulationTable();
+
+    table.add(Meld.createMeld(O5, O6, O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
+    table.split(2, 1);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void split_invalidMeldSize0_shouldThrow() {
+    ManipulationTable table = new ManipulationTable();
+
+    table.split(0, 1);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void split_invalidMeldSize1_shouldThrow() {
+    ManipulationTable table = new ManipulationTable();
+
+    table.add(Meld.createMeld(O5));
+    table.split(0, 1);
+  }
+
   @Test
   public void split_Run_WithSingleBreakPoint() {
     ManipulationTable table = new ManipulationTable();
