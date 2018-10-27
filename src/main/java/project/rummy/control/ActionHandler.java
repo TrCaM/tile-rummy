@@ -1,13 +1,9 @@
 package project.rummy.control;
 
-import project.rummy.entities.Hand;
-import project.rummy.entities.ManipulationTable;
-import project.rummy.entities.Meld;
-import project.rummy.entities.Table;
-import project.rummy.player.Player;
+import project.rummy.entities.*;
 
 /**
- * This class handles all player's interaction with the game.
+ * This class handles all controllers's interaction with the game.
  */
 public class ActionHandler {
   private Hand hand;
@@ -16,10 +12,11 @@ public class ActionHandler {
   private ManipulationTable manipulationTable;
 
   public ActionHandler(Player player, Table table) {
-    this.hand = player.getHand();
-    this.canUseTable = player.getStatus() != PlayerStatus.START;
+    this.hand = player.hand();
+    this.canUseTable = player.status() != PlayerStatus.START;
     this.table = table;
-    this.manipulationTable = new ManipulationTable();
+    this.manipulationTable = ManipulationTable.getInstance();
+    manipulationTable.clear();
   }
 
   public void draw() {

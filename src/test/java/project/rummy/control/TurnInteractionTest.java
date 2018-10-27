@@ -1,8 +1,13 @@
 package project.rummy.control;
 
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 import project.rummy.entities.*;
-import project.rummy.player.Player;
+import project.rummy.entities.Player;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.contains;
@@ -17,12 +22,24 @@ public class TurnInteractionTest {
   private final Tile B6 = Tile.createTile(Color.BLACK, 6);
   private final Tile B7 = Tile.createTile(Color.BLACK, 7);
 
+  @Rule
+  public MockitoRule mockitoRule = MockitoJUnit.rule();
+
+  @Mock
+  private Controller controller;
+
+  private Player player;
+
+  @Before
+  public void setUp() {
+    player = new Player(controller);
+  }
+
   @Test
   public void scenario_1_Test() throws IllegalAccessException {
-    /* Set up player and hand */
-    Player player = new Player();
+    /* Set up controllers and hand */
     player.setStatus(PlayerStatus.ICE_BROKEN);
-    Hand hand = player.getHand();
+    Hand hand = player.hand();
     hand.addTiles(B4, B6, B7);
     /* Set up the table before the turn happens */
     Table table = new Table();
