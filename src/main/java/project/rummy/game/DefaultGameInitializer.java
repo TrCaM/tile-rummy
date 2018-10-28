@@ -27,11 +27,9 @@ public class DefaultGameInitializer implements GameInitializer {
 
   @Override
   public Table initTable() {
-    return null;
-  }
-
-  @Override
-  public GameStatus initGameStatus() {
-    return null;
+    Table table = new Table();
+    table.initTiles();
+    table.shuffle();
+    return table;
   }
 }

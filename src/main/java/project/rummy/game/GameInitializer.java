@@ -18,9 +18,4 @@ public interface GameInitializer {
    * Initialize the table for the game
    */
   Table initTable();
-
-  /**
-   * Initialize the game status before the game start
-   */
-  GameStatus initGameStatus();
 }
