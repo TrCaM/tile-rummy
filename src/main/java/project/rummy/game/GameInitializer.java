@@ -18,4 +18,9 @@ public interface GameInitializer {
    * Initialize the table for the game
    */
   Table initTable();
+
+  /**
+   * Initialize game state
+   */
+  void initializeGameState(Player[] players, Table table);
 }

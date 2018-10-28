@@ -3,11 +3,14 @@ package project.rummy.game;
 import project.rummy.control.AutoController;
 import project.rummy.control.Controller;
 import project.rummy.control.ManualController;
+import project.rummy.entities.Hand;
 import project.rummy.entities.Player;
 import project.rummy.entities.Table;
 import project.rummy.strategies.AggressiveStrategy;
 import project.rummy.strategies.ModerateStrategy;
 import project.rummy.strategies.PassiveStrategy;
+
+import java.util.stream.Stream;
 
 public class DefaultGameInitializer implements GameInitializer {
 
@@ -32,4 +35,14 @@ public class DefaultGameInitializer implements GameInitializer {
     table.shuffle();
     return table;
   }
+
+  /**
+   * Generate a normal game (draw 14 cards to each player)
+   */
+  @Override
+  public void initializeGameState(Player[] players, Table table) {
+    // TODO: Generate the initial game state for players (draw 14 tiles for each), making sure that
+    // the table is empty
+  }
+
 }

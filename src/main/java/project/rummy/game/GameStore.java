@@ -13,7 +13,8 @@ public class GameStore {
   public Game initializeGame() {
     Player[] players = initializer.initPlayers();
     Table table = initializer.initTable();
-    GameState status = initializer.initGameStatus();
-    return new Game(players, table, status);
+    initializer.initializeGameState(players, table);
+    return new Game(players, table);
   }
+
 }
