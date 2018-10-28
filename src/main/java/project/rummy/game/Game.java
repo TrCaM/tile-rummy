@@ -24,12 +24,26 @@ public class Game implements Observable {
   }
 
   /**
-   * Start the game
+   * Start the game specifically:
+   *  + It create the game loops to keep looping until the game is done
+   *  + Each loop will represent a single move that requires the interface update
+   *  + Redraw the components that need to be re-rendered after each iteration
+   *  + Constantly check the state of the game and check for when the game should end
    */
   public void start() {
-
   }
 
+  /**
+   * Check the current state of the game to see that if the game has ended:
+   *  + When a player has win the game (no tile in hand)
+   *  + When there's no free tile to draw.
+   * @return the player index who won the game. That player either is the only player who has no
+   *         tile or has the least points in hand when there's no tile to draw and play.
+   */
+  public int isGameEnd() {
+    //TODO: Write test and implement the method
+    throw new UnsupportedOperationException();
+  }
   Table getTable() {
     return this.table;
   }
