@@ -42,6 +42,10 @@ public class Hand {
     return Collections.unmodifiableList(melds);
   }
 
+  public HandData toHandData() {
+    return new HandData(this);
+  }
+
   public Meld formMeld(int ...tileIndexes) {
     Arrays.sort(tileIndexes);
     Tile[] meldTiles = new Tile[tileIndexes.length];
