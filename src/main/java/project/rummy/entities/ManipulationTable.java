@@ -59,7 +59,22 @@ public class ManipulationTable {
 
     Arrays.sort(breakPoints);
 
+    //table with 0 melds
+    if (melds.size() == 0) {
+      throw new IllegalArgumentException("empty table.");
+    }
+    //invalid meld index
+    if (meldIndex < 0 || meldIndex >= melds.size()) {
+      throw new IllegalArgumentException("invalid meld index.");
+    }
+
+
     int meldSize = melds.get(meldIndex).tiles().size();
+
+    //check meld size
+    if (meldSize == 1) {
+      throw new IllegalArgumentException("cannot split meld with size smaller than 2");
+    }
 
     ///checking for invalid breakpoints
     for (int i = 0; i < breakPoints.length; i++) {
