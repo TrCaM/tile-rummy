@@ -1,6 +1,9 @@
 package project.rummy.game;
 
-import project.rummy.entities.*;
+import project.rummy.entities.Hand;
+import project.rummy.entities.HandData;
+import project.rummy.entities.Meld;
+import project.rummy.entities.Player;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -14,14 +17,15 @@ public class GameState {
   private int freeTilesCount;
   private List<Meld> tableMelds;
   private HandData[] handsData;
+  private int currentPlayer;
 
   static GameState generateState(Game game) {
     GameState gameState = new GameState();
     gameState.turnNumber = game.getTurnNumber();
+    gameState.currentPlayer = game.getCurrentPlayer();
     gameState.freeTilesCount = game.getTable().getFreeTiles().size();
     gameState.tableMelds = game.getTable().getPlayingMelds();
     gameState.handsData = Stream.of(game.getPlayers())
-        //TODO: create HandData class and method toHandData in Hand class
         .map(Player::hand).map(Hand::toHandData).toArray(HandData[]::new);
     return gameState;
   }
@@ -40,5 +44,9 @@ public class GameState {
 
   public int getTurnNumber() {
     return turnNumber;
+  }
+
+  public int getCurrentPlayer() {
+    return this.currentPlayer;
   }
 }
