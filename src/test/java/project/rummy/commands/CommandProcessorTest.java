@@ -7,8 +7,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import project.rummy.control.ActionHandler;
+import project.rummy.game.Game;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -20,15 +20,20 @@ public class CommandProcessorTest {
   @Mock
   private ActionHandler handler;
 
+  @Mock
+  private Game game;
+
   private CommandProcessor processor;
 
   @Before
   public void setUp() {
     processor = CommandProcessor.getInstance();
+    processor.setUpGame(game);
   }
 
   @Test(expected = IllegalStateException.class)
   public void noHandler_shouldThrow() {
+    processor.setUpHandler(null);
     processor.apply(ActionHandler::draw);
   }
 
