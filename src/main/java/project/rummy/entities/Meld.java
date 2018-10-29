@@ -22,6 +22,12 @@ public class Meld {
     this.source = MeldSource.HAND;
   }
 
+  public void setSource (MeldSource source){
+    this.source = source;
+  }
+
+
+
   /**
    * Create a meld or a portion of meld by grouping a list of tiles. The creation is valid when:
    * + There's only tile in the meld: It is a SINGLE meld tyle
@@ -46,6 +52,7 @@ public class Meld {
   public static Meld createMeld(List<Tile> tiles) {
     return createMeld(tiles.toArray(new Tile[0]));
   }
+
 
   /**
    * Check if a meld is a RUN
