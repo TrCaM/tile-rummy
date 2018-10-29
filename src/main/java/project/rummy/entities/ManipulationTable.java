@@ -44,7 +44,16 @@ public class ManipulationTable {
   public Meld remove(int meldIndex) {
     //TODO: Write test and implement, note that we need to check if the MeldSource is not MANIPULATION for a meld to be
     // able to be removed
+
+    if (meldIndex < 0 || meldIndex >= melds.size()) {
+      throw new IllegalArgumentException("invalid meld index.");
+    }
+
+    if(melds.get(meldIndex).source() == MeldSource.MANIPULATION) {
+      throw new IllegalArgumentException("wrong meld source.");
+    }
     return melds.remove(meldIndex);
+
   }
 
   /**
@@ -68,7 +77,6 @@ public class ManipulationTable {
       throw new IllegalArgumentException("invalid meld index.");
     }
 
-
     int meldSize = melds.get(meldIndex).tiles().size();
 
     //check meld size
@@ -88,25 +96,27 @@ public class ManipulationTable {
       }
     }
 
-    List<Meld> meldsList = new ArrayList<>();
+    Meld temp;
 
     List<Tile> tilesList = melds.get(meldIndex).tiles();
-    List<Tile> temp;
 
-    temp = tilesList.subList(0, breakPoints[0]);
-    meldsList.add(Meld.createMeld(temp.toArray(new Tile[temp.size()])));
+    temp = Meld.createMeld(tilesList.subList(0, breakPoints[0]));
+    temp.setSource(MeldSource.MANIPULATION);
+    add(temp);
 
     for (int i = 1; i < breakPoints.length; i++) {
-      temp = tilesList.subList(breakPoints[i - 1], breakPoints[i]);
-      meldsList.add(Meld.createMeld(temp.toArray(new Tile[temp.size()])));
+      temp = Meld.createMeld(tilesList.subList(breakPoints[i - 1], breakPoints[i]));
+      temp.setSource(MeldSource.MANIPULATION);
+      add(temp);
     }
 
-    temp = tilesList.subList(breakPoints[breakPoints.length - 1], meldSize);
-    meldsList.add(Meld.createMeld(temp.toArray(new Tile[temp.size()])));
+    temp = Meld.createMeld(tilesList.subList(breakPoints[breakPoints.length - 1], meldSize));
+    temp.setSource(MeldSource.MANIPULATION);
+    add(temp);
 
-    remove(meldIndex);
+    melds.remove(meldIndex);
 
-    add(meldsList.toArray(new Meld[meldsList.size()]));
+
   }
 
   /**
@@ -147,8 +157,15 @@ public class ManipulationTable {
       }
     }
 
-    remove(meldIndex);
-    add(Meld.createMeld(detachedTiles), Meld.createMeld(remainingTiles));
+    melds.remove(meldIndex);
+
+    Meld m1 = Meld.createMeld(detachedTiles);
+    m1.setSource(MeldSource.MANIPULATION);
+
+    Meld m2 = Meld.createMeld(remainingTiles);
+    m2.setSource(MeldSource.MANIPULATION);
+
+    add(m1, m2);
   }
 
     /**
@@ -182,18 +199,16 @@ public class ManipulationTable {
         tilesFromMelds.addAll(melds.get(meldIndexes[i]).tiles());
       }
 
-      //sort list of tiles in increasing order
       tilesFromMelds.sort(Comparator.comparing(Tile::value));
 
-      //create new meld from those tiles
       Meld newMeld = Meld.createMeld(tilesFromMelds.toArray(new Tile[tilesFromMelds.size()]));
 
-
       for (int i = meldIndexes.length - 1; i >= 0; i--) {
-        remove(meldIndexes[i]);
+        melds.remove(meldIndexes[i]);
       }
-      melds.add(newMeld);
 
+      newMeld.setSource(MeldSource.MANIPULATION);
+      add(newMeld);
     }
 
     /**
@@ -202,15 +217,14 @@ public class ManipulationTable {
      */
     public boolean submit (Table table){
 
-      //all meld should be valid before adding
       for (Meld e : melds) {
         if (!e.isValidMeld()) {
           return false;
         }
       }
 
-      //add all meld to table
       for (Meld m : melds) {
+        m.setSource(MeldSource.TABLE);
         table.addMeld(m);
       }
 

@@ -27,6 +27,42 @@ public class ManipulationTableTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
+  public void remove_invalidIndex_shouldThrow() {
+    Meld m1 = Meld.createMeld(O5, O6, O7, O8, O9);
+    m1.setSource(MeldSource.MANIPULATION);
+
+    Meld m2 = Meld.createMeld(R3, G3, B3, O3);
+    m2.setSource(MeldSource.TABLE);
+
+    table.add(m1, m2);
+    table.remove(2);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void remove_invalidMeldSource_shouldThrow() {
+    Meld m1 = Meld.createMeld(O5, O6, O7, O8, O9);
+    m1.setSource(MeldSource.MANIPULATION);
+
+    Meld m2 = Meld.createMeld(R3, G3, B3, O3);
+    m2.setSource(MeldSource.TABLE);
+
+    table.add(m1, m2);
+    table.remove(0);
+  }
+
+  @Test
+  public void remove_validMeld() {
+    Meld m1 = Meld.createMeld(O5, O6, O7, O8, O9);
+    m1.setSource(MeldSource.MANIPULATION);
+
+    Meld m2 = Meld.createMeld(R3, G3, B3, O3);
+    m2.setSource(MeldSource.TABLE);
+
+    table.add(m1, m2);
+    assertEquals(table.remove(1), m2);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
   public void split_invalidBreakpoint_shouldThrow() {
 
     table.add(Meld.createMeld(O5, O6, O7, O8, O9), Meld.createMeld(R3, G3, B3, O3));
