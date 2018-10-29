@@ -6,10 +6,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-import project.rummy.entities.Color;
-import project.rummy.entities.Meld;
-import project.rummy.entities.Table;
-import project.rummy.entities.Tile;
+import project.rummy.entities.*;
 
 import java.util.Arrays;
 
@@ -36,12 +33,17 @@ public class ActionHandlerTest {
   @Mock
   private Table table;
 
-  private Player player = new Player();
+  @Mock
+  private Player player;
 
   private ActionHandler handler;
 
+  private Hand hand = new Hand();
+
   @Before
   public void setUp() {
+    when(player.hand()).thenReturn(hand);
+    when(player.status()).thenReturn(PlayerStatus.START).thenReturn(PlayerStatus.ICE_BROKEN);
     handler = new ActionHandler(player, table);
   }
 
@@ -52,26 +54,38 @@ public class ActionHandlerTest {
     handler.draw();
     handler.draw();
 
-    assertThat(player.getHand().getTiles(), contains(O5, R3));
+    assertThat(player.hand().getTiles(), contains(O5, R3));
     verify(table, times(2)).drawTile();
   }
 
   @Test
   public void playFromHand_shouldSucceed() {
-    player.getHand().addTiles(O5, O6, O7, O8, R3, G3, B3);
-    player.getHand().formMeld(0, 1, 2);
+    player.hand().addTiles(O5, O6, O7, O8, R3, G3, B3);
+    player.hand().formMeld(0, 1, 2);
 
     handler.playFromHand(0);
 
-    assertThat(player.getHand().getTiles(), not(contains(O5, O6, O7)));
+    assertThat(player.hand().getTiles(), not(contains(O5, O6, O7)));
     assertThat(handler.getManipulationTable().getMelds().get(0).tiles(), contains(O5, O6, O7));
-    assertEquals(player.getHand().getTiles().size(), 4);
+    assertEquals(player.hand().getTiles().size(), 4);
+  }
+
+  @Test
+  public void playFromHand_byMeld_shouldSucceed() {
+    player.hand().addTiles(O5, O6, O7, O8, R3, G3, B3);
+    Meld meld = player.hand().formMeld(0, 1, 2);
+
+    handler.playFromHand(meld);
+
+    assertThat(player.hand().getTiles(), not(contains(O5, O6, O7)));
+    assertThat(handler.getManipulationTable().getMelds().get(0).tiles(), contains(O5, O6, O7));
+    assertEquals(player.hand().getTiles().size(), 4);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void playFromHand_invalidIndex_shouldThrow() {
-    player.getHand().addTiles(O5, O6, O7, O8, R3, G3, B3);
-    player.getHand().formMeld(0, 1, 2);
+    player.hand().addTiles(O5, O6, O7, O8, R3, G3, B3);
+    player.hand().formMeld(0, 1, 2);
 
     handler.playFromHand(1);
   }

@@ -43,6 +43,10 @@ public class Meld {
     throw new IllegalArgumentException("Invalid tiles input");
   }
 
+  public static Meld createMeld(List<Tile> tiles) {
+    return createMeld(tiles.toArray(new Tile[0]));
+  }
+
   /**
    * Check if a meld is a RUN
    */

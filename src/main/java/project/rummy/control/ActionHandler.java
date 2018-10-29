@@ -1,23 +1,28 @@
 package project.rummy.control;
 
-import project.rummy.entities.Hand;
-import project.rummy.entities.ManipulationTable;
-import project.rummy.entities.Table;
+import project.rummy.entities.*;
 
 /**
- * This class handles all player's interaction with the game.
+ * This class handles all controllers's interaction with the game.
  */
 public class ActionHandler {
   private Hand hand;
   private boolean canUseTable;
   private Table table;
   private ManipulationTable manipulationTable;
+  private boolean isTurnEnd;
 
   public ActionHandler(Player player, Table table) {
-    this.hand = player.getHand();
-    this.canUseTable = player.getStatus() != PlayerStatus.START;
+    this.hand = player.hand();
+    this.canUseTable = player.status() != PlayerStatus.START;
     this.table = table;
-    this.manipulationTable = new ManipulationTable();
+    this.manipulationTable = ManipulationTable.getInstance();
+    manipulationTable.clear();
+    this.isTurnEnd = false;
+  }
+
+  public boolean isExpired() {
+    return this.isTurnEnd;
   }
 
   public void draw() {
@@ -32,6 +37,10 @@ public class ActionHandler {
     }
   }
 
+  public void playFromHand(Meld meld) {
+    playFromHand(hand.getMelds().indexOf(meld));
+  }
+
   public void takeTableMeld(int meldIndex) throws IllegalAccessException {
     if (!canUseTable) {
       throw new IllegalAccessException("Cannot manipulate table");
@@ -44,7 +53,8 @@ public class ActionHandler {
   }
 
   public boolean endTurn() {
-    return manipulationTable.submit(table);
+    isTurnEnd = manipulationTable.submit(table);
+    return isTurnEnd;
   }
 
   public ManipulationTable getManipulationTable() {

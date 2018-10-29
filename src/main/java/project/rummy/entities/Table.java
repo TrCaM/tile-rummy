@@ -66,6 +66,10 @@ public class Table {
     return Collections.unmodifiableList(freeTiles);
   }
 
+  public int getFreeTilesSize() {
+    return freeTiles.size();
+  }
+
   public List<Meld> getPlayingMelds() {
     return Collections.unmodifiableList(melds);
   }

@@ -1,5 +1,5 @@
 package project.rummy.main;
-
+/*
 import org.junit.jupiter.api.*;
 public class ApplicationTest {
     @Test
@@ -8,4 +8,4 @@ public class ApplicationTest {
         System.out.print("???");
     }
 
-}
+}*/
