@@ -7,7 +7,7 @@ import java.util.List;
 
 public class FastIceBreakingMoveMaker implements ComputerMoveMaker {
   @Override
-  public List<Command> rockTheTurn(GameState state) {
+  public List<Command> calculateMove(GameState state) {
     return null;
   }
 }

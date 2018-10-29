@@ -7,7 +7,7 @@ import java.util.List;
 
 public class FindAllTheMoveMoveMaker implements ComputerMoveMaker {
   @Override
-  public List<Command> rockTheTurn(GameState state) {
+  public List<Command> calculateMove(GameState state) {
     return null;
   }
 }

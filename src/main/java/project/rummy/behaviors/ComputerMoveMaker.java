@@ -6,5 +6,5 @@ import project.rummy.game.GameState;
 import java.util.List;
 
 public interface ComputerMoveMaker {
-  List<Command> rockTheTurn(GameState state);
+  List<Command> calculateMove(GameState state);
 }

@@ -3,14 +3,11 @@ package project.rummy.game;
 import project.rummy.control.AutoController;
 import project.rummy.control.Controller;
 import project.rummy.control.ManualController;
-import project.rummy.entities.Hand;
 import project.rummy.entities.Player;
 import project.rummy.entities.Table;
-import project.rummy.strategies.AggressiveStrategy;
+import project.rummy.strategies.Strategy1;
 import project.rummy.strategies.ModerateStrategy;
 import project.rummy.strategies.PassiveStrategy;
-
-import java.util.stream.Stream;
 
 public class DefaultGameInitializer implements GameInitializer {
 
@@ -18,7 +15,7 @@ public class DefaultGameInitializer implements GameInitializer {
   public Player[] initPlayers() {
     Controller[] controllers = new Controller[]{
         new ManualController(),
-        new AutoController(new AggressiveStrategy()),
+        new AutoController(new Strategy1()),
         new AutoController(new PassiveStrategy()),
         new AutoController(new ModerateStrategy())};
     Player[] players = new Player[4];
