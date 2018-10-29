@@ -55,7 +55,6 @@ public class TileView extends Pane{
     Rectangle viewTile = new Rectangle(width, height, getColor(tile));
     Text value = new Text();
     StackPane stackPane = new StackPane();
-
     stackPane.getChildren().addAll(viewTile , value);
     value.setText(Integer.toString(tile.value()));
     value.setFill(Color.WHITE);
