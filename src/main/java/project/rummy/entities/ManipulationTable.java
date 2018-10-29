@@ -158,7 +158,14 @@ public class ManipulationTable {
     }
 
     melds.remove(meldIndex);
-    add(Meld.createMeld(detachedTiles), Meld.createMeld(remainingTiles));
+
+    Meld m1 = Meld.createMeld(detachedTiles);
+    m1.setSource(MeldSource.MANIPULATION);
+
+    Meld m2 = Meld.createMeld(remainingTiles);
+    m2.setSource(MeldSource.MANIPULATION);
+
+    add(m1, m2);
   }
 
     /**
