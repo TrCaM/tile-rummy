@@ -39,7 +39,6 @@ public class Game implements Observable {
       currentPlayer = (currentPlayer + 1) % 4;
       commandProcessor.setUpHandler(new ActionHandler(players[currentPlayer], table));
       players[currentPlayer].getController().playTurn();
-      currentPlayer = -1;
     }
     // TODO: Display dialog to show the winner and done the game.
   }
