@@ -45,6 +45,13 @@ public class ManipulationTable {
     //TODO: Write test and implement, note that we need to check if the MeldSource is not MANIPULATION for a meld to be
     // able to be removed
 
+    if (meldIndex < 0 || meldIndex >= melds.size()) {
+      throw new IllegalArgumentException("invalid meld index.");
+    }
+
+    if(melds.get(meldIndex).source() == MeldSource.MANIPULATION) {
+      throw new IllegalArgumentException("wrong meld source.");
+    }
     return melds.remove(meldIndex);
 
   }
