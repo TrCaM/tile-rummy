@@ -63,6 +63,31 @@ public class HandTest {
   }
 
   @Test
+  public void findPossibleRuns_noRunsFound() {
+    List<Tile> tiles = Arrays.asList(O5, O10, R3,R11);
+    hand = new Hand(tiles);
+
+    List<Meld> runs = hand.findPossibleRuns(hand.getTiles());
+
+    assertEquals(runs.size(), 0);
+  }
+
+  @Test
+  public void findPossibleRuns_test() {
+    List<Tile> tiles = Arrays.asList(O5, O10, R3, O8, B11, R8, O7, G11, O6);
+    hand = new Hand(tiles);
+
+    List<Meld> runs = hand.findPossibleRuns(hand.getTiles());
+
+    assertEquals(runs.size(), 1);
+    assertTrue(runs.get(0).tiles().contains(O5));
+    assertTrue(runs.get(0).tiles().contains(O6));
+    assertTrue(runs.get(0).tiles().contains(O7));
+    assertTrue(runs.get(0).tiles().contains(O8));
+  }
+
+
+  @Test
   public void addTile_shouldSucceed() {
     hand = new Hand();
     hand.addTile(O5);
