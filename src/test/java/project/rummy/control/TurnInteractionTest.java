@@ -162,9 +162,50 @@ public class TurnInteractionTest {
         assertThat(table.getPlayingMelds().get(1).tiles(),contains(R8, B8, G8, O8));
         assertThat(hand.getMelds().size(), is( 0));
         assertThat(hand.getTiles().size(), is(0));
-
   }
 
-}
+    @Test
+    //Add and split
+    public void scenario_4_Test() throws IllegalAccessException {
+        //Set up controllers and hand
+        player.setStatus(PlayerStatus.ICE_BROKEN);
+        Hand hand = player.hand();
+        hand.addTiles(R8);
+
+        // Set up the table
+        Table table = new Table();
+        Meld setOf7 = Meld.createMeld(O5,O6, O7, O8, B8, R8, G8, O8);
+        table.addMeld(setOf7);
+
+        //Create action handler
+        ActionHandler handler = new ActionHandler(player, table);
+        ManipulationTable tempTable = handler.getManipulationTable();
+
+        //Test table before turn
+        assertThat(tempTable.getMelds().isEmpty(), is(true));
+
+        /* Start the turn  */
+        //Adding O5,O6, O7, O8, B8, R8, G8, O8 to tempt table
+        handler.takeTableMeld(0);
+        //Forming tiles to play from hand {R8}
+        hand.formMeld(0);
+        //Adding {R8} manipulation table
+        handler.playFromHand(0);
+
+        tempTable.detach(0, 3);
+        tempTable.detach(0,0);
+
+        tempTable.combineMelds(0,2,4);
+
+        //Checking the turn
+        assertThat(table.getPlayingMelds().size(),is(3) );
+        assertThat(table.getPlayingMelds().get(0).tiles(),contains(R8, O8, B8));
+        assertThat(table.getPlayingMelds().get(1).tiles(),contains(O5, O6, O7));
+        assertThat(table.getPlayingMelds().get(2).tiles(),contains(R8, G8, O8));
+        assertThat(hand.getMelds().size(), is( 0));
+        assertThat(hand.getTiles().size(), is(0));
+    }
+ }
+
 
 
