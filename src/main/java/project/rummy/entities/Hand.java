@@ -126,6 +126,35 @@ public class Hand {
     return possibleMelds;
   }
 
+  /**
+   * find all possible runs that can be made up from a list of tiles
+   */
+  public List<Meld> findPossibleRuns(List<Tile> tilesList){
 
+    List<Meld> possibleMelds = new ArrayList<>();
+    List<Tile> alist = new ArrayList<>(tilesList);
+    alist.sort(Comparator.comparing(Tile::value));
+
+    while(alist.size() > 2) {
+      List<Tile> tempMeld = new ArrayList<>();
+      tempMeld.add(alist.get(0));
+
+      for (int i = 1; i < alist.size(); i++) {
+        if(tempMeld.get(0).color() == alist.get(i).color()
+                && !tempMeld.contains(alist.get(i))
+                && tempMeld.get(tempMeld.size()-1).value() == alist.get(i).value()-1){
+          tempMeld.add(alist.get(i));
+        }
+      }
+
+      if (tempMeld.size() >= 3) {
+        possibleMelds.add(Meld.createMeld(tempMeld));
+      }
+      for(Tile e: tempMeld){
+        alist.remove(alist.indexOf(e));
+      }
+    }
+    return possibleMelds;
+  }
 
 }
