@@ -79,6 +79,28 @@ public class Hand {
   }
 
   /**
+   * adding a tile to an existing meld in hand
+   */
+  public void addTileToMeld(int tileIndex, int meldIndex){
+    //checking for invalid indexes
+    if (meldIndex >= melds.size() || meldIndex < 0
+            || tileIndex >= tiles.size() || tileIndex < 0) {
+      throw new IllegalArgumentException("Invalid index");
+    }
+
+    List<Tile> allTiles = new ArrayList<>(melds.get(meldIndex).tiles());
+    allTiles.add(tiles.get(tileIndex));
+
+    allTiles.sort(Comparator.comparing(Tile::value));
+
+    Meld newMeld = Meld.createMeld(allTiles);
+
+    melds.add(newMeld);
+    melds.remove(meldIndex);
+    tiles.remove(tileIndex);
+  }
+
+  /**
    * Get the number of tiles in the hand
    */
   public int size() {
