@@ -157,4 +157,49 @@ public class Hand {
     return possibleMelds;
   }
 
+
+  /**
+   * find all possible sets and runs from the hand's tiles that give the highest score
+   * list of melds 1: find all possible sets first, then runs
+   * list of melds 2: find all possible runs first, then sets
+   * return the list of melds that gives the highest score
+   */
+  public List<Meld> findBestMelds(){
+    List<Tile> tilesList = new ArrayList<>(tiles);
+
+    //sets first then runs
+    List<Meld> bestMelds_1 = findPossibleSets(tilesList);
+
+    for(Meld m: bestMelds_1){
+      for(Tile t: m.tiles()){
+        tilesList.remove(tilesList.indexOf(t));
+      }
+    }
+    bestMelds_1.addAll(findPossibleRuns(tilesList));
+
+    int score_1 = 0;
+    for(Meld m: bestMelds_1){
+      score_1 += m.getScore();
+    }
+
+    //runs first then sets
+    tilesList = new ArrayList<>(tiles);
+    List<Meld> bestMelds_2 = findPossibleRuns(tilesList);
+
+    for(Meld m: bestMelds_2){
+      for(Tile t: m.tiles()){
+        tilesList.remove(tilesList.indexOf(t));
+      }
+    }
+    bestMelds_2.addAll(findPossibleSets(tilesList));
+
+    int score_2 = 0;
+    for(Meld m: bestMelds_2){
+      score_2 += m.getScore();
+    }
+
+    return score_1 > score_2 ? bestMelds_1 : bestMelds_2;
+  }
+
+
 }
