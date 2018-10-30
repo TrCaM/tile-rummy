@@ -21,13 +21,14 @@ public class DefaultGameInitializerTest {
 
   @Test
   public void initPlayers_shouldSucceed() {
-    Player[] players = initializer.initPlayers();
+    Game game = new Game();
+    initializer.initPlayers(game);
 
-    assertThat(players.length, is(4));
-    assertThat(players[0].getController(), instanceOf(ManualController.class));
-    assertThat(players[1].getController(), instanceOf(AutoController.class));
-    assertThat(players[2].getController(), instanceOf(AutoController.class));
-    assertThat(players[3].getController(), instanceOf(AutoController.class));
+    assertThat(game.getPlayers().length, is(4));
+    assertThat(game.getPlayers()[0].getController(), instanceOf(ManualController.class));
+    assertThat(game.getPlayers()[1].getController(), instanceOf(AutoController.class));
+    assertThat(game.getPlayers()[2].getController(), instanceOf(AutoController.class));
+    assertThat(game.getPlayers()[3].getController(), instanceOf(AutoController.class));
   }
 
 }

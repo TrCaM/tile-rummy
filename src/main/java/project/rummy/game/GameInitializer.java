@@ -12,12 +12,12 @@ public interface GameInitializer {
   /**
    * Initialize a list of players
    */
-  Player[] initPlayers();
+  void initPlayers(Game game);
 
   /**
    * Initialize the table for the game
    */
-  Table initTable();
+  void initTable(Game game);
 
   /**
    * Initialize game state

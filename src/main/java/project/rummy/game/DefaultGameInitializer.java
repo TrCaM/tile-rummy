@@ -6,31 +6,32 @@ import project.rummy.control.ManualController;
 import project.rummy.entities.Player;
 import project.rummy.entities.Table;
 import project.rummy.strategies.Strategy1;
-import project.rummy.strategies.ModerateStrategy;
-import project.rummy.strategies.PassiveStrategy;
+import project.rummy.strategies.Strategy2;
+import project.rummy.strategies.Strategy3;
 
 public class DefaultGameInitializer implements GameInitializer {
 
   @Override
-  public Player[] initPlayers() {
+  public void initPlayers(Game game) {
     Controller[] controllers = new Controller[]{
         new ManualController(),
-        new AutoController(new Strategy1()),
-        new AutoController(new PassiveStrategy()),
-        new AutoController(new ModerateStrategy())};
+        new AutoController(new Strategy1(game)),
+        new AutoController(new Strategy2(game)),
+        new AutoController(new Strategy3(game))};
     Player[] players = new Player[4];
-    for (int i=0; i<4;i++) {
-      players[i] = new Player(controllers[i]);
+    players[0] = new Player("You", controllers[0]);
+    for (int i=1; i<4; i++) {
+      players[i] = new Player(String.format("Player %d", i), controllers[i]);
     }
-    return players;
+    game.setUpPlayer(players);
   }
 
   @Override
-  public Table initTable() {
+  public void initTable(Game game) {
     Table table = new Table();
     table.initTiles();
     table.shuffle();
-    return table;
+    game.setUpTable(table);
   }
 
   /**
