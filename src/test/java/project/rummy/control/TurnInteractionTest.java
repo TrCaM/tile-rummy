@@ -25,6 +25,8 @@ public class TurnInteractionTest {
     private final Tile G6 = Tile.createTile(Color.GREEN, 6);
     private final Tile G7 = Tile.createTile(Color.GREEN, 7);
     private final Tile G8 = Tile.createTile(Color.GREEN, 8);
+    private final Tile B6 = Tile.createTile(Color.BLACK, 6);
+    private final Tile B7 = Tile.createTile(Color.BLACK, 7);
     private final Tile B8 = Tile.createTile(Color.BLACK, 8);
     private final Tile R8 = Tile.createTile(Color.RED, 8);
 
@@ -266,5 +268,83 @@ public class TurnInteractionTest {
         assertThat(hand.getMelds().size(), is(0));
     }
 
+    @Test
+    //Multiple Splits
+    public void scenario_5_Test() throws IllegalAccessException {
+        //Set up controllers and hand
+        player.setStatus(PlayerStatus.ICE_BROKEN);
+        Hand hand = player.hand();
+        hand.addTiles(O3, R8);
+
+        // Set up the table
+        Table table = new Table();
+        Meld setOfRun1 = Meld.createMeld(B6, B7, B8);
+        Meld setOfRun2 = Meld.createMeld(G6, G7, G8);
+        Meld setOfSet = Meld.createMeld(O4, O5, O6, O7, O8);
+        table.addMeld(setOfRun1);
+        table.addMeld(setOfRun2);
+        table.addMeld(setOfSet);
+
+        //Create action handler
+        ActionHandler handler = new ActionHandler(player, table);
+        ManipulationTable tempTable = handler.getManipulationTable();
+
+        //Test table before turn
+        assertThat(tempTable.getMelds().isEmpty(), is(true));
+
+        //Taking meld {B6, B7, B8}, {G6, G7, G8} and {O4, O5, O6, O7, O8} into temp table
+        handler.takeTableMeld(0);
+        handler.takeTableMeld(0);
+        handler.takeTableMeld(0);
+        assertThat(tempTable.getMelds().get(0).tiles(), contains(B6, B7, B8));
+        assertThat(tempTable.getMelds().get(1).tiles(), contains(G6, G7, G8));
+        assertThat(tempTable.getMelds().get(2).tiles(), contains(O4, O5, O6, O7, O8));
+
+        //Forming {O3} and {R8} from hand to play
+        hand.formMeld(0);
+        hand.formMeld(0);
+        assertThat(hand.getMelds().get(0).tiles(), contains(O3));
+        assertThat(hand.getMelds().get(1).tiles(), contains(R8));
+
+        //Adding {O3} and {R8} to temp table
+        handler.playFromHand(0);
+        handler.playFromHand(0);
+        assertThat(tempTable.getMelds().get(3).tiles(), contains(O3));
+        assertThat(tempTable.getMelds().get(4).tiles(), contains(R8));
+
+        //Splitting {B8} in {B6, B7, B8} , {G8} in {G6, G7, G8} and {O8} in {O4, O5, O6, O7, O8}
+        tempTable.split(0, 2);
+        assertThat(tempTable.getMelds().get(5).tiles(), contains(B8));
+        tempTable.split(0, 2);
+        assertThat(tempTable.getMelds().get(6).tiles(), contains(G8));
+        tempTable.split(0, 4);
+        assertThat(tempTable.getMelds().get(7).tiles(), contains(O8));
+        tempTable.combineMelds(1, 3, 5, 7);
+        assertThat(tempTable.getMelds().get(4).tiles(), contains(R8, B8, G8, O8));
+
+        //========================================================================
+        tempTable.split(1, 1);
+        tempTable.split(1, 1);
+        tempTable.split(1, 3);
+        tempTable.split(6, 2);
+        tempTable.combineMelds(2, 4, 8);
+        tempTable.combineMelds(2, 3, 4);
+        tempTable.combineMelds(0, 2);
+        assertThat(tempTable.getMelds().get(0).tiles(), contains(R8, B8, G8, O8));
+        assertThat(tempTable.getMelds().get(1).tiles(), contains(B6, G6, O6));
+        assertThat(tempTable.getMelds().get(2).tiles(), contains(B7, G7, O7));
+        assertThat(tempTable.getMelds().get(3).tiles(), contains(O3, O4, O5));
+
+        //End turn
+        handler.endTurn();
+
+        //Checking the turn
+        assertThat(table.getPlayingMelds().size(), is(4));
+        assertThat(table.getPlayingMelds().get(0).tiles(), contains(R8, B8, G8, O8));
+        assertThat(table.getPlayingMelds().get(1).tiles(), contains(B6, G6, O6));
+        assertThat(table.getPlayingMelds().get(2).tiles(), contains(B7, G7, O7));
+        assertThat(table.getPlayingMelds().get(3).tiles(), contains(O3, O4, O5));
+         assertThat(hand.getMelds().size(), is(0));
+    }
 }
 
