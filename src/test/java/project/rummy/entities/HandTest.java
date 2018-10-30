@@ -86,6 +86,66 @@ public class HandTest {
     assertTrue(runs.get(0).tiles().contains(O8));
   }
 
+  @Test
+  public void findPossibleRuns_noMeldsFound() {
+    List<Tile> tiles = Arrays.asList(O5, O10, R3,R11);
+    hand = new Hand(tiles);
+
+    List<Meld> sets = hand.findBestMelds();
+
+    assertEquals(sets.size(), 0);
+  }
+  @Test
+  public void findPossibleRuns_onlySets() {
+    List<Tile> tiles = Arrays.asList(O5, O10, R3,R11, B11, R8, B5, G11, G5);
+    hand = new Hand(tiles);
+
+    List<Meld> melds = hand.findBestMelds();
+
+    assertEquals(melds.size(), 2);
+
+    assertTrue(melds.get(0).tiles().contains(O5));
+    assertTrue(melds.get(0).tiles().contains(B5));
+    assertTrue(melds.get(0).tiles().contains(G5));
+
+    assertTrue(melds.get(1).tiles().contains(R11));
+    assertTrue(melds.get(1).tiles().contains(B11));
+    assertTrue(melds.get(1).tiles().contains(G11));
+  }
+
+  @Test
+  public void findPossibleRuns_onlyRuns() {
+    List<Tile> tiles = Arrays.asList(O5, O10, R3, O8, B11, R8, O7, G11, O6);
+    hand = new Hand(tiles);
+
+    List<Meld> melds = hand.findBestMelds();
+
+    assertEquals(melds.size(), 1);
+    assertTrue(melds.get(0).tiles().contains(O5));
+    assertTrue(melds.get(0).tiles().contains(O6));
+    assertTrue(melds.get(0).tiles().contains(O7));
+    assertTrue(melds.get(0).tiles().contains(O8));
+  }
+
+
+  @Test
+  public void findBestMelds_test() {
+    List<Tile> tiles = Arrays.asList(O5, O10, B5, R3, O8, B11, G5, R8, O7, G11, O6);
+    hand = new Hand(tiles);
+
+    List<Meld> best = hand.findBestMelds();
+
+    assertEquals(best.size(), 2);
+
+    assertTrue(best.get(0).tiles().contains(O5));
+    assertTrue(best.get(0).tiles().contains(B5));
+    assertTrue(best.get(0).tiles().contains(G5));
+
+    assertTrue(best.get(1).tiles().contains(O6));
+    assertTrue(best.get(1).tiles().contains(O7));
+    assertTrue(best.get(1).tiles().contains(O8));
+  }
+
 
   @Test
   public void addTile_shouldSucceed() {
