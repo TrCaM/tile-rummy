@@ -30,6 +30,52 @@ public class HandTest {
   public void setUp() {
   }
 
+   @Test(expected = IllegalArgumentException.class)
+   public void removeTileFromMeld_invalidIndex() {
+       hand = new Hand();
+       hand.addTiles(O5, O10, G5, B7, B5);
+       hand.formMeld(0,2,4);
+
+       hand.removeTileFromMeld(0,1);
+   }
+
+   @Test(expected = IllegalArgumentException.class)
+   public void removeTileFromMeld_invalidMeldFormed() {
+       hand = new Hand();
+       hand.addTiles(O5, O10, B6, G5, B7, B5);
+       hand.formMeld(2,4,5);
+
+       hand.removeTileFromMeld(1,0);
+   }
+
+   @Test
+   public void removeTileFromMeld_Run() {
+       hand = new Hand();
+       hand.addTiles(O5, O10, B6, G5, B7, B5);
+       hand.formMeld(2,4,5);
+
+       hand.removeTileFromMeld(0,0);
+
+       assertEquals(hand.getMelds().get(0).tiles().size(), 2);
+       assertTrue(hand.getMelds().get(0).tiles().contains(B6));
+       assertTrue(hand.getMelds().get(0).tiles().contains(B7));
+       assertTrue(hand.getTiles().contains(B5));
+   }
+
+   @Test
+   public void removeTileFromMeld_Set() {
+       hand = new Hand();
+       hand.addTiles(O5, O10, B6, G5, B7, B5);
+       hand.formMeld(0,3,5);
+
+       hand.removeTileFromMeld(1,0);
+
+       assertEquals(hand.getMelds().get(0).tiles().size(), 2);
+       assertTrue(hand.getMelds().get(0).tiles().contains(O5));
+       assertTrue(hand.getMelds().get(0).tiles().contains(B5));
+       assertTrue(hand.getTiles().contains(G5));
+   }
+
   @Test(expected = IllegalArgumentException.class)
    public void addTileToMeld_invalidIndex() {
        hand = new Hand();
