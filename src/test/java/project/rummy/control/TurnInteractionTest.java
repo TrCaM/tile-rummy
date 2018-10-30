@@ -21,6 +21,9 @@ public class TurnInteractionTest {
     private final Tile O6 = Tile.createTile(Color.ORANGE, 6);
     private final Tile O7 = Tile.createTile(Color.ORANGE, 7);
     private final Tile O8 = Tile.createTile(Color.ORANGE, 8);
+    private final Tile G5 = Tile.createTile(Color.GREEN, 5);
+    private final Tile G6 = Tile.createTile(Color.GREEN, 6);
+    private final Tile G7 = Tile.createTile(Color.GREEN, 7);
     private final Tile G8 = Tile.createTile(Color.GREEN, 8);
     private final Tile B8 = Tile.createTile(Color.BLACK, 8);
     private final Tile R8 = Tile.createTile(Color.RED, 8);
@@ -139,11 +142,11 @@ public class TurnInteractionTest {
         //End Turn
         handler.endTurn();
 
-      //Checking the turn
-      assertThat(table.getPlayingMelds().size(),is(2) );
-      assertThat(table.getPlayingMelds().get(0).tiles(),contains(R8, G8, B8));
-      assertThat(table.getPlayingMelds().get(1).tiles(),contains(O5, O6, O7, O8));
-      assertThat(hand.getMelds().size(), is( 0));
+        //Checking the turn
+        assertThat(table.getPlayingMelds().size(), is(2));
+        assertThat(table.getPlayingMelds().get(0).tiles(), contains(R8, G8, B8));
+        assertThat(table.getPlayingMelds().get(1).tiles(), contains(O5, O6, O7, O8));
+        assertThat(hand.getMelds().size(), is(0));
     }
 
     @Test
@@ -181,10 +184,10 @@ public class TurnInteractionTest {
         handler.playFromHand(0);
         handler.playFromHand(0);
         assertThat(tempTable.getMelds().get(1).tiles(), contains(O5));
-        assertThat(tempTable.getMelds().get(2).tiles(),contains(B8, R8));
+        assertThat(tempTable.getMelds().get(2).tiles(), contains(B8, R8));
 
         //Splitting {O8} from {O6, O7, O8}
-        tempTable.split(0,2);
+        tempTable.split(0, 2);
         assertThat(tempTable.getMelds().size(), is(4));
         assertThat(tempTable.getMelds().get(2).tiles(), contains(O6, O7));
         assertThat(tempTable.getMelds().get(3).tiles(), contains(O8));
@@ -206,17 +209,19 @@ public class TurnInteractionTest {
     }
 
     @Test
-    //Add and split
+    //Combined Split
     public void scenario_4_Test() throws IllegalAccessException {
         //Set up controllers and hand
         player.setStatus(PlayerStatus.ICE_BROKEN);
         Hand hand = player.hand();
-        hand.addTiles(R8);
+        hand.addTiles(B8);
 
         // Set up the table
         Table table = new Table();
-        Meld setOf7 = Meld.createMeld(O5, O6, O7, O8, B8, R8, G8, O8);
-        table.addMeld(setOf7);
+        Meld setOfSet = Meld.createMeld(O8, R8, B8, G8);
+        Meld setOfRun = Meld.createMeld(G5, G6, G7, G8);
+        table.addMeld(setOfSet);
+        table.addMeld(setOfRun);
 
         //Create action handler
         ActionHandler handler = new ActionHandler(player, table);
@@ -226,25 +231,40 @@ public class TurnInteractionTest {
         assertThat(tempTable.getMelds().isEmpty(), is(true));
 
         /* Start the turn  */
-        //Adding O5,O6, O7, O8, B8, R8, G8, O8 to tempt table
+        //Adding  {O8, R8, B8, G8} and {G5, G6, G7, G8} to tempt table
         handler.takeTableMeld(0);
+        handler.takeTableMeld(0);
+        assertThat(tempTable.getMelds().get(0).tiles(), contains(O8, R8, B8, G8));
+        assertThat(tempTable.getMelds().get(1).tiles(), contains(G5, G6, G7, G8));
+
         //Forming tiles to play from hand {R8}
         hand.formMeld(0);
+        assertThat(hand.getMelds().get(0).tiles(), contains(B8));
+
         //Adding {R8} manipulation table
         handler.playFromHand(0);
+        assertThat(tempTable.getMelds().get(2).tiles(), contains(B8));
 
-        tempTable.detach(0, 3);
+        //Splitting {O8} from  {O8, R8, B8, G8} and {G8} from {G5, G6, G7, G8}
         tempTable.detach(0, 0);
+        tempTable.split(0, 3);
+        assertThat(tempTable.getMelds().get(1).tiles(), contains(O8));
+        assertThat(tempTable.getMelds().get(4).tiles(), contains(G8));
 
-        tempTable.combineMelds(0, 2, 4);
+        //Combining {B8}, {O8}, {G8} to form {B8, O8, G8}
+        tempTable.combineMelds(0, 1, 4);
+        assertThat(tempTable.getMelds().get(2).tiles(), contains(B8, O8, G8));
+
+        //End turn
+        handler.endTurn();
 
         //Checking the turn
         assertThat(table.getPlayingMelds().size(), is(3));
-        assertThat(table.getPlayingMelds().get(0).tiles(), contains(R8, O8, B8));
-        assertThat(table.getPlayingMelds().get(1).tiles(), contains(O5, O6, O7));
-        assertThat(table.getPlayingMelds().get(2).tiles(), contains(R8, G8, O8));
+        assertThat(table.getPlayingMelds().get(0).tiles(), contains(R8, B8, G8));
+        assertThat(table.getPlayingMelds().get(1).tiles(), contains(G5, G6, G7));
+        assertThat(table.getPlayingMelds().get(2).tiles(), contains(B8, O8, G8));
         assertThat(hand.getMelds().size(), is(0));
-        assertThat(hand.getTiles().size(), is(0));
     }
+
 }
 
