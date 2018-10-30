@@ -1,19 +1,19 @@
 package project.rummy.strategies;
 
-import project.rummy.control.ActionHandler;
+import project.rummy.commands.Command;
+
+import java.util.List;
 
 public interface Strategy {
   /**
    * Play the first 30+ point turn
-   * @param handler the action handler to communicate with the board and hand during the turn
    */
-  void iceBreak();
+  List<Command> iceBreak();
 
 
   /**
    * Play the turn after the first 30+ turn. Note that at this point the controllers can manipulate the
    * table
-   * @param handler the action handler to communicate with the board and hand during the turn
    */
-  void performFullTurn();
+  List<Command> performFullTurn();
 }

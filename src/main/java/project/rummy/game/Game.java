@@ -18,13 +18,19 @@ public class Game implements Observable {
   private int turnNumber;
   private CommandProcessor commandProcessor;
 
-  Game(Player[] players, Table table) {
-    this.players = players;
-    this.table = table;
+  Game() {
     this.observers = new ArrayList<>();
+    this.commandProcessor = CommandProcessor.getInstance();
+  }
+
+  public void setUpPlayer(Player[] players) {
+    this.players = players;
     this.turnNumber = 0;
     this.currentPlayer = 0;
-    this.commandProcessor = CommandProcessor.getInstance();
+  }
+
+  public void setUpTable(Table table) {
+    this.table = table;
   }
 
   /**
@@ -59,6 +65,7 @@ public class Game implements Observable {
   public boolean isGameEnd() {
     return getWinner() != -1;
   }
+
   Table getTable() {
     return this.table;
   }

@@ -13,13 +13,14 @@ public class LoadGameInitializer implements GameInitializer{
   public LoadGameInitializer(GameState state) {
     this.state = state;
   }
+
   @Override
-  public Player[] initPlayers() {
+  public void initPlayers(Game game) {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public Table initTable() {
+  public void initTable(Game game) {
     throw new UnsupportedOperationException();
   }
 

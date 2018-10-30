@@ -1,5 +1,6 @@
 package project.rummy.control;
 
+import org.apache.log4j.Logger;
 import project.rummy.entities.*;
 
 /**
@@ -11,6 +12,9 @@ public class ActionHandler {
   private Table table;
   private ManipulationTable manipulationTable;
   private boolean isTurnEnd;
+  private String playerName;
+
+  private static Logger logger = Logger.getLogger(ActionHandler.class);
 
   public ActionHandler(Player player, Table table) {
     this.hand = player.hand();
@@ -19,6 +23,7 @@ public class ActionHandler {
     this.manipulationTable = ManipulationTable.getInstance();
     manipulationTable.clear();
     this.isTurnEnd = false;
+    this.playerName = player.getName();
   }
 
   public boolean isExpired() {
@@ -26,10 +31,13 @@ public class ActionHandler {
   }
 
   public void draw() {
-    hand.addTile(table.drawTile());
+    Tile tile = table.drawTile();
+    hand.addTile(tile);
+    logger.info(String.format("%s has draw %s", playerName, tile));
   }
 
   public void playFromHand(int meldIndex) {
+    //TODO: Add a logging infomation here
     if (meldIndex >=0 && meldIndex < hand.getMelds().size()) {
       manipulationTable.add(hand.removeMeld(meldIndex));
     } else {
@@ -38,10 +46,12 @@ public class ActionHandler {
   }
 
   public void playFromHand(Meld meld) {
+    //TODO: Add a logging infomation here
     playFromHand(hand.getMelds().indexOf(meld));
   }
 
   public void takeTableMeld(int meldIndex) throws IllegalAccessException {
+    //TODO: Add a logging infomation here
     if (!canUseTable) {
       throw new IllegalAccessException("Cannot manipulate table");
     }
@@ -53,6 +63,7 @@ public class ActionHandler {
   }
 
   public boolean endTurn() {
+    // TODO: Add logging information here
     isTurnEnd = manipulationTable.submit(table);
     return isTurnEnd;
   }

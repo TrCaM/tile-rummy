@@ -35,7 +35,7 @@ public class TurnInteractionTest {
 
   @Before
   public void setUp() {
-    player = new Player(controller);
+    player = new Player("Player", controller);
   }
 
   @Test

@@ -11,10 +11,11 @@ public class GameStore {
   }
 
   public Game initializeGame() {
-    Player[] players = initializer.initPlayers();
-    Table table = initializer.initTable();
-    initializer.initializeGameState(players, table);
-    return new Game(players, table);
+    Game game = new Game();
+    initializer.initPlayers(game);
+    initializer.initTable(game);
+    initializer.initializeGameState(game.getPlayers(), game.getTable());
+    return game;
   }
 
 }

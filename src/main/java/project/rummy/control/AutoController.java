@@ -1,7 +1,11 @@
 package project.rummy.control;
 
+import project.rummy.commands.Command;
+import project.rummy.entities.Player;
 import project.rummy.entities.PlayerStatus;
 import project.rummy.strategies.Strategy;
+
+import java.util.List;
 
 public class AutoController extends Controller {
   private Strategy strategy;
@@ -12,10 +16,9 @@ public class AutoController extends Controller {
 
   @Override
   public void playTurn() {
-    if (player.status() == PlayerStatus.START) {
-      strategy.iceBreak();
-    } else {
-      strategy.performFullTurn();
-    }
+    List<Command> commands =
+        player.status() == PlayerStatus.START ? strategy.iceBreak() : strategy.performFullTurn();
+
+    commands.forEach(this::send);
   }
 }
