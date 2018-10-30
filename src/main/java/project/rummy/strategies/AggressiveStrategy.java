@@ -13,9 +13,10 @@ import project.rummy.observers.Observer;
 public class AggressiveStrategy implements Strategy, Observer {
   private GameState state;
 
-  public AggressiveStrategy(Game game) {
+  /*public AggressiveStrategy(Game game) {
     game.registerObserver(this);
   }
+*/
 
   @Override
   public void iceBreak() {
