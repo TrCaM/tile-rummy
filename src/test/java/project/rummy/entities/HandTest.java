@@ -3,6 +3,7 @@ package project.rummy.entities;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,10 +24,42 @@ public class HandTest {
   private final Tile B1 = Tile.createTile(Color.BLACK, 1);
   private final Tile G11 = Tile.createTile(Color.GREEN, 11);
   private final Tile G5 = Tile.createTile(Color.GREEN, 5);
+  private final Tile B11 = Tile.createTile(Color.BLACK, 11);
+  private final Tile R11 = Tile.createTile(Color.RED, 11);
+  private final Tile O6 = Tile.createTile(Color.ORANGE, 6);
+  private final Tile O7 = Tile.createTile(Color.ORANGE, 7);
+  private final Tile O8 = Tile.createTile(Color.ORANGE, 8);
   private Hand hand;
 
   @Before
-  public void setUp() {
+  public void setUp() {  }
+
+
+  @Test
+  public void findPossibleSets_noSetsFound() {
+    List<Tile> tiles = Arrays.asList(O5, O10, R3,R11);
+    hand = new Hand(tiles);
+
+    List<Meld> sets = hand.findPossibleSets(hand.getTiles());
+
+    assertEquals(sets.size(), 0);
+  }
+  @Test
+  public void findPossibleSets_test() {
+    List<Tile> tiles = Arrays.asList(O5, O10, R3,R11, B11, R8, B5, G11, G5);
+    hand = new Hand(tiles);
+
+    List<Meld> sets = hand.findPossibleSets(hand.getTiles());
+
+    assertEquals(sets.size(), 2);
+
+    assertTrue(sets.get(0).tiles().contains(O5));
+    assertTrue(sets.get(0).tiles().contains(B5));
+    assertTrue(sets.get(0).tiles().contains(G5));
+
+    assertTrue(sets.get(1).tiles().contains(R11));
+    assertTrue(sets.get(1).tiles().contains(B11));
+    assertTrue(sets.get(1).tiles().contains(G11));
   }
 
   @Test
