@@ -34,6 +34,11 @@ public class DefaultGameInitializer implements GameInitializer {
     game.setUpTable(table);
   }
 
+  public void  initEmptyTable(Game game){
+    Table table = new Table();
+    game.setUpTable(table);
+  }
+
   /**
    * Generate a normal game (draw 14 cards to each player)
    */
@@ -41,6 +46,7 @@ public class DefaultGameInitializer implements GameInitializer {
   public void initializeGameState(Player[] players, Table table) {
     // TODO: Generate the initial game state for players (draw 14 tiles for each), making sure that
     // the table is empty
+    //
   }
 
 }
