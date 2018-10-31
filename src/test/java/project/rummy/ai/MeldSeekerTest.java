@@ -135,4 +135,53 @@ public class MeldSeekerTest {
         assertTrue(best.get(1).tiles().contains(O8));
     }
 
+    @Test
+    public void findNextMelds_noMeldsFound() {
+        List<Tile> tiles = Arrays.asList(O10, B5, R3, O8, B11, G5, R8, G11, O6);
+
+        Meld next = MeldSeeker.findNextMelds(tiles);
+
+        assertTrue(next == null);
+    }
+
+    @Test
+    public void findNextMelds_onlyRuns() {
+        List<Tile> tiles = Arrays.asList(O10, B5, R3, O8, B11, G5, R8, O7, G11, O6);
+
+        //run: O6 O7 O8
+        Meld next = MeldSeeker.findNextMelds(tiles);
+
+        assertTrue(next.tiles().contains(O6));
+        assertTrue(next.tiles().contains(O7));
+        assertTrue(next.tiles().contains(O8));
+    }
+
+
+    @Test
+    public void findNextMelds_onlySet() {
+        List<Tile> tiles = Arrays.asList(O5, O10, B5, R3, O8, B11, G5, R8, G11, O6);
+
+        //set: O5 B5 G5
+
+        Meld next = MeldSeeker.findNextMelds(tiles);
+
+        assertTrue(next.tiles().contains(O5));
+        assertTrue(next.tiles().contains(B5));
+        assertTrue(next.tiles().contains(G5));
+    }
+
+    @Test
+    public void findNextMelds_test() {
+        List<Tile> tiles = Arrays.asList(O5, O10, B5, R3, O8, B11, G5, R8, O7, G11, O6);
+
+        //run: O5 O6 O7 O8
+        //set: O5 B5 G5
+
+        Meld next = MeldSeeker.findNextMelds(tiles);
+
+        assertTrue(next.tiles().contains(O5));
+        assertTrue(next.tiles().contains(O6));
+        assertTrue(next.tiles().contains(O7));
+        assertTrue(next.tiles().contains(O8));
+    }
 }
