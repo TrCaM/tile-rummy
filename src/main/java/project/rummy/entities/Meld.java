@@ -1,23 +1,34 @@
 package project.rummy.entities;
 
 import com.almasb.fxgl.entity.component.Component;
+import project.rummy.game.GameState;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * Entity class for meld, which is a run or a set of tiles played by players and can be put on the table
  */
 public class Meld extends Component {
+  public static int nextId = 0;
+
+  public static Map<Integer, Meld> idsToMelds = new HashMap<>();
+
+  private int id;
   private List<Tile> tiles;
   private MeldType type;
   private MeldSource source;
   private int tableRow;
+
 
   private Meld(Tile tile) {
     this.tiles = Collections.singletonList(tile);
     this.type = MeldType.SINGLE;
     this.source = MeldSource.HAND;
     this.tableRow = -1;
+    this.id = nextId;
+    nextId++;
+    idsToMelds.put(id, this);
   }
 
   private Meld(List<Tile> tiles, MeldType type) {
@@ -25,6 +36,22 @@ public class Meld extends Component {
     this.type = type;
     this.source = MeldSource.HAND;
     this.tableRow = -1;
+    this.id = nextId;
+    nextId++;
+    idsToMelds.put(id,this);
+  }
+
+  public static void cleanUpMap(GameState state) {
+    HashMap<Integer, Meld> idsToMeldUpdate = new HashMap<>();
+    state.getTableMelds().forEach(meld -> idsToMeldUpdate.put(meld.id, meld));
+    Stream.of(state.getHandsData())
+        .map(data -> data.melds)
+        .forEach(melds -> melds.forEach(meld -> idsToMeldUpdate.put(meld.id, meld)));
+    idsToMelds = idsToMeldUpdate;
+  }
+
+  public int getId() {
+    return id;
   }
 
   public void setSource (MeldSource source){
@@ -40,6 +67,10 @@ public class Meld extends Component {
 
   public int getTableRow() {
     return this.tableRow;
+  }
+
+  public Tile getTile(int index) {
+    return tiles.get(index);
   }
 
   /**
