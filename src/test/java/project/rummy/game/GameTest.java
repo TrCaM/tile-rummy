@@ -65,7 +65,7 @@ public class GameTest {
         assertThat(game.getWinner(), is(0));
     }
 
-    /*@Test
+    @Test
     public void playerWinWithLeastPoint() {
         Game game = new Game();
         initializer.initPlayers(game);
@@ -77,6 +77,7 @@ public class GameTest {
         game.getPlayers()[2].hand().addTiles(O3, R8, B9);
         game.getPlayers()[3].hand().addTiles(B5, G3, G5, O4, O5);
 
+        assertThat(game.getTable().getFreeTiles().isEmpty(), is(true) );
         assertThat(game.getWinner(), is(0) );
-    }*/
+    }
 }
