@@ -11,4 +11,11 @@ public class TableData extends Component {
   public int[][] setGrid2;
   public int[][] runGrid;
 
+  public TableData(Table table) {
+    freeTiles = table.getFreeTiles();
+    melds = table.getPlayingMelds();
+    setGrid1 = table.getSetGrid1();
+    setGrid2 = table.getSetGrid2();
+    runGrid = table.getRunGrid();
+  }
 }

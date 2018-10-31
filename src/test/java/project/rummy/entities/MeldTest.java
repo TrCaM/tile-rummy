@@ -145,11 +145,18 @@ public class MeldTest {
     assertFalse(meld.isValidMeld());
   }
 
+  @Mock
+  private Hand hand;
+
+
   @Test
   public void resetMapTest_shoudSuceed() {
     Meld meld = Meld.createMeld(O5, O6, O7);
     Meld meld2 = Meld.createMeld(R3,G3, B3, O3);
-    when(gameState.getTableMelds()).thenReturn(Arrays.asList(meld, meld2));
+    Table table = new Table();
+    table.addMeld(meld);
+    table.addMeld(meld2);
+    when(gameState.getTableData()).thenReturn(table.toTableData());
     when(gameState.getHandsData()).thenReturn(new HandData[0]);
 
     Meld.cleanUpMap(gameState);

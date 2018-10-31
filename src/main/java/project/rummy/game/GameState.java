@@ -34,7 +34,7 @@ public class GameState {
     return freeTilesCount;
   }
 
-  public TableData getTableMelds() {
+  public TableData getTableData() {
     return tableData;
   }
 

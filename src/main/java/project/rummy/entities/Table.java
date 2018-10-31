@@ -172,12 +172,6 @@ public class Table {
   }
 
   public TableData toTableData() {
-    TableData data = new TableData();
-    data.freeTiles = freeTiles;
-    data.melds = melds;
-    data.runGrid = runGrid;
-    data.setGrid1 = setGrid1;
-    data.setGrid2 = setGrid2;
-    return data;
+    return new TableData(this);
   }
 }
