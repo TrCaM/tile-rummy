@@ -13,7 +13,6 @@ public class Table {
   private List<Meld> melds;
   private int[][] setGrid;
   private int[][] runGrid;
-  private Map<Integer, Meld> idToMelds;
   /**
    * Note for back up melds: It is used for restoring the table before each turn.
    */
@@ -153,4 +152,8 @@ public class Table {
   public Tile drawTile() {
     return freeTiles.remove(freeTiles.size() - 1);
   }
+
+//  public TableData toTableData() {
+//
+//  }
 }

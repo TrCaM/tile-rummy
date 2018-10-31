@@ -4,7 +4,10 @@ import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
 import project.rummy.entities.HandData;
 import project.rummy.entities.Meld;
+import project.rummy.entities.TableData;
 import project.rummy.entities.Tile;
+
+import java.util.List;
 
 public class EntitiesBuilder {
 
@@ -35,4 +38,12 @@ public class EntitiesBuilder {
     return handEntity;
   }
 
+  public static Entity buildTable(TableData tableData) {
+    Entity tableEntity = Entities.builder()
+        .type(EntityType.TABLE)
+        .viewFromNode(new TableView(tableData))
+        .build();
+    tableEntity.addComponent(tableData);
+    return tableEntity;
+  }
 }

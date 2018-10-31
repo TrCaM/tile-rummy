@@ -23,6 +23,7 @@ public class TileRummyApplication extends GameApplication {
 
   @Override
   protected void initGame() {
+    System.out.println(Color.RED.value());
     Entity tileView = EntitiesBuilder.buildTile(new Tile(Color.ORANGE, 4));
     tileView.setX(300);
     tileView.setY(600);
