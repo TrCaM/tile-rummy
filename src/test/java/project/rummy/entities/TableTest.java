@@ -22,8 +22,23 @@ public class TableTest {
     private static final Tile R7 = Tile.createTile(Color.RED, 7);
     private static final Tile G3 = Tile.createTile(Color.GREEN, 3);
     private static final Tile G7 = Tile.createTile(Color.GREEN, 7);
+    private static final Tile G8 = Tile.createTile(Color.GREEN, 8);
+    private static final Tile G9 = Tile.createTile(Color.GREEN, 9);
+    private static final Tile B1 = Tile.createTile(Color.BLACK, 1);
+    private static final Tile B2 = Tile.createTile(Color.BLACK, 2);
     private static final Tile B3 = Tile.createTile(Color.BLACK, 3);
+    private static final Tile B4 = Tile.createTile(Color.BLACK, 4);
+    private static final Tile B5 = Tile.createTile(Color.BLACK, 5);
+    private static final Tile B6 = Tile.createTile(Color.BLACK, 6);
     private static final Tile B7 = Tile.createTile(Color.BLACK, 7);
+    private static final Tile B8 = Tile.createTile(Color.BLACK, 8);
+    private static final Tile B9 = Tile.createTile(Color.BLACK, 9);
+    private static final Tile B10 = Tile.createTile(Color.BLACK, 10);
+    private static final Tile B11 = Tile.createTile(Color.BLACK, 11);
+    private static final Tile B12 = Tile.createTile(Color.BLACK, 12);
+    private static final Tile B13 = Tile.createTile(Color.BLACK, 13);
+
+
 
     private Table table = new Table();
     private Table shuffleTable = new Table();
@@ -146,15 +161,22 @@ public class TableTest {
 
     @Test
     public void addMeld_shouldSucceed() {
-        //Meld validMeld1 = Meld.createMeld(O5, O6, O7, O8);
+        Meld validRun1 = Meld.createMeld(B1, B2, B3, B4, B5, B6, B7, B8, B9, B10, B11, B12, B13);
+        Meld validRun2 = Meld.createMeld(B1, B2, B3);
+        Meld validRun3 = Meld.createMeld(G7, G8, G9);
         Meld validSet1 = Meld.createMeld(R3, B3, G3);
         Meld validSet2 = Meld.createMeld(O7, B7, G7, R7);
         Meld validSet3 = Meld.createMeld(O7, B7, G7);
+
+
         //Meld invalidMeld = Meld.createMeld(R3, B3);
 
         assertTrue(table.addMeld(validSet1));
         assertTrue(table.addMeld(validSet2));
         assertTrue(table.addMeld(validSet3));
+        assertTrue(table.addMeld(validRun1));
+        assertTrue(table.addMeld(validRun2));
+        assertTrue(table.addMeld(validRun3));
 
         // assertThat(table.getPlayingMelds(), contains(validMeld1, validMeld2));
         // assertThat(table.getPlayingMelds(), not(contains(invalidMeld)));
@@ -163,6 +185,12 @@ public class TableTest {
         assertTrue(table.getSetGrid1()[6][0] == validSet2.getId());
         assertTrue(table.getSetGrid2()[6][0] == validSet3.getId());
 
+        assertTrue(table.getRunGrid()[2][0] == validRun1.getId());
+        assertTrue(table.getRunGrid()[3][0] == validRun2.getId());
+        assertTrue(table.getRunGrid()[4][6] == validRun3.getId());
+
+
+        ;
 
     }
 
