@@ -11,24 +11,36 @@ public class Meld extends Component {
   private List<Tile> tiles;
   private MeldType type;
   private MeldSource source;
+  private int tableRow;
 
   private Meld(Tile tile) {
     this.tiles = Collections.singletonList(tile);
     this.type = MeldType.SINGLE;
     this.source = MeldSource.HAND;
+    this.tableRow = -1;
   }
 
   private Meld(List<Tile> tiles, MeldType type) {
     this.tiles = tiles;
     this.type = type;
     this.source = MeldSource.HAND;
+    this.tableRow = -1;
   }
 
   public void setSource (MeldSource source){
     this.source = source;
   }
 
+  public void setTableRow(int row) {
+    if (!isValidMeld() || source != MeldSource.TABLE) {
+      throw new IllegalStateException("not a valid table meld");
+    }
+    this.tableRow = row;
+  }
 
+  public int getTableRow() {
+    return this.tableRow;
+  }
 
   /**
    * Create a meld or a portion of meld by grouping a list of tiles. The creation is valid when:
