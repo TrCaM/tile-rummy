@@ -1,11 +1,13 @@
 package project.rummy.entities;
 
+import com.almasb.fxgl.entity.component.Component;
+
 import java.util.*;
 
 /**
  * Entity class for meld, which is a run or a set of tiles played by players and can be put on the table
  */
-public class Meld {
+public class Meld extends Component {
   private List<Tile> tiles;
   private MeldType type;
   private MeldSource source;

@@ -14,7 +14,7 @@ public class Hand {
     melds = new ArrayList<>();
   }
 
-  Hand(List<Tile> tiles) {
+  public Hand(List<Tile> tiles) {
     this();
     this.tiles.addAll(tiles);
   }

@@ -1,13 +1,15 @@
 package project.rummy.entities;
 
+import com.almasb.fxgl.entity.component.Component;
+
 /**
  * Represents tiles in the game
  */
-public class Tile {
+public class Tile extends Component {
   private final Color color;
   private final int value;
 
-  private Tile(Color color, int value) {
+  public Tile(Color color, int value) {
     this.color = color;
     this.value = value;
   }
