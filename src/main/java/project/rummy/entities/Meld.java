@@ -10,7 +10,7 @@ import java.util.stream.Stream;
  * Entity class for meld, which is a run or a set of tiles played by players and can be put on the table
  */
 public class Meld extends Component {
-  public static int nextId = 0;
+  public static int nextId = 1;
 
   public static Map<Integer, Meld> idsToMelds = new HashMap<>();
 

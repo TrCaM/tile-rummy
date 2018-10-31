@@ -2,6 +2,7 @@ package project.rummy.game;
 
 import project.rummy.commands.CommandProcessor;
 import project.rummy.control.ActionHandler;
+import project.rummy.entities.Meld;
 import project.rummy.entities.Table;
 import project.rummy.entities.Player;
 import project.rummy.observers.Observable;
@@ -95,6 +96,7 @@ public class Game implements Observable {
   @Override
   public void notifyObservers() {
     GameState state = generateGameState();
+    Meld.cleanUpMap(state);
     observers.forEach(observer -> observer.update(state));
   }
 
