@@ -9,18 +9,25 @@ import project.rummy.entities.Player;
  * easier.
  */
 public interface GameInitializer {
-  /**
-   * Initialize a list of players
-   */
-  void initPlayers(Game game);
+    /**
+     * Initialize a list of players
+     */
+    void initPlayers(Game game);
 
-  /**
-   * Initialize the table for the game
-   */
-  void initTable(Game game);
+    /**
+     * Initialize the table for the game
+     */
+    void initTable(Game game);
 
-  /**
-   * Initialize game state
-   */
-  void initializeGameState(Player[] players, Table table);
+    /**
+     * Initialize an empty table for testing
+     *
+     * @param game
+     */
+    void initEmptyTable(Game game);
+
+    /**
+     * Initialize game state
+     */
+    void initializeGameState(Player[] players, Table table);
 }
