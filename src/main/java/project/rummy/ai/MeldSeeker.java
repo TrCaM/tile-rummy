@@ -91,7 +91,33 @@ public class MeldSeeker {
         return score_1 > score_2 ? bestMelds_1 : bestMelds_2;
     }
 
+    /**
+     * find a meld from a list of tiles that gives the highest score
+     */
+    public static Meld findNextMelds(List<Tile> tiles) {
 
+        List<Meld> sets = findPossibleSets(tiles);
+        List<Meld> runs = findPossibleRuns(tiles);
+
+        if (sets.isEmpty() && runs.isEmpty()) return null;
+
+        Meld maxSet = null;
+        int setScore = 0;
+        if(!sets.isEmpty()) {
+            maxSet = Collections.max(sets, Comparator.comparing(Meld::getScore));
+            setScore = maxSet.getScore();
+        }
+
+
+        Meld maxRun = null;
+        int runScore = 0;
+        if(!runs.isEmpty()) {
+            maxRun = Collections.max(runs, Comparator.comparing(Meld::getScore));
+            runScore = maxRun.getScore();
+        }
+
+        return setScore > runScore ? maxSet : maxRun;
+    }
 
 }
 
