@@ -7,6 +7,8 @@ import java.util.List;
 public class TableData extends Component {
   public List<Tile> freeTiles;
   public List<Meld> melds;
-  public int[][] setGrid;
+  public int[][] setGrid1;
+  public int[][] setGrid2;
   public int[][] runGrid;
+
 }
