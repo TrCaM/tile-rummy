@@ -2,6 +2,7 @@ package project.rummy.game;
 
 import project.rummy.commands.CommandProcessor;
 import project.rummy.control.ActionHandler;
+import project.rummy.entities.Meld;
 import project.rummy.entities.Hand;
 import project.rummy.entities.Table;
 import project.rummy.entities.Player;

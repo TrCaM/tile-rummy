@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 public class GameState {
   private int turnNumber;
   private int freeTilesCount;
-  private List<Meld> tableMelds;
+  private TableData tableData;
   private HandData[] handsData;
   private PlayerStatus[] statuses;
   private int currentPlayer;
@@ -22,7 +22,7 @@ public class GameState {
     gameState.turnNumber = game.getTurnNumber();
     gameState.currentPlayer = game.getCurrentPlayer();
     gameState.freeTilesCount = game.getTable().getFreeTiles().size();
-    gameState.tableMelds = game.getTable().getPlayingMelds();
+    gameState.tableData = game.getTable().toTableData();
     gameState.handsData = Stream.of(game.getPlayers())
         .map(Player::hand).map(Hand::toHandData).toArray(HandData[]::new);
     gameState.statuses = Stream.of(game.getPlayers())
@@ -34,8 +34,8 @@ public class GameState {
     return freeTilesCount;
   }
 
-  public List<Meld> getTableMelds() {
-    return tableMelds;
+  public TableData getTableMelds() {
+    return tableData;
   }
 
   public HandData[] getHandsData() {

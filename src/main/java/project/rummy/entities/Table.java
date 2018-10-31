@@ -3,6 +3,7 @@ package project.rummy.entities;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class represent the table entity of the game
@@ -10,6 +11,8 @@ import java.util.List;
 public class Table {
   private List<Tile> freeTiles;
   private List<Meld> melds;
+  private int[][] setGrid;
+  private int[][] runGrid;
   /**
    * Note for back up melds: It is used for restoring the table before each turn.
    */
@@ -22,6 +25,16 @@ public class Table {
     this.melds = new ArrayList<>();
     this.backupMelds = new ArrayList<>();
     this.freeTiles = new ArrayList<>();
+    this.setGrid = new int[13][4];
+    this.runGrid = new int[13][13];
+  }
+
+  public int[][] getSetGrid() {
+    return setGrid;
+  }
+
+  public int[][] getRunGrid() {
+    return runGrid;
   }
 
   public void initTiles() {
@@ -85,8 +98,51 @@ public class Table {
     if (!meld.isValidMeld()) {
       return false;
     }
+    setPosition(meld);
     melds.add(meld);
     return true;
+  }
+
+  private void setPosition(Meld meld) {
+    if (meld.type() == MeldType.RUN) {
+      setPositionForRun(meld);
+    }
+    setPositionForSet(meld);
+  }
+
+  private void setPositionForRun(Meld meld) {
+    if (meld.type() != MeldType.RUN) {
+      throw new IllegalStateException("Expected a Run, not other types of Meld");
+    }
+    int color = meld.getTile(0).color().value();
+    int row = color * 2;
+    for (Tile tile : meld.tiles()) {
+      if (runGrid[row][tile.value()] != 0) {
+          row = color * 2 + 1;
+          break;
+      }
+    }
+    for (Tile tile : meld.tiles()) {
+      runGrid[row][tile.value()] = meld.getId();
+    }
+  }
+
+  private void setPositionForSet(Meld setMeld) {
+    if (setMeld.type() != MeldType.SET) {
+      throw new IllegalStateException("Expected a Set, not other types of Meld");
+    }
+    int value = setMeld.getTile(0).value();
+    if (setGrid[value *2][0] == 0 && setGrid[value *2 +1][0] != 0) {
+      throw new IllegalStateException("Unexpected grid overlap");
+    }
+    int row = setGrid[value * 2] == null ? value*2 : (value*2 +1);
+    for (int i=0; i<setMeld.tiles().size(); i++) {
+      setGrid[row][i] = setMeld.getId();
+    }
+  }
+
+  public Meld removeMeld(Meld meld) {
+    return melds.remove(melds.indexOf(meld));
   }
 
   public Meld removeMeld(int index) {
@@ -96,4 +152,8 @@ public class Table {
   public Tile drawTile() {
     return freeTiles.remove(freeTiles.size() - 1);
   }
+
+//  public TableData toTableData() {
+//
+//  }
 }
