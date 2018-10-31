@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import project.rummy.control.AutoController;
 import project.rummy.control.ManualController;
-import project.rummy.entities.Player;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;

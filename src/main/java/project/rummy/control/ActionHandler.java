@@ -26,6 +26,14 @@ public class ActionHandler {
     this.playerName = player.getName();
   }
 
+  public Hand getHand(){
+    return this.hand;
+  }
+
+  public void formMeld(int ...indexes){
+    hand.formMeld(indexes);
+  }
+
   public boolean isExpired() {
     return this.isTurnEnd;
   }

@@ -14,7 +14,7 @@ public class Hand {
     melds = new ArrayList<>();
   }
 
-  Hand(List<Tile> tiles) {
+  public Hand(List<Tile> tiles) {
     this();
     this.tiles.addAll(tiles);
   }
@@ -77,6 +77,53 @@ public class Hand {
         ? tile1.color().compareTo(tile2.color())
         : tile1.value() - tile2.value());
   }
+
+  /**
+   * adding a tile to an existing meld in hand
+   * @param meldIndex : index of meld in melds list
+   * @param tileIndex : index of tile in tiles list
+   */
+  public void addTileToMeld(int tileIndex, int meldIndex){
+    //checking for invalid indexes
+    if (meldIndex >= melds.size() || meldIndex < 0
+            || tileIndex >= tiles.size() || tileIndex < 0) {
+      throw new IllegalArgumentException("Invalid index");
+    }
+
+    List<Tile> allTiles = new ArrayList<>(melds.get(meldIndex).tiles());
+    allTiles.add(tiles.get(tileIndex));
+
+    allTiles.sort(Comparator.comparing(Tile::value));
+
+    Meld newMeld = Meld.createMeld(allTiles);
+
+    melds.add(newMeld);
+    melds.remove(meldIndex);
+    tiles.remove(tileIndex);
+  }
+
+    /**
+     * remove a tile from an existing meld in hand
+     * @param meldIndex : index of meld in melds list
+     * @param tileIndex : index of tile in that meld
+     */
+    public void removeTileFromMeld(int tileIndex, int meldIndex){
+        //checking for invalid indexes
+        if (meldIndex >= melds.size() || meldIndex < 0
+                || tileIndex >= melds.get(meldIndex).tiles().size() || tileIndex < 0) {
+            throw new IllegalArgumentException("Invalid index");
+        }
+
+        List<Tile> allTiles = new ArrayList<>(melds.get(meldIndex).tiles());
+
+        Tile removedTile = allTiles.remove(tileIndex);
+
+        Meld newMeld = Meld.createMeld(allTiles);
+
+        melds.add(newMeld);
+        tiles.add(removedTile);
+        melds.remove(meldIndex);
+    }
 
   /**
    * Get the number of tiles in the hand

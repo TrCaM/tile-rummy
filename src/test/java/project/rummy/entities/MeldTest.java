@@ -1,9 +1,19 @@
 package project.rummy.entities;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
+import project.rummy.game.GameState;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 
 public class MeldTest {
   private Meld meld;
@@ -17,6 +27,12 @@ public class MeldTest {
   private static final Tile G3 = Tile.createTile(Color.GREEN, 3);
   private static final Tile B3 = Tile.createTile(Color.BLACK, 3);
   private static final Tile O3 = Tile.createTile(Color.ORANGE, 3);
+
+  @Rule
+  public MockitoRule mockitoRule = MockitoJUnit.rule();
+
+  @Mock
+  private GameState gameState;
 
   @Test(expected = IllegalArgumentException.class)
   public void createMeld_2tiles_shouldThrow() {
@@ -127,5 +143,18 @@ public class MeldTest {
   public void isValidMeld_shouldReturnFalse() {
     meld = Meld.createMeld(R3, B3);
     assertFalse(meld.isValidMeld());
+  }
+
+  @Test
+  public void resetMapTest_shoudSuceed() {
+    Meld meld = Meld.createMeld(O5, O6, O7);
+    Meld meld2 = Meld.createMeld(R3,G3, B3, O3);
+    when(gameState.getTableMelds()).thenReturn(Arrays.asList(meld, meld2));
+    when(gameState.getHandsData()).thenReturn(new HandData[0]);
+
+    Meld.cleanUpMap(gameState);
+
+    assertThat(Meld.idsToMelds.get(meld.getId()), is(meld));
+    assertThat(Meld.idsToMelds.get(meld2.getId()), is(meld2));
   }
 }
