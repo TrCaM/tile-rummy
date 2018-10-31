@@ -152,6 +152,8 @@ public class TableTest {
 
     assertThat(table.getPlayingMelds(), contains(validMeld1, validMeld2));
     assertThat(table.getPlayingMelds(), not(contains(invalidMeld)));
+
+    assertTrue(table.getSetGrid1()[2][0] == validMeld2.getId());
   }
 
   @Test
