@@ -125,14 +125,15 @@ public class Table {
     int color = meld.getTile(0).color().value();
     int row = color * 2;
     for (Tile tile : meld.tiles()) {
-      if (runGrid[row][tile.value()] != 0) {
+      if (runGrid[row][tile.value() - 1] != 0) {
           row = color * 2 + 1;
           break;
       }
     }
     for (Tile tile : meld.tiles()) {
-      runGrid[row][tile.value()] = meld.getId();
+      runGrid[row][tile.value() -1] = meld.getId();
     }
+    System.out.println();
   }
 
   private void setPositionForSet(Meld setMeld) {
