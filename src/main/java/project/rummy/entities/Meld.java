@@ -80,6 +80,7 @@ public class Meld extends Component {
    * + There's three tiles in the meld: isValidMeldPart and isValidMeld both return true.
    */
   public static Meld createMeld(Tile... tiles) {
+    Arrays.sort(tiles, Comparator.comparing(Tile::value));
     if (tiles.length == 0) {
       throw new IllegalArgumentException("Invalid tiles input");
     }
