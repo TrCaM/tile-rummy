@@ -11,7 +11,8 @@ import java.util.Map;
 public class Table {
   private List<Tile> freeTiles;
   private List<Meld> melds;
-  private int[][] setGrid;
+  private int[][] setGrid1;
+  private int[][] setGrid2;
   private int[][] runGrid;
   /**
    * Note for back up melds: It is used for restoring the table before each turn.
@@ -25,12 +26,17 @@ public class Table {
     this.melds = new ArrayList<>();
     this.backupMelds = new ArrayList<>();
     this.freeTiles = new ArrayList<>();
-    this.setGrid = new int[13][4];
+    this.setGrid1 = new int[13][4];
+    this.setGrid2 = new int[13][4];
     this.runGrid = new int[13][13];
   }
 
-  public int[][] getSetGrid() {
-    return setGrid;
+  public int[][] getSetGrid1() {
+    return setGrid1;
+  }
+
+  public int[][] getSetGrid2() {
+    return setGrid2;
   }
 
   public int[][] getRunGrid() {
@@ -104,10 +110,12 @@ public class Table {
   }
 
   private void setPosition(Meld meld) {
+    System.out.println(meld.type() + meld.tiles().toString());
     if (meld.type() == MeldType.RUN) {
       setPositionForRun(meld);
+    }else {
+      setPositionForSet(meld);
     }
-    setPositionForSet(meld);
   }
 
   private void setPositionForRun(Meld meld) {
@@ -131,13 +139,23 @@ public class Table {
     if (setMeld.type() != MeldType.SET) {
       throw new IllegalStateException("Expected a Set, not other types of Meld");
     }
-    int value = setMeld.getTile(0).value();
-    if (setGrid[value *2][0] == 0 && setGrid[value *2 +1][0] != 0) {
-      throw new IllegalStateException("Unexpected grid overlap");
-    }
-    int row = setGrid[value * 2] == null ? value*2 : (value*2 +1);
-    for (int i=0; i<setMeld.tiles().size(); i++) {
-      setGrid[row][i] = setMeld.getId();
+    int row = setMeld.getTile(0).value() - 1;
+//    if (setGrid[value *2][0] == 0 && setGrid[value *2 +1][0] != 0) {
+//      throw new IllegalStateException("Unexpected grid overlap");
+//    }
+//    int row = setGrid[value * 2] == null ? value*2 : (value*2 +1);
+//    for (int i=0; i<setMeld.tiles().size(); i++) {
+//      setGrid[row][i] = setMeld.getId();
+//    }
+
+    if(setGrid1[row][0] == 0 && setGrid1[row][1] == 0){
+      for(int i=0; i<setMeld.tiles().size(); i++){
+        setGrid1[row][i] = setMeld.getId();
+      }
+    }else{
+      for(int i=0; i<setMeld.tiles().size(); i++){
+        setGrid2[row][i] = setMeld.getId();
+      }
     }
   }
 
@@ -153,7 +171,13 @@ public class Table {
     return freeTiles.remove(freeTiles.size() - 1);
   }
 
-//  public TableData toTableData() {
-//
-//  }
+  public TableData toTableData() {
+    TableData data = new TableData();
+    data.freeTiles = freeTiles;
+    data.melds = melds;
+    data.runGrid = runGrid;
+    data.setGrid1 = setGrid1;
+    data.setGrid2 = setGrid2;
+    return data;
+  }
 }
