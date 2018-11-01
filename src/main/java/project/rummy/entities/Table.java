@@ -141,14 +141,6 @@ public class Table {
       throw new IllegalStateException("Expected a Set, not other types of Meld");
     }
     int row = setMeld.getTile(0).value() - 1;
-//    if (setGrid[value *2][0] == 0 && setGrid[value *2 +1][0] != 0) {
-//      throw new IllegalStateException("Unexpected grid overlap");
-//    }
-//    int row = setGrid[value * 2] == null ? value*2 : (value*2 +1);
-//    for (int i=0; i<setMeld.tiles().size(); i++) {
-//      setGrid[row][i] = setMeld.getId();
-//    }
-
     if(setGrid1[row][0] == 0 && setGrid1[row][1] == 0){
       for(int i=0; i<setMeld.tiles().size(); i++){
         setGrid1[row][i] = setMeld.getId();

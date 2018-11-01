@@ -17,7 +17,8 @@ import java.util.stream.IntStream;
 public class TableView extends Pane {
   private GameFXMLLoader loader;
 
-  @FXML private GridPane setPane;
+  @FXML private GridPane setPane1;
+  @FXML private GridPane setPane2;
   @FXML private GridPane runPane;
 
   public TableView(TableData tableData) {
@@ -40,31 +41,37 @@ public class TableView extends Pane {
   }
 
   private void renderMelds(TableData tableData) {
-//    tableData.stream()
-//        .filter(meld -> meld.getTableRow() != -1)
-//        .forEach(this::renderMeld);
-//    tableData.stream()
-//        .filter(meld -> meld.getTableRow() == -1)
-//        .forEach(meld -> {
-//          findAvailableRow
-//        });
-//    for (Meld meld : tableData) {
-//      if (meld.getTableRow() != -1) {
-//        renderMeld(meld, );
-//      }
-//    }
+    int[][] setGrid1 = tableData.setGrid1;
+    int[][] setGrid2 = tableData.setGrid2;
+    int[][] runGrid = tableData.runGrid;
+    for (int row=0; row<13; row++) {
+      for(int col=0; col<4; col++) {
+        int meldId1 = setGrid1[row][col];
+        int meldId2 = setGrid2[row][col];
+        if (meldId1 != 0) {
+          Meld meld1 = Meld.idsToMelds.get(meldId1);
+          renderTile(meld1.getTile(col), setPane1, row, col);
+        }
+        if (meldId2 != 0) {
+          Meld meld2 = Meld.idsToMelds.get(meldId2);
+          renderTile(meld2.getTile(col), setPane2, row, col);
+        }
+      }
+    }
+    for (int row=0; row<8; row++) {
+      for (int col=0; col<13; col++) {
+        int runId = runGrid[row][col];
+        if (runId != 0) {
+          Meld run = Meld.idsToMelds.get(runId);
+          int firstVal = run.getTile(0).value();
+          renderTile(run.getTile(col +1 - firstVal), runPane, row, col);
+        }
+      }
+    }
   }
 
   private void renderTile(Tile tile, GridPane pane, int row, int col) {
-    pane.add(new TileView(tile), row, col);
+    pane.add(new TileView(tile), col, row);
   }
-
-  private void renderMeld(Meld meld) {
-    int row = meld.getTableRow();
-    GridPane pane = meld.type() == MeldType.RUN ? runPane : setPane;
-    IntStream.range(0, meld.tiles().size())
-        .forEach(i -> pane.add(new TileView(meld.getTile(i)), meld.getTableRow(), i ));
-  }
-
 }
 
