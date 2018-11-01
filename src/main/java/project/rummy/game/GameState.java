@@ -1,11 +1,7 @@
 package project.rummy.game;
 
 import com.almasb.fxgl.entity.component.Component;
-import project.rummy.entities.Hand;
-import project.rummy.entities.HandData;
-import project.rummy.entities.Player;
-import project.rummy.entities.PlayerStatus;
-import project.rummy.entities.TableData;
+import project.rummy.entities.*;
 
 import java.util.stream.Stream;
 
