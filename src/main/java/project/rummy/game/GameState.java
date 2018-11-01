@@ -14,6 +14,7 @@ public class GameState {
   private int freeTilesCount;
   private TableData tableData;
   private HandData[] handsData;
+  private PlayerData[] playerData;
   private PlayerStatus[] statuses;
   private int currentPlayer;
 
@@ -27,8 +28,12 @@ public class GameState {
         .map(Player::hand).map(Hand::toHandData).toArray(HandData[]::new);
     gameState.statuses = Stream.of(game.getPlayers())
         .map(Player::status).toArray(PlayerStatus[]::new);
+    gameState.playerData = Stream.of(game.getPlayers())
+            .map(Player::toPlayerData).toArray(PlayerData[]::new);;
     return gameState;
   }
+
+  public PlayerData[] getPlayerData(){return playerData;  }
 
   public int getFreeTilesCount() {
     return freeTilesCount;
