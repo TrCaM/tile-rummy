@@ -1,0 +1,9 @@
+.highlight {
+	-fx-stroke: violet; 
+	-fx-stroke-width: 3 
+}
+
+.chosen {
+	-fx-stroke: yellow; 
+	-fx-stroke-width: 3 
+}
