@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import static org.junit.Assert.*;
 
-public class MeldSeekerTest {
+public class HandMeldSeekerTest {
 
     private final Tile O5 = Tile.createTile(Color.ORANGE, 5);
     private final Tile O10 = Tile.createTile(Color.ORANGE, 10);
@@ -34,7 +34,7 @@ public class MeldSeekerTest {
     public void findPossibleSets_noSetsFound() {
         List<Tile> tiles = Arrays.asList(O5, O10, R3,R11);
 
-        List<Meld> sets = MeldSeeker.findPossibleSets(tiles);
+        List<Meld> sets = HandMeldSeeker.findPossibleSets(tiles);
 
         assertEquals(sets.size(), 0);
     }
@@ -43,7 +43,7 @@ public class MeldSeekerTest {
         List<Tile> tiles = Arrays.asList(O5, O10, R3,R11, B11, R8, B5, G11, G5);
 
 
-        List<Meld> sets = MeldSeeker.findPossibleSets(tiles);
+        List<Meld> sets = HandMeldSeeker.findPossibleSets(tiles);
 
         assertEquals(sets.size(), 2);
 
@@ -60,7 +60,7 @@ public class MeldSeekerTest {
     public void findPossibleRuns_noRunsFound() {
         List<Tile> tiles = Arrays.asList(O5, O10, R3,R11);
 
-        List<Meld> runs = MeldSeeker.findPossibleRuns(tiles);
+        List<Meld> runs = HandMeldSeeker.findPossibleRuns(tiles);
 
         assertEquals(runs.size(), 0);
     }
@@ -69,7 +69,7 @@ public class MeldSeekerTest {
     public void findPossibleRuns_test() {
         List<Tile> tiles = Arrays.asList(O5, O10, R3, O8, B11, R8, O7, G11, O6);
 
-        List<Meld> runs = MeldSeeker.findPossibleRuns(tiles);
+        List<Meld> runs = HandMeldSeeker.findPossibleRuns(tiles);
 
         assertEquals(runs.size(), 1);
         assertTrue(runs.get(0).tiles().contains(O5));
@@ -82,7 +82,7 @@ public class MeldSeekerTest {
     public void findPossibleRuns_noMeldsFound() {
         List<Tile> tiles = Arrays.asList(O5, O10, R3,R11);
 
-        List<Meld> sets = MeldSeeker.findBestMelds(tiles);
+        List<Meld> sets = HandMeldSeeker.findBestMelds(tiles);
 
         assertEquals(sets.size(), 0);
     }
@@ -90,7 +90,7 @@ public class MeldSeekerTest {
     public void findPossibleRuns_onlySets() {
         List<Tile> tiles = Arrays.asList(O5, O10, R3,R11, B11, R8, B5, G11, G5);
 
-        List<Meld> melds = MeldSeeker.findBestMelds(tiles);
+        List<Meld> melds = HandMeldSeeker.findBestMelds(tiles);
 
         assertEquals(melds.size(), 2);
 
@@ -108,7 +108,7 @@ public class MeldSeekerTest {
         List<Tile> tiles = Arrays.asList(O5, O10, R3, O8, B11, R8, O7, G11, O6);
 
 
-        List<Meld> melds = MeldSeeker.findBestMelds(tiles);
+        List<Meld> melds = HandMeldSeeker.findBestMelds(tiles);
 
         assertEquals(melds.size(), 1);
         assertTrue(melds.get(0).tiles().contains(O5));
@@ -122,7 +122,7 @@ public class MeldSeekerTest {
     public void findBestMelds_test() {
         List<Tile> tiles = Arrays.asList(O5, O10, B5, R3, O8, B11, G5, R8, O7, G11, O6);
 
-        List<Meld> best = MeldSeeker.findBestMelds(tiles);
+        List<Meld> best = HandMeldSeeker.findBestMelds(tiles);
 
         assertEquals(best.size(), 2);
 
@@ -139,7 +139,7 @@ public class MeldSeekerTest {
     public void findNextMelds_noMeldsFound() {
         List<Tile> tiles = Arrays.asList(O10, B5, R3, O8, B11, G5, R8, G11, O6);
 
-        Meld next = MeldSeeker.findNextMelds(tiles);
+        Meld next = HandMeldSeeker.findNextMelds(tiles);
 
         assertTrue(next == null);
     }
@@ -149,7 +149,7 @@ public class MeldSeekerTest {
         List<Tile> tiles = Arrays.asList(O10, B5, R3, O8, B11, G5, R8, O7, G11, O6);
 
         //run: O6 O7 O8
-        Meld next = MeldSeeker.findNextMelds(tiles);
+        Meld next = HandMeldSeeker.findNextMelds(tiles);
 
         assertTrue(next.tiles().contains(O6));
         assertTrue(next.tiles().contains(O7));
@@ -163,7 +163,7 @@ public class MeldSeekerTest {
 
         //set: O5 B5 G5
 
-        Meld next = MeldSeeker.findNextMelds(tiles);
+        Meld next = HandMeldSeeker.findNextMelds(tiles);
 
         assertTrue(next.tiles().contains(O5));
         assertTrue(next.tiles().contains(B5));
@@ -177,7 +177,7 @@ public class MeldSeekerTest {
         //run: O5 O6 O7 O8
         //set: O5 B5 G5
 
-        Meld next = MeldSeeker.findNextMelds(tiles);
+        Meld next = HandMeldSeeker.findNextMelds(tiles);
 
         assertTrue(next.tiles().contains(O5));
         assertTrue(next.tiles().contains(O6));
