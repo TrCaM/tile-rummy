@@ -19,13 +19,13 @@ public class AutoController extends Controller {
   @Override
   public String getControllerType(){
     if(strategy instanceof Strategy1){
-      return "trategy1";
+      return "strategy1";
     }
     if (strategy instanceof Strategy2) {
-      return "trategy2";
+      return "strategy2";
     }
 
-    return "trategy3";
+    return "strategy3";
   }
 
   @Override

@@ -9,27 +9,40 @@ import java.util.Map;
  * This class represent the table entity of the game
  */
 public class Table {
-    private List<Tile> freeTiles;
-    private List<Meld> melds;
-    private int[][] setGrid1;
-    private int[][] setGrid2;
-    private int[][] runGrid;
-    /**
-     * Note for back up melds: It is used for restoring the table before each turn.
-     */
-    private List<Meld> backupMelds;
 
-    static final int MAX_VALUE = 13;
-    static final int DECKS_AMOUNT = 2;
+  private List<Tile> freeTiles;
+  private List<Meld> melds;
+  private int[][] setGrid1;
+  private int[][] setGrid2;
+  private int[][] runGrid;
+  /**
+   * Note for back up melds: It is used for restoring the table before each turn.
+   */
+  private List<Meld> backupMelds;
 
-    public Table() {
-        this.melds = new ArrayList<>();
-        this.backupMelds = new ArrayList<>();
-        this.freeTiles = new ArrayList<>();
-        this.setGrid1 = new int[13][4];
-        this.setGrid2 = new int[13][4];
-        this.runGrid = new int[13][13];
-    }
+  static final int MAX_VALUE = 13;
+  static final int DECKS_AMOUNT = 2;
+
+  public Table() {
+    this.melds = new ArrayList<>();
+    this.backupMelds = new ArrayList<>();
+    this.freeTiles = new ArrayList<>();
+    this.setGrid1 = new int[13][4];
+    this.setGrid2 = new int[13][4];
+    this.runGrid = new int[13][13];
+  }
+
+
+  public Table(List<Meld> melds, List<Tile> freeTiles, int[][] setGrid1, int[][] setGrid2, int[][] runGrid) {
+
+    this.melds = new ArrayList<>(melds);
+    this.backupMelds = new ArrayList<>();
+    this.freeTiles = new ArrayList<>(freeTiles);
+    this.setGrid1 = setGrid1;
+    this.setGrid2 = setGrid2;
+    this.runGrid = runGrid;
+  }
+
 
     public int[][] getSetGrid1() {
         return setGrid1;
@@ -43,9 +56,20 @@ public class Table {
         return runGrid;
     }
 
-    public void initTiles() {
-        createDeck();
+
+  public Meld getMeldById(int meldid){
+    for(Meld m: melds){
+      if(m.getId() == meldid){
+        return m;
+      }
     }
+    return null;
+  }
+
+  public void initTiles() {
+    createDeck();
+  }
+
 
     public void shuffle() {
         Collections.shuffle(freeTiles);

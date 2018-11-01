@@ -8,6 +8,7 @@ import project.rummy.entities.Tile;
 
 import java.util.Arrays;
 import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class HandMeldSeekerTest {
@@ -183,5 +184,24 @@ public class HandMeldSeekerTest {
         assertTrue(next.tiles().contains(O6));
         assertTrue(next.tiles().contains(O7));
         assertTrue(next.tiles().contains(O8));
+    }
+
+    @Test
+    public void findRemainingTiles_test() {
+        List<Tile> tiles = Arrays.asList(O5, O10, B5, R3, O8, B11, G5, R8, O7, G11, O6);
+
+        //run: O5 O6 O7 O8
+        //set: O5 B5 G5
+        //highest score: O6 O7 O8 AND O5 B5 G5
+        //tiles remained: O10 B5 R3 B11 G5 R8 G11
+
+        List<Tile> remain = HandMeldSeeker.findRemainingTiles(tiles);
+
+        assertTrue(remain.contains(O10));
+        assertTrue(remain.contains(R3));
+        assertTrue(remain.contains(B11));
+        assertTrue(remain.contains(R8));
+        assertTrue(remain.contains(G11));
+
     }
 }
