@@ -169,8 +169,17 @@ public class Table {
         Meld meld = melds.get(index);
 
         if (meld.type() == MeldType.SET) {
+            int row = meld.getTile(0).value() - 1;
 
-
+            if (setGrid1[row][0] == meld.getId()) {
+                for (int i = 0; i < 4; i++) {
+                    setGrid1[row][i] = 0;
+                }
+            } else {
+                for (int i = 0; i < 4; i++) {
+                    setGrid2[row][i] = 0;
+                }
+            }
         } else {
             int row = meld.getTile(0).color().value() * 2;
             int value = meld.getTile(0).value();
