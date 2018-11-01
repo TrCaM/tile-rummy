@@ -227,6 +227,22 @@ public class TableTest {
         assertTrue(table.getRunGrid()[3][0] == run2.getId());
     }
 
+    @Test
+    public void removeSetFromGrid() {
+        Meld set1 = Meld.createMeld(O7, B7, G7);
+        Meld set2 = Meld.createMeld(O7, B7, G7);
 
+        assertTrue(table.addMeld(set1));
+        assertTrue(table.addMeld(set2));
+
+        assertTrue(table.getSetGrid1()[6][0] == set1.getId());
+        assertTrue(table.getSetGrid2()[6][0] == set2.getId());
+
+        table.removeMeld(set1);
+        table.removeMeld(set2);
+
+        assertTrue(table.getSetGrid1()[6][0] == 0);
+        assertTrue(table.getSetGrid1()[6][0] == 0);
+    }
 
 }
