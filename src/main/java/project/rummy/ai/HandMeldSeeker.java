@@ -126,5 +126,17 @@ public class HandMeldSeeker {
         return setScore > runScore ? maxSet : maxRun;
     }
 
+    /**
+     * find remaining tiles that cannot form melds
+     */
+    public static List<Tile> findRemainingTiles(List<Tile> tiles){
+        List<Meld> allMelds = findBestMelds(tiles);
+        List<Tile> remainingTiles = new ArrayList<>(tiles);
+        for(Meld m: allMelds){
+            m.tiles().forEach(remainingTiles::remove);
+        }
+        return remainingTiles;
+    }
+
 }
 
