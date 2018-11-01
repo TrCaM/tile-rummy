@@ -1,15 +1,19 @@
 package project.rummy.game;
 
-import project.rummy.entities.*;
+import com.almasb.fxgl.entity.component.Component;
+import project.rummy.entities.Hand;
+import project.rummy.entities.HandData;
+import project.rummy.entities.Player;
+import project.rummy.entities.PlayerStatus;
+import project.rummy.entities.TableData;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 /**
  * Generate a general data object for displaying the game, or for the strategies to analyze and find
  * the best possible moves.
  */
-public class GameState {
+public class GameState extends Component {
   private int turnNumber;
   private int freeTilesCount;
   private TableData tableData;
