@@ -34,6 +34,7 @@ public class DefaultGameInitializer implements GameInitializer {
     game.setUpTable(table);
   }
 
+  @Override
   public void  initEmptyTable(Game game){
     Table table = new Table();
     game.setUpTable(table);

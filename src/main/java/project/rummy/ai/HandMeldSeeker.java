@@ -6,7 +6,7 @@ import project.rummy.entities.Tile;
 
 import java.util.*;
 
-public class MeldSeeker {
+public class HandMeldSeeker {
 
     /**
      * find all possible sets that can be made up from a list of tiles
@@ -73,6 +73,8 @@ public class MeldSeeker {
         //sets first then runs
         List<Meld> bestMelds_1 = findPossibleSets(tilesList);
 
+
+
         for(Meld m : bestMelds_1) { m.tiles().forEach(tilesList::remove);}
         bestMelds_1.addAll(findPossibleRuns(tilesList));
 
@@ -83,7 +85,12 @@ public class MeldSeeker {
         tilesList = new ArrayList<>(tiles);
         List<Meld> bestMelds_2 = findPossibleRuns(tilesList);
 
-        for(Meld m : bestMelds_2) { m.tiles().forEach(tilesList::remove); }
+        //bestMelds_2.stream().map(meld -> meld.tiles()).forEach(tilesList::remove);
+
+        for(Meld m : bestMelds_2) {
+            m.tiles().forEach(tilesList::remove);
+        }
+
         bestMelds_2.addAll(findPossibleSets(tilesList));
 
         int score_2 = bestMelds_2.stream().mapToInt(Meld::getScore).sum();

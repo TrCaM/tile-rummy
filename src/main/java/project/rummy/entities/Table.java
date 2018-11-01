@@ -202,13 +202,7 @@ public class Table {
         return freeTiles.remove(freeTiles.size() - 1);
     }
 
-    public TableData toTableData() {
-        TableData data = new TableData();
-        data.freeTiles = freeTiles;
-        data.melds = melds;
-        data.runGrid = runGrid;
-        data.setGrid1 = setGrid1;
-        data.setGrid2 = setGrid2;
-        return data;
-    }
+  public TableData toTableData() {
+    return new TableData(this);
+  }
 }

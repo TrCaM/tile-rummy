@@ -43,7 +43,7 @@ public class Meld extends Component {
 
   public static void cleanUpMap(GameState state) {
     HashMap<Integer, Meld> idsToMeldUpdate = new HashMap<>();
-    state.getTableMelds().forEach(meld -> idsToMeldUpdate.put(meld.id, meld));
+    state.getTableData().melds.forEach(meld -> idsToMeldUpdate.put(meld.id, meld));
     Stream.of(state.getHandsData())
         .map(data -> data.melds)
         .forEach(melds -> melds.forEach(meld -> idsToMeldUpdate.put(meld.id, meld)));

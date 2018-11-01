@@ -18,6 +18,10 @@ public class Hand {
     this();
     this.tiles.addAll(tiles);
   }
+  public Hand(List<Tile> tiles, List<Meld> melds) {
+    this.melds.addAll(melds);
+    this.tiles.addAll(tiles);
+  }
 
   /**
    * Add a new Tile into a player hand
