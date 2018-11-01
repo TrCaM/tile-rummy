@@ -57,4 +57,29 @@ public class GameState extends Component {
   public PlayerStatus[] getPlayerStatuses() {
     return this.statuses;
   }
+
+  public void setTurnNumber(int turnNumber) {
+    this.turnNumber = turnNumber;
+  }
+
+  public void setFreeTilesCount(int freeTilesCount) {
+    this.freeTilesCount = freeTilesCount;
+  }
+
+  public void setTableData(TableData tableData) {
+    this.tableData = tableData;
+  }
+
+  public void setHandsData(HandData[] handsData) {
+    this.handsData = handsData;
+  }
+
+  public void setStatuses(PlayerStatus[] statuses) {
+    this.statuses = statuses;
+  }
+
+  public void setCurrentPlayer(int currentPlayer) {
+    this.currentPlayer = currentPlayer;
+  }
+
 }

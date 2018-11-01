@@ -6,6 +6,7 @@ import project.rummy.entities.HandData;
 import project.rummy.entities.Meld;
 import project.rummy.entities.TableData;
 import project.rummy.entities.Tile;
+import project.rummy.game.GameState;
 
 import java.util.List;
 
@@ -44,6 +45,15 @@ public class EntitiesBuilder {
         .viewFromNode(new TableView(tableData))
         .build();
     tableEntity.addComponent(tableData);
+    return tableEntity;
+  }
+
+  public static Entity buildGameInfo(GameState gameState) {
+    Entity tableEntity = Entities.builder()
+        .type(EntityType.GAME_INFO)
+        .viewFromNode(new GameInfoView(gameState))
+        .build();
+    tableEntity.addComponent(gameState);
     return tableEntity;
   }
 }
