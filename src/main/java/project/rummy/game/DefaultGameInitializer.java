@@ -9,6 +9,8 @@ import project.rummy.strategies.Strategy1;
 import project.rummy.strategies.Strategy2;
 import project.rummy.strategies.Strategy3;
 
+import java.util.stream.Stream;
+
 public class DefaultGameInitializer implements GameInitializer {
 
   @Override
@@ -48,6 +50,12 @@ public class DefaultGameInitializer implements GameInitializer {
     // TODO: Generate the initial game state for players (draw 14 tiles for each), making sure that
     // the table is empty
     //
+    Stream.of(players).forEach(player -> {
+      for (int i=0; i<14; i++) {
+        player.hand().addTile(table.drawTile());
+      }
+      player.hand().sort();
+    });
   }
 
 }

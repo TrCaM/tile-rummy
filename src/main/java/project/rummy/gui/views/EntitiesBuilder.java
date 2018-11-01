@@ -12,14 +12,14 @@ import java.util.List;
 
 public class EntitiesBuilder {
 
-  public static Entity buildTile(Tile tile) {
-    Entity tileEntity = Entities.builder()
-        .type(EntityType.TILE)
-        .viewFromNode(new TileView(tile))
-        .build();
-    tileEntity.addComponent(tile);
-    return tileEntity;
-  }
+//  public static Entity buildTile(Tile tile) {
+//    Entity tileEntity = Entities.builder()
+//        .type(EntityType.TILE)
+//        .viewFromNode(new TileView(tile))
+//        .build();
+//    tileEntity.addComponent(tile);
+//    return tileEntity;
+//  }
 
   public static Entity buildMeld(Meld meld) {
     Entity meldEntity = Entities.builder()

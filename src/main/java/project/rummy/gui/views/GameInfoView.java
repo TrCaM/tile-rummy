@@ -12,6 +12,7 @@ import java.io.IOException;
 public class GameInfoView extends Pane {
   private GameFXMLLoader loader;
 
+  @FXML private Label humanTiles;
   @FXML private Label oppo1Tiles;
   @FXML private Label oppo2Tiles;
   @FXML private Label oppo3Tiles;
@@ -47,12 +48,13 @@ public class GameInfoView extends Pane {
 
   private void renderGameInfo(GameState gameState) {
     // Update the num tiles
+
     oppo1Tiles.setText("" + gameState.getHandsData()[1].tiles.size() + " Tiles");
     oppo2Tiles.setText("" + gameState.getHandsData()[2].tiles.size() + " Tiles");
     oppo3Tiles.setText("" + gameState.getHandsData()[3].tiles.size() + " Tiles");
+    humanTiles.setText("" + gameState.getHandsData()[0].tiles.size() + " Tiles");
     // Update current player
     Label currentLabel;
-    System.out.println(you.getStyleClass());
     you.getStyleClass().clear();
     oppo1.getStyleClass().clear();
     oppo2.getStyleClass().clear();

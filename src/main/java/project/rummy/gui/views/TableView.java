@@ -4,10 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import project.rummy.entities.Meld;
-import project.rummy.entities.MeldType;
-import project.rummy.entities.TableData;
-import project.rummy.entities.Tile;
+import project.rummy.entities.*;
 import project.rummy.main.GameFXMLLoader;
 
 import java.io.IOException;
@@ -50,11 +47,11 @@ public class TableView extends Pane {
         int meldId2 = setGrid2[row][col];
         if (meldId1 != 0) {
           Meld meld1 = Meld.idsToMelds.get(meldId1);
-          renderTile(meld1.getTile(col), setPane1, row, col);
+          renderTile(meld1.getTile(col), TileSource.TABLE_SET, setPane1, row, col);
         }
         if (meldId2 != 0) {
           Meld meld2 = Meld.idsToMelds.get(meldId2);
-          renderTile(meld2.getTile(col), setPane2, row, col);
+          renderTile(meld2.getTile(col), TileSource.TABLE_SET, setPane2, row, col);
         }
       }
     }
@@ -64,14 +61,14 @@ public class TableView extends Pane {
         if (runId != 0) {
           Meld run = Meld.idsToMelds.get(runId);
           int firstVal = run.getTile(0).value();
-          renderTile(run.getTile(col +1 - firstVal), runPane, row, col);
+          renderTile(run.getTile(col +1 - firstVal), TileSource.TABLE_RUN, runPane, row, col);
         }
       }
     }
   }
 
-  private void renderTile(Tile tile, GridPane pane, int row, int col) {
-    pane.add(new TileView(tile), col, row);
+  private void renderTile(Tile tile, TileSource source, GridPane pane, int row, int col) {
+    pane.add(new TileView(tile, source), col, row);
   }
 }
 
