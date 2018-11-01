@@ -52,6 +52,15 @@ public class Table {
     return runGrid;
   }
 
+  public Meld getMeldById(int meldid){
+    for(Meld m: melds){
+      if(m.getId() == meldid){
+        return m;
+      }
+    }
+    return null;
+  }
+
   public void initTiles() {
     createDeck();
   }
