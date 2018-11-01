@@ -32,7 +32,7 @@ public class EntitiesBuilder {
 
   public static Entity buildHand(HandData handData) {
     Entity handEntity = Entities.builder()
-        .type(EntityType.MELD)
+        .type(EntityType.HAND)
         .viewFromNode(new HandView(handData))
         .build();
     handEntity.addComponent(handData);

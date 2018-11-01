@@ -1,5 +1,6 @@
 package project.rummy.game;
 
+import com.almasb.fxgl.entity.component.Component;
 import project.rummy.commands.CommandProcessor;
 import project.rummy.control.ActionHandler;
 import project.rummy.entities.Table;
@@ -10,7 +11,7 @@ import project.rummy.observers.Observer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Game implements Observable {
+public class Game extends Component implements Observable {
     private Player[] players;
     private Table table;
     private int currentPlayer;
@@ -19,6 +20,7 @@ public class Game implements Observable {
     private CommandProcessor commandProcessor;
 
     Game() {
+        super();
         this.observers = new ArrayList<>();
         this.commandProcessor = CommandProcessor.getInstance();
     }
@@ -26,7 +28,7 @@ public class Game implements Observable {
     public void setUpPlayer(Player[] players) {
         this.players = players;
         this.turnNumber = 0;
-        this.currentPlayer = 0;
+        this.currentPlayer = -1;
     }
 
     public void setUpTable(Table table) {
@@ -40,13 +42,10 @@ public class Game implements Observable {
      * + Redraw the components that need to be re-rendered after each iteration
      * + Constantly check the state of the game and check for when the game should end
      */
-    public void start() {
-        while (!isGameEnd()) {
-            currentPlayer = (currentPlayer + 1) % 4;
-            commandProcessor.setUpHandler(new ActionHandler(players[currentPlayer], table));
-            players[currentPlayer].getController().playTurn();
-        }
-        // TODO: Display dialog to show the winner and done the game.
+    public void nextTurn() {
+        currentPlayer = (currentPlayer + 1) % 4;
+        commandProcessor.setUpHandler(new ActionHandler(players[currentPlayer], table));
+//        players[currentPlayer].getController().playTurn();
     }
 
     /**

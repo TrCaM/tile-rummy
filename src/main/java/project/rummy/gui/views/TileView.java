@@ -58,6 +58,9 @@ public class TileView extends Pane {
     }
     value.setText(String.valueOf(tile.value()));
     value.setFill(getColor(tile.color()));
+    if (tile.isHightlight()) {
+      border.getStyleClass().add("highlight");
+    }
     getChildren().setAll(tileView);
   }
 

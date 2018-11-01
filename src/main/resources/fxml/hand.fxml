@@ -42,6 +42,6 @@
          </children>
       </GridPane>
       <Button fx:id="playMeldButton" disable="true" layoutX="1149.0" layoutY="175.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="94.0" text="Play Meld" />
-      <Button fx:id="playTileButton" disable="true" layoutX="1149.0" layoutY="95.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="94.0" text="Play Tile" />
+      <Button fx:id="drawButton" layoutX="1149.0" layoutY="95.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="94.0" text="Draw" />
    </children>
 </AnchorPane>

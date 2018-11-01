@@ -2,6 +2,7 @@ package project.rummy.main;
 
 import com.almasb.fxgl.app.FXGL;
 import com.almasb.fxgl.app.GameApplication;
+import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.view.ScrollingBackgroundView;
 import com.almasb.fxgl.settings.GameSettings;
@@ -21,11 +22,17 @@ import java.util.Arrays;
 
 import static project.rummy.entities.PlayerStatus.ICE_BROKEN;
 import static project.rummy.entities.PlayerStatus.START;
+import static project.rummy.gui.views.EntityType.GAME;
 
 public class TileRummyApplication extends GameApplication {
   private GameStore gameStore;
   private CommandProcessor processor;
   private Game game;
+
+  private Entity handView;
+  private Entity tableView;
+  private Entity gameInfoView;
+  private Entity gameEntity;
 
   public TileRummyApplication() {
     super();
@@ -88,13 +95,22 @@ public class TileRummyApplication extends GameApplication {
 //    HandData handData1 = hand1.toHandData();
 //    HandData handData2 = hand2.toHandData();
 //    HandData handData3 = hand3.toHandData();
-    Entity handView = EntitiesBuilder.buildHand(gameState.getHandsData()[0]);
+    gameEntity = Entities.builder().type(GAME).build();
+    gameEntity.addComponent(game);
+    getGameWorld().addEntities(gameEntity);
+    handView = EntitiesBuilder.buildHand(gameState.getHandsData()[0]);
     handView.setX(0);
     handView.setY(740);
-    Entity tableView = EntitiesBuilder.buildTable(gameState.getTableData());
-    Entity gameInfoView = EntitiesBuilder.buildGameInfo(gameState);
+    tableView = EntitiesBuilder.buildTable(gameState.getTableData());
+    gameInfoView = EntitiesBuilder.buildGameInfo(gameState);
     gameInfoView.setX(1300);
     getGameWorld().addEntities(handView, tableView, gameInfoView);
+    game.nextTurn();
+  }
+
+  @Override
+  protected void onUpdate(double tpf) {
+    processor.processNextCommand();
   }
 
   public static void main(String[] args) {

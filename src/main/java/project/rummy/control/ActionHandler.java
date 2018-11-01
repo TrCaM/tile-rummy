@@ -40,7 +40,9 @@ public class ActionHandler {
 
   public void draw() {
     Tile tile = table.drawTile();
+    tile.setHightlight(true);
     hand.addTile(tile);
+    hand.sort();
     logger.info(String.format("%s has draw %s", playerName, tile));
   }
 
@@ -81,10 +83,9 @@ public class ActionHandler {
     }
   }
 
-  public boolean endTurn() {
+  public void endTurn() {
     // TODO: Add logging information here
     isTurnEnd = manipulationTable.submit(table);
-    return isTurnEnd;
   }
 
   public ManipulationTable getManipulationTable() {

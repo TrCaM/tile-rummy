@@ -21,7 +21,7 @@ public abstract class Controller {
   public abstract void playTurn();
 
   protected void send(Command command) {
-    processor.apply(command);
+    processor.enqueueCommand(command);
   }
 
   public Controller setPlayer(Player player) {
