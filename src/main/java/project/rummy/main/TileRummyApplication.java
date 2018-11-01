@@ -9,9 +9,13 @@ import com.almasb.fxgl.texture.Texture;
 import javafx.geometry.Orientation;
 import javafx.scene.image.Image;
 import project.rummy.entities.*;
+import project.rummy.game.GameState;
 import project.rummy.gui.views.EntitiesBuilder;
 
 import java.util.Arrays;
+
+import static project.rummy.entities.PlayerStatus.ICE_BROKEN;
+import static project.rummy.entities.PlayerStatus.START;
 
 public class TileRummyApplication extends GameApplication {
 
@@ -62,8 +66,15 @@ public class TileRummyApplication extends GameApplication {
     Tile R12 = Tile.createTile(Color.RED, 12);
     Tile R11 = Tile.createTile(Color.RED, 11);
     Hand hand = new Hand(Arrays.asList(O5, O6, O7, O8, O9, R3, G3, B3, O3));
+    Hand hand1 = new Hand(Arrays.asList(O8, O9, R3, G3, B3, O3));
+    Hand hand2 = new Hand(Arrays.asList(G3, B3, O3));
+    Hand hand3 = new Hand(Arrays.asList(O7, O8, O9, R3, G3, B3, O3));
     hand.formMeld(0, 1, 2);
     hand.formMeld(0, 1);
+    HandData handData0 = hand.toHandData();
+    HandData handData1 = hand1.toHandData();
+    HandData handData2 = hand2.toHandData();
+    HandData handData3 = hand3.toHandData();
     Entity handView = EntitiesBuilder.buildHand(hand.toHandData());
     handView.setX(0);
     handView.setY(740);
@@ -75,7 +86,16 @@ public class TileRummyApplication extends GameApplication {
     table.addMeld(Meld.createMeld(R9, G9, B9));
     table.addMeld(Meld.createMeld(R13, R12, R11));
     Entity tableView = EntitiesBuilder.buildTable(table.toTableData());
-    getGameWorld().addEntities(handView, tableView);
+    GameState gameState = new GameState();
+    gameState.setTurnNumber(40);
+    gameState.setFreeTilesCount(100);
+    gameState.setCurrentPlayer(2);
+    gameState.setTableData(table.toTableData());
+    gameState.setHandsData(new HandData[] {handData0, handData1, handData2, handData3});
+    gameState.setStatuses(new PlayerStatus[] {ICE_BROKEN, START, ICE_BROKEN, START});
+    Entity gameInfoView = EntitiesBuilder.buildGameInfo(gameState);
+    gameInfoView.setX(1300);
+    getGameWorld().addEntities(handView, tableView, gameInfoView);
   }
 
   public static void main(String[] args) {
