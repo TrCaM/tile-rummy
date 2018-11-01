@@ -2,8 +2,6 @@ package project.rummy.game;
 
 import project.rummy.commands.CommandProcessor;
 import project.rummy.control.ActionHandler;
-import project.rummy.entities.Meld;
-import project.rummy.entities.Hand;
 import project.rummy.entities.Table;
 import project.rummy.entities.Player;
 import project.rummy.observers.Observable;
@@ -11,7 +9,6 @@ import project.rummy.observers.Observer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class Game implements Observable {
     private Player[] players;

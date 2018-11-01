@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="436.0" prefWidth="646.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TextArea editable="false" layoutX="26.0" layoutY="109.0" prefHeight="324.0" prefWidth="575.0" text="Oppoent 1 just draws O7sdfsd fs sdf sdf sdf sdf sdf sdfsd fsd fsdf sd&#10;The Game is Brokens s&#10;ssdf&#10;sd f&#10;sdf&#10; sd&#10;f s&#10;df&#10; sdf&#10; sd&#10;f &#10;sdf&#10;...&#10;...&#10;..&#10;Human wins&#10;" wrapText="true">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </TextArea>
+      <Label layoutX="26.0" layoutY="32.0" prefHeight="58.0" prefWidth="312.0" text="Game Console" textFill="#0f29bf">
+         <font>
+            <Font name="System Bold" size="41.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
