@@ -58,15 +58,26 @@ public class ActionHandler {
     playFromHand(hand.getMelds().indexOf(meld));
   }
 
-  public void takeTableMeld(int meldIndex) throws IllegalAccessException {
+  public void takeTableMeld(int meldIndex){
     //TODO: Add a logging infomation here
     if (!canUseTable) {
-      throw new IllegalAccessException("Cannot manipulate table");
+      throw new IllegalStateException("Cannot manipulate table");
     }
     if (meldIndex >=0 && meldIndex < table.getPlayingMelds().size()) {
       manipulationTable.add(table.removeMeld(meldIndex));
     } else {
       throw new IllegalArgumentException("Invalid meld index");
+    }
+  }
+  public void takeHandTile(int tileIndex){
+    //TODO: Add a logging infomation here
+    if (!canUseTable) {
+      throw new IllegalStateException("Cannot manipulate table");
+    }
+    if (tileIndex >=0 && tileIndex < hand.getTiles().size()) {
+      manipulationTable.add(Meld.createMeld(hand.removeTile(tileIndex)));
+    } else {
+      throw new IllegalArgumentException("Invalid tile index");
     }
   }
 
