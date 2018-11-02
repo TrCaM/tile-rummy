@@ -18,7 +18,7 @@ public class GameState extends Component {
   private PlayerStatus[] statuses;
   private int currentPlayer;
 
-  static GameState generateState(Game game) {
+  public static GameState generateState(Game game) {
     GameState gameState = new GameState();
     gameState.turnNumber = game.getTurnNumber();
     gameState.currentPlayer = game.getCurrentPlayer();
