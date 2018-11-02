@@ -16,15 +16,19 @@ public class TableMeldSeeker {
     public static Meld findDetachableIdenticalTile (Tile tile, List<Meld> melds){
         List<Meld> meldsFound = new ArrayList<>();
 
-        melds.stream().filter(meld -> meld.tiles().contains(tile)
-                && meld.tiles().size() >= 4).forEach(meldsFound::add);
+        melds.stream().filter(meld -> meld.tiles().size() >= 4).forEach(meldsFound::add);
 
         for(Meld m: meldsFound){
-            if(m.type() == MeldType.SET
-                    || m.tiles().indexOf(tile) == 0
-                    || m.tiles().indexOf(tile) == m.tiles().size()-1){
-                return m;
+            for(Tile t: m.tiles()){
+                if(t.value()== tile.value() && t.color()==tile.color()){
+                    if(m.type() == MeldType.SET
+                            || m.tiles().indexOf(tile) == 0
+                            || m.tiles().indexOf(tile) == m.tiles().size()-1){
+                        return m;
+                    }
+                }
             }
+
         }
         return null;
     }
