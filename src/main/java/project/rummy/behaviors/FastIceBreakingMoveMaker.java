@@ -27,11 +27,14 @@ public class FastIceBreakingMoveMaker implements ComputerMoveMaker {
             return commands;
         } else {
             for (Meld m : allMelds) {
+                indecies.clear();
                 for (int i = 0; i < m.tiles().size(); i++) {
                     indecies.add(i);
                 }
                 commands.add(handler -> handler.formMeld(indecies.stream().mapToInt(Integer::intValue).toArray()));
+                commands.add(handler -> handler.playFromHand(0));
             }
+            //TODO send endturn command
             return commands;
         }
     }
