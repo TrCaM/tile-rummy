@@ -24,6 +24,9 @@ public class Player {
     this.controller = controller.setPlayer(this);
   }
 
+  public void resetForNewTurn() {
+    hand.getTiles().forEach(tile -> tile.setHightlight(false));
+  }
   public Controller getController() {
     return this.controller;
   }

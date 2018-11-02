@@ -3,10 +3,7 @@ package project.rummy.game;
 import com.almasb.fxgl.entity.component.Component;
 import project.rummy.commands.CommandProcessor;
 import project.rummy.control.ActionHandler;
-import project.rummy.entities.Hand;
-import project.rummy.entities.Table;
-import project.rummy.entities.Player;
-import project.rummy.entities.TurnStatus;
+import project.rummy.entities.*;
 import project.rummy.observers.Observable;
 import project.rummy.observers.Observer;
 
@@ -50,6 +47,7 @@ public class Game extends Component implements Observable {
    * + Constantly check the state of the game and check for when the game should end
    */
   public void nextTurn() {
+    resetTileHightlight();
     currentPlayer = (currentPlayer + 4) % 4;
     ActionHandler handler = new ActionHandler(players[currentPlayer], table);
     commandProcessor.setUpHandler(handler);
@@ -57,6 +55,11 @@ public class Game extends Component implements Observable {
     this.turnNumber++;
     handler.backUpTurn();
 //        players[currentPlayer].getController().playTurn();
+  }
+
+  private void resetTileHightlight() {
+    players[currentPlayer].resetForNewTurn();
+    table.resetForNewTurn();
   }
 
   public void setTable(Table table) {
@@ -136,6 +139,8 @@ public class Game extends Component implements Observable {
   public void update(TurnStatus turnStatus) {
     this.turnStatus = turnStatus;
     if (turnStatus.isTurnEnd) {
+      PlayerStatus status = turnStatus.isIceBroken ? PlayerStatus.ICE_BROKEN : PlayerStatus.START;
+      players[currentPlayer].setStatus(status);
       nextTurn();
     }
     notifyObservers();

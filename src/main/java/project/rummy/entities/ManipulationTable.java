@@ -225,6 +225,7 @@ public class ManipulationTable {
 
       for (Meld m : melds) {
         m.setSource(MeldSource.TABLE);
+        m.tiles().forEach(tile -> tile.setHightlight(true));
         table.addMeld(m);
       }
 
