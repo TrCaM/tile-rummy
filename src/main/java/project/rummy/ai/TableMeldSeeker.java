@@ -3,52 +3,106 @@ package project.rummy.ai;
 import project.rummy.entities.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class TableMeldSeeker {
 
 
     /**
-     * @param direction: left, right, none
+     * find meld that can be detached to give a identical tile
      */
-    public static int findDetachableMeld(Tile tile, List<Meld> melds, DetachDirection direction){
-        List<Meld> meldFound = new ArrayList<>();
-        melds.stream().filter(meld -> meld.tiles().contains(tile)).forEach(meldFound::add);
+    public static int findDetachableIdenticalTile (int tileValue, Color tileColor, List<Meld> melds){
+        List<Meld> meldsFound = new ArrayList<>();
 
-        if(meldFound.isEmpty()){
-            return 0;
-        }
-        for(Meld m: meldFound){
-            int index = m.tiles().indexOf(tile);
+        melds.stream().filter(meld -> meld.tiles().size() >= 4).forEach(meldsFound::add);
 
-            if(direction == DetachDirection.RIGHT && m.type() == MeldType.RUN && index > 2){
-                return m.getId();
+        for(Meld m: meldsFound){
+            for(Tile t: m.tiles()){
+                if(t.value()== tileValue && t.color()== tileColor){
+                    if(m.type() == MeldType.SET
+                            || m.tiles().indexOf(t) == 0
+                            || m.tiles().indexOf(t) == m.tiles().size()-1){
+                        return m.getId();
+                    }
+                }
             }
-            if(direction == DetachDirection.LEFT && m.type() == MeldType.RUN && m.tiles().size() - index - 1 >= 3 ){
-                return m.getId();
-            }
-            if(direction == DetachDirection.NONE && m.type() == MeldType.SET && m.tiles().size() == 4 ){
-                return m.getId();
-            }
+
         }
         return 0;
     }
 
+
+    /**
+     * find meld that can split and give:
+     * on the left: tiles that can be added to the left of the given tile
+     * on the right: a valid meld
+     */
+    public static int findLeftDetachableTiles (int tileValue, Color tileColor, List<Meld> melds){
+        List<Meld> meldsFound = new ArrayList<>();
+
+        if(tileValue < 1 || tileValue > 11){ return 0;}
+        for(Meld m: melds){
+            for(Tile t: m.tiles()){
+                if(t.value()==tileValue && t.color()==tileColor
+                        && m.type() == MeldType.RUN
+                        && m.tiles().indexOf(t) > 0
+                        && m.tiles().size() - m.tiles().indexOf(t) >= 3){
+                    meldsFound.add(m);
+                }
+            }
+        }
+        //return the meld with give the max number of detachable tiles
+        return meldsFound.isEmpty() ? 0 : Collections.max(meldsFound, Comparator.comparing(meld -> meld.tiles().size())).getId();
+    }
+
+
+    /**
+     * find meld that can split and give:
+     * on the right: tiles that can be added to the right of the given tile
+     * on the left: a valid meld
+     */
+    public static int findRightDetachableTiles (int tileValue, Color tileColor, List<Meld> melds){
+        List<Meld> meldsFound = new ArrayList<>();
+
+        if(tileValue > 12 || tileValue < 3){ return 0;}
+        for(Meld m: melds){
+            for(Tile t: m.tiles()){
+                if(t.value()==tileValue && t.color()==tileColor
+                        && m.type() == MeldType.RUN
+                        && m.tiles().indexOf(t) != m.tiles().size()-1
+                        && m.tiles().indexOf(t) >= 2){
+                    meldsFound.add(m);
+                }
+            }
+        }
+
+        //return the meld with give the max number of detachable tiles
+        return meldsFound.isEmpty() ? 0 : Collections.max(meldsFound, Comparator.comparing(meld -> meld.tiles().size())).getId();
+    }
+
+
     /**
      * find meld that the tile can directly add to
      */
-    public static int findDirectMeldToAdd(Tile tile, List<Meld> melds){
+    public static int findDirectMeld(int tileValue, Color tileColor, List<Meld> melds){
 
         //the suitable meld will be the first one appears
         for(Meld m: melds){
-            if(m.type() == MeldType.SET && m.tiles().get(0).value() == tile.value() && !m.tiles().contains(tile)){
-                return m.getId();
+            if(m.type() == MeldType.SET && m.tiles().get(0).value() == tileValue){
+                boolean exist = false;
+                for(Tile t: m.tiles()){
+                    if(t.color() == tileColor){ exist=true; }
+                }
+                if(!exist){ return m.getId(); }
             }
+
             int first = m.tiles().get(0).value();
             int last  = first + m.tiles().size() - 1;
 
-            if(m.tiles().get(0).color() == tile.color()
-                    && (tile.value() == first -1 || tile.value() == last +1)){
+            if(m.tiles().get(0).color() == tileColor
+                    && (tileValue == first -1 || tileValue == last +1)){
                 return m.getId();
             }
         }
