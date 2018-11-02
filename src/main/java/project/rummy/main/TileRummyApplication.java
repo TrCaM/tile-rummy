@@ -54,7 +54,6 @@ public class TileRummyApplication extends GameApplication {
   @Override
   protected void initGame() {
     game = gameStore.initializeGame();
-    GameState gameState = GameState.generateState(game);
     processor = CommandProcessor.getInstance();
     processor.setUpGame(game);
 //    System.out.println(Color.RED.value());
@@ -97,15 +96,16 @@ public class TileRummyApplication extends GameApplication {
 //    HandData handData3 = hand3.toHandData();
     gameEntity = Entities.builder().type(GAME).build();
     gameEntity.addComponent(game);
+    game.nextTurn();
+    GameState gameState = GameState.generateState(game);
     getGameWorld().addEntities(gameEntity);
-    handView = EntitiesBuilder.buildHand(gameState.getHandsData()[0]);
+    handView = EntitiesBuilder.buildHand(gameState);
     handView.setX(0);
     handView.setY(740);
     tableView = EntitiesBuilder.buildTable(gameState.getTableData());
     gameInfoView = EntitiesBuilder.buildGameInfo(gameState);
     gameInfoView.setX(1300);
     getGameWorld().addEntities(handView, tableView, gameInfoView);
-    game.nextTurn();
   }
 
   @Override

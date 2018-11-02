@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="260.0" prefWidth="1332.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
@@ -43,5 +44,15 @@
       </GridPane>
       <Button fx:id="playMeldButton" disable="true" layoutX="1149.0" layoutY="175.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="94.0" text="Play Meld" />
       <Button fx:id="drawButton" layoutX="1149.0" layoutY="95.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="94.0" text="Draw" />
+      <Button fx:id="endTurnButton" layoutX="1258.0" layoutY="142.0" mnemonicParsing="false" prefHeight="103.0" prefWidth="60.0" text="End Turn" wrapText="true">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+      <Button fx:id="undoButton" layoutX="1258.0" layoutY="14.0" mnemonicParsing="false" prefHeight="103.0" prefWidth="60.0" text="Undo" wrapText="true">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

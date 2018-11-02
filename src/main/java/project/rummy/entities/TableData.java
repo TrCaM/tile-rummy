@@ -27,4 +27,8 @@ public class TableData extends Component {
     setGrid2 = new int[13][4];
     runGrid = new int[8][13];
   }
+
+  public static Table toTable(TableData data) {
+    return new Table(data.melds, data.freeTiles, data.setGrid1, data.setGrid2, data.runGrid);
+  }
 }

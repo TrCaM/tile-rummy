@@ -30,12 +30,12 @@ public class EntitiesBuilder {
     return meldEntity;
   }
 
-  public static Entity buildHand(HandData handData) {
+  public static Entity buildHand(GameState gameState) {
     Entity handEntity = Entities.builder()
         .type(EntityType.HAND)
-        .viewFromNode(new HandView(handData))
+        .viewFromNode(new HandView(gameState))
         .build();
-    handEntity.addComponent(handData);
+    handEntity.addComponent(gameState.getHandsData()[0]);
     return handEntity;
   }
 
