@@ -52,7 +52,7 @@ public class HandView extends Pane implements Observer {
     loader.setController(this);
     this.chosenTiles = new HashSet<>();
     this.turnStatus = state.getTurnStatus();
-    loadHandView(state.getHandsData()[0]);
+    loadHandView(state);
     setId("hand");
     setUpHandlers();
     Game game = FXGL.getGameWorld().getEntitiesByType(EntityType.GAME).get(0).getComponent(Game.class);
@@ -64,6 +64,11 @@ public class HandView extends Pane implements Observer {
     this.drawButton.setOnMouseClicked(this::onDrawClick);
     this.playMeldButton.setOnMouseClicked(this::onPlayMeldButtonClick);
     this.undoButton.setOnMouseClicked(this::onUndoButtonClick);
+    this.endTurnButton.setOnMouseClicked(this::onEndTurnButtonClick);
+  }
+
+  private void onEndTurnButtonClick(MouseEvent mouseEvent) {
+    CommandProcessor.getInstance().enqueueCommand(ActionHandler::endTurn);
   }
 
   private void onPlayMeldButtonClick(MouseEvent mouseEvent) {
@@ -96,23 +101,14 @@ public class HandView extends Pane implements Observer {
     CommandProcessor.getInstance().enqueueCommand(ActionHandler::draw);
   }
 
-  private void loadHandView(HandData data) {
+  private void loadHandView(GameState state) {
     try {
       handView = loader.load();
     } catch (IOException e) {
       e.printStackTrace();
       throw new IllegalStateException("Can not load hand");
     }
-    data.tiles.stream()
-        .map(tile -> new TileView(tile, TileSource.HAND))
-        .forEach(view -> {
-          tileRack.getChildren().add(view);
-        });
-    data.melds.stream()
-        .map(MeldView::new)
-        .forEach(view -> {
-          meldRack.getChildren().add(view);
-        });
+    update(state);
     getChildren().setAll(handView);
   }
 
@@ -132,5 +128,6 @@ public class HandView extends Pane implements Observer {
     playMeldButton.setDisable(true);
     this.tileRack.setDisable(!turnStatus.canPlay);
     this.meldRack.setDisable(!turnStatus.canPlay);
+    this.endTurnButton.setDisable(!turnStatus.canEnd);
   }
 }

@@ -52,8 +52,7 @@ public class CommandProcessor {
       throw new IllegalStateException("ActionHandler was not set up properly before the turn");
     }
     command.execute(handler);
-    game.setTurnStatus(handler.getTurnStatus());
-    game.notifyObservers();
+    game.update(handler.getTurnStatus());
   }
 
   public void processNextCommand() {
