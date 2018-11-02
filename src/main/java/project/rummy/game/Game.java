@@ -3,8 +3,10 @@ package project.rummy.game;
 import com.almasb.fxgl.entity.component.Component;
 import project.rummy.commands.CommandProcessor;
 import project.rummy.control.ActionHandler;
+import project.rummy.entities.Hand;
 import project.rummy.entities.Table;
 import project.rummy.entities.Player;
+import project.rummy.entities.TurnStatus;
 import project.rummy.observers.Observable;
 import project.rummy.observers.Observer;
 
@@ -18,6 +20,7 @@ public class Game extends Component implements Observable {
     private List<Observer> observers;
     private int turnNumber;
     private CommandProcessor commandProcessor;
+    TurnStatus turnStatus;
 
     Game() {
         super();
@@ -35,6 +38,10 @@ public class Game extends Component implements Observable {
         this.table = table;
     }
 
+    public Player getCurrentPlayerObject() {
+        return players[currentPlayer];
+    }
+
     /**
      * Start the game specifically:
      * + It create the game loops to keep looping until the game is done
@@ -44,8 +51,20 @@ public class Game extends Component implements Observable {
      */
     public void nextTurn() {
         currentPlayer = (currentPlayer + 1) % 4;
-        commandProcessor.setUpHandler(new ActionHandler(players[currentPlayer], table));
+        ActionHandler handler = new ActionHandler(players[currentPlayer], table);
+        commandProcessor.setUpHandler(handler);
+        this.turnStatus = handler.getTurnStatus();
+        handler.backUpTurn();
 //        players[currentPlayer].getController().playTurn();
+    }
+
+    public void setTable(Table table) {
+        this.table = table;
+    }
+
+    public void restoreTurn(Hand hand, Table table) {
+        players[currentPlayer].setHand(hand);
+        this.table = table;
     }
 
     /**
@@ -113,7 +132,12 @@ public class Game extends Component implements Observable {
         observers.forEach(observer -> observer.update(state));
     }
 
-    private GameState generateGameState() {
+
+  public void setTurnStatus(TurnStatus turnStatus) {
+    this.turnStatus = turnStatus;
+  }
+
+  private GameState generateGameState() {
         return GameState.generateState(this);
     }
 }

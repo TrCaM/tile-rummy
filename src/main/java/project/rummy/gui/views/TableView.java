@@ -1,18 +1,24 @@
 package project.rummy.gui.views;
 
+import com.almasb.fxgl.app.FXGL;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import project.rummy.entities.*;
+import project.rummy.game.Game;
+import project.rummy.game.GameState;
 import project.rummy.main.GameFXMLLoader;
+import project.rummy.observers.Observable;
+import project.rummy.observers.Observer;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class TableView extends Pane {
+public class TableView extends Pane implements Observer {
   private GameFXMLLoader loader;
+  private Node tableView;
 
   @FXML private GridPane setPane1;
   @FXML private GridPane setPane2;
@@ -23,10 +29,11 @@ public class TableView extends Pane {
     this.loader = new GameFXMLLoader("table");
     loader.setController(this);
     loadTableView(tableData);
+    Game game = FXGL.getGameWorld().getEntitiesByType(EntityType.GAME).get(0).getComponent(Game.class);
+    game.registerObserver(this);
   }
 
   private void loadTableView(TableData tableData) {
-    Node tableView;
     try {
       tableView = loader.load();
     } catch (IOException e) {
@@ -69,6 +76,15 @@ public class TableView extends Pane {
 
   private void renderTile(Tile tile, TileSource source, GridPane pane, int row, int col) {
     pane.add(new TileView(tile, source), col, row);
+  }
+
+  @Override
+  public void update(GameState status) {
+    System.out.println("Table view updated");
+    runPane.getChildren().clear();
+    setPane1.getChildren().clear();
+    setPane2.getChildren().clear();
+    renderMelds(status.getTableData());
   }
 }
 

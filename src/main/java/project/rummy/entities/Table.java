@@ -46,22 +46,35 @@ public class Table {
     this.melds = new ArrayList<>(melds);
     this.backupMelds = new ArrayList<>();
     this.freeTiles = new ArrayList<>(freeTiles);
-    this.setGrid1 = setGrid1;
-    this.setGrid2 = setGrid2;
-    this.runGrid = runGrid;
+    this.setGrid1 = copy2DimensionArray(setGrid1);
+    this.setGrid2 = copy2DimensionArray(setGrid2);
+    this.runGrid = copy2DimensionArray(runGrid);
   }
 
 
+    private static int[][] copy2DimensionArray(int[][] old) {
+      int[][] current = new int[old.length][old[0].length];
+      for(int i=0; i<old.length; i++) {
+        for(int j=0; j<old[i].length; j++) {
+          current[i][j]=old[i][j];
+        }
+      }
+      return current;
+    }
+
     public int[][] getSetGrid1() {
-        return setGrid1;
+//      return setGrid1;
+      return copy2DimensionArray(setGrid1);
     }
 
     public int[][] getSetGrid2() {
-        return setGrid2;
+//      return setGrid2;
+      return copy2DimensionArray(setGrid2);
     }
 
     public int[][] getRunGrid() {
-        return runGrid;
+//      return runGrid;
+      return copy2DimensionArray(runGrid);
     }
 
 
@@ -114,7 +127,7 @@ public class Table {
 
 
     public List<Tile> getFreeTiles() {
-        return Collections.unmodifiableList(freeTiles);
+        return new ArrayList<>(freeTiles);
     }
 
     public int getFreeTilesSize() {
@@ -122,11 +135,11 @@ public class Table {
     }
 
     public List<Meld> getPlayingMelds() {
-        return Collections.unmodifiableList(melds);
+        return new ArrayList<>(melds);
     }
 
     public List<Meld> getBackupMelds() {
-        return Collections.unmodifiableList(backupMelds);
+        return new ArrayList<>(backupMelds);
     }
 
     /**

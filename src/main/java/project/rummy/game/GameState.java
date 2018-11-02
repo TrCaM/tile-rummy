@@ -16,7 +16,9 @@ public class GameState extends Component {
   private HandData[] handsData;
   private PlayerData[] playerData;
   private PlayerStatus[] statuses;
+  private TurnStatus turnStatus;
   private int currentPlayer;
+
 
   public static GameState generateState(Game game) {
     GameState gameState = new GameState();
@@ -29,11 +31,15 @@ public class GameState extends Component {
     gameState.statuses = Stream.of(game.getPlayers())
         .map(Player::status).toArray(PlayerStatus[]::new);
     gameState.playerData = Stream.of(game.getPlayers())
-            .map(Player::toPlayerData).toArray(PlayerData[]::new);;
+        .map(Player::toPlayerData).toArray(PlayerData[]::new);
+    gameState.turnStatus = game.turnStatus;
+
     return gameState;
   }
 
-  public PlayerData[] getPlayerData(){return playerData;  }
+  public PlayerData[] getPlayerData() {
+    return playerData;
+  }
 
   public int getFreeTilesCount() {
     return freeTilesCount;
@@ -57,6 +63,10 @@ public class GameState extends Component {
 
   public PlayerStatus[] getPlayerStatuses() {
     return this.statuses;
+  }
+
+  public TurnStatus getTurnStatus() {
+    return turnStatus;
   }
 
   public void setTurnNumber(int turnNumber) {

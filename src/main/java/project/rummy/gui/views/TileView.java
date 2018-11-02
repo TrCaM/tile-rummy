@@ -1,6 +1,5 @@
 package project.rummy.gui.views;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
@@ -11,7 +10,6 @@ import project.rummy.entities.Color;
 import project.rummy.entities.Tile;
 import project.rummy.entities.TileSource;
 import project.rummy.events.TileChooseEvent;
-import project.rummy.events.TileUnChooseEvent;
 import project.rummy.main.GameFXMLLoader;
 
 import java.io.IOException;

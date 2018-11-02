@@ -91,6 +91,7 @@ public class TurnInteractionTest {
         assertThat(tempTable.getMelds().get(1).tiles(), contains(R8, G8, B8, O8));
 
         //End turn
+        handler.submit();
         handler.endTurn();
 
         //Checking the turn
@@ -142,6 +143,7 @@ public class TurnInteractionTest {
         assertThat(tempTable.getMelds().get(1).tiles(), contains(O5, O6, O7, O8));
 
         //End Turn
+        handler.submit();
         handler.endTurn();
 
         //Checking the turn
@@ -201,6 +203,7 @@ public class TurnInteractionTest {
         assertThat(tempTable.getMelds().get(1).tiles(), contains(B8, R8, O8));
 
         //End turn
+        handler.submit();
         handler.endTurn();
 
         //Checking the turn
@@ -258,6 +261,7 @@ public class TurnInteractionTest {
         assertThat(tempTable.getMelds().get(2).tiles(), contains(B8, O8, G8));
 
         //End turn
+        handler.submit();
         handler.endTurn();
 
         //Checking the turn
@@ -336,6 +340,7 @@ public class TurnInteractionTest {
         assertThat(tempTable.getMelds().get(3).tiles(), contains(O3, O4, O5));
 
         //End turn
+        handler.submit();
         handler.endTurn();
 
         //Checking the turn

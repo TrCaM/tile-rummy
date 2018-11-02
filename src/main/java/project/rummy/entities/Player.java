@@ -28,6 +28,10 @@ public class Player {
     return this.controller;
   }
 
+  public void setHand(Hand hand) {
+    this.hand = hand;
+  }
+
   public Hand hand() {
     return hand;
   }

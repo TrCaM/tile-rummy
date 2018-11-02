@@ -1,15 +1,18 @@
 package project.rummy.gui.views;
 
+import com.almasb.fxgl.app.FXGL;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import project.rummy.game.Game;
 import project.rummy.game.GameState;
 import project.rummy.main.GameFXMLLoader;
+import project.rummy.observers.Observer;
 
 import java.io.IOException;
 
-public class GameInfoView extends Pane {
+public class GameInfoView extends Pane implements Observer {
   private GameFXMLLoader loader;
 
   @FXML private Label humanTiles;
@@ -32,6 +35,8 @@ public class GameInfoView extends Pane {
     this.loader = new GameFXMLLoader("gameInfo");
     loader.setController(this);
     loadGameInfoView(gameState);
+    Game game = FXGL.getGameWorld().getEntitiesByType(EntityType.GAME).get(0).getComponent(Game.class);
+    game.registerObserver(this);
   }
 
   private void loadGameInfoView(GameState gameState) {
@@ -83,6 +88,10 @@ public class GameInfoView extends Pane {
     turnNum.setText(Integer.toString(gameState.getTurnNumber()));
   }
 
+  @Override
+  public void update(GameState status) {
+    renderGameInfo(status);
+  }
 }
 
 
