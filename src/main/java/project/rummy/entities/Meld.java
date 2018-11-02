@@ -41,6 +41,15 @@ public class Meld extends Component {
     idsToMelds.put(id,this);
   }
 
+  public static Meld getMeldFromId(int meldid, List<Meld> melds){
+    for(Meld m: melds){
+      if(m.getId() == meldid){
+        return m;
+      }
+    }
+    throw new IllegalArgumentException("meld Id not found");
+  }
+
   public static void cleanUpMap(GameState state) {
     HashMap<Integer, Meld> idsToMeldUpdate = new HashMap<>();
     state.getTableData().melds.forEach(meld -> idsToMeldUpdate.put(meld.id, meld));
