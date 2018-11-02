@@ -250,4 +250,13 @@ public class Table {
   public TableData toTableData() {
     return new TableData(this);
   }
+
+  public void resetForNewTurn() {
+      List<Tile> allTiles = new ArrayList<>();
+      melds.stream().map(Meld::tiles).reduce(allTiles, (middleList, meldTiles) -> {
+        middleList.addAll(meldTiles);
+        return middleList;
+      });
+      allTiles.forEach(tile -> tile.setHightlight(false));
+  }
 }

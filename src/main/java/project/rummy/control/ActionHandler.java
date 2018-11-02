@@ -21,6 +21,7 @@ public class ActionHandler {
   private boolean canDraw;
   private boolean canPlay;
   private boolean canEnd;
+  private boolean isIceBroken;
   private HandData backUpHand;
   private TableData backUpTable;
   private String playerName;
@@ -42,6 +43,7 @@ public class ActionHandler {
     this.canPlay = true;
     this.canEnd = false;
     this.turnType = player.status();
+    this.isIceBroken = player.status() == ICE_BROKEN;
   }
 
   public Hand getHand(){
@@ -54,6 +56,7 @@ public class ActionHandler {
     status.canPlay = canPlay;
     status.isTurnEnd = isTurnEnd;
     status.canEnd = canEnd;
+    status.isIceBroken = isIceBroken;
     return status;
   }
 
@@ -68,6 +71,8 @@ public class ActionHandler {
     this.table = TableData.toTable(backUpTable);
     game.setUpTable(table);
     game.getCurrentPlayerObject().setHand(hand);
+    game.getCurrentPlayerObject().resetForNewTurn();
+    table.resetForNewTurn();
     this.manipulationTable.clear();
     this.isTurnEnd = false;
     this.canDraw = true;
@@ -141,6 +146,7 @@ public class ActionHandler {
     manipulationTable.submit(table);
     manipulationTable.clear();
     if (turnType == ICE_BROKEN  || startPoint - hand.getScore() >= 30) {
+      this.isIceBroken = true;
       this.canEnd = true;
     }
   }
