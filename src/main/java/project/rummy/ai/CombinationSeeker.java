@@ -72,7 +72,6 @@ public class CombinationSeeker {
                 break;
             }
         }
-
         int leftValue = tileValue - 1;
         while(leftValue >= 1) {
             int meldid = TableMeldSeeker.findDetachableIdenticalTile(leftValue, tileColor, copyMelds);
@@ -99,23 +98,37 @@ public class CombinationSeeker {
      * @param tileColor
      * @param tableMelds
      */
-    public static void formRunGeneral(int tileValue, Color tileColor, List<Meld> tableMelds){
+    public static Map<Meld, Integer> formRunBySplitRight(int tileValue, Color tileColor, List<Meld> tableMelds) {
 
+        Map<Meld, Integer> map = new HashMap<>();
         int rightId = TableMeldSeeker.findRightDetachableTiles(tileValue, tileColor, tableMelds);
         Meld rightMeld = rightId == 0 ? null : Meld.getMeldFromId(rightId, tableMelds);
 
-        if(rightMeld != null){
-            for(int i=0; i<rightMeld.tiles().size(); i++){
-                if(rightMeld.tiles().get(i).value()== tileValue && rightMeld.tiles().get(i).color() == tileColor){
+        if (rightMeld != null) {
+            for (int i = 0; i < rightMeld.tiles().size(); i++) {
+                if (rightMeld.tiles().get(i).value() == tileValue && rightMeld.tiles().get(i).color() == tileColor) {
                     //this is the number of tiles that we can detach
-                    if(rightMeld.tiles().size() - i - 1 >= 2){
-                        //TODO return something
+                    if (rightMeld.tiles().size() - i - 1 >= 2) {
+                        map.put(rightMeld, i);
+                        return map;
                     }
                 }
             }
         }
+        return map;
+    }
 
-        int leftId = TableMeldSeeker.findRightDetachableTiles(tileValue, tileColor, tableMelds);
+    /**
+     *
+     * @param tileValue
+     * @param tileColor
+     * @param tableMelds
+     */
+    public static Map<Meld, Integer> formRunBySplitLeft(int tileValue, Color tileColor, List<Meld> tableMelds){
+
+        Map<Meld, Integer> map = new HashMap<>();
+
+        int leftId = TableMeldSeeker.findLeftDetachableTiles(tileValue, tileColor, tableMelds);
         Meld leftMeld = leftId == 0 ? null : Meld.getMeldFromId(leftId, tableMelds);
 
         if(leftMeld != null){
@@ -123,12 +136,14 @@ public class CombinationSeeker {
                 if(leftMeld.tiles().get(i).value()== tileValue && leftMeld.tiles().get(i).color() == tileColor){
                     //this is the number of tiles that we can detach
                     if(i >= 2){
-                        //TODO return something
+                        System.out.println(tileValue + tileColor.toString());
+                        System.out.println(leftMeld.tiles().toString());
+                        map.put(leftMeld, i);
+                        return map;
                     }
                 }
             }
         }
-
-
+        return map;
     }
 }
