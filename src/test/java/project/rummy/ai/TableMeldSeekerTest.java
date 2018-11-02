@@ -40,13 +40,13 @@ public class TableMeldSeekerTest {
         melds.add(Meld.createMeld(R4, G4, B4, O4));
         melds.add(Meld.createMeld(G5, B5, O5));
 
-        assertTrue(TableMeldSeeker.findDetachableIdenticalTile(B10, melds) == null);
-        assertTrue(TableMeldSeeker.findDetachableIdenticalTile(B5, melds) == null);
-        assertTrue(TableMeldSeeker.findDetachableIdenticalTile(O7, melds) == null);
-        assertTrue(TableMeldSeeker.findDetachableIdenticalTile(O5, melds) == null);
-        assertEquals(melds.get(1).getId(), TableMeldSeeker.findDetachableIdenticalTile(G4, melds).getId());
-        assertEquals(melds.get(0).getId(), TableMeldSeeker.findDetachableIdenticalTile(O4, melds).getId());
-        assertEquals(melds.get(0).getId(), TableMeldSeeker.findDetachableIdenticalTile(O9, melds).getId());
+        assertEquals(0, TableMeldSeeker.findDetachableIdenticalTile(10, Color.BLACK, melds));
+        assertEquals(0, TableMeldSeeker.findDetachableIdenticalTile(5, Color.BLACK, melds));
+        assertEquals(0, TableMeldSeeker.findDetachableIdenticalTile(7, Color.ORANGE, melds));
+        assertEquals(0, TableMeldSeeker.findDetachableIdenticalTile(5, Color.ORANGE, melds));
+        assertEquals(melds.get(1).getId(), TableMeldSeeker.findDetachableIdenticalTile(4, Color.GREEN, melds));
+        assertEquals(melds.get(0).getId(), TableMeldSeeker.findDetachableIdenticalTile(4, Color.ORANGE, melds));
+        assertEquals(melds.get(0).getId(), TableMeldSeeker.findDetachableIdenticalTile(9, Color.ORANGE, melds));
 
     }
 
@@ -57,12 +57,12 @@ public class TableMeldSeekerTest {
         melds.add(Meld.createMeld(R4, G4, B4, O4));
         melds.add(Meld.createMeld(G5, B5, O5));
 
-        assertTrue(TableMeldSeeker.findLeftDetachableTiles(O8, melds) == null);
-        assertTrue (TableMeldSeeker.findLeftDetachableTiles(G4, melds) == null);
-        assertTrue(TableMeldSeeker.findLeftDetachableTiles(O4, melds) == null);
-        assertEquals(melds.get(0).getId(), TableMeldSeeker.findLeftDetachableTiles(O6, melds).getId());
-        assertEquals(melds.get(0).getId(), TableMeldSeeker.findLeftDetachableTiles(O7, melds).getId());
-        assertEquals(melds.get(0).getId(), TableMeldSeeker.findLeftDetachableTiles(O5, melds).getId());
+        assertEquals(0, TableMeldSeeker.findLeftDetachableTiles(8, Color.ORANGE, melds));
+        assertEquals (0, TableMeldSeeker.findLeftDetachableTiles(4, Color.GREEN, melds));
+        assertEquals(0, TableMeldSeeker.findLeftDetachableTiles(4, Color.ORANGE, melds));
+        assertEquals(melds.get(0).getId(), TableMeldSeeker.findLeftDetachableTiles(6, Color.ORANGE, melds));
+        assertEquals(melds.get(0).getId(), TableMeldSeeker.findLeftDetachableTiles(7, Color.ORANGE, melds));
+        assertEquals(melds.get(0).getId(), TableMeldSeeker.findLeftDetachableTiles(5, Color.ORANGE, melds));
     }
 
 
@@ -72,11 +72,11 @@ public class TableMeldSeekerTest {
         melds.add(Meld.createMeld(R4, G4, B4, O4));
         melds.add(Meld.createMeld(G5, B5, O5));
 
-        assertEquals(null, TableMeldSeeker.findRightDetachableTiles(O9, melds));
-        assertEquals(null, TableMeldSeeker.findRightDetachableTiles(R4, melds));
-        assertEquals(melds.get(0).getId(), TableMeldSeeker.findRightDetachableTiles(O8, melds).getId());
-        assertEquals(melds.get(0).getId(), TableMeldSeeker.findRightDetachableTiles(O7, melds).getId());
-        assertEquals(melds.get(0).getId(), TableMeldSeeker.findRightDetachableTiles(O6, melds).getId());
+        assertEquals(0, TableMeldSeeker.findRightDetachableTiles(9, Color.ORANGE, melds));
+        assertEquals(0, TableMeldSeeker.findRightDetachableTiles(4, Color.RED, melds));
+        assertEquals(melds.get(0).getId(), TableMeldSeeker.findRightDetachableTiles(6, Color.ORANGE, melds));
+        assertEquals(melds.get(0).getId(), TableMeldSeeker.findRightDetachableTiles(7, Color.ORANGE, melds));
+        assertEquals(melds.get(0).getId(), TableMeldSeeker.findRightDetachableTiles(8, Color.ORANGE, melds));
     }
 
 
@@ -86,13 +86,13 @@ public class TableMeldSeekerTest {
         melds.add(Meld.createMeld(R4, G4, B4));
         melds.add(Meld.createMeld(G5, B5, O5));
 
-        assertEquals(null, TableMeldSeeker.findDirectMeld(B10, melds));
-        assertEquals(null, TableMeldSeeker.findDirectMeld(B4, melds));
-        assertEquals(null, TableMeldSeeker.findDirectMeld(O8, melds));
+        assertEquals(0, TableMeldSeeker.findDirectMeld(10, Color.BLACK, melds));
+        assertEquals(0, TableMeldSeeker.findDirectMeld(4, Color.BLACK, melds));
+        assertEquals(0, TableMeldSeeker.findDirectMeld(8, Color.ORANGE, melds));
 
-        assertEquals(melds.get(0).getId(), TableMeldSeeker.findDirectMeld(O4, melds).getId());
-        assertEquals(melds.get(0).getId(), TableMeldSeeker.findDirectMeld(O9, melds).getId());
-        assertEquals(melds.get(2).getId(), TableMeldSeeker.findDirectMeld(R5, melds).getId());
+        assertEquals(melds.get(0).getId(), TableMeldSeeker.findDirectMeld(4, Color.ORANGE, melds));
+        assertEquals(melds.get(0).getId(), TableMeldSeeker.findDirectMeld(9, Color.ORANGE, melds));
+        assertEquals(melds.get(2).getId(), TableMeldSeeker.findDirectMeld(5, Color.RED, melds));
 
 
     }
