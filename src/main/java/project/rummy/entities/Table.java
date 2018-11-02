@@ -32,6 +32,14 @@ public class Table {
     this.runGrid = new int[13][13];
   }
 
+    public Table(List<Tile> freeTiles) {
+        this.melds = new ArrayList<>();
+        this.backupMelds = new ArrayList<>();
+        this.freeTiles = new ArrayList<>(freeTiles);
+        this.setGrid1 = new int[13][4];
+        this.setGrid2 = new int[13][4];
+        this.runGrid = new int[13][13];
+    }
 
   public Table(List<Meld> melds, List<Tile> freeTiles, int[][] setGrid1, int[][] setGrid2, int[][] runGrid) {
 
