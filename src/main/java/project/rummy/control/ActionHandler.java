@@ -6,6 +6,9 @@ import project.rummy.entities.*;
 import project.rummy.game.Game;
 import project.rummy.gui.views.EntityType;
 
+import static project.rummy.entities.PlayerStatus.ICE_BROKEN;
+import static project.rummy.entities.PlayerStatus.START;
+
 /**
  * This class handles all controllers's interaction with the game.
  */
@@ -17,22 +20,28 @@ public class ActionHandler {
   private boolean isTurnEnd;
   private boolean canDraw;
   private boolean canPlay;
+  private boolean canEnd;
   private HandData backUpHand;
   private TableData backUpTable;
   private String playerName;
+  private int startPoint;
+  private PlayerStatus turnType;
 
   private static Logger logger = Logger.getLogger(ActionHandler.class);
 
   public ActionHandler(Player player, Table table) {
     this.hand = player.hand();
-    this.canUseTable = player.status() != PlayerStatus.START;
+    this.canUseTable = player.status() != START;
     this.table = table;
     this.manipulationTable = ManipulationTable.getInstance();
     manipulationTable.clear();
+    this.startPoint = hand.getScore();
     this.isTurnEnd = false;
     this.playerName = player.getName();
     this.canDraw = true;
     this.canPlay = true;
+    this.canEnd = false;
+    this.turnType = player.status();
   }
 
   public Hand getHand(){
@@ -44,6 +53,7 @@ public class ActionHandler {
     status.canDraw = canDraw;
     status.canPlay = canPlay;
     status.isTurnEnd = isTurnEnd;
+    status.canEnd = canEnd;
     return status;
   }
 
@@ -62,6 +72,7 @@ public class ActionHandler {
     this.isTurnEnd = false;
     this.canDraw = true;
     this.canPlay = true;
+    this.canEnd = false;
   }
 
   public void formMeld(int ...indexes){
@@ -79,6 +90,7 @@ public class ActionHandler {
     hand.sort();
     this.canDraw = false;
     this.canPlay = false;
+    this.canEnd = true;
     logger.info(String.format("%s has draw %s", playerName, tile));
   }
 
@@ -128,6 +140,9 @@ public class ActionHandler {
     this.canDraw = false;
     manipulationTable.submit(table);
     manipulationTable.clear();
+    if (turnType == ICE_BROKEN  || startPoint - hand.getScore() >= 30) {
+      this.canEnd = true;
+    }
   }
 
   public ManipulationTable getManipulationTable() {
