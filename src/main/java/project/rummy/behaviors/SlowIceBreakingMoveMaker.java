@@ -20,8 +20,6 @@ public class SlowIceBreakingMoveMaker implements ComputerMoveMaker {
 
         List<Meld> allMelds = HandMeldSeeker.findBestMelds(handTiles);
 
-        List<Integer> indecies = new ArrayList<>();
-
 
         if (allMelds.isEmpty()) {
             commands.add(handler -> handler.draw());
@@ -31,22 +29,13 @@ public class SlowIceBreakingMoveMaker implements ComputerMoveMaker {
             return commands;
         }else {
             for(int i = 0 ; i < 4; i ++){
-                if((state.getPlayerStatuses()[i] == PlayerStatus.START)
-                        && (state.getPlayerStatuses()[state.getCurrentPlayer()]) != PlayerStatus.ICE_BROKEN ){
-                    for (Meld m : allMelds) {
-                        for (int j = 0; j < m.tiles().size(); j++) {
-                            indecies.add(j);
-                        }
-                        commands.add(handler -> handler.formMeld(indecies.stream().mapToInt(Integer::intValue).toArray()));
-                    }
-                }
-                else{
-                    commands.add(handler -> handler.draw());
+                if((state.getPlayerStatuses()[i] == PlayerStatus.START)){
+                    ComputerMoveMaker move = new FastIceBreakingMoveMaker();
+                    return move.calculateMove(state);
                 }
             }
+            commands.add(handler -> handler.draw());
             return  commands;
         }
-
-
     }
 }
