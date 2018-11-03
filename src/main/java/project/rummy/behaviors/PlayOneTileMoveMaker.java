@@ -31,7 +31,7 @@ public class PlayOneTileMoveMaker implements ComputerMoveMaker {
                 handler.takeTableMeld(tableMelds.indexOf(m));
                 handler.takeHandTile(handTiles.indexOf(tile));
                 handler.getManipulationTable().combineMelds(0,1);
-                //TODO submit manipulationTable
+                handler.submit();
             });
         }
         return commands;
@@ -43,7 +43,7 @@ public class PlayOneTileMoveMaker implements ComputerMoveMaker {
     public List<Command> tryFormSet(Tile tile, GameState state) {
         List<Command> commands = new ArrayList<>();
 
-        List<Meld> tableMelds = state.getTableData().melds;
+        List<Meld> tableMelds = new ArrayList<>(state.getTableData().melds);
         List<Tile> handTiles = state.getHandsData()[state.getCurrentPlayer()].tiles;
 
         Map<Meld, Integer> map = CombinationSeeker.formSet(tile.value(), tile.color(), tableMelds);
@@ -55,10 +55,21 @@ public class PlayOneTileMoveMaker implements ComputerMoveMaker {
                 for (Meld m : map.keySet()){
                     handler.takeTableMeld(tableMelds.indexOf(m));
                     int indexOnManip = manip.getMelds().indexOf(m);
-                    manip.detach(indexOnManip, map.get(m));
-                    manip.combineMelds(indexOnManip-1, indexOnManip+1);
+                    if(m.type() == MeldType.SET) {
+                        manip.detach(indexOnManip, map.get(m));
+                        manip.combineMelds(indexOnManip - 1, indexOnManip + 1);
+                    }else{
+                        if(map.get(m) == 0){
+                            manip.split(indexOnManip,1);
+                            manip.combineMelds(indexOnManip , indexOnManip - 1);
+                        }else{
+                            manip.split(indexOnManip,map.get(m));
+                            manip.combineMelds(indexOnManip-1 , indexOnManip + 1);
+                        }
+                    }
+                    tableMelds.remove(tableMelds.indexOf(m));
                 }
-                //TODO submit manipulationTable
+                handler.submit();
             });
         }
         return commands;
@@ -85,7 +96,7 @@ public class PlayOneTileMoveMaker implements ComputerMoveMaker {
                 handler.takeTableMeld(tableMelds.indexOf(m));
                 manip.split(manip.getMelds().size()-1, map.get(m)+1);
                 manip.combineMelds(0,2);
-                //TODO submit manipulationTable
+                handler.submit();
             });
         }
 
@@ -99,7 +110,7 @@ public class PlayOneTileMoveMaker implements ComputerMoveMaker {
                 handler.takeTableMeld(tableMelds.indexOf(m));
                 manip.split(manip.getMelds().size()-1, map2.get(m));
                 manip.combineMelds(0,1);
-                //TODO submit manipulationTable
+                handler.submit();
             });
         }
 
@@ -124,7 +135,7 @@ public class PlayOneTileMoveMaker implements ComputerMoveMaker {
                         }
                     }
                 }
-                //TODO submit manipulationTable
+                handler.submit();
             });
         }
 
@@ -147,7 +158,7 @@ public class PlayOneTileMoveMaker implements ComputerMoveMaker {
         for(Tile t: singleTiles){
             if(!(commands = tryAddDirectLy(t,state)).isEmpty()){ break; }
             if(!(commands = tryFormSet(t,state)).isEmpty()){ break; }
-            if(!(commands = tryFormRun(t,state)).isEmpty()){ break; }
+            //if(!(commands = tryFormRun(t,state)).isEmpty()){ break; }
         }
         return commands;
     }

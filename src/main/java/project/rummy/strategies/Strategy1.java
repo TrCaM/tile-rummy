@@ -34,24 +34,25 @@ public class Strategy1 implements Strategy, Observer {
     List<Command> recievedCmd;
     boolean mustDraw = true;
 
-    ComputerMoveMaker playMeld = new PlayMeldMoveMaker();
+    ComputerMoveMaker playMeld = new PlayAllMeldsMoveMaker();
 
     recievedCmd = playMeld.calculateMove(state);
-    while(!recievedCmd.isEmpty()){
-        mustDraw = false;
-        commands.addAll(recievedCmd);
-        recievedCmd = playMeld.calculateMove(state);
-    }
+    if(!recievedCmd.isEmpty()){ commands.addAll(recievedCmd);}
 
-    ComputerMoveMaker playTile = new FastTilesOnlyMoveMaker();
-
+//    ComputerMoveMaker playTile = new FastTilesOnlyMoveMaker();
+////
+////    recievedCmd = playTile.calculateMove(state);
+////    while(!recievedCmd.isEmpty()){
+////      mustDraw = false;
+////      commands.addAll(recievedCmd);
+////      recievedCmd = playTile.calculateMove(state);
+////    }
+    ComputerMoveMaker playTile = new PlayOneTileMoveMaker();
     recievedCmd = playTile.calculateMove(state);
-    while(!recievedCmd.isEmpty()){
-        mustDraw = false;
-        commands.addAll(recievedCmd);
-        recievedCmd = playTile.calculateMove(state);
+    if (!recievedCmd.isEmpty()){
+      commands.addAll(recievedCmd);
+      mustDraw = false;
     }
-
     if(mustDraw){ commands.add(handler -> handler.draw()); }
 
     return commands;
