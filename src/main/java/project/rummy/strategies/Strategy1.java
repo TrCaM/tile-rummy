@@ -1,10 +1,14 @@
 package project.rummy.strategies;
 
+import project.rummy.behaviors.ComputerMoveMaker;
+import project.rummy.behaviors.FastIceBreakingMoveMaker;
+import project.rummy.behaviors.PlaySingleTileMoveMaker;
 import project.rummy.commands.Command;
 import project.rummy.game.Game;
 import project.rummy.game.GameState;
 import project.rummy.observers.Observer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -22,12 +26,37 @@ public class Strategy1 implements Strategy, Observer {
 
   @Override
   public List<Command> iceBreak() {
-    return null;
+    ComputerMoveMaker move = new FastIceBreakingMoveMaker();
+    return move.calculateMove(state);
   }
 
   @Override
   public List<Command> performFullTurn() {
-    return null;
+    List<Command> commands = new ArrayList<>();
+    List<Command> recievedCmd;
+    boolean mustDraw = true;
+
+    ComputerMoveMaker playMeld = new PlaySingleTileMoveMaker();
+
+    recievedCmd = playMeld.calculateMove(state);
+    while(!recievedCmd.isEmpty()){
+        mustDraw = false;
+        commands.addAll(recievedCmd);
+        recievedCmd = playMeld.calculateMove(state);
+    }
+
+    ComputerMoveMaker playTile = new PlaySingleTileMoveMaker();
+
+    recievedCmd = playTile.calculateMove(state);
+    while(!recievedCmd.isEmpty()){
+        mustDraw = false;
+        commands.addAll(recievedCmd);
+        recievedCmd = playTile.calculateMove(state);
+    }
+
+    if(mustDraw){ commands.add(handler -> handler.draw()); }
+
+    return commands;
   }
 
   @Override
