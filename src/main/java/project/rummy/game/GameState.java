@@ -37,9 +37,11 @@ public class GameState extends Component {
     return gameState;
   }
 
+
   public PlayerData[] getPlayerData() {
     return playerData;
   }
+
 
   public int getFreeTilesCount() {
     return freeTilesCount;
@@ -81,6 +83,9 @@ public class GameState extends Component {
     this.tableData = tableData;
   }
 
+  public void setPlayerData(PlayerData[] playerData) {
+    this.playerData = playerData;
+  }
   public void setHandsData(HandData[] handsData) {
     this.handsData = handsData;
   }

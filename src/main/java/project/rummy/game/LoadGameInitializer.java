@@ -31,6 +31,9 @@ public class LoadGameInitializer implements GameInitializer {
         Hand hand;
 
         for(int i=0; i<4; i++){
+
+            //System.out.println(state.getHandsData()[i].tiles.toString());
+
             hand = new Hand(state.getHandsData()[i].tiles, state.getHandsData()[i].melds);
 
             if(state.getPlayerData()[i].controllerType.equals("human")){
@@ -43,10 +46,12 @@ public class LoadGameInitializer implements GameInitializer {
                 controller = new AutoController(new Strategy3(game));
             }
 
-            players[i] = new Player(String.format("Player %d", i), controller, hand, state.getPlayerStatuses()[i]);
+            players[i] = new Player(state.getPlayerData()[i].name, controller, hand, state.getPlayerStatuses()[i]);
         }
 
+
         game.setUpPlayer(players);
+        game.setTurnNumber(state.getTurnNumber());
     }
 
     @Override
@@ -65,6 +70,6 @@ public class LoadGameInitializer implements GameInitializer {
     @Override
     public void initializeGameState(Player[] players, Table table) {
         /* TODO: We can actually left this empty if you already do everything else before */
-        throw new UnsupportedOperationException();
+        //throw new UnsupportedOperationException();
     }
 }
