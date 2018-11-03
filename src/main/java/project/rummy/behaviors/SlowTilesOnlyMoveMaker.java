@@ -10,12 +10,11 @@ public class SlowTilesOnlyMoveMaker implements ComputerMoveMaker{
     @Override
     public List<Command> calculateMove(GameState state) {
         List<Command> commands = new ArrayList<>();
-        List<Command> receivedCommands = new ArrayList<>();
+        List<Command> receivedCommands;
 
         ComputerMoveMaker move = new PlaySingleTileMoveMaker();
         receivedCommands = move.calculateMove(state);
         if(receivedCommands.isEmpty()){
-            commands.add(handler -> handler.draw());
             return commands;
         }
 
@@ -27,7 +26,6 @@ public class SlowTilesOnlyMoveMaker implements ComputerMoveMaker{
                 }
             }
         }
-        commands.add(handler -> handler.draw());
         return commands;
     }
 

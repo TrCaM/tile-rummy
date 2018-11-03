@@ -14,10 +14,6 @@ public List<Command> calculateMove(GameState state) {
   ComputerMoveMaker move = new PlaySingleTileMoveMaker();
 
   List<Command> receivedCommands = move.calculateMove(state);
-  if(receivedCommands.isEmpty()){
-    commands.add(handler -> handler.draw());
-    return commands;
-  }
   while(!receivedCommands.isEmpty()){
     commands.addAll(receivedCommands);
     receivedCommands = move.calculateMove(state);
