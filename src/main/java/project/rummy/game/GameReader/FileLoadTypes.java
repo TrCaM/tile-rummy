@@ -2,12 +2,19 @@ package project.rummy.game.GameReader;
 
 public enum FileLoadTypes {
     // melds
-    Melds,
+    MeldsOnTable,
     Id,
-    meldedTile,
-
-    // Tiles
+    Meld,
     Tiles,
+
+    CurrentPlayer,
+    Turn,
+    TileDrawn,
+    MeldPlay,
+    Deck,
+
+
+
 
     Status,
     Hand,

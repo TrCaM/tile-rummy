@@ -39,7 +39,6 @@ public class WriteGameState {
         JsonElement parser = new JsonParser().parse(str);
 
         String st =gson.toJson(parser);
-     //   System.out.println(st);
         writer.write(st);
         writer.close();
     }
@@ -47,30 +46,22 @@ public class WriteGameState {
         JSONObject playerSample = new JSONObject();
         JSONArray player_info = new JSONArray();
         JSONObject info = new JSONObject();
-
-        for (PlayerLoadTypes types: PlayerLoadTypes.values()) {
-            JSONObject melds = new JSONObject();
-
-            melds = writeAll(0, 3);
-            playerSample.put(types, melds);
-        }
-
-        return playerSample;
-    }
-
-    private JSONObject writeAll(int player, int melds_amount) {
         JSONArray meld_info = new JSONArray();
-        JSONObject info = new JSONObject();
-        JSONObject item = new JSONObject();
         JSONArray tiles = new JSONArray();
 
 
 
-        for (int i = 0; i < melds_amount; i++) {
-        //    tiles.addAll(gameState.getHandsData()[player].melds.get(i).tiles());
+        for (PlayerLoadTypes types: PlayerLoadTypes.values()) {
+            JSONObject melds = new JSONObject();
+
+            melds = writeAll(0, 1);
+            playerSample.put(types, melds);
+        }
+
+        for (int i = 0; i < 1; i++) {
             tiles.add("C8");
             tiles.add("C13");
-            info.put(FileLoadTypes.meldedTile, tiles);
+            info.put(FileLoadTypes.Meld, tiles);
 
             info.put(FileLoadTypes.Id, 0);
             meld_info.add(info);
@@ -78,11 +69,47 @@ public class WriteGameState {
 
 
 
-        item.put(FileLoadTypes.Melds, meld_info);
+        playerSample.put(FileLoadTypes.MeldsOnTable, meld_info);
+
+        playerSample.put(FileLoadTypes.Turn, 0);
+        playerSample.put(FileLoadTypes.CurrentPlayer, "");
+        playerSample.put(FileLoadTypes.Status, "");
+        playerSample.put(FileLoadTypes.TileDrawn, "");
+        playerSample.put(FileLoadTypes.Deck, 0);
+        playerSample.put(FileLoadTypes.MeldPlay, writeMeldToBePlayed());
+
+
+        return playerSample;
+    }
+
+    private JSONArray writeMeldToBePlayed() {
+        JSONArray meld = new JSONArray();
+        JSONArray melds = new JSONArray();
+        meld.add("C9");
+        meld.add("C8");
+        meld.add("C7");
+        melds.add(meld);
+        meld.clear();
+        meld.add("C8");
+        meld.add("C9");
+        meld.add("C10");
+        melds.add(meld);
+
+
+
+        return melds;
+    }
+
+    private JSONObject writeAll(int player, int melds_amount) {
+        JSONObject item = new JSONObject();
+        JSONArray tiles = new JSONArray();
+
+
+
 
         item.put(FileLoadTypes.Tiles, writeTiles());
         item.put(FileLoadTypes.Name, "");
-        item.put(FileLoadTypes.Status, "");
+
         return item;
     }
 
