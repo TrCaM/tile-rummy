@@ -1,6 +1,8 @@
 package project.rummy.game;
 
 import com.almasb.fxgl.entity.component.Component;
+import javafx.fxml.FXML;
+import javafx.scene.layout.FlowPane;
 import project.rummy.commands.CommandProcessor;
 import project.rummy.control.ActionHandler;
 import project.rummy.entities.*;

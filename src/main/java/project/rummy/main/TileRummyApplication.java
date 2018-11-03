@@ -72,7 +72,7 @@ public class TileRummyApplication extends GameApplication {
     handView.setY(740);
     tableView = EntitiesBuilder.buildTable(gameState);
     gameInfoView = EntitiesBuilder.buildGameInfo(gameState);
-    gameInfoView.setX(1300);
+    gameInfoView.setX(1150);
     getGameWorld().addEntities(handView, tableView, gameInfoView);
   }
 

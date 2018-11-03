@@ -18,7 +18,7 @@ public class DefaultGameInitializer implements GameInitializer {
   public void initPlayers(Game game) {
     Controller[] controllers = new Controller[]{
         new ManualController(),
-        new AutoController(new Strategy1(game)),
+        new AutoController(new StrategyDrawOnly(game)),
         new AutoController(new StrategyDrawOnly(game)),
         new AutoController(new StrategyDrawOnly(game))};
     Player[] players = new Player[4];
