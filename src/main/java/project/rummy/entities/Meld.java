@@ -179,4 +179,14 @@ public class Meld extends Component {
     }
     return score;
   }
+
+  @Override
+  public int hashCode() {
+    return id;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return obj instanceof Meld && ((Meld) obj).id == this.id;
+  }
 }

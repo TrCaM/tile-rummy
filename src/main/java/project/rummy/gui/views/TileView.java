@@ -94,6 +94,10 @@ public class TileView extends Pane {
     }
   }
 
+  public TileSource getTileSource() {
+    return tileSource;
+  }
+
   public int getRow() {
     return row;
   }

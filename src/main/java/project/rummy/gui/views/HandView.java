@@ -17,8 +17,10 @@ import project.rummy.main.GameFXMLLoader;
 import project.rummy.observers.Observer;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class HandView extends Pane implements Observer {
   private GameFXMLLoader loader;
@@ -32,7 +34,7 @@ public class HandView extends Pane implements Observer {
   private FlowPane meldRack;
   @FXML
 
-  Set<Tile> chosenTiles;
+  Set<TileView> chosenTiles;
   Set<Meld> chosenMelds;
 
   @FXML
@@ -72,13 +74,34 @@ public class HandView extends Pane implements Observer {
   }
 
   private void onPlayMeldButtonClick(MouseEvent mouseEvent) {
+    int[] handTileIndexes = chosenTiles.stream()
+        .filter(tileView -> tileView.getTileSource() == TileSource.HAND)
+        .mapToInt(TileView::getCol)
+        .toArray();
+    Map<Meld, List<Integer>> detachTiles = new HashMap<>();
+    chosenTiles.stream()
+        .filter(tileView -> tileView.getTileSource() == TileSource.HAND_MELD)
+        .forEach(tileView -> {
+          Meld meld = Meld.idsToMelds.get(tileView.getRow());
+          if (!detachTiles.containsKey(meld)) {
+            detachTiles.put(meld, new ArrayList<>());
+          }
+          detachTiles.get(meld).add(tileView.getCol());
+        });
     CommandProcessor.getInstance().enqueueCommand(handler -> {
-      int[] indexes = chosenTiles.stream()
-          .mapToInt(tile -> handler.getHand().getTiles().indexOf(tile))
-          .toArray();
-      handler.formMeld(indexes);
-      handler.playFromHand(0);
-      handler.submit();
+      ManipulationTable manipulationTable = handler.getManipulationTable();
+      List<Integer> combineMelds = new ArrayList<>();
+      detachTiles.forEach((key, value) -> {
+        int[] splitAll = IntStream.range(1, key.tiles().size()).toArray();
+        List<Integer> meldIds = manipulationTable.split(key, splitAll);
+        value.forEach(index -> combineMelds.add(meldIds.get(index)));
+      });
+      Stream.of(handTileIndexes).forEach(handler::formMeld);
+      handler
+          .playAllMeldFromHand()
+          .forEach(meld -> combineMelds.add(meld.getId()));
+      Meld newMeld = manipulationTable.combineMelds(combineMelds);
+      handler.submit(newMeld);
     });
   }
 
@@ -88,11 +111,11 @@ public class HandView extends Pane implements Observer {
 
   private void onTileClick(TileChooseEvent event) {
     if (event.isChoosing()) {
-      chosenTiles.add(event.getTile());
+      chosenTiles.add((TileView) event.getTarget());
     } else {
-      chosenTiles.remove(event.getTile());
+      chosenTiles.remove((TileView) event.getTarget());
     }
-    Tile[] tiles = chosenTiles.toArray(new Tile[chosenTiles.size()]);
+    Tile[] tiles = chosenTiles.stream().map(TileView::getTile).toArray(Tile[]::new);
     formMeldButton.setDisable(!Meld.canFormMeld(tiles));
     playMeldButton.setDisable(!turnStatus.canPlay || !Meld.canPlayOnTable(tiles));
   }
@@ -121,8 +144,10 @@ public class HandView extends Pane implements Observer {
     data.tiles.stream()
         .map(tile -> new TileView(tile, TileSource.HAND, 0, data.tiles.indexOf(tile)))
         .forEach(view -> tileRack.getChildren().add(view));
-    ManipulationTable.getInstance().getMelds()
-        .stream().map(MeldView::new).forEach(view -> meldRack.getChildren().add(view));
+    List<Meld> manipulatingMelds = ManipulationTable.getInstance().getMelds();
+    manipulatingMelds.stream()
+        .map(MeldView::new)
+        .forEach(view -> meldRack.getChildren().add(view));
     turnStatus = status.getTurnStatus();
     drawButton.setDisable(!turnStatus.canDraw);
     playMeldButton.setDisable(true);

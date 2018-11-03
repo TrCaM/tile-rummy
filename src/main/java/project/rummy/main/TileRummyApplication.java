@@ -9,6 +9,7 @@ import com.almasb.fxgl.settings.GameSettings;
 import com.almasb.fxgl.texture.Texture;
 import javafx.geometry.Orientation;
 import javafx.scene.image.Image;
+
 import project.rummy.commands.CommandProcessor;
 import project.rummy.control.ActionHandler;
 import project.rummy.entities.*;
@@ -16,8 +17,10 @@ import project.rummy.game.DefaultGameInitializer;
 import project.rummy.game.Game;
 import project.rummy.game.GameState;
 import project.rummy.game.GameStore;
+
 import project.rummy.gui.views.EntitiesBuilder;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 import static project.rummy.entities.PlayerStatus.ICE_BROKEN;
@@ -49,6 +52,9 @@ public class TileRummyApplication extends GameApplication {
     settings.setHeight(1000);
     settings.setTitle("Tile Rummy");
     settings.setVersion("0.1");
+
+
+
   }
 
   @Override

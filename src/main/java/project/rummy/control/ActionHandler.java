@@ -7,6 +7,7 @@ import project.rummy.game.Game;
 import project.rummy.gui.views.EntityType;
 
 import java.util.Collection;
+import java.util.List;
 
 import static project.rummy.entities.PlayerStatus.ICE_BROKEN;
 import static project.rummy.entities.PlayerStatus.START;
@@ -83,6 +84,9 @@ public class ActionHandler {
   }
 
   public void formMeld(int ...indexes){
+    if (indexes.length == 0) {
+      return;
+    }
     hand.formMeld(indexes);
   }
 
@@ -113,6 +117,11 @@ public class ActionHandler {
   public void playFromHand(Meld meld) {
     //TODO: Add a logging infomation here
     playFromHand(hand.getMelds().indexOf(meld));
+  }
+
+  public List<Meld> playAllMeldFromHand() {
+    manipulationTable.getMelds().addAll(hand.getMelds());
+    return hand.clearMeld();
   }
 
   public void takeTableMelds(Collection<Meld> melds) {
@@ -154,6 +163,15 @@ public class ActionHandler {
     if (turnType == ICE_BROKEN  || startPoint - hand.getScore() >= 30) {
       this.isIceBroken = true;
       this.canEnd = true;
+    }
+  }
+
+  public void submit(Meld meld) {
+    manipulationTable.submit(meld, table);
+    this.canDraw = false;
+    if (turnType == ICE_BROKEN  || startPoint - hand.getScore() >= 30) {
+      this.isIceBroken = true;
+      this.canEnd = manipulationTable.getMelds().isEmpty();
     }
   }
 
