@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class PlaySingleTileMoveMaker implements ComputerMoveMaker {
+public class PlayOneTileMoveMaker implements ComputerMoveMaker {
 
     /**
      *add tile to a meld directly

@@ -1,8 +1,6 @@
 package project.rummy.strategies;
 
-import project.rummy.behaviors.ComputerMoveMaker;
-import project.rummy.behaviors.FastIceBreakingMoveMaker;
-import project.rummy.behaviors.PlaySingleTileMoveMaker;
+import project.rummy.behaviors.*;
 import project.rummy.commands.Command;
 import project.rummy.game.Game;
 import project.rummy.game.GameState;
@@ -36,7 +34,7 @@ public class Strategy1 implements Strategy, Observer {
     List<Command> recievedCmd;
     boolean mustDraw = true;
 
-    ComputerMoveMaker playMeld = new PlaySingleTileMoveMaker();
+    ComputerMoveMaker playMeld = new PlayMeldMoveMaker();
 
     recievedCmd = playMeld.calculateMove(state);
     while(!recievedCmd.isEmpty()){
@@ -45,7 +43,7 @@ public class Strategy1 implements Strategy, Observer {
         recievedCmd = playMeld.calculateMove(state);
     }
 
-    ComputerMoveMaker playTile = new PlaySingleTileMoveMaker();
+    ComputerMoveMaker playTile = new FastTilesOnlyMoveMaker();
 
     recievedCmd = playTile.calculateMove(state);
     while(!recievedCmd.isEmpty()){
