@@ -12,7 +12,7 @@ public class SlowTilesOnlyMoveMaker implements ComputerMoveMaker{
         List<Command> commands = new ArrayList<>();
         List<Command> receivedCommands;
 
-        ComputerMoveMaker move = new PlaySingleTileMoveMaker();
+        ComputerMoveMaker move = new PlayOneTileMoveMaker();
         receivedCommands = move.calculateMove(state);
         if(receivedCommands.isEmpty()){
             return commands;

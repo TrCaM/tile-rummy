@@ -11,7 +11,7 @@ public class FastTilesOnlyMoveMaker implements ComputerMoveMaker {
 public List<Command> calculateMove(GameState state) {
   List<Command> commands = new ArrayList<>();
 
-  ComputerMoveMaker move = new PlaySingleTileMoveMaker();
+  ComputerMoveMaker move = new PlayOneTileMoveMaker();
 
   List<Command> receivedCommands = move.calculateMove(state);
   while(!receivedCommands.isEmpty()){
