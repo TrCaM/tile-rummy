@@ -165,7 +165,7 @@ public class ManipulationTable {
     Meld m2 = Meld.createMeld(remainingTiles);
     m2.setSource(MeldSource.MANIPULATION);
 
-    add(m1, m2);
+    add(m2, m1);
   }
 
     /**

@@ -19,16 +19,20 @@ public class TileView extends Pane {
   private Tile tile;
   private boolean isChosen;
   private TileSource tileSource;
+  private int row;
+  private int col;
 
   @FXML private Text value;
   @FXML private Rectangle border;
 
-  public TileView(Tile tile, TileSource tileSource) {
+  public TileView(Tile tile, TileSource tileSource, int row, int col) {
     super();
     this.tile = tile;
     this.tileSource = tileSource;
     this.isChosen = false;
     this.loader = new GameFXMLLoader("tile");
+    this.row = row;
+    this.col = col;
     loader.setController(this);
     loadTileView(tile);
     setUpHandlers();
@@ -76,13 +80,26 @@ public class TileView extends Pane {
   }
 
   private void onTileClicked(MouseEvent event) {
-    isChosen = !isChosen;
+    toggleChosen(!isChosen);
+    this.fireEvent(new TileChooseEvent(tile, tileSource, isChosen, row, col));
+    event.consume();
+  }
+
+  public void toggleChosen(boolean isChosen) {
+    this.isChosen = isChosen;
     if (isChosen) {
       border.getStyleClass().add("chosen");
     } else {
       border.getStyleClass().clear();
     }
-    this.fireEvent(new TileChooseEvent(tile, tileSource, isChosen));
-    event.consume();
   }
+
+  public int getRow() {
+    return row;
+  }
+
+  public int getCol() {
+    return col;
+  }
+
 }

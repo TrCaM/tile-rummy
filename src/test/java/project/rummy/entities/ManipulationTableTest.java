@@ -207,8 +207,8 @@ public class ManipulationTableTest {
     assertEquals(3, table.getMelds().size());
 
     assertThat(table.getMelds().get(0).tiles(), contains(O5, O6, O7, O8, O9));
-    assertThat(table.getMelds().get(1).tiles(), contains(O3));
-    assertThat(table.getMelds().get(2).tiles(), contains(R3, G3, B3));
+    assertThat(table.getMelds().get(1).tiles(), contains(R3, G3, B3));
+    assertThat(table.getMelds().get(2).tiles(), contains(O3));
   }
 
   @Test
@@ -220,8 +220,8 @@ public class ManipulationTableTest {
     assertEquals(3, table.getMelds().size());
 
     assertThat(table.getMelds().get(0).tiles(), contains(O5, O6, O7, O8, O9));
-    assertThat(table.getMelds().get(1).tiles(), contains(R3, G3, O3));
-    assertThat(table.getMelds().get(2).tiles(), contains(B3));
+    assertThat(table.getMelds().get(2).tiles(), contains(R3, G3, O3));
+    assertThat(table.getMelds().get(1).tiles(), contains(B3));
   }
 
   @Test(expected = IllegalArgumentException.class)

@@ -39,12 +39,12 @@ public class EntitiesBuilder {
     return handEntity;
   }
 
-  public static Entity buildTable(TableData tableData) {
+  public static Entity buildTable(GameState gameState) {
     Entity tableEntity = Entities.builder()
         .type(EntityType.TABLE)
-        .viewFromNode(new TableView(tableData))
+        .viewFromNode(new TableView(gameState))
         .build();
-    tableEntity.addComponent(tableData);
+    tableEntity.addComponent(gameState.getTableData());
     return tableEntity;
   }
 
