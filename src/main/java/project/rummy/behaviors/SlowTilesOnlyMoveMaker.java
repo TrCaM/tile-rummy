@@ -6,7 +6,7 @@ import project.rummy.game.GameState;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SlowTilesOnlyMoveMaker {
+public class SlowTilesOnlyMoveMaker implements ComputerMoveMaker{
     @Override
     public List<Command> calculateMove(GameState state) {
         List<Command> commands = new ArrayList<>();
@@ -27,7 +27,7 @@ public class SlowTilesOnlyMoveMaker {
                 }
             }
         }
-
+        commands.add(handler -> handler.draw());
         return commands;
     }
 
