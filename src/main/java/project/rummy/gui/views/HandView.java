@@ -114,15 +114,15 @@ public class HandView extends Pane implements Observer {
 
   @Override
   public void update(GameState status) {
-    System.out.println("Hand view updated");
     HandData data = status.getHandsData()[0];
     this.chosenTiles.clear();
     tileRack.getChildren().clear();
     meldRack.getChildren().clear();
     data.tiles.stream()
-        .map(tile -> new TileView(tile, TileSource.HAND))
+        .map(tile -> new TileView(tile, TileSource.HAND, 0, data.tiles.indexOf(tile)))
         .forEach(view -> tileRack.getChildren().add(view));
-    data.melds.stream().map(MeldView::new).forEach(view -> meldRack.getChildren().add(view));
+    ManipulationTable.getInstance().getMelds()
+        .stream().map(MeldView::new).forEach(view -> meldRack.getChildren().add(view));
     turnStatus = status.getTurnStatus();
     drawButton.setDisable(!turnStatus.canDraw);
     playMeldButton.setDisable(true);

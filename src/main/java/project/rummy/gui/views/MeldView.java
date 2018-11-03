@@ -16,7 +16,7 @@ public class MeldView extends HBox {
   private void loadMeldView(Meld meld) {
     ObservableList<Node> children = getChildren();
     meld.tiles().stream()
-        .map(tile -> new TileView(tile, TileSource.HAND_MELD))
+        .map(tile -> new TileView(tile, TileSource.HAND_MELD, 0, 0))
         .forEach(children::add);
   }
 }

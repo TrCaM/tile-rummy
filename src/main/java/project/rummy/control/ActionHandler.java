@@ -6,6 +6,8 @@ import project.rummy.entities.*;
 import project.rummy.game.Game;
 import project.rummy.gui.views.EntityType;
 
+import java.util.Collection;
+
 import static project.rummy.entities.PlayerStatus.ICE_BROKEN;
 import static project.rummy.entities.PlayerStatus.START;
 
@@ -111,6 +113,10 @@ public class ActionHandler {
   public void playFromHand(Meld meld) {
     //TODO: Add a logging infomation here
     playFromHand(hand.getMelds().indexOf(meld));
+  }
+
+  public void takeTableMelds(Collection<Meld> melds) {
+    melds.forEach(meld -> takeTableMeld(table.getPlayingMelds().indexOf(meld)));
   }
 
   public void takeTableMeld(int meldIndex){
