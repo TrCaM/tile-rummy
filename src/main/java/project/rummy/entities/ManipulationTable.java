@@ -34,7 +34,7 @@ public class ManipulationTable {
   }
 
   public List<Meld> getMelds() {
-    return Collections.unmodifiableList(melds);
+    return melds;
   }
 
   /**
@@ -64,9 +64,10 @@ public class ManipulationTable {
    * @param meldIndex   the index of the meld to be split
    * @param breakPoints the index of the first tile from the right-hand meld.
    */
-  public void split(int meldIndex, int... breakPoints) {
+  public List<Integer> split(int meldIndex, int... breakPoints) {
 
     Arrays.sort(breakPoints);
+    List<Integer> newMeldIds = new ArrayList<>();
 
     //table with 0 melds
     if (melds.size() == 0) {
@@ -103,20 +104,23 @@ public class ManipulationTable {
     temp = Meld.createMeld(tilesList.subList(0, breakPoints[0]));
     temp.setSource(MeldSource.MANIPULATION);
     add(temp);
+    newMeldIds.add(temp.getId());
 
     for (int i = 1; i < breakPoints.length; i++) {
       temp = Meld.createMeld(tilesList.subList(breakPoints[i - 1], breakPoints[i]));
       temp.setSource(MeldSource.MANIPULATION);
       add(temp);
+      newMeldIds.add(temp.getId());
     }
 
     temp = Meld.createMeld(tilesList.subList(breakPoints[breakPoints.length - 1], meldSize));
     temp.setSource(MeldSource.MANIPULATION);
     add(temp);
+    newMeldIds.add(temp.getId());
 
     melds.remove(meldIndex);
 
-
+    return newMeldIds;
   }
 
   /**
@@ -124,7 +128,8 @@ public class ManipulationTable {
    * support split run, this method is better to detach the tiles from the set. Thus I decided that
    * only set can use this method
    */
-  public void detach(int meldIndex, int... tileIndexes) {
+  public List<Integer> detach(int meldIndex, int... tileIndexes) {
+    List<Integer> newMeldIds = new ArrayList<>();
     if (meldIndex < 0 || meldIndex >= melds.size()) {
       throw new IllegalArgumentException("Invalid meld index");
     }
@@ -161,11 +166,33 @@ public class ManipulationTable {
 
     Meld m1 = Meld.createMeld(detachedTiles);
     m1.setSource(MeldSource.MANIPULATION);
+    newMeldIds.add(m1.getId());
 
     Meld m2 = Meld.createMeld(remainingTiles);
     m2.setSource(MeldSource.MANIPULATION);
+    newMeldIds.add(m2.getId());
 
     add(m2, m1);
+    return  newMeldIds;
+  }
+
+  public List<Integer> split(Meld meld, int... tileIndexes) {
+    return split(melds.indexOf(meld), tileIndexes);
+  }
+
+  public Meld combineMelds(List<Integer> meldIds) {
+    if (meldIds.size() == 0) {
+      throw new IllegalArgumentException("You combine nothing?");
+    }
+    if (meldIds.size() == 1) {
+      return Meld.idsToMelds.get(meldIds.get(0));
+    }
+    int[] indexes = new int[meldIds.size()];
+    for (int i=0; i< meldIds.size(); i++) {
+      Integer indexOf = melds.indexOf(Meld.idsToMelds.get(meldIds.get(i)));
+      indexes[i] = indexOf;
+    }
+    return combineMelds(indexes);
   }
 
     /**
@@ -174,7 +201,7 @@ public class ManipulationTable {
      *
      * @param meldIndexes the indexes of the melds to be combined.
      */
-    public void combineMelds ( int...meldIndexes){
+    public Meld combineMelds (int...meldIndexes){
 
       Arrays.sort(meldIndexes);
       List<Tile> tilesFromMelds = new ArrayList<>();
@@ -209,6 +236,7 @@ public class ManipulationTable {
 
       newMeld.setSource(MeldSource.MANIPULATION);
       add(newMeld);
+      return newMeld;
     }
 
     /**
@@ -229,6 +257,17 @@ public class ManipulationTable {
         table.addMeld(m);
       }
 
+      return true;
+    }
+
+    public boolean submit(Meld m, Table table) {
+      if (!m.isValidMeld()) {
+        return false;
+      }
+      m.setSource(MeldSource.TABLE);
+      m.tiles().forEach(tile -> tile.setHightlight(true));
+      table.addMeld(m);
+      melds.remove(m);
       return true;
     }
 

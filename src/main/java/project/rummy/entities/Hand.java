@@ -50,6 +50,12 @@ public class Hand {
     return new ArrayList<>(melds);
   }
 
+  public List<Meld> clearMeld() {
+    List<Meld> melds = new ArrayList<>(this.melds);
+    this.melds.clear();
+    return melds;
+  }
+
   public HandData toHandData() {
     return new HandData(this);
   }
