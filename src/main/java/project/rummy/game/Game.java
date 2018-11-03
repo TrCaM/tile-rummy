@@ -1,8 +1,6 @@
 package project.rummy.game;
 
 import com.almasb.fxgl.entity.component.Component;
-import javafx.fxml.FXML;
-import javafx.scene.layout.FlowPane;
 import project.rummy.commands.CommandProcessor;
 import project.rummy.control.ActionHandler;
 import project.rummy.entities.*;
@@ -19,9 +17,10 @@ public class Game extends Component implements Observable {
   private List<Observer> observers;
   private int turnNumber;
   private CommandProcessor commandProcessor;
+  private boolean isGameEnd;
+  private String winnerName;
   TurnStatus turnStatus;
-
-  Game() {
+Game() {
     super();
     this.observers = new ArrayList<>();
     this.commandProcessor = CommandProcessor.getInstance();
@@ -37,8 +36,7 @@ public class Game extends Component implements Observable {
     this.table = table;
   }
   public void setTurnNumber(int num) { this.turnNumber = num;}
-
-  public Player getCurrentPlayerObject() {
+public Player getCurrentPlayerObject() {
     return players[currentPlayer];
   }
 
@@ -105,7 +103,7 @@ public class Game extends Component implements Observable {
   }
 
   public boolean isGameEnd() {
-    return getWinner() != -1;
+    return isGameEnd;
   }
 
   Table getTable() {
@@ -145,13 +143,23 @@ public class Game extends Component implements Observable {
     if (turnStatus.isTurnEnd) {
       PlayerStatus status = turnStatus.isIceBroken ? PlayerStatus.ICE_BROKEN : PlayerStatus.START;
       players[currentPlayer].setStatus(status);
-      nextTurn();
+      int winner = getWinner();
+      if (winner != -1) {
+        this.isGameEnd = true;
+        this.winnerName = players[winner].getName();
+      } else {
+        nextTurn();
+      }
     }
     notifyObservers();
   }
 
   public void setTurnStatus(TurnStatus turnStatus) {
     this.turnStatus = turnStatus;
+  }
+
+  public String getWinnerName() {
+    return this.winnerName;
   }
 
     public GameState generateGameState() {

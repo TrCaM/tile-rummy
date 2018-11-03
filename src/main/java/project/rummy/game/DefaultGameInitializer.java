@@ -22,7 +22,7 @@ public class DefaultGameInitializer implements GameInitializer {
         new AutoController(new StrategyDrawOnly(game)),
         new AutoController(new StrategyDrawOnly(game))};
     Player[] players = new Player[4];
-    players[0] = new Player("You", controllers[0]);
+    players[0] = new Player("The HUMAN", controllers[0]);
     for (int i=1; i<4; i++) {
       players[i] = new Player(String.format("Player %d", i), controllers[i]);
     }
