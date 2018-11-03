@@ -55,8 +55,8 @@ public Player getCurrentPlayerObject() {
     commandProcessor.setUpHandler(handler);
     this.turnStatus = handler.getTurnStatus();
     handler.backUpTurn();
+    notifyObservers();
     this.players[currentPlayer].getController().playTurn();
-//        players[currentPlayer].getController().playTurn();
   }
 
   private void resetTileHightlight() {
