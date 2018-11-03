@@ -18,7 +18,6 @@ import project.rummy.observers.Observer;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -113,7 +112,7 @@ public class HandView extends Pane implements Observer {
     if (event.isChoosing()) {
       chosenTiles.add((TileView) event.getTarget());
     } else {
-      chosenTiles.remove((TileView) event.getTarget());
+      chosenTiles.remove(event.getTarget());
     }
     Tile[] tiles = chosenTiles.stream().map(TileView::getTile).toArray(Tile[]::new);
     formMeldButton.setDisable(!Meld.canFormMeld(tiles));

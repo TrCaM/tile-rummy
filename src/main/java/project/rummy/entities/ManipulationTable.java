@@ -37,6 +37,10 @@ public class ManipulationTable {
     return melds;
   }
 
+  public boolean isEmpty() {
+    return melds.isEmpty();
+  }
+
   /**
    * Remove a meld from this temporary table. Note that a meld should be in it original form since when it was added to
    * be able to be removed.
@@ -177,6 +181,11 @@ public class ManipulationTable {
   }
 
   public List<Integer> split(Meld meld, int... tileIndexes) {
+    if (tileIndexes.length == 0) {
+      List<Integer> meldIds = new ArrayList<>();
+      meldIds.add(meld.getId());
+      return meldIds;
+    }
     return split(melds.indexOf(meld), tileIndexes);
   }
 
