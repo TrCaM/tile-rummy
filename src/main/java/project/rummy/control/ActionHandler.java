@@ -23,7 +23,6 @@ public class ActionHandler {
   private boolean isTurnEnd;
   private boolean canDraw;
   private boolean canPlay;
-  private boolean canEnd;
   private boolean isIceBroken;
   private HandData backUpHand;
   private TableData backUpTable;
@@ -44,12 +43,11 @@ public class ActionHandler {
     this.playerName = player.getName();
     this.canDraw = true;
     this.canPlay = true;
-    this.canEnd = false;
     this.turnType = player.status();
     this.isIceBroken = player.status() == ICE_BROKEN;
   }
 
-  public Hand getHand(){
+  public Hand getHand() {
     return this.hand;
   }
 
@@ -58,8 +56,8 @@ public class ActionHandler {
     status.canDraw = canDraw;
     status.canPlay = canPlay;
     status.isTurnEnd = isTurnEnd;
-    status.canEnd = canEnd;
     status.isIceBroken = isIceBroken;
+    status.canEnd = canEndTurn();
     return status;
   }
 
@@ -80,14 +78,21 @@ public class ActionHandler {
     this.isTurnEnd = false;
     this.canDraw = true;
     this.canPlay = true;
-    this.canEnd = false;
   }
 
-  public void formMeld(int ...indexes){
+  public void formMeld(int... indexes) {
     if (indexes.length == 0) {
       return;
     }
     hand.formMeld(indexes);
+  }
+
+  private boolean canEndTurn() {
+    if (turnType == START) {
+      return (startPoint - hand.getScore() >= 30 || hand.getScore() > startPoint)
+          && manipulationTable.isEmpty();
+    }
+    return hand.getScore() != startPoint && manipulationTable.isEmpty();
   }
 
   public boolean isExpired() {
@@ -101,13 +106,12 @@ public class ActionHandler {
     hand.sort();
     this.canDraw = false;
     this.canPlay = false;
-    this.canEnd = true;
     logger.info(String.format("%s has draw %s", playerName, tile));
   }
 
   public void playFromHand(int meldIndex) {
     //TODO: Add a logging infomation here
-    if (meldIndex >=0 && meldIndex < hand.getMelds().size()) {
+    if (meldIndex >= 0 && meldIndex < hand.getMelds().size()) {
       manipulationTable.add(hand.removeMeld(meldIndex));
     } else {
       throw new IllegalArgumentException("Invalid meld index");
@@ -128,23 +132,24 @@ public class ActionHandler {
     melds.forEach(meld -> takeTableMeld(table.getPlayingMelds().indexOf(meld)));
   }
 
-  public void takeTableMeld(int meldIndex){
+  public void takeTableMeld(int meldIndex) {
     //TODO: Add a logging infomation here
     if (!canUseTable) {
       throw new IllegalStateException("Cannot manipulate table");
     }
-    if (meldIndex >=0 && meldIndex < table.getPlayingMelds().size()) {
+    if (meldIndex >= 0 && meldIndex < table.getPlayingMelds().size()) {
       manipulationTable.add(table.removeMeld(meldIndex));
     } else {
       throw new IllegalArgumentException("Invalid meld index");
     }
   }
-  public void takeHandTile(int tileIndex){
+
+  public void takeHandTile(int tileIndex) {
     //TODO: Add a logging infomation here
     if (!canUseTable) {
       throw new IllegalStateException("Cannot manipulate table");
     }
-    if (tileIndex >=0 && tileIndex < hand.getTiles().size()) {
+    if (tileIndex >= 0 && tileIndex < hand.getTiles().size()) {
       manipulationTable.add(Meld.createMeld(hand.removeTile(tileIndex)));
     } else {
       throw new IllegalArgumentException("Invalid tile index");
@@ -152,7 +157,9 @@ public class ActionHandler {
   }
 
   public void endTurn() {
-    // TODO: Add logging information here
+    if (!canEndTurn()) {
+      throw new IllegalStateException("Can not end the turn now");
+    }
     isTurnEnd = true;
   }
 
@@ -160,18 +167,16 @@ public class ActionHandler {
     this.canDraw = false;
     manipulationTable.submit(table);
     manipulationTable.clear();
-    if (turnType == ICE_BROKEN  || startPoint - hand.getScore() >= 30) {
+    if (turnType == ICE_BROKEN || startPoint - hand.getScore() >= 30) {
       this.isIceBroken = true;
-      this.canEnd = true;
     }
   }
 
   public void submit(Meld meld) {
     manipulationTable.submit(meld, table);
     this.canDraw = false;
-    if (turnType == ICE_BROKEN  || startPoint - hand.getScore() >= 30) {
+    if (turnType == ICE_BROKEN || startPoint - hand.getScore() >= 30) {
       this.isIceBroken = true;
-      this.canEnd = manipulationTable.getMelds().isEmpty();
     }
   }
 
