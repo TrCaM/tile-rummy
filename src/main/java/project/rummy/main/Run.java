@@ -23,7 +23,7 @@ public class Run extends javafx.application.Application {
 
   @Override
   public void start(Stage primaryStage){
-
+  /**
     GameState game = new GameState();
     WriteGameState testState = new WriteGameState(game);
     try {
@@ -32,7 +32,7 @@ public class Run extends javafx.application.Application {
     }
     catch (IOException e) {
       System.out.println("Whoops something went wrong");
-    }
+    } **/
 
     ReadGameState gameState = new ReadGameState();
     try {
@@ -45,6 +45,9 @@ public class Run extends javafx.application.Application {
 
     }
 
+    System.out.println(gameState.getCurrentPlayer());
+    System.out.println(gameState.getPlayerLoad().get(0).getName());
+    System.out.println(gameState.getDeck());
 //    GUIController gui = new GUIController();
 //    gui.StartMenu(primaryStage);
   }
