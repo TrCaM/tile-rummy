@@ -36,6 +36,7 @@ public class Game extends Component implements Observable {
   public void setUpTable(Table table) {
     this.table = table;
   }
+  public void setTurnNumber(int num) { this.turnNumber = num;}
 
   public Player getCurrentPlayerObject() {
     return players[currentPlayer];
@@ -153,7 +154,8 @@ public class Game extends Component implements Observable {
     this.turnStatus = turnStatus;
   }
 
-  private GameState generateGameState() {
-    return GameState.generateState(this);
-  }
+    public GameState generateGameState() {
+        return GameState.generateState(this);
+    }
+
 }

@@ -11,10 +11,9 @@ public class PlayerData {
      * @param name
      * @param controller: human, strategy1, strategy2, strategy3
      */
-    PlayerData(String name, String controller){
+    public PlayerData(String name, String controller){
         this.name = name;
         this.controllerType = controller;
     }
-
 
 }
