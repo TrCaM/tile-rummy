@@ -32,6 +32,7 @@ public class Game implements Observable {
     public void setUpTable(Table table) {
         this.table = table;
     }
+    public void setTurnNumber(int num) { this.turnNumber = num;}
 
     /**
      * Start the game specifically:
@@ -114,7 +115,7 @@ public class Game implements Observable {
         observers.forEach(observer -> observer.update(state));
     }
 
-    private GameState generateGameState() {
+    public GameState generateGameState() {
         return GameState.generateState(this);
     }
 }

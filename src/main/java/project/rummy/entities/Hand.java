@@ -19,8 +19,8 @@ public class Hand {
     this.tiles.addAll(tiles);
   }
   public Hand(List<Tile> tiles, List<Meld> melds) {
-    this.melds.addAll(melds);
-    this.tiles.addAll(tiles);
+    this(tiles);
+    if(!melds.isEmpty()){this.melds.addAll(melds);}
   }
 
   /**

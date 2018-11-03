@@ -32,8 +32,18 @@ public class Table {
     this.runGrid = new int[13][13];
   }
 
+    public Table(List<Tile> freeTiles) {
+        this.melds = new ArrayList<>();
+        this.backupMelds = new ArrayList<>();
+        this.freeTiles = freeTiles;
+        this.setGrid1 = new int[13][4];
+        this.setGrid2 = new int[13][4];
+        this.runGrid = new int[13][13];
+    }
 
-  public Table(List<Meld> melds, List<Tile> freeTiles, int[][] setGrid1, int[][] setGrid2, int[][] runGrid) {
+
+
+    public Table(List<Meld> melds, List<Tile> freeTiles, int[][] setGrid1, int[][] setGrid2, int[][] runGrid) {
 
     this.melds = new ArrayList<>(melds);
     this.backupMelds = new ArrayList<>();
@@ -135,7 +145,7 @@ public class Table {
     }
 
     private void setPosition(Meld meld) {
-        System.out.println(meld.type() + meld.tiles().toString());
+
         if (meld.type() == MeldType.RUN) {
             setPositionForRun(meld);
         } else {
@@ -158,7 +168,6 @@ public class Table {
         for (Tile tile : meld.tiles()) {
             runGrid[row][tile.value() - 1] = meld.getId();
         }
-        System.out.println();
     }
 
     private void setPositionForSet(Meld setMeld) {

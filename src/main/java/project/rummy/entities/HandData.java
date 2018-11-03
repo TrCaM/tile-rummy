@@ -8,7 +8,7 @@ public class HandData extends Component {
   public List<Tile> tiles;
   public List<Meld> melds;
 
-  HandData(Hand hand) {
+  public HandData(Hand hand) {
     this.tiles = hand.getTiles();
     this.melds = hand.getMelds();
   }
