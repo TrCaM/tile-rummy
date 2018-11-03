@@ -4,4 +4,5 @@ tile-rummy.iml
 .classpath
 .project
 .settings/
+/logs
 uml-diagram.mdj
