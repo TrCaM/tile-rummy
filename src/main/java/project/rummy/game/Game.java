@@ -48,12 +48,13 @@ public class Game extends Component implements Observable {
    */
   public void nextTurn() {
     resetTileHightlight();
-    currentPlayer = (currentPlayer + 4) % 4;
+    turnNumber++;
+    currentPlayer = (turnNumber - 1) % 4;
     ActionHandler handler = new ActionHandler(players[currentPlayer], table);
     commandProcessor.setUpHandler(handler);
     this.turnStatus = handler.getTurnStatus();
-    this.turnNumber++;
     handler.backUpTurn();
+    this.players[currentPlayer].getController().playTurn();
 //        players[currentPlayer].getController().playTurn();
   }
 
