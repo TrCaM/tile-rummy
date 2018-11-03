@@ -4,9 +4,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.json.simple.parser.ParseException;
 import project.rummy.entities.Table;
+import project.rummy.game.DefaultGameInitializer;
+import project.rummy.game.Game;
+import project.rummy.game.GameReader.ReadGameState;
+import project.rummy.game.GameReader.WriteGameState;
+import project.rummy.game.GameState;
 import project.rummy.gui.GUIController;
 import javax.swing.*;
+import java.io.IOException;
 
 
 public class Run extends javafx.application.Application {
@@ -15,10 +22,31 @@ public class Run extends javafx.application.Application {
   }
 
   @Override
-  public void start(Stage primaryStage) throws Exception{
+  public void start(Stage primaryStage){
 
-    GUIController gui = new GUIController();
-    gui.StartMenu(primaryStage);
+    GameState game = new GameState();
+    WriteGameState testState = new WriteGameState(game);
+    try {
+
+      testState.write();
+    }
+    catch (IOException e) {
+      System.out.println("Whoops something went wrong");
+    }
+
+    ReadGameState gameState = new ReadGameState();
+    try {
+      gameState.read();
+    }
+    catch (IOException e) {
+      System.out.println("Whoops something went wrong");
+    }
+    catch (ParseException e) {
+
+    }
+
+//    GUIController gui = new GUIController();
+//    gui.StartMenu(primaryStage);
   }
 
 

@@ -8,9 +8,14 @@ import com.almasb.fxgl.settings.GameSettings;
 import com.almasb.fxgl.texture.Texture;
 import javafx.geometry.Orientation;
 import javafx.scene.image.Image;
+import org.json.simple.parser.ParseException;
 import project.rummy.entities.*;
+import project.rummy.game.GameReader.ReadGameState;
+import project.rummy.game.GameReader.WriteGameState;
+import project.rummy.game.GameState;
 import project.rummy.gui.views.EntitiesBuilder;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 public class TileRummyApplication extends GameApplication {
@@ -29,6 +34,9 @@ public class TileRummyApplication extends GameApplication {
     settings.setHeight(1000);
     settings.setTitle("Tile Rummy");
     settings.setVersion("0.1");
+
+
+
   }
 
   @Override
