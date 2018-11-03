@@ -4,23 +4,17 @@ import net.bytebuddy.agent.builder.AgentBuilder;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import project.rummy.control.AutoController;
-import project.rummy.control.Controller;
+
 import project.rummy.entities.*;
 import project.rummy.game.Game;
 import project.rummy.game.GameState;
 import project.rummy.game.GameStore;
 import project.rummy.game.LoadGameInitializer;
-import project.rummy.strategies.Strategy;
-import project.rummy.strategies.Strategy1;
-import project.rummy.strategies.Strategy2;
-import project.rummy.strategies.Strategy3;
 
 import static org.junit.Assert.*;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class LoadGameInitializerTest {
     //Orange Tiles
@@ -71,82 +65,117 @@ class LoadGameInitializerTest {
     private final Tile R9 = Tile.createTile(Color.RED, 9);
     private final Tile R10 = Tile.createTile(Color.RED, 10);
 
-    @Mock
-    private Controller controller;
 
-    private  GameState  state;
-    private  Game game;
+    private int turnNumber;
+    private int freeTilesCount;
+    private TableData tableData;
+    private HandData[] handsData;
+    private PlayerData[] playerData;
+    private PlayerStatus[] statuses;
+    private int currentPlayer;
+
+    private GameState state;
 
     @Before
-    public void setUp() {
-        // Creating  list of tiles, free tiles and players
-        List<Tile> list1 = new ArrayList<>();
-        List<Tile> list2 = new ArrayList<>();
-        List<Tile> list3 = new ArrayList<>();
-        List<Tile> list4 = new ArrayList<>();
-        List<Tile> Freetiles = new ArrayList<>();
-        List<Player> listOfPlayers = new ArrayList<>();
+    public void setup() {
 
-        //Adding list of tiles into hand
-        list1.addAll(Arrays.asList(B10, R5, O1, B8, B9, O7, G1));
-        Hand hand1 = new Hand(list1);
-        list2.addAll(Arrays.asList(B3, G7, B7, R7, G3, O10));
-        Hand hand2 = new Hand(list2);
-        list3.addAll(Arrays.asList(G1, G2, R1, R9, G8, O9));
-        Hand hand3 = new Hand(list3);
-        list4.addAll(Arrays.asList(O8, G5, G9, B1, B2, B5, R2, R3));
-        Hand hand4 = new Hand(list4);
-
-        //Creating controller for each player
-//        Controller control1 = new AutoController(new Strategy1(game));
-//        Controller control2 = new AutoController(new Strategy2(game));
-//        Controller control3 = new AutoController(new Strategy3(game));
-//        Controller control4 = new AutoController(new Strategy1(game));
-
-        //Creating players
-        Player p1 = new Player("Player1", controller, hand1, PlayerStatus.START);
-        Player p2 = new Player("Player2", controller, hand2, PlayerStatus.START);
-        Player p3 = new Player("Player3", controller, hand3, PlayerStatus.START);
-        Player p4 = new Player("Player4", controller, hand4, PlayerStatus.START);
-
-        //Creating a list of players
-        listOfPlayers.addAll(Arrays.asList(p1,p2,p3,p4));
-
-
-        Meld set1 = Meld.createMeld(O4, B4, G4, R4);
-        Meld set2 = Meld.createMeld(B6, O6, G6, R6);
-        Meld set3 = Meld.createMeld(O10, B10, G10, R10);
-        Meld run1 = Meld.createMeld(O1, O2, O3, O4, O5, O6);
-        Meld run2 = Meld.createMeld(B8, B9, B10);
-        Meld run3 = Meld.createMeld(R5, R6, R7, R8, R9, R10);
-
-        //Setting up deck
-        Freetiles.addAll(Arrays.asList(R5, R6, R7, R8, R9, R10));
-
-        //Setting up table
-        Table table = new Table(Freetiles);
-        table.addMeld(set1);
-        table.addMeld(set2);
-        table.addMeld(set3);
-        table.addMeld(run1);
-        table.addMeld(run2);
-        table.addMeld(run3);
-
-        //Setting up game
-        game.setUpPlayer(listOfPlayers.toArray(new Player[4]));
-        game.setUpTable(table);
-
-        //Generating a game state from game
-        state = GameState.generateState(game);
     }
 
     @Test
-    public void LoadGameInitiallizer_test(){
+    public void loadGameInitializer_test(){
+        state = new GameState();
+        List<List<Tile>> tileList = new ArrayList<>();
+        List<Tile> freeTiles = new ArrayList<>();
+        List<Player> players = new ArrayList<>();
+        List<Meld> tableMelds = new ArrayList<>();
+
+        // Creating  list of tiles, free tiles and players
+        List<Tile> list1 = new ArrayList<>();
+        list1.addAll(Arrays.asList(B10, R5, O1, B8, B9, O7, G1));
+        tileList.add(list1);
+
+        List<Tile> list2 = new ArrayList<>();
+        list2.addAll(Arrays.asList(B3, G7, B7, R7, G3, O10));
+        tileList.add(list2);
+
+        List<Tile> list3 = new ArrayList<>();
+        list3.addAll(Arrays.asList(G1, G2, R1, R9, G8, O9));
+        tileList.add(list3);
+
+        List<Tile> list4 = new ArrayList<>();
+        list4.addAll(Arrays.asList(O8, G5, G9, B1, B2, B5, R2, R3));
+        tileList.add(list4);
+
+        handsData = new HandData[4];
+        playerData = new PlayerData[4];
+
+        statuses = new PlayerStatus[4];
+        for (int i = 0; i < 4; i++) {
+            statuses[i] = PlayerStatus.START;
+        }
+
+        for (int i = 0; i < 4; i++) {
+            Hand hand = new Hand(tileList.get(i));
+            handsData[i] = new HandData(hand);
+            playerData[i] = new PlayerData("player" + i, "human");
+        }
+
+        //set up melds on the table
+        tableMelds.add(Meld.createMeld(O4, B4, G4, R4));
+        tableMelds.add(Meld.createMeld(B6, O6, G6, R6));
+        tableMelds.add(Meld.createMeld(O10, B10, G10, R10));
+        tableMelds.add(Meld.createMeld(O1, O2, O3, O4, O5, O6));
+        tableMelds.add(Meld.createMeld(B8, B9, B10));
+        tableMelds.add(Meld.createMeld(R5, R6, R7, R8, R9, R10));
+
+
+        //Setting up deck
+        freeTiles.addAll(Arrays.asList(R5, R6, R7, R8, R9, R10));
+
+        //Setting up table
+        Table table = new Table(freeTiles);
+        for (Meld m : tableMelds) {
+            table.addMeld(m);
+        }
+
+
+        //setup data
+        turnNumber = 11;
+        freeTilesCount = freeTiles.size();
+        tableData = new TableData(table);
+        currentPlayer = 0;
+
+        state.setTurnNumber(turnNumber);
+        state.setFreeTilesCount(freeTiles.size());
+        state.setTableData(table.toTableData());
+        state.setHandsData(handsData);
+        state.setPlayerData(playerData);
+        state.setStatuses(statuses);
+        state.setCurrentPlayer(currentPlayer);
+
         GameStore gameStore = new GameStore(new LoadGameInitializer(state));
-        GameState gameTest = GameState.generateState(gameStore.initializeGame());
+        Game game = gameStore.initializeGame();
 
+        GameState stateTest = game.generateGameState();
 
+        assertTrue(stateTest.getPlayerStatuses()[0] == PlayerStatus.START);
+        assertTrue(stateTest.getPlayerData()[0].controllerType.equals("human"));
+        assertTrue(stateTest.getTableData().freeTiles.contains(R5));
+        assertTrue(stateTest.getTableData().freeTiles.contains(R8));
+        assertTrue(stateTest.getTableData().freeTiles.contains(R10));
+        assertFalse(stateTest.getTableData().freeTiles.contains(B5));
+
+        for(Meld meld: tableMelds) {
+            assertTrue(stateTest.getTableData().melds.contains(meld));
+        }
+        assertEquals(stateTest.getTurnNumber(), turnNumber);
+
+        assertTrue(stateTest.getHandsData()[2].melds.isEmpty());
+
+        for(Tile t: list3){
+            assertTrue(stateTest.getHandsData()[2].tiles.contains(t));
+        }
+
+        assertTrue(stateTest.getPlayerData()[1].name.equals(playerData[1].name));
     }
-
-
 }

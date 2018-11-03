@@ -3,8 +3,12 @@ package project.rummy.gui.views;
 import com.almasb.fxgl.app.FXGL;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import project.rummy.entities.HandData;
+import project.rummy.entities.TileSource;
 import project.rummy.game.Game;
 import project.rummy.game.GameState;
 import project.rummy.main.GameFXMLLoader;
@@ -29,6 +33,14 @@ public class GameInfoView extends Pane implements Observer {
   @FXML private Label oppo1;
   @FXML private Label oppo2;
   @FXML private Label oppo3;
+  @FXML private FlowPane oppo1Hand;
+  @FXML private FlowPane oppo2Hand;
+  @FXML private FlowPane oppo3Hand;
+  @FXML private Node oppoHands;
+  @FXML private Button debugButton;
+
+
+  private boolean debugMode;
 
   public GameInfoView(GameState gameState) {
     super();
@@ -37,6 +49,15 @@ public class GameInfoView extends Pane implements Observer {
     loadGameInfoView(gameState);
     Game game = FXGL.getGameWorld().getEntitiesByType(EntityType.GAME).get(0).getComponent(Game.class);
     game.registerObserver(this);
+    this.debugMode = false;
+    setUpHandlers();
+  }
+
+  private void setUpHandlers() {
+    this.debugButton.setOnMouseClicked(event -> {
+      debugMode = !debugMode;
+      oppoHands.setVisible(debugMode);
+    });
   }
 
   private void loadGameInfoView(GameState gameState) {
@@ -47,7 +68,7 @@ public class GameInfoView extends Pane implements Observer {
       e.printStackTrace();
       throw new IllegalStateException("Can not load table");
     }
-    renderGameInfo(gameState);
+    update(gameState);
     getChildren().setAll(gameStateView);
   }
 
@@ -91,6 +112,24 @@ public class GameInfoView extends Pane implements Observer {
   @Override
   public void update(GameState status) {
     renderGameInfo(status);
+    loadOpponentHand(status);
+  }
+
+  private void loadOpponentHand(GameState status) {
+    HandData[] data = status.getHandsData();
+    oppo1Hand.getChildren().clear();
+    oppo2Hand.getChildren().clear();
+    oppo3Hand.getChildren().clear();
+    data[1].tiles.stream()
+        .map(tile -> new TileView(tile, TileSource.HAND, 0, data[1].tiles.indexOf(tile)))
+        .forEach(view -> oppo1Hand.getChildren().add(view));
+    data[2].tiles.stream()
+        .map(tile -> new TileView(tile, TileSource.HAND, 0, data[2].tiles.indexOf(tile)))
+        .forEach(view -> oppo2Hand.getChildren().add(view));
+    data[3].tiles.stream()
+        .map(tile -> new TileView(tile, TileSource.HAND, 0, data[3].tiles.indexOf(tile)))
+        .forEach(view -> oppo3Hand.getChildren().add(view));
+    oppoHands.setVisible(debugMode);
   }
 }
 

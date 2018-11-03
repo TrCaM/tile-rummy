@@ -1,6 +1,8 @@
 package project.rummy.game;
 
 import com.almasb.fxgl.entity.component.Component;
+import javafx.fxml.FXML;
+import javafx.scene.layout.FlowPane;
 import project.rummy.commands.CommandProcessor;
 import project.rummy.control.ActionHandler;
 import project.rummy.entities.*;
@@ -34,6 +36,7 @@ public class Game extends Component implements Observable {
   public void setUpTable(Table table) {
     this.table = table;
   }
+  public void setTurnNumber(int num) { this.turnNumber = num;}
 
   public Player getCurrentPlayerObject() {
     return players[currentPlayer];
@@ -48,12 +51,13 @@ public class Game extends Component implements Observable {
    */
   public void nextTurn() {
     resetTileHightlight();
-    currentPlayer = (currentPlayer + 4) % 4;
+    turnNumber++;
+    currentPlayer = (turnNumber - 1) % 4;
     ActionHandler handler = new ActionHandler(players[currentPlayer], table);
     commandProcessor.setUpHandler(handler);
     this.turnStatus = handler.getTurnStatus();
-    this.turnNumber++;
     handler.backUpTurn();
+    this.players[currentPlayer].getController().playTurn();
 //        players[currentPlayer].getController().playTurn();
   }
 
@@ -150,7 +154,8 @@ public class Game extends Component implements Observable {
     this.turnStatus = turnStatus;
   }
 
-  private GameState generateGameState() {
-    return GameState.generateState(this);
-  }
+    public GameState generateGameState() {
+        return GameState.generateState(this);
+    }
+
 }
