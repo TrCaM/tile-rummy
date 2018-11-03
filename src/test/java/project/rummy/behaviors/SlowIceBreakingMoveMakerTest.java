@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-public class FastIceBreakingMoveMakerTest {
+public class SlowIceBreakingMoveMakerTest {
 
 
     //Orange Tiles
@@ -82,7 +82,7 @@ public class FastIceBreakingMoveMakerTest {
 
 
     @Test
-    public void FastIceBreakingMoveMaker_test() {
+    public void loadGameInitializer_noIcebreakYet() {
         CommandProcessor processor = CommandProcessor.getInstance();
         state = new GameState();
 
@@ -111,14 +111,15 @@ public class FastIceBreakingMoveMakerTest {
         playerData = new PlayerData[4];
 
         statuses = new PlayerStatus[4];
-        for (int i = 0; i < 4; i++) {
-            statuses[i] = PlayerStatus.START;
-        }
+        statuses[0] = PlayerStatus.START;
+        statuses[1] = PlayerStatus.START;
+        statuses[2] = PlayerStatus.START;
+        statuses[3] = PlayerStatus.START;
 
         for (int i = 0; i < 4; i++) {
             Hand hand = new Hand(tileList.get(i));
             handsData[i] = new HandData(hand);
-            playerData[i] = new PlayerData("player" + i, "strategy1");
+            playerData[i] = new PlayerData("player" + i, "strategy2");
         }
 
 
@@ -156,7 +157,87 @@ public class FastIceBreakingMoveMakerTest {
         game.nextTurn();
         processor.proccessAllCommands();
         GameState newState = game.generateGameState();
-        assertEquals(1,newState.getHandsData()[newState.getCurrentPlayer()].tiles.size());
+        assertEquals(8,newState.getHandsData()[newState.getCurrentPlayer()].tiles.size());
+
+    }
+
+    @Test
+    public void loadGameInitializer_alreadyIceBroken() {
+        CommandProcessor processor = CommandProcessor.getInstance();
+        state = new GameState();
+
+        List<List<Tile>> tileList = new ArrayList<>();
+        List<Tile> freeTiles = new ArrayList<>();
+        List<Meld> tableMelds = new ArrayList<>();
+
+        // Creating  list of tiles, free tiles and players
+        List<Tile> list1 = new ArrayList<>();
+        list1.addAll(Arrays.asList(R2, R9, B7, B9, B10, B13, G2, O1, O2, O5, O7, O9_2, O9, O13));
+        tileList.add(list1);
+
+        List<Tile> list2 = new ArrayList<>();
+        list2.addAll(Arrays.asList(B3, G7, B7, R7, G3, O10, O1));
+        tileList.add(list2);
+
+        List<Tile> list3 = new ArrayList<>();
+        list3.addAll(Arrays.asList(G1, G2, R1, R9, G8, O9, O5));
+        tileList.add(list3);
+
+        List<Tile> list4 = new ArrayList<>();
+        list4.addAll(Arrays.asList(R2, R9, B7));
+        tileList.add(list4);
+
+        handsData = new HandData[4];
+        playerData = new PlayerData[4];
+
+        statuses = new PlayerStatus[4];
+        statuses[0] = PlayerStatus.START;
+        statuses[1] = PlayerStatus.START;
+        statuses[2] = PlayerStatus.START;
+        statuses[3] = PlayerStatus.ICE_BROKEN;
+
+        for (int i = 0; i < 4; i++) {
+            Hand hand = new Hand(tileList.get(i));
+            handsData[i] = new HandData(hand);
+            playerData[i] = new PlayerData("player" + i, "strategy2");
+        }
+
+
+        //Setting up deck
+        freeTiles.addAll(Arrays.asList(R5, R6, R7, R8, R9, R10));
+
+        //Setting up table
+        Table table = new Table(freeTiles);
+        for (Meld m : tableMelds) {
+            table.addMeld(m);
+        }
+
+
+        //setup data
+        turnNumber = 12;
+        freeTilesCount = freeTiles.size();
+        tableData = new TableData(table);
+        currentPlayer = 3;
+
+        state.setTurnNumber(turnNumber);
+        state.setFreeTilesCount(freeTiles.size());
+        state.setTableData(table.toTableData());
+        state.setHandsData(handsData);
+        state.setPlayerData(playerData);
+        state.setStatuses(statuses);
+        state.setCurrentPlayer(currentPlayer);
+
+        GameStore gameStore = new GameStore(new LoadGameInitializer(state));
+        Game game = gameStore.initializeGame();
+        GameState stateTest = game.generateGameState();
+
+        processor.setUpGame(game);
+
+        //O10, B10,  R1, B1, R4, G10, G1
+        game.nextTurn();
+        processor.proccessAllCommands();
+        GameState newState = game.generateGameState();
+        assertEquals(8,newState.getHandsData()[newState.getCurrentPlayer()].tiles.size());
 
         //B3, G7, B7, R7, G3, O10, O1
         game.nextTurn();
@@ -170,11 +251,8 @@ public class FastIceBreakingMoveMakerTest {
         GameState newState3 = game.generateGameState();
         assertEquals(8,newState3.getHandsData()[newState3.getCurrentPlayer()].tiles.size());
 
-        //O8, G5, G9, B1, B2, B3, R2, R3, O7, O6, O5
-        game.nextTurn();
-        processor.proccessAllCommands();
-        GameState newState4 = game.generateGameState();
-        assertEquals(8 ,newState4.getHandsData()[newState4.getCurrentPlayer()].tiles.size());
     }
+
+
 
 }
