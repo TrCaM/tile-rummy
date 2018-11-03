@@ -8,6 +8,10 @@ import project.rummy.game.GameState;
 import java.util.*;
 
 public class FastIceBreakingMoveMaker implements ComputerMoveMaker {
+
+    /***
+     * this icebreaking is used for strategy 1 and strategy 2
+     */
     @Override
     public List<Command> calculateMove(GameState state) {
 

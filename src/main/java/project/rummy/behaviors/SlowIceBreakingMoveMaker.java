@@ -11,6 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SlowIceBreakingMoveMaker implements ComputerMoveMaker {
+
+    /**
+     * this type of icebreaking is used for strategy 2
+     */
     @Override
     public List<Command> calculateMove(GameState state) {
 
@@ -28,7 +32,7 @@ public class SlowIceBreakingMoveMaker implements ComputerMoveMaker {
             commands.add(handler -> handler.draw());
             return commands;
         }else {
-            for(int i = 0 ; i < 4; i ++){
+            for(int i = 0 ; i < 4 && i!= state.getCurrentPlayer(); i ++){
                 if((state.getPlayerStatuses()[i] == PlayerStatus.START)){
                     ComputerMoveMaker move = new FastIceBreakingMoveMaker();
                     return move.calculateMove(state);
