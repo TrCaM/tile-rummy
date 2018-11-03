@@ -91,6 +91,7 @@ public class TurnInteractionTest {
         assertThat(tempTable.getMelds().get(1).tiles(), contains(R8, G8, B8, O8));
 
         //End turn
+        handler.submit();
         handler.endTurn();
 
         //Checking the turn
@@ -134,14 +135,15 @@ public class TurnInteractionTest {
 
         //taking O8 out of set
         tempTable.detach(0, 0);
-        assertThat(tempTable.getMelds().get(1).tiles(), contains(O8));
+        assertThat(tempTable.getMelds().get(2).tiles(), contains(O8));
 
         //Combine with {O5, O6, O7}
-        tempTable.combineMelds(0, 1);
+        tempTable.combineMelds(0, 2);
         assertThat(tempTable.getMelds().get(0).tiles(), contains(R8, G8, B8));
         assertThat(tempTable.getMelds().get(1).tiles(), contains(O5, O6, O7, O8));
 
         //End Turn
+        handler.submit();
         handler.endTurn();
 
         //Checking the turn
@@ -201,6 +203,7 @@ public class TurnInteractionTest {
         assertThat(tempTable.getMelds().get(1).tiles(), contains(B8, R8, O8));
 
         //End turn
+        handler.submit();
         handler.endTurn();
 
         //Checking the turn
@@ -250,14 +253,15 @@ public class TurnInteractionTest {
         //Splitting {O8} from  {O8, R8, B8, G8} and {G8} from {G5, G6, G7, G8}
         tempTable.detach(0, 0);
         tempTable.split(0, 3);
-        assertThat(tempTable.getMelds().get(1).tiles(), contains(O8));
+        assertThat(tempTable.getMelds().get(2).tiles(), contains(O8));
         assertThat(tempTable.getMelds().get(4).tiles(), contains(G8));
 
         //Combining {B8}, {O8}, {G8} to form {B8, O8, G8}
-        tempTable.combineMelds(0, 1, 4);
+        tempTable.combineMelds(0, 2, 4);
         assertThat(tempTable.getMelds().get(2).tiles(), contains(B8, O8, G8));
 
         //End turn
+        handler.submit();
         handler.endTurn();
 
         //Checking the turn
@@ -336,6 +340,7 @@ public class TurnInteractionTest {
         assertThat(tempTable.getMelds().get(3).tiles(), contains(O3, O4, O5));
 
         //End turn
+        handler.submit();
         handler.endTurn();
 
         //Checking the turn

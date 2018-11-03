@@ -4,18 +4,12 @@ import net.bytebuddy.agent.builder.AgentBuilder;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import project.rummy.control.AutoController;
-import project.rummy.control.Controller;
-import project.rummy.control.ManualController;
+
 import project.rummy.entities.*;
 import project.rummy.game.Game;
 import project.rummy.game.GameState;
 import project.rummy.game.GameStore;
 import project.rummy.game.LoadGameInitializer;
-import project.rummy.strategies.Strategy;
-import project.rummy.strategies.Strategy1;
-import project.rummy.strategies.Strategy2;
-import project.rummy.strategies.Strategy3;
 
 import static org.junit.Assert.*;
 
@@ -72,10 +66,6 @@ class LoadGameInitializerTest {
     private final Tile R10 = Tile.createTile(Color.RED, 10);
 
 
-    private Controller controller = new ManualController();;
-
-
-
     private int turnNumber;
     private int freeTilesCount;
     private TableData tableData;
@@ -126,7 +116,6 @@ class LoadGameInitializerTest {
 
         for (int i = 0; i < 4; i++) {
             Hand hand = new Hand(tileList.get(i));
-            //players.add(new Player("Player" + (i + 1), controller, hand, PlayerStatus.START));
             handsData[i] = new HandData(hand);
             playerData[i] = new PlayerData("player" + i, "human");
         }
@@ -188,13 +177,5 @@ class LoadGameInitializerTest {
         }
 
         assertTrue(stateTest.getPlayerData()[1].name.equals(playerData[1].name));
-
-
-
-
-
-
     }
-
-
 }

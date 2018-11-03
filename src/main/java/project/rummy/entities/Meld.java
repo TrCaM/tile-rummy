@@ -108,6 +108,19 @@ public class Meld extends Component {
     return createMeld(tiles.toArray(new Tile[0]));
   }
 
+  public static boolean canPlayOnTable(Tile ...tiles) {
+    Arrays.sort(tiles, Comparator.comparing(Tile::value));
+    return tiles.length >= 3 && (isRun(tiles) || isSet(tiles));
+  }
+
+  public static boolean canFormMeld(Tile ...tiles) {
+    if (tiles.length == 0) {
+      return false;
+    }
+    Arrays.sort(tiles, Comparator.comparing(Tile::value));
+    return tiles.length == 1 || isRun(tiles) || isSet(tiles);
+  }
+
 
   /**
    * Check if a meld is a RUN
@@ -165,5 +178,15 @@ public class Meld extends Component {
       score += tile.value();
     }
     return score;
+  }
+
+  @Override
+  public int hashCode() {
+    return id;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return obj instanceof Meld && ((Meld) obj).id == this.id;
   }
 }

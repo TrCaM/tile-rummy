@@ -9,9 +9,12 @@ public class Tile extends Component {
   private final Color color;
   private final int value;
 
+  private boolean hightlight;
+
   public Tile(Color color, int value) {
     this.color = color;
     this.value = value;
+    this.hightlight = false;
   }
 
   public static Tile createTile(Color color, int value) {
@@ -26,6 +29,13 @@ public class Tile extends Component {
     return this.value;
   }
 
+  public void setHightlight(boolean hightlight) {
+    this.hightlight = hightlight;
+  }
+
+  public boolean isHightlight() {
+    return hightlight;
+  }
   @Override
   public String toString() {
     return String.format("%s %d", color.toString(), value);

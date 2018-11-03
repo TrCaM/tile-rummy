@@ -1,27 +1,53 @@
 package project.rummy.gui.views;
 
-import com.almasb.fxgl.entity.Entity;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import project.rummy.entities.Color;
 import project.rummy.entities.Tile;
+import project.rummy.entities.TileSource;
+import project.rummy.events.TileChooseEvent;
 import project.rummy.main.GameFXMLLoader;
 
 import java.io.IOException;
 
 public class TileView extends Pane {
   private GameFXMLLoader loader;
+  private Tile tile;
+  private boolean isChosen;
+  private TileSource tileSource;
+  private int row;
+  private int col;
 
   @FXML private Text value;
+  @FXML private Rectangle border;
 
-  public TileView(Tile tile) {
+  public TileView(Tile tile, TileSource tileSource, int row, int col) {
     super();
+    this.tile = tile;
+    this.tileSource = tileSource;
+    this.isChosen = false;
     this.loader = new GameFXMLLoader("tile");
+    this.row = row;
+    this.col = col;
     loader.setController(this);
     loadTileView(tile);
+    setUpHandlers();
+  }
+
+  public Tile getTile() {
+    return tile;
+  }
+
+  public boolean isChosen() {
+    return isChosen;
+  }
+
+  private void setUpHandlers() {
+    this.addEventHandler(MouseEvent.MOUSE_CLICKED,this::onTileClicked);
   }
 
   private void loadTileView(Tile tile) {
@@ -29,10 +55,14 @@ public class TileView extends Pane {
     try {
       tileView = loader.load();
     } catch (IOException e) {
+      e.printStackTrace();
       throw new IllegalStateException("Can not load tile");
     }
     value.setText(String.valueOf(tile.value()));
     value.setFill(getColor(tile.color()));
+    if (tile.isHightlight()) {
+      border.getStyleClass().add("highlight");
+    }
     getChildren().setAll(tileView);
   }
 
@@ -47,6 +77,33 @@ public class TileView extends Pane {
       default:
         return javafx.scene.paint.Color.GREEN;
     }
+  }
+
+  private void onTileClicked(MouseEvent event) {
+    toggleChosen(!isChosen);
+    this.fireEvent(new TileChooseEvent(tile, tileSource, isChosen, row, col));
+    event.consume();
+  }
+
+  public void toggleChosen(boolean isChosen) {
+    this.isChosen = isChosen;
+    if (isChosen) {
+      border.getStyleClass().add("chosen");
+    } else {
+      border.getStyleClass().clear();
+    }
+  }
+
+  public TileSource getTileSource() {
+    return tileSource;
+  }
+
+  public int getRow() {
+    return row;
+  }
+
+  public int getCol() {
+    return col;
   }
 
 }

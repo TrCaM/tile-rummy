@@ -1,5 +1,5 @@
 package project.rummy.gui.views;
 
 public enum EntityType {
-  TILE, MELD, TABLE, GAME_INFO
+  TILE, MELD, HAND, TABLE, GAME_INFO, GAME
 }

@@ -30,6 +30,10 @@ public class Hand {
     tiles.add(tile);
   }
 
+  public void addMeld(Meld meld) {
+    melds.add(meld);
+  }
+
   public void addTiles(Tile ...tiles) {
     this.tiles.addAll(Arrays.asList(tiles));
   }
@@ -39,11 +43,17 @@ public class Hand {
   }
 
   public List<Tile> getTiles() {
-    return Collections.unmodifiableList(tiles);
+    return new ArrayList<>(tiles);
   }
 
   public List<Meld> getMelds() {
-    return Collections.unmodifiableList(melds);
+    return new ArrayList<>(melds);
+  }
+
+  public List<Meld> clearMeld() {
+    List<Meld> melds = new ArrayList<>(this.melds);
+    this.melds.clear();
+    return melds;
   }
 
   public HandData toHandData() {

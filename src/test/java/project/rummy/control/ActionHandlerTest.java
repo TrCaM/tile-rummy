@@ -54,7 +54,7 @@ public class ActionHandlerTest {
     handler.draw();
     handler.draw();
 
-    assertThat(player.hand().getTiles(), contains(O5, R3));
+    assertThat(player.hand().getTiles(), contains(R3, O5));
     verify(table, times(2)).drawTile();
   }
 

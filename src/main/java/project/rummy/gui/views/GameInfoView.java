@@ -1,17 +1,21 @@
 package project.rummy.gui.views;
 
+import com.almasb.fxgl.app.FXGL;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import project.rummy.game.Game;
 import project.rummy.game.GameState;
 import project.rummy.main.GameFXMLLoader;
+import project.rummy.observers.Observer;
 
 import java.io.IOException;
 
-public class GameInfoView extends Pane {
+public class GameInfoView extends Pane implements Observer {
   private GameFXMLLoader loader;
 
+  @FXML private Label humanTiles;
   @FXML private Label oppo1Tiles;
   @FXML private Label oppo2Tiles;
   @FXML private Label oppo3Tiles;
@@ -31,6 +35,8 @@ public class GameInfoView extends Pane {
     this.loader = new GameFXMLLoader("gameInfo");
     loader.setController(this);
     loadGameInfoView(gameState);
+    Game game = FXGL.getGameWorld().getEntitiesByType(EntityType.GAME).get(0).getComponent(Game.class);
+    game.registerObserver(this);
   }
 
   private void loadGameInfoView(GameState gameState) {
@@ -47,12 +53,13 @@ public class GameInfoView extends Pane {
 
   private void renderGameInfo(GameState gameState) {
     // Update the num tiles
+
     oppo1Tiles.setText("" + gameState.getHandsData()[1].tiles.size() + " Tiles");
     oppo2Tiles.setText("" + gameState.getHandsData()[2].tiles.size() + " Tiles");
     oppo3Tiles.setText("" + gameState.getHandsData()[3].tiles.size() + " Tiles");
+    humanTiles.setText("" + gameState.getHandsData()[0].tiles.size() + " Tiles");
     // Update current player
     Label currentLabel;
-    System.out.println(you.getStyleClass());
     you.getStyleClass().clear();
     oppo1.getStyleClass().clear();
     oppo2.getStyleClass().clear();
@@ -81,6 +88,10 @@ public class GameInfoView extends Pane {
     turnNum.setText(Integer.toString(gameState.getTurnNumber()));
   }
 
+  @Override
+  public void update(GameState status) {
+    renderGameInfo(status);
+  }
 }
 
 
