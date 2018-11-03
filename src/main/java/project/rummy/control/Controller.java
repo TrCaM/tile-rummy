@@ -12,6 +12,8 @@ public abstract class Controller {
     processor = CommandProcessor.getInstance();
   }
 
+  public abstract String getControllerType();
+
   /**
    * play the turn. the method contains all the logic to play a turn, and it should be able to
    * effect the player's hand and the table itself
@@ -19,7 +21,7 @@ public abstract class Controller {
   public abstract void playTurn();
 
   protected void send(Command command) {
-    processor.apply(command);
+    processor.enqueueCommand(command);
   }
 
   public Controller setPlayer(Player player) {

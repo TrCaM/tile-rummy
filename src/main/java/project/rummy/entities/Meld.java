@@ -41,6 +41,15 @@ public class Meld extends Component {
     idsToMelds.put(id,this);
   }
 
+  public static Meld getMeldFromId(int meldid, List<Meld> melds){
+    for(Meld m: melds){
+      if(m.getId() == meldid){
+        return m;
+      }
+    }
+    throw new IllegalArgumentException("meld Id not found");
+  }
+
   public static void cleanUpMap(GameState state) {
     HashMap<Integer, Meld> idsToMeldUpdate = new HashMap<>();
     state.getTableData().melds.forEach(meld -> idsToMeldUpdate.put(meld.id, meld));
@@ -97,6 +106,19 @@ public class Meld extends Component {
 
   public static Meld createMeld(List<Tile> tiles) {
     return createMeld(tiles.toArray(new Tile[0]));
+  }
+
+  public static boolean canPlayOnTable(Tile ...tiles) {
+    Arrays.sort(tiles, Comparator.comparing(Tile::value));
+    return tiles.length >= 3 && (isRun(tiles) || isSet(tiles));
+  }
+
+  public static boolean canFormMeld(Tile ...tiles) {
+    if (tiles.length == 0) {
+      return false;
+    }
+    Arrays.sort(tiles, Comparator.comparing(Tile::value));
+    return tiles.length == 1 || isRun(tiles) || isSet(tiles);
   }
 
 

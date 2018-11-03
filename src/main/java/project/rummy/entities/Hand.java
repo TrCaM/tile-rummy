@@ -18,12 +18,20 @@ public class Hand {
     this();
     this.tiles.addAll(tiles);
   }
+  public Hand(List<Tile> tiles, List<Meld> melds) {
+    this.melds.addAll(melds);
+    this.tiles.addAll(tiles);
+  }
 
   /**
    * Add a new Tile into a player hand
    */
   public void addTile(Tile tile) {
     tiles.add(tile);
+  }
+
+  public void addMeld(Meld meld) {
+    melds.add(meld);
   }
 
   public void addTiles(Tile ...tiles) {
@@ -35,11 +43,11 @@ public class Hand {
   }
 
   public List<Tile> getTiles() {
-    return Collections.unmodifiableList(tiles);
+    return new ArrayList<>(tiles);
   }
 
   public List<Meld> getMelds() {
-    return Collections.unmodifiableList(melds);
+    return new ArrayList<>(melds);
   }
 
   public HandData toHandData() {

@@ -3,9 +3,14 @@ package project.rummy.commands;
 import project.rummy.control.ActionHandler;
 import project.rummy.game.Game;
 
+import java.awt.*;
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class CommandProcessor {
   private Game game;
   private ActionHandler handler;
+  private Queue<Command> commands;
 
   private static final CommandProcessor INSTANCE = new CommandProcessor();
 
@@ -15,6 +20,7 @@ public class CommandProcessor {
 
 
   private CommandProcessor() {
+    commands = new LinkedList<>();
     game = null;
     handler = null;
   }
@@ -46,6 +52,16 @@ public class CommandProcessor {
       throw new IllegalStateException("ActionHandler was not set up properly before the turn");
     }
     command.execute(handler);
-    game.notifyObservers();
+    game.update(handler.getTurnStatus());
+  }
+
+  public void processNextCommand() {
+    if (!commands.isEmpty()) {
+      apply(commands.remove());
+    }
+  }
+
+  public void enqueueCommand(Command command) {
+    commands.add(command);
   }
 }

@@ -165,7 +165,7 @@ public class ManipulationTable {
     Meld m2 = Meld.createMeld(remainingTiles);
     m2.setSource(MeldSource.MANIPULATION);
 
-    add(m1, m2);
+    add(m2, m1);
   }
 
     /**
@@ -225,6 +225,7 @@ public class ManipulationTable {
 
       for (Meld m : melds) {
         m.setSource(MeldSource.TABLE);
+        m.tiles().forEach(tile -> tile.setHightlight(true));
         table.addMeld(m);
       }
 

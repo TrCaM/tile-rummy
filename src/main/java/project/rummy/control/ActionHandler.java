@@ -1,7 +1,15 @@
 package project.rummy.control;
 
+import com.almasb.fxgl.app.FXGL;
 import org.apache.log4j.Logger;
 import project.rummy.entities.*;
+import project.rummy.game.Game;
+import project.rummy.gui.views.EntityType;
+
+import java.util.Collection;
+
+import static project.rummy.entities.PlayerStatus.ICE_BROKEN;
+import static project.rummy.entities.PlayerStatus.START;
 
 /**
  * This class handles all controllers's interaction with the game.
@@ -12,22 +20,66 @@ public class ActionHandler {
   private Table table;
   private ManipulationTable manipulationTable;
   private boolean isTurnEnd;
+  private boolean canDraw;
+  private boolean canPlay;
+  private boolean canEnd;
+  private boolean isIceBroken;
+  private HandData backUpHand;
+  private TableData backUpTable;
   private String playerName;
+  private int startPoint;
+  private PlayerStatus turnType;
 
   private static Logger logger = Logger.getLogger(ActionHandler.class);
 
   public ActionHandler(Player player, Table table) {
     this.hand = player.hand();
-    this.canUseTable = player.status() != PlayerStatus.START;
+    this.canUseTable = player.status() != START;
     this.table = table;
     this.manipulationTable = ManipulationTable.getInstance();
     manipulationTable.clear();
+    this.startPoint = hand.getScore();
     this.isTurnEnd = false;
     this.playerName = player.getName();
+    this.canDraw = true;
+    this.canPlay = true;
+    this.canEnd = false;
+    this.turnType = player.status();
+    this.isIceBroken = player.status() == ICE_BROKEN;
   }
 
   public Hand getHand(){
     return this.hand;
+  }
+
+  public TurnStatus getTurnStatus() {
+    TurnStatus status = new TurnStatus();
+    status.canDraw = canDraw;
+    status.canPlay = canPlay;
+    status.isTurnEnd = isTurnEnd;
+    status.canEnd = canEnd;
+    status.isIceBroken = isIceBroken;
+    return status;
+  }
+
+  public void backUpTurn() {
+    this.backUpHand = hand.toHandData();
+    this.backUpTable = table.toTableData();
+  }
+
+  public void restoreTurn() {
+    Game game = FXGL.getGameWorld().getEntitiesByType(EntityType.GAME).get(0).getComponent(Game.class);
+    this.hand = HandData.toHand(backUpHand);
+    this.table = TableData.toTable(backUpTable);
+    game.setUpTable(table);
+    game.getCurrentPlayerObject().setHand(hand);
+    game.getCurrentPlayerObject().resetForNewTurn();
+    table.resetForNewTurn();
+    this.manipulationTable.clear();
+    this.isTurnEnd = false;
+    this.canDraw = true;
+    this.canPlay = true;
+    this.canEnd = false;
   }
 
   public void formMeld(int ...indexes){
@@ -40,7 +92,12 @@ public class ActionHandler {
 
   public void draw() {
     Tile tile = table.drawTile();
+    tile.setHightlight(true);
     hand.addTile(tile);
+    hand.sort();
+    this.canDraw = false;
+    this.canPlay = false;
+    this.canEnd = true;
     logger.info(String.format("%s has draw %s", playerName, tile));
   }
 
@@ -58,10 +115,14 @@ public class ActionHandler {
     playFromHand(hand.getMelds().indexOf(meld));
   }
 
-  public void takeTableMeld(int meldIndex) throws IllegalAccessException {
+  public void takeTableMelds(Collection<Meld> melds) {
+    melds.forEach(meld -> takeTableMeld(table.getPlayingMelds().indexOf(meld)));
+  }
+
+  public void takeTableMeld(int meldIndex){
     //TODO: Add a logging infomation here
     if (!canUseTable) {
-      throw new IllegalAccessException("Cannot manipulate table");
+      throw new IllegalStateException("Cannot manipulate table");
     }
     if (meldIndex >=0 && meldIndex < table.getPlayingMelds().size()) {
       manipulationTable.add(table.removeMeld(meldIndex));
@@ -69,11 +130,31 @@ public class ActionHandler {
       throw new IllegalArgumentException("Invalid meld index");
     }
   }
+  public void takeHandTile(int tileIndex){
+    //TODO: Add a logging infomation here
+    if (!canUseTable) {
+      throw new IllegalStateException("Cannot manipulate table");
+    }
+    if (tileIndex >=0 && tileIndex < hand.getTiles().size()) {
+      manipulationTable.add(Meld.createMeld(hand.removeTile(tileIndex)));
+    } else {
+      throw new IllegalArgumentException("Invalid tile index");
+    }
+  }
 
-  public boolean endTurn() {
+  public void endTurn() {
     // TODO: Add logging information here
-    isTurnEnd = manipulationTable.submit(table);
-    return isTurnEnd;
+    isTurnEnd = true;
+  }
+
+  public void submit() {
+    this.canDraw = false;
+    manipulationTable.submit(table);
+    manipulationTable.clear();
+    if (turnType == ICE_BROKEN  || startPoint - hand.getScore() >= 30) {
+      this.isIceBroken = true;
+      this.canEnd = true;
+    }
   }
 
   public ManipulationTable getManipulationTable() {

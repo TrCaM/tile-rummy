@@ -54,7 +54,7 @@ public class ActionHandlerTest {
     handler.draw();
     handler.draw();
 
-    assertThat(player.hand().getTiles(), contains(O5, R3));
+    assertThat(player.hand().getTiles(), contains(R3, O5));
     verify(table, times(2)).drawTile();
   }
 
@@ -90,13 +90,13 @@ public class ActionHandlerTest {
     handler.playFromHand(1);
   }
 
-  @Test(expected =  IllegalAccessException.class)
-  public void takeTableMeld_cannotUseTable_shouldThrow() throws IllegalAccessException {
+  @Test(expected =  IllegalStateException.class)
+  public void takeTableMeld_cannotUseTable_shouldThrow(){
     handler.takeTableMeld(0);
   }
 
   @Test(expected =  IllegalArgumentException.class)
-  public void takeTableMeld_invalidIndex_shouldThrow() throws IllegalAccessException {
+  public void takeTableMeld_invalidIndex_shouldThrow(){
     player.setStatus(PlayerStatus.ICE_BROKEN);
     handler = new ActionHandler(player, table);
     Meld meld1 = Meld.createMeld(O5, O6, O7, O8);
@@ -106,8 +106,9 @@ public class ActionHandlerTest {
     handler.takeTableMeld(3);
   }
 
+
   @Test
-  public void takeTableMeld_shouldSucceed() throws IllegalAccessException {
+  public void takeTableMeld_shouldSucceed(){
     player.setStatus(PlayerStatus.ICE_BROKEN);
     handler = new ActionHandler(player, table);
     Meld meld1 = Meld.createMeld(O5, O6, O7, O8);
@@ -120,5 +121,22 @@ public class ActionHandlerTest {
     assertThat(handler.getManipulationTable().getMelds().get(0).tiles(), contains(R3, G3, B3));
     verify(table).getPlayingMelds();
     verify(table).removeMeld(1);
+  }
+
+  @Test
+  public void takeHandTile_shouldSucceed()  {
+    player.setStatus(PlayerStatus.START);
+    handler = new ActionHandler(player, table);
+    hand.addTiles(R3, O5, O8);
+
+
+    handler.takeHandTile(1);
+
+    assertThat(handler.getManipulationTable().getMelds().get(0).tiles(), contains(O5));
+    assertEquals(handler.getHand().getTiles().size(), 2);
+    assertTrue(handler.getHand().getTiles().contains(R3));
+    assertTrue(handler.getHand().getTiles().contains(O8));
+    assertFalse(handler.getHand().getTiles().contains(O5));
+
   }
 }
