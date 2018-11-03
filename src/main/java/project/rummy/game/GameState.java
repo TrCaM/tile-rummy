@@ -19,6 +19,8 @@ public class GameState extends Component {
   private TurnStatus turnStatus;
   private int currentPlayer;
 
+  private boolean isGameEnd;
+
 
   public static GameState generateState(Game game) {
     GameState gameState = new GameState();
@@ -33,10 +35,14 @@ public class GameState extends Component {
     gameState.playerData = Stream.of(game.getPlayers())
         .map(Player::toPlayerData).toArray(PlayerData[]::new);
     gameState.turnStatus = game.turnStatus;
+    gameState.isGameEnd = game.isGameEnd();
 
     return gameState;
   }
 
+  public boolean isGameEnd() {
+    return isGameEnd;
+  }
 
   public PlayerData[] getPlayerData() {
     return playerData;

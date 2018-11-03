@@ -79,6 +79,12 @@ public class TileRummyApplication extends GameApplication {
   @Override
   protected void onUpdate(double tpf) {
     processor.processNextCommand();
+    if (game.isGameEnd()) {
+      this.getNotificationService().pushNotification(
+          String.format("Player %s has won", game.getWinnerName()));
+      getGameWorld().clear();
+//      exit();
+    }
   }
 
   public static void main(String[] args) {

@@ -1,174 +1,63 @@
 {
-  "PLAYER1_Hand": {
-    "Status": "",
-    "Name": "",
-    "Melds": [
-      {
-        "meldedTile": [
-          "C8",
-          "C13",
-          "C8",
-          "C13",
-          "C8",
-          "C13"
-        ],
-        "Id": 0
-      },
-      {
-        "meldedTile": [
-          "C8",
-          "C13",
-          "C8",
-          "C13",
-          "C8",
-          "C13"
-        ],
-        "Id": 0
-      },
-      {
-        "meldedTile": [
-          "C8",
-          "C13",
-          "C8",
-          "C13",
-          "C8",
-          "C13"
-        ],
-        "Id": 0
-      }
-    ],
+  "Player1": {
     "Tiles": [
       "C8",
       "C0"
-    ]
+    ],
+    "Name": ""
   },
-  "PLAYER4_Hand": {
-    "Status": "",
-    "Name": "",
-    "Melds": [
-      {
-        "meldedTile": [
-          "C8",
-          "C13",
-          "C8",
-          "C13",
-          "C8",
-          "C13"
-        ],
-        "Id": 0
-      },
-      {
-        "meldedTile": [
-          "C8",
-          "C13",
-          "C8",
-          "C13",
-          "C8",
-          "C13"
-        ],
-        "Id": 0
-      },
-      {
-        "meldedTile": [
-          "C8",
-          "C13",
-          "C8",
-          "C13",
-          "C8",
-          "C13"
-        ],
-        "Id": 0
-      }
-    ],
+  "Status": "",
+  "Player2": {
     "Tiles": [
       "C8",
       "C0"
-    ]
+    ],
+    "Name": ""
   },
-  "PLAYER2_Hand": {
-    "Status": "",
-    "Name": "",
-    "Melds": [
-      {
-        "meldedTile": [
-          "C8",
-          "C13",
-          "C8",
-          "C13",
-          "C8",
-          "C13"
-        ],
-        "Id": 0
-      },
-      {
-        "meldedTile": [
-          "C8",
-          "C13",
-          "C8",
-          "C13",
-          "C8",
-          "C13"
-        ],
-        "Id": 0
-      },
-      {
-        "meldedTile": [
-          "C8",
-          "C13",
-          "C8",
-          "C13",
-          "C8",
-          "C13"
-        ],
-        "Id": 0
-      }
+  "TileDrawn": "",
+  "MeldPlay": [
+    [
+      "C8",
+      "C9",
+      "C10"
     ],
+    [
+      "C8",
+      "C9",
+      "C10"
+    ]
+  ],
+  "MeldsOnTable": [
+    {
+      "Meld": [
+        "C8",
+        "C13"
+      ],
+      "Id": 0
+    },
+    {
+      "Meld": [
+        "C",
+        "C13"
+      ],
+      "Id": 1
+    }
+  ],
+  "Player3": {
     "Tiles": [
       "C8",
       "C0"
-    ]
+    ],
+    "Name": ""
   },
-  "PLAYER3_Hand": {
-    "Status": "",
-    "Name": "",
-    "Melds": [
-      {
-        "meldedTile": [
-          "C8",
-          "C13",
-          "C8",
-          "C13",
-          "C8",
-          "C13"
-        ],
-        "Id": 0
-      },
-      {
-        "meldedTile": [
-          "C8",
-          "C13",
-          "C8",
-          "C13",
-          "C8",
-          "C13"
-        ],
-        "Id": 0
-      },
-      {
-        "meldedTile": [
-          "C8",
-          "C13",
-          "C8",
-          "C13",
-          "C8",
-          "C13"
-        ],
-        "Id": 0
-      }
-    ],
+  "CurrentPlayer": "Human",
+  "Deck": 0,
+  "Human": {
     "Tiles": [
       "C8",
       "C0"
-    ]
-  }
+    ],
+    "Name": "Tim"
+  },
+  "Turn": 0
 }
