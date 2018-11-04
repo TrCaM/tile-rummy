@@ -20,10 +20,13 @@ public class Game extends Component implements Observable {
   private boolean isGameEnd;
   private String winnerName;
   TurnStatus turnStatus;
-Game() {
+  private boolean preventUpdate;
+
+  Game() {
     super();
     this.observers = new ArrayList<>();
     this.commandProcessor = CommandProcessor.getInstance();
+    this.preventUpdate = false;
   }
 
   public void setUpPlayer(Player[] players) {
@@ -35,8 +38,12 @@ Game() {
   public void setUpTable(Table table) {
     this.table = table;
   }
-  public void setTurnNumber(int num) { this.turnNumber = num;}
-public Player getCurrentPlayerObject() {
+
+  public void setTurnNumber(int num) {
+    this.turnNumber = num;
+  }
+
+  public Player getCurrentPlayerObject() {
     return players[currentPlayer];
   }
 
@@ -48,6 +55,8 @@ public Player getCurrentPlayerObject() {
    * + Constantly check the state of the game and check for when the game should end
    */
   public void nextTurn() {
+    this.players[currentPlayer].getController().endTurn();
+    commandProcessor.reset();
     resetTileHightlight();
     turnNumber++;
     currentPlayer = (turnNumber - 1) % 4;
@@ -57,6 +66,11 @@ public Player getCurrentPlayerObject() {
     handler.backUpTurn();
     notifyObservers();
     this.players[currentPlayer].getController().playTurn();
+  }
+
+  public void endTurn() {
+    this.players[currentPlayer].getController().endTurn();
+    commandProcessor.reset();
   }
 
   private void resetTileHightlight() {
@@ -140,18 +154,23 @@ public Player getCurrentPlayerObject() {
 
   public void update(TurnStatus turnStatus) {
     this.turnStatus = turnStatus;
-    if (turnStatus.isTurnEnd) {
+    if (turnStatus.goNextTurn) {
       PlayerStatus status = turnStatus.isIceBroken ? PlayerStatus.ICE_BROKEN : PlayerStatus.START;
       players[currentPlayer].setStatus(status);
+      nextTurn();
+    } else if (turnStatus.isTurnEnd) {
       int winner = getWinner();
       if (winner != -1) {
         this.isGameEnd = true;
         this.winnerName = players[winner].getName();
+        notifyObservers();
       } else {
-        nextTurn();
+        endTurn();
       }
     }
-    notifyObservers();
+    if (!preventUpdate) {
+      notifyObservers();
+    }
   }
 
   public void setTurnStatus(TurnStatus turnStatus) {
@@ -162,8 +181,15 @@ public Player getCurrentPlayerObject() {
     return this.winnerName;
   }
 
-    public GameState generateGameState() {
-        return GameState.generateState(this);
-    }
+  public GameState generateGameState() {
+    return GameState.generateState(this);
+  }
 
+  public void preventUpdate() {
+    this.preventUpdate = true;
+  }
+
+  public void enableUpdate() {
+    this.preventUpdate = false;
+  }
 }

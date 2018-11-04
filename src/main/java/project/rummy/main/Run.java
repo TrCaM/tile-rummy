@@ -23,6 +23,7 @@ public class Run extends javafx.application.Application {
 
     ReadGameState gameState = new ReadGameState();
     GameState state = new GameState();
+
     try {
       state = gameState.read();
     }

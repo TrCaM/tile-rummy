@@ -13,4 +13,9 @@ public class ManualController extends Controller {
   @Override
   public void playTurn() {
   }
+
+  @Override
+  public void endTurn() {
+
+  }
 }

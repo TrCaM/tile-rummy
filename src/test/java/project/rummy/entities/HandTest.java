@@ -239,12 +239,18 @@ public class HandTest {
     hand.formMeld(1, 10);
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void formMeld_invalidMeld_shouldThrow() {
+  @Test
+  public void formMeld_invalidMeld_shouldHave2Melds() {
     List<Tile> tiles = Arrays.asList(B13, O5, B7, G11, R3, B5, G5);
     hand = new Hand(tiles);
 
     hand.formMeld(1, 0);
+
+    hand.getTiles().forEach(System.out::println);
+    assertThat(hand.getMelds().get(0).tiles(), contains(O5));
+    assertThat(hand.getMelds().get(1).tiles(), contains(B13));
+    assertEquals(hand.getTiles().size(), 5);
+    assertThat(hand.getTiles(), not(contains(O5, B13)));
   }
 
   @Test

@@ -44,7 +44,7 @@
       </GridPane>
       <Button fx:id="playMeldButton" disable="true" layoutX="1149.0" layoutY="175.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="94.0" text="Play Meld" />
       <Button fx:id="drawButton" layoutX="1149.0" layoutY="95.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="94.0" text="Draw" />
-      <Button fx:id="endTurnButton" layoutX="1258.0" layoutY="142.0" mnemonicParsing="false" prefHeight="103.0" prefWidth="60.0" text="End Turn" wrapText="true">
+      <Button fx:id="nextTurnButton" layoutX="1258.0" layoutY="142.0" mnemonicParsing="false" prefHeight="103.0" prefWidth="60.0" text="Next Turn" wrapText="true">
          <font>
             <Font size="15.0" />
          </font>

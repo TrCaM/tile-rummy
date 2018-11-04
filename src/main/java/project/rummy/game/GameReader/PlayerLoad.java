@@ -39,15 +39,17 @@ public class PlayerLoad {
             tile = new Tile(color, tile_num);
             tiles.add(tile);
         }
-        data[0] = new HandData(new Hand(tiles, new ArrayList<Meld>()));
+        ArrayList<Meld> test = new ArrayList<Meld>();
+        // write the melds to be played or make it stay empity
+        data[0] = new HandData(new Hand(tiles, test));
 
 
 
         parser = new JsonParser().parse(object.get("Player 1").toString());
         jsonObject = parser.getAsJsonObject();
 
+        tiles = new ArrayList<>();
         for (JsonElement element: jsonObject.get("Tiles").getAsJsonArray()) {
-            tiles = new ArrayList<>();
             color = getColor(element.getAsString().charAt(0));
             tile_num = Integer.parseInt(element.getAsString().substring(1));
             tile = new Tile(color, tile_num);
@@ -58,9 +60,9 @@ public class PlayerLoad {
 
         parser = new JsonParser().parse(object.get("Player 2").toString());
         jsonObject = parser.getAsJsonObject();
+        tiles = new ArrayList<>();
 
         for (JsonElement element: jsonObject.get("Tiles").getAsJsonArray()) {
-            tiles = new ArrayList<>();
             color = getColor(element.getAsString().charAt(0));
             tile_num = Integer.parseInt(element.getAsString().substring(1));
             tile = new Tile(color, tile_num);
@@ -70,16 +72,15 @@ public class PlayerLoad {
 
         parser = new JsonParser().parse(object.get("Player 3").toString());
         jsonObject = parser.getAsJsonObject();
+        tiles = new ArrayList<>();
 
         for (JsonElement element: jsonObject.get("Tiles").getAsJsonArray()) {
-            tiles = new ArrayList<>();
             color = getColor(element.getAsString().charAt(0));
             tile_num = Integer.parseInt(element.getAsString().substring(1));
             tile = new Tile(color, tile_num);
             tiles.add(tile);
         }
         data[3] = new HandData(new Hand(tiles, new ArrayList<Meld>()));
-
 
         return data;
     }
@@ -134,35 +135,80 @@ public class PlayerLoad {
         return null;
     }
 
-    public  PlayerData getPlayerDatas(JSONObject object) {
+    public  PlayerData [] getPlayerDatas(JSONObject object) {
         JsonElement parser = new JsonParser().parse(object.get("HUMAN").toString());
         JsonObject jsonObject = parser.getAsJsonObject();
         playerData = new PlayerData[4];
 
+        playerData[0] = new PlayerData(jsonObject.get(FileLoadTypes.Name.name()).getAsString(), jsonObject.get(FileLoadTypes.Controller.name()).getAsString());
 
+        parser = new JsonParser().parse(object.get("Player 1").toString());
+        jsonObject = parser.getAsJsonObject();
 
-        return null;
+        playerData[1] = new PlayerData(jsonObject.get(FileLoadTypes.Name.name()).getAsString(), jsonObject.get(FileLoadTypes.Controller.name()).getAsString());
+        parser = new JsonParser().parse(object.get("Player 2").toString());
+        jsonObject = parser.getAsJsonObject();
+
+        playerData[2] = new PlayerData(jsonObject.get(FileLoadTypes.Name.name()).getAsString(), jsonObject.get(FileLoadTypes.Controller.name()).getAsString());
+        parser = new JsonParser().parse(object.get("Player 3").toString());
+        jsonObject = parser.getAsJsonObject();
+        playerData[3] = new PlayerData(jsonObject.get(FileLoadTypes.Name.name()).getAsString(), jsonObject.get(FileLoadTypes.Controller.name()).getAsString());
+
+        return this.playerData;
     }
 
     public TableData getTableData(JSONObject object) {
-        JsonElement parser = new JsonParser().parse(object.get(FileLoadTypes.MeldsOnTable.name()).toString());
+        JsonElement parser = new JsonParser().parse(object.get(FileLoadTypes.FreeTiles.name()).toString());
         JsonArray jsonArray = parser.getAsJsonArray();
         TableData data = new TableData();
+        ArrayList<Tile> tiles = new ArrayList<>();
         Color color;
         int tile_num;
         Tile tile;
         Meld meld;
 
+
         for (JsonElement element : jsonArray){
             color = getColor(element.getAsString().charAt(0));
             tile_num = Integer.parseInt(element.getAsString().substring(1));
             tile = new Tile(color, tile_num);
-            meld = new Meld(tile);
+            data.freeTiles.add(tile);
+        }
+
+        // add code to load from meld
+        parser = new JsonParser().parse(object.get(FileLoadTypes.MeldsOnTable.name()).toString());
+        jsonArray = parser.getAsJsonArray();
+
+        for  (JsonElement element: jsonArray) {
+            for (JsonElement element1: element.getAsJsonObject().get(FileLoadTypes.Meld.name()).getAsJsonArray()) {
+                color = getColor(element1.getAsString().charAt(0));
+                tile_num = Integer.parseInt(element1.getAsString().substring(1));
+                tile = new Tile(color, tile_num);
+                tiles.add(tile);
+
+
+            }
+            meld = new Meld(tiles, MeldType.RUN);
             data.melds.add(meld);
         }
 
+        System.out.println(data.melds.size());
+
 
         return data;
+    }
+
+    public TurnStatus getTurnStatuses(JSONObject jsonObject) {
+        JsonElement parser = new JsonParser().parse(jsonObject.toJSONString());
+        TurnStatus status = new TurnStatus();
+
+        status.canDraw = parser.getAsJsonObject().get(FileLoadTypes.canDraw.name()).getAsBoolean();
+        status.canEnd = parser.getAsJsonObject().get(FileLoadTypes.canEnd.name()).getAsBoolean();
+        status.canPlay = parser.getAsJsonObject().get(FileLoadTypes.canPlay.name()).getAsBoolean();
+        status.isTurnEnd = parser.getAsJsonObject().get(FileLoadTypes.TurnEnd.name()).getAsBoolean();
+        status.isIceBroken = parser.getAsJsonObject().get(FileLoadTypes.IceBroken.name()).getAsBoolean();
+
+        return status;
     }
 
     public  void getMeldOnTable() {}

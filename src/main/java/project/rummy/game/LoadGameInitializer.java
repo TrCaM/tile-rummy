@@ -30,24 +30,20 @@ public class LoadGameInitializer implements GameInitializer {
         Controller controller;
         Player[] players = new Player[4];
         Hand hand;
-
         for(int i=0; i<4; i++){
-
-            //System.out.println(state.getHandsData()[i].tiles.toString());
-
             hand = new Hand(state.getHandsData()[i].tiles, state.getHandsData()[i].melds);
 
             if(state.getPlayerData()[i].controllerType.equals("human")){
                 controller = new ManualController();
             }else if(state.getPlayerData()[i].controllerType.equals("strategy1")){
-                controller = new AutoController(new Strategy1(game));
+                controller = new AutoController(game, new Strategy1());
             }else if(state.getPlayerData()[i].controllerType.equals("strategy2")) {
-                controller = new AutoController(new Strategy2(game));
+                controller = new AutoController(game, new Strategy2(game));
             }else{
-                controller = new AutoController(new Strategy3(game));
+                controller = new AutoController(game, new Strategy3(game));
             }
 
-            players[i] = new Player(state.getPlayerData()[i].name, controller, hand, state.getPlayerStatuses()[i]);
+            players[i] = new Player(state.getPlayerData()[i].name, controller, hand, state.getPlayerStatuses()[i], i);
         }
 
 
@@ -59,6 +55,12 @@ public class LoadGameInitializer implements GameInitializer {
     public void initTable(Game game) {
         TableData data = state.getTableData();
         Table table = new Table(data.melds, data.freeTiles, data.setGrid1, data.setGrid2, data.runGrid);
+
+        for (int i = 0; i < state.getTableData().melds.size(); i++) {
+            table.addMeld(state.getTableData().melds.get(i));
+        }
+
+        // then per player plays a meld
         game.setUpTable(table);
     }
 

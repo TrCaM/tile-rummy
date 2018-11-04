@@ -73,7 +73,7 @@ public class ActionHandlerTest {
   @Test
   public void playFromHand_byMeld_shouldSucceed() {
     player.hand().addTiles(O5, O6, O7, O8, R3, G3, B3);
-    Meld meld = player.hand().formMeld(0, 1, 2);
+    Meld meld = player.hand().formMeld(0, 1, 2).get(0);
 
     handler.playFromHand(meld);
 
@@ -138,5 +138,19 @@ public class ActionHandlerTest {
     assertTrue(handler.getHand().getTiles().contains(O8));
     assertFalse(handler.getHand().getTiles().contains(O5));
 
+  }
+
+  @Test
+  public void formMeld_notAbleToForm_shouldForm2SingleMelds() {
+    player.setStatus(PlayerStatus.START);
+    handler = new ActionHandler(player, table);
+    hand.addTiles(R3, O5, O8);
+
+
+    handler.formMeld(1, 2);
+
+    assertEquals(handler.getHand().getTiles().size(), 1);
+    assertTrue(handler.getHand().getMelds().get(0).tiles().contains(O5));
+    assertTrue(handler.getHand().getMelds().get(1).tiles().contains(O8));
   }
 }
