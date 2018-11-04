@@ -2,28 +2,49 @@
   "": {
     "Status": "NOT PLAYED",
     "Tiles": [
+      "R8",
+      "R12",
+      "B1",
+      "B4",
+      "B5",
+      "B8",
+      "G1",
+      "G4",
+      "G5",
+      "G8",
+      "G12",
+      "O1",
+      "O2",
+      "O12"
+    ]
+  },
+  "FreeTiles": [],
+  "CurrentPlayer": 1,
+  "MeldPlay": "",
+  "Deck": 6,
+  "Turn": 2,
+  "TileDrawn": 6,
+  "Id": 0,
+  "MeldsOnTable": [
+    [
       "R6",
       "R7",
       "R8",
-      "R12",
-      "B2",
-      "B2",
-      "B3",
-      "B3",
-      "B6",
-      "G8",
-      "G9",
-      "O1",
-      "O3",
-      "O13"
+      "R9",
+      "R6",
+      "R7",
+      "R8",
+      "R9"
+    ],
+    [
+      "R6",
+      "R7",
+      "R8",
+      "R9",
+      "R6",
+      "R7",
+      "R8",
+      "R9"
     ]
-  },
-  "Turn": 1,
-  "FreeTiles": [],
-  "MeldsOnTable": [],
-  "CurrentPlayer": 0,
-  "TileDrawn": 6,
-  "Deck": 6,
-  "Id": 0,
-  "MeldPlay": ""
+  ]
 }

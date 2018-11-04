@@ -39,7 +39,9 @@ public class PlayerLoad {
             tile = new Tile(color, tile_num);
             tiles.add(tile);
         }
-        data[0] = new HandData(new Hand(tiles, new ArrayList<Meld>()));
+        ArrayList<Meld> test = new ArrayList<Meld>();
+        // write the melds to be played or make it stay empity
+        data[0] = new HandData(new Hand(tiles, test));
 
 
 
@@ -159,6 +161,7 @@ public class PlayerLoad {
         JsonElement parser = new JsonParser().parse(object.get(FileLoadTypes.FreeTiles.name()).toString());
         JsonArray jsonArray = parser.getAsJsonArray();
         TableData data = new TableData();
+        ArrayList<Tile> tiles = new ArrayList<>();
         Color color;
         int tile_num;
         Tile tile;
@@ -171,6 +174,25 @@ public class PlayerLoad {
             tile = new Tile(color, tile_num);
             data.freeTiles.add(tile);
         }
+
+        // add code to load from meld
+        parser = new JsonParser().parse(object.get(FileLoadTypes.MeldsOnTable.name()).toString());
+        jsonArray = parser.getAsJsonArray();
+
+        for  (JsonElement element: jsonArray) {
+            for (JsonElement element1: element.getAsJsonObject().get(FileLoadTypes.Meld.name()).getAsJsonArray()) {
+                color = getColor(element1.getAsString().charAt(0));
+                tile_num = Integer.parseInt(element1.getAsString().substring(1));
+                tile = new Tile(color, tile_num);
+                tiles.add(tile);
+
+
+            }
+            meld = new Meld(tiles, MeldType.RUN);
+            data.melds.add(meld);
+        }
+
+        System.out.println(data.melds.size());
 
 
         return data;

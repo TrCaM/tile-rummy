@@ -55,6 +55,12 @@ public class LoadGameInitializer implements GameInitializer {
     public void initTable(Game game) {
         TableData data = state.getTableData();
         Table table = new Table(data.melds, data.freeTiles, data.setGrid1, data.setGrid2, data.runGrid);
+
+        for (int i = 0; i < state.getTableData().melds.size(); i++) {
+            table.addMeld(state.getTableData().melds.get(i));
+        }
+
+        // then per player plays a meld
         game.setUpTable(table);
     }
 
