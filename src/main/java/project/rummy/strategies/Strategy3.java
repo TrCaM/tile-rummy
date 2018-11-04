@@ -20,18 +20,18 @@ public class Strategy3 implements Strategy, Observer {
   }
 
   @Override
-  public PlayDirection iceBreak() {
-    return null;
-  }
-
-  @Override
-  public PlayDirection performFullTurn() {
-    return null;
-  }
-
-  @Override
   public void update(GameState state) {
     this.state = state;
+  }
+
+  @Override
+  public PlayDirection iceBreak(GameState gameState) {
+    return null;
+  }
+
+  @Override
+  public PlayDirection performFullTurn(GameState gameState) {
+    return null;
   }
 }
 

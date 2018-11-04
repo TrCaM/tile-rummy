@@ -2,12 +2,14 @@ package project.rummy.behaviors;
 
 import project.rummy.ai.HandMeldSeeker;
 import project.rummy.commands.Command;
+import project.rummy.control.ActionHandler;
 import project.rummy.entities.Meld;
 import project.rummy.entities.Tile;
 import project.rummy.game.GameState;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public class PlayAllMeldsMoveMaker implements ComputerMoveMaker {
@@ -15,7 +17,7 @@ public class PlayAllMeldsMoveMaker implements ComputerMoveMaker {
     @Override
     public List<Command> calculateMove(GameState state) {
 
-        List<Command> commands = new ArrayList<>();
+        LinkedList<Command> commands = new LinkedList<>();
 
         List<Tile> handTiles = new ArrayList<>(state.getHandsData()[state.getCurrentPlayer()].tiles);
 
@@ -38,6 +40,10 @@ public class PlayAllMeldsMoveMaker implements ComputerMoveMaker {
                     handTiles.remove(handTiles.get(indecies.get(k)));
                 }
             }
+        }
+        if (!commands.isEmpty()) {
+            commands.addFirst(ActionHandler::preventUpdate);
+            commands.addLast(ActionHandler::enableUpdate);
         }
         return commands;
     }

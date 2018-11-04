@@ -182,10 +182,9 @@ public class PlayOneTileMoveMaker implements ComputerMoveMaker {
 
         List<Meld> allMelds = HandMeldSeeker.findBestMelds(handTiles);
 
-        List<Tile> singleTiles = handTiles;
-        allMelds.stream().forEach(meld -> meld.tiles().forEach(singleTiles::remove));
+        allMelds.forEach(meld -> meld.tiles().forEach(handTiles::remove));
 
-        for(Tile t: singleTiles){
+        for(Tile t: handTiles){
             if(!(commands = tryAddDirectLy(t,state)).isEmpty()){ break; }
             if(!(commands = tryFormSet(t,state)).isEmpty()){ break; }
             if(!(commands = tryFormRun(t,state)).isEmpty()){ break; }

@@ -6,4 +6,5 @@ public class TurnStatus{
   public boolean canPlay;
   public boolean isTurnEnd;
   public boolean isIceBroken;
+  public boolean goNextTurn;
 }

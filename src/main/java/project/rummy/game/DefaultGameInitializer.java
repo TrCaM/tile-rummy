@@ -18,13 +18,13 @@ public class DefaultGameInitializer implements GameInitializer {
   public void initPlayers(Game game) {
     Controller[] controllers = new Controller[]{
         new ManualController(),
-        new AutoController(new Strategy1(game)),
-        new AutoController(new Strategy1(game)),
-        new AutoController(new Strategy1(game))};
+        new AutoController(game, new Strategy1()),
+        new AutoController(game, new Strategy1()),
+        new AutoController(game, new Strategy1())};
     Player[] players = new Player[4];
-    players[0] = new Player("The HUMAN", controllers[0]);
+    players[0] = new Player("The HUMAN", controllers[0], 0);
     for (int i=1; i<4; i++) {
-      players[i] = new Player(String.format("Player %d", i), controllers[i]);
+      players[i] = new Player(String.format("Player %d", i), controllers[i], i);
     }
     game.setUpPlayer(players);
   }

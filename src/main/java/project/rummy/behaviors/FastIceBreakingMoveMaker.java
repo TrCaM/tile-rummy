@@ -2,6 +2,7 @@ package project.rummy.behaviors;
 
 import project.rummy.ai.HandMeldSeeker;
 import project.rummy.commands.Command;
+import project.rummy.control.ActionHandler;
 import project.rummy.entities.Meld;
 import project.rummy.entities.Tile;
 import project.rummy.game.GameState;
@@ -22,10 +23,10 @@ public class FastIceBreakingMoveMaker implements ComputerMoveMaker {
         List<Meld> allMelds = HandMeldSeeker.findBestMelds(handTiles);
 
         if (allMelds.isEmpty()) {
-            commands.add(handler -> handler.draw());
+            commands.add(ActionHandler::drawOrEndTurn);
             return commands;
         } else if (allMelds.stream().mapToInt(Meld::getScore).sum() < 30) {
-            commands.add(handler -> handler.draw());
+            commands.add(ActionHandler::drawOrEndTurn);
             return commands;
         } else {
             ComputerMoveMaker move = new PlayAllMeldsMoveMaker();

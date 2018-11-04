@@ -23,6 +23,8 @@ public abstract class Controller {
    */
   public abstract void playTurn();
 
+  public abstract void endTurn();
+
   protected void send(List<Command> commands, List<CommandChunks> chunksList) {
     commands.forEach(processor::enqueueCommand);
     chunksList.forEach(processor::enqueueChunks);

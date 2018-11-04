@@ -2,6 +2,7 @@ package project.rummy.control;
 
 import com.almasb.fxgl.app.FXGL;
 import org.apache.log4j.Logger;
+import project.rummy.commands.CommandProcessor;
 import project.rummy.entities.*;
 import project.rummy.game.Game;
 import project.rummy.gui.views.EntityType;
@@ -29,8 +30,10 @@ public class ActionHandler {
   private String playerName;
   private int startPoint;
   private PlayerStatus turnType;
+  private boolean preventUpdate;
 
   private static Logger logger = Logger.getLogger(ActionHandler.class);
+  private boolean goNextTurn;
 
   public ActionHandler(Player player, Table table) {
     this.hand = player.hand();
@@ -40,11 +43,13 @@ public class ActionHandler {
     manipulationTable.clear();
     this.startPoint = hand.getScore();
     this.isTurnEnd = false;
+    this.goNextTurn = false;
     this.playerName = player.getName();
     this.canDraw = true;
     this.canPlay = true;
     this.turnType = player.status();
     this.isIceBroken = player.status() == ICE_BROKEN;
+    this.preventUpdate = false;
   }
 
   public Hand getHand() {
@@ -58,7 +63,18 @@ public class ActionHandler {
     status.isTurnEnd = isTurnEnd;
     status.isIceBroken = isIceBroken;
     status.canEnd = canEndTurn();
+    status.goNextTurn = goNextTurn;
     return status;
+  }
+
+  public void preventUpdate() {
+    Game game = FXGL.getGameWorld().getEntitiesByType(EntityType.GAME).get(0).getComponent(Game.class);
+    game.preventUpdate();
+  }
+
+  public void enableUpdate() {
+    Game game = FXGL.getGameWorld().getEntitiesByType(EntityType.GAME).get(0).getComponent(Game.class);
+    game.enableUpdate();
   }
 
   public void forceUpdate(){
@@ -100,7 +116,7 @@ public class ActionHandler {
   }
 
   public boolean isExpired() {
-    return this.isTurnEnd;
+    return this.goNextTurn;
   }
 
   public void draw() {
@@ -110,7 +126,16 @@ public class ActionHandler {
     hand.sort();
     this.canDraw = false;
     this.canPlay = false;
-    logger.info(String.format("%s has draw %s", playerName, tile));
+    System.out.println(String.format("%s has draw %s", playerName, tile));
+    endTurn();
+  }
+
+  public void drawOrEndTurn() {
+    if (canEndTurn()) {
+      endTurn();
+    } else {
+      draw();
+    }
   }
 
   public void playFromHand(int meldIndex) {
@@ -160,11 +185,26 @@ public class ActionHandler {
     }
   }
 
+  public void stash() {
+    CommandProcessor processor = CommandProcessor.getInstance();
+    if (!canEndTurn()) {
+      throw new IllegalStateException("Cannot stash if you cannot end");
+    }
+    processor.reset();
+  }
+
   public void endTurn() {
     if (!canEndTurn()) {
       throw new IllegalStateException("Can not end the turn now");
     }
     isTurnEnd = true;
+  }
+
+  public void nextTurn() {
+    if (!isTurnEnd) {
+      endTurn();
+    }
+    goNextTurn = true;
   }
 
   public void submit() {

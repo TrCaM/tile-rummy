@@ -43,7 +43,7 @@ public class HandView extends Pane implements Observer {
   @FXML
   private Button drawButton;
   @FXML
-  private Button endTurnButton;
+  private Button nextTurnButton;
   @FXML
   private Button undoButton;
 
@@ -65,11 +65,11 @@ public class HandView extends Pane implements Observer {
     this.drawButton.setOnMouseClicked(this::onDrawClick);
     this.playMeldButton.setOnMouseClicked(this::onPlayMeldButtonClick);
     this.undoButton.setOnMouseClicked(this::onUndoButtonClick);
-    this.endTurnButton.setOnMouseClicked(this::onEndTurnButtonClick);
+    this.nextTurnButton.setOnMouseClicked(this::onNextTurnButtonClick);
   }
 
-  private void onEndTurnButtonClick(MouseEvent mouseEvent) {
-    CommandProcessor.getInstance().enqueueCommand(ActionHandler::endTurn);
+  private void onNextTurnButtonClick(MouseEvent mouseEvent) {
+    CommandProcessor.getInstance().enqueueCommand(ActionHandler::nextTurn);
   }
 
   private void onPlayMeldButtonClick(MouseEvent mouseEvent) {
@@ -152,7 +152,7 @@ public class HandView extends Pane implements Observer {
     playMeldButton.setDisable(true);
     this.tileRack.setDisable(!turnStatus.canPlay);
     this.meldRack.setDisable(!turnStatus.canPlay);
-    this.endTurnButton.setDisable(!turnStatus.canEnd);
+    this.nextTurnButton.setDisable(!turnStatus.canEnd);
     this.undoButton.setDisable(status.getCurrentPlayer() != 0);
   }
 }

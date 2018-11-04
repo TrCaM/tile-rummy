@@ -9,30 +9,25 @@ import project.rummy.observers.Observer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StrategyDrawOnly implements Strategy, Observer {
-    private GameState state;
-
-    public StrategyDrawOnly(Game game) {
-        game.registerObserver(this);
-    }
+public class StrategyDrawOnly implements Strategy {
 
     @Override
-    public PlayDirection iceBreak() {
-
+    public PlayDirection iceBreak(GameState gameState) {
         List<Command> commands = new ArrayList<>();
-        commands.add(handler -> handler.draw());
+        commands.add(handler -> {
+            handler.draw();
+            handler.endTurn();
+        });
         return new PlayDirection(commands);
     }
 
     @Override
-    public PlayDirection performFullTurn() {
+    public PlayDirection performFullTurn(GameState gameState) {
         List<Command> commands = new ArrayList<>();
-        commands.add(handler -> handler.draw());
+        commands.add(handler -> {
+            handler.draw();
+            handler.endTurn();
+        });
         return new PlayDirection(commands);
-    }
-
-    @Override
-    public void update(GameState state) {
-        this.state = state;
     }
 }
