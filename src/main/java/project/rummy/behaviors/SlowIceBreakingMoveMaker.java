@@ -32,8 +32,8 @@ public class SlowIceBreakingMoveMaker implements ComputerMoveMaker {
             commands.add(handler -> handler.draw());
             return commands;
         }else {
-            for(int i = 0 ; i < 4 && i!= state.getCurrentPlayer(); i ++){
-                if((state.getPlayerStatuses()[i] == PlayerStatus.START)){
+            for(int i = 0 ; i < 4 ; i ++){
+                if((state.getPlayerStatuses()[i] == PlayerStatus.ICE_BROKEN && i!= state.getCurrentPlayer())){
                     ComputerMoveMaker move = new FastIceBreakingMoveMaker();
                     return move.calculateMove(state);
                 }

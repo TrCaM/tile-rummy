@@ -17,11 +17,9 @@ public class FastIceBreakingMoveMaker implements ComputerMoveMaker {
 
         List<Command> commands = new ArrayList<>();
 
-        List<Tile> handTiles = state.getHandsData()[state.getCurrentPlayer()].tiles;
+        List<Tile> handTiles = new ArrayList<>(state.getHandsData()[state.getCurrentPlayer()].tiles);
 
         List<Meld> allMelds = HandMeldSeeker.findBestMelds(handTiles);
-
-        List<Integer> indecies = new ArrayList<>();
 
         if (allMelds.isEmpty()) {
             commands.add(handler -> handler.draw());
@@ -31,14 +29,20 @@ public class FastIceBreakingMoveMaker implements ComputerMoveMaker {
             return commands;
         } else {
             for (Meld m : allMelds) {
-                indecies.clear();
+                List<Integer> indecies = new ArrayList<>();
                 for (int i = 0; i < m.tiles().size(); i++) {
-                    indecies.add(i);
+                    indecies.add(handTiles.indexOf(m.tiles().get(i)));
                 }
-                commands.add(handler -> handler.formMeld(indecies.stream().mapToInt(Integer::intValue).toArray()));
-                commands.add(handler -> handler.playFromHand(0));
+                commands.add(handler -> {
+                    handler.formMeld(indecies.stream().mapToInt(Integer::intValue).toArray());
+                    handler.playFromHand(0);
+                    handler.submit();
+                });
+                Collections.sort(indecies);
+                for(int k=indecies.size()-1; k>=0; k--) {
+                    handTiles.remove(handTiles.get(indecies.get(k)));
+                }
             }
-            //TODO send endturn command
             return commands;
         }
     }

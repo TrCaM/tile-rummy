@@ -60,6 +60,11 @@ public class CommandProcessor {
       apply(commands.remove());
     }
   }
+  public void proccessAllCommands(){
+    while(!commands.isEmpty()){
+      apply(commands.remove());
+    }
+  }
 
   public void enqueueCommand(Command command) {
     commands.add(command);

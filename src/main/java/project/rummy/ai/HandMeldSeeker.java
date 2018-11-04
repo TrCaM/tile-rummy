@@ -22,9 +22,14 @@ public class HandMeldSeeker {
 
             for (int i = 1; i < alist.size(); i++) {
                 if (alist.get(0).value() == alist.get(i).value()
-                        && alist.get(0).color() != alist.get(i).color()
-                        && !tempMeld.contains(alist.get(i))) {
-                    tempMeld.add(alist.get(i));
+                        && alist.get(0).color() != alist.get(i).color()) {
+                    boolean exist = false;
+                    for(Tile t: tempMeld){
+                        if(t.value()==alist.get(i).value() && t.color() == alist.get(i).color()){
+                            exist = true;
+                        }
+                    }
+                    if(!exist){tempMeld.add(alist.get(i));}
                 }
             }
 
@@ -73,23 +78,17 @@ public class HandMeldSeeker {
         //sets first then runs
         List<Meld> bestMelds_1 = findPossibleSets(tilesList);
 
-
-
         for(Meld m : bestMelds_1) { m.tiles().forEach(tilesList::remove);}
         bestMelds_1.addAll(findPossibleRuns(tilesList));
 
         int score_1 = bestMelds_1.stream().mapToInt(Meld::getScore).sum();
 
-
         //runs first then sets
         tilesList = new ArrayList<>(tiles);
         List<Meld> bestMelds_2 = findPossibleRuns(tilesList);
 
-        //bestMelds_2.stream().map(meld -> meld.tiles()).forEach(tilesList::remove);
 
-        for(Meld m : bestMelds_2) {
-            m.tiles().forEach(tilesList::remove);
-        }
+        for(Meld m : bestMelds_2) {m.tiles().forEach(tilesList::remove); }
 
         bestMelds_2.addAll(findPossibleSets(tilesList));
 
