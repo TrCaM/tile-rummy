@@ -8,7 +8,6 @@ import project.rummy.entities.Hand;
 import project.rummy.entities.Player;
 import project.rummy.entities.Table;
 import project.rummy.entities.TableData;
-import project.rummy.game.GameReader.ReadGameState;
 import project.rummy.strategies.Strategy1;
 import project.rummy.strategies.Strategy2;
 import project.rummy.strategies.Strategy3;
@@ -33,12 +32,12 @@ public class LoadGameInitializer implements GameInitializer {
         for(int i=0; i<4; i++){
             hand = new Hand(state.getHandsData()[i].tiles, state.getHandsData()[i].melds);
 
-            if(state.getPlayerData()[i].controllerType.equals("human")){
+            if("human".equals(state.getPlayerData()[i].controllerType)){
                 controller = new ManualController();
-            }else if(state.getPlayerData()[i].controllerType.equals("strategy1")){
+            }else if("strategy1".equals(state.getPlayerData()[i].controllerType)){
                 controller = new AutoController(game, new Strategy1());
-            }else if(state.getPlayerData()[i].controllerType.equals("strategy2")) {
-                controller = new AutoController(game, new Strategy2(game));
+            }else if("strategy2".equals(state.getPlayerData()[i].controllerType)) {
+                controller = new AutoController(game, new Strategy2());
             }else{
                 controller = new AutoController(game, new Strategy3(game));
             }
