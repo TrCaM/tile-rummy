@@ -101,7 +101,7 @@ public class Meld extends Component {
     } else if (isSet(tiles)) {
       return new Meld(Arrays.asList(tiles), MeldType.SET);
     }
-    throw new IllegalArgumentException("Invalid tiles input");
+    throw new IllegalArgumentException(String.format("Invalid tiles input: %s", Arrays.deepToString(tiles)));
   }
 
   public static Meld createMeld(List<Tile> tiles) {

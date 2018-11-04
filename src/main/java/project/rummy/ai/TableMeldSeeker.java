@@ -90,20 +90,20 @@ public class TableMeldSeeker {
 
         //the suitable meld will be the first one appears
         for(Meld m: melds){
-            if(m.type() == MeldType.SET && m.tiles().get(0).value() == tileValue){
+            if(m.type() == MeldType.SET && m.tiles().get(0).value()==tileValue){
                 boolean exist = false;
                 for(Tile t: m.tiles()){
-                    if(t.color() == tileColor){ exist=true; }
+                    if(t.color() == tileColor && t.value()==tileValue){ exist=true; }
                 }
                 if(!exist){ return m.getId(); }
-            }
+            }else if(m.type()==MeldType.RUN){
+                int first = m.tiles().get(0).value();
+                int last = first + m.tiles().size() - 1;
 
-            int first = m.tiles().get(0).value();
-            int last  = first + m.tiles().size() - 1;
-
-            if(m.tiles().get(0).color() == tileColor
-                    && (tileValue == first -1 || tileValue == last +1)){
-                return m.getId();
+                if (m.tiles().get(0).color() == tileColor
+                        && (tileValue == first - 1 || tileValue == last + 1)) {
+                    return m.getId();
+                }
             }
         }
         return 0;

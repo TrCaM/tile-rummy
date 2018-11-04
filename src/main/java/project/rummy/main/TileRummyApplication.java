@@ -105,7 +105,7 @@ public class TileRummyApplication extends GameApplication {
 
   @Override
   protected void onUpdate(double tpf) {
-    processor.processNextCommand();
+    processor.processNext();
     if (game.isGameEnd()) {
       this.getNotificationService().pushNotification(
           String.format("Player %s has won", game.getWinnerName()));

@@ -1,6 +1,9 @@
 package project.rummy.entities;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Entities class for hand, which contains the tiles belong to a specific player
@@ -60,18 +63,33 @@ public class Hand {
     return new HandData(this);
   }
 
-  public Meld formMeld(int ...tileIndexes) {
+  public List<Meld> formMeld(int ...tileIndexes) {
     Arrays.sort(tileIndexes);
     Tile[] meldTiles = new Tile[tileIndexes.length];
     for (int i = tileIndexes.length - 1; i >= 0; i--) {
       if (tileIndexes[i] < 0 || tileIndexes[i] >= tiles.size()) {
-        throw new IllegalArgumentException("Invalid tile index!");
+        throw new IllegalArgumentException(String.format(
+                "Invalid tile index: %s, tiles: %s",
+                Arrays.toString(tileIndexes),
+                tiles.toString()));
       }
       meldTiles[i] = tiles.remove(tileIndexes[i]);
     }
-    Meld newMeld = Meld.createMeld(meldTiles);
-    melds.add(newMeld);
-    return newMeld;
+    List<Meld> newMelds = new ArrayList<>();
+    Arrays.sort(meldTiles, Comparator.comparingInt(Tile::value));
+    int start = 0;
+    for (int i=0; i< meldTiles.length; i++) {
+      Tile[] subTiles = Arrays.copyOfRange(meldTiles, start, i+1);
+      if (!Meld.canFormMeld(subTiles)) {
+        newMelds.add(Meld.createMeld(Arrays.copyOfRange(meldTiles, start, i)));
+        start = i;
+      }
+    }
+    if (start <= meldTiles.length) {
+      newMelds.add(Meld.createMeld(Arrays.copyOfRange(meldTiles, start, meldTiles.length)));
+    }
+    melds.addAll(newMelds);
+    return newMelds;
   }
 
   public Meld removeMeld(int index) {
