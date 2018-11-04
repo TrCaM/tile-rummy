@@ -23,6 +23,7 @@ public class PlayAllMeldsMoveMaker implements ComputerMoveMaker {
 
         if(!allMelds.isEmpty()){
             for (Meld m : allMelds) {
+                System.out.println(state.getPlayerData()[state.getCurrentPlayer()].name + " plays meld "  + m.tiles().toString());
                 List<Integer> indecies = new ArrayList<>();
                 for (int i = 0; i < m.tiles().size(); i++) {
                     indecies.add(handTiles.indexOf(m.tiles().get(i)));

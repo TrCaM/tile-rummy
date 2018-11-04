@@ -27,8 +27,8 @@ public class PlayOneTileMoveMaker implements ComputerMoveMaker {
         int meldid = TableMeldSeeker.findDirectMeld(tile.value(), tile.color(), tableMelds);
         //System.out.println(Meld.getMeldFromId(meldid, state.getTableData().melds));
         if(meldid != 0){
-            System.out.println("add" + tile.toString() +" to " + Meld.getMeldFromId(meldid, state.getTableData().melds).tiles().toString());
             Meld m = Meld.getMeldFromId(meldid, tableMelds);
+            System.out.println(state.getPlayerData()[state.getCurrentPlayer()].name + " adds {"  + tile.toString() +"} to " + m.tiles().toString());
             commands.add(handler ->{
                 handler.takeTableMeld(tableMelds.indexOf(m));
                 handler.takeHandTile(handTiles.indexOf(tile));
@@ -51,6 +51,11 @@ public class PlayOneTileMoveMaker implements ComputerMoveMaker {
         Map<Meld, Integer> map = CombinationSeeker.formSet(tile.value(), tile.color(), tableMelds);
 
         if(map.size() >= 2){
+            System.out.print(state.getPlayerData()[state.getCurrentPlayer()].name + " use {"  + tile.toString() +"} to form set with ");
+            for(Meld k: map.keySet()){
+                System.out.print(k.tiles().toString());
+            }
+            System.out.println();
             commands.add(handler ->{
                 handler.takeHandTile(handTiles.indexOf(tile));
                 ManipulationTable manip = handler.getManipulationTable();
@@ -91,6 +96,11 @@ public class PlayOneTileMoveMaker implements ComputerMoveMaker {
         //try to form new meld by split other meld and take the right split tiles
         Map<Meld, Integer> map = CombinationSeeker.formRunBySplitRight(tile.value(), tile.color(), tableMelds);
         if(!map.isEmpty()){
+            System.out.print(state.getPlayerData()[state.getCurrentPlayer()].name + " use {"  + tile.toString() +"} to form run with ");
+            for(Meld k: map.keySet()){
+                System.out.print(k.tiles().toString());
+            }
+            System.out.println();
             commands.add(handler -> {
                 ManipulationTable manip = handler.getManipulationTable();
                 handler.takeHandTile(handTiles.indexOf(tile));
@@ -106,6 +116,11 @@ public class PlayOneTileMoveMaker implements ComputerMoveMaker {
         //try to form new meld by split other meld and take the left split tiles
         Map<Meld, Integer> map2 = CombinationSeeker.formRunBySplitLeft(tile.value(), tile.color(), tableMelds);
         if(!map2.isEmpty()){
+            System.out.print(state.getPlayerData()[state.getCurrentPlayer()].name + " use {"  + tile.toString() +"} to form run with ");
+            for(Meld k: map2.keySet()){
+                System.out.print(k.tiles().toString());
+            }
+            System.out.println();
             commands.add(handler -> {
                 ManipulationTable manip = handler.getManipulationTable();
                 handler.takeHandTile(handTiles.indexOf(tile));
@@ -121,9 +136,11 @@ public class PlayOneTileMoveMaker implements ComputerMoveMaker {
         Map<Meld, Integer> map3 = CombinationSeeker.formRunByDetaching(tile.value(), tile.color(), tableMelds);
 
         if(map3.size() >= 2){
+            System.out.print(state.getPlayerData()[state.getCurrentPlayer()].name + " use {"  + tile.toString() +"} to form set with ");
             for(Meld k: map3.keySet()){
-                System.out.println("****" + tile.toString() +" to " + k.tiles().toString());
+                System.out.print(k.tiles().toString());
             }
+            System.out.println();
             commands.add(handler ->{
                 handler.takeHandTile(handTiles.indexOf(tile));
                 ManipulationTable manip = handler.getManipulationTable();
