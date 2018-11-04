@@ -18,13 +18,7 @@
       "O12"
     ]
   },
-  "FreeTiles": [],
-  "CurrentPlayer": 1,
-  "MeldPlay": "",
   "Deck": 6,
-  "Turn": 2,
-  "TileDrawn": 6,
-  "Id": 0,
   "MeldsOnTable": [
     [
       "R6",
@@ -46,5 +40,11 @@
       "R8",
       "R9"
     ]
-  ]
+  ],
+  "Turn": 2,
+  "TileDrawn": 6,
+  "FreeTiles": [],
+  "CurrentPlayer": 1,
+  "Id": 0,
+  "MeldPlay": ""
 }
