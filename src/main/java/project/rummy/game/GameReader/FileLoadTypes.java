@@ -6,14 +6,20 @@ public enum FileLoadTypes {
     Id,
     Meld,
     Tiles,
+    FreeTiles,
 
     CurrentPlayer,
     Turn,
     TileDrawn,
     MeldPlay,
     Deck,
+    Controller,
 
-
+    canEnd,
+    canDraw,
+    canPlay,
+    TurnEnd,
+    IceBroken,
 
 
     Status,

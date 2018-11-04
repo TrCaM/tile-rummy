@@ -21,7 +21,7 @@ public class Meld extends Component {
   private int tableRow;
 
 
-  private Meld(Tile tile) {
+   public Meld(Tile tile) {
     this.tiles = Collections.singletonList(tile);
     this.type = MeldType.SINGLE;
     this.source = MeldSource.HAND;
@@ -31,7 +31,7 @@ public class Meld extends Component {
     idsToMelds.put(id, this);
   }
 
-  private Meld(List<Tile> tiles, MeldType type) {
+  public Meld(List<Tile> tiles, MeldType type) {
     this.tiles = tiles;
     this.type = type;
     this.source = MeldSource.HAND;

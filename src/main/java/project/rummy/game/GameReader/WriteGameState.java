@@ -2,6 +2,10 @@ package project.rummy.game.GameReader;
 
 import com.google.gson.*;
 import project.rummy.entities.HandData;
+import project.rummy.entities.Meld;
+import project.rummy.entities.PlayerData;
+import project.rummy.entities.Tile;
+import project.rummy.game.Game;
 import project.rummy.game.GameState;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -25,7 +29,6 @@ public class WriteGameState {
         JSONArray players = new JSONArray();
         HandData data[] = gameState.getHandsData();
 
-
         gameInfo = writePlayer();
         writeToJSON(gameInfo);
 
@@ -33,7 +36,7 @@ public class WriteGameState {
     }
 
     private void writeToJSON(JSONObject object) throws  IOException {
-        FileWriter writer = new FileWriter("load\\test.json");
+        FileWriter writer = new FileWriter("load\\test1.json");
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String str = object.toJSONString();
         JsonElement parser = new JsonParser().parse(str);
@@ -50,91 +53,73 @@ public class WriteGameState {
         JSONArray tiles = new JSONArray();
 
 
-
-        for (PlayerLoadTypes types: PlayerLoadTypes.values()) {
+        for (int i = 0; i < gameState.getPlayerData().length; i++) {
             JSONObject melds = new JSONObject();
-
-            melds = writeAll(0, 1);
-            playerSample.put(types, melds);
-        }
-
-        for (int i = 0; i < 1; i++) {
-            tiles.add("C8");
-            tiles.add("C13");
-            info.put(FileLoadTypes.Meld, tiles);
-
-            info.put(FileLoadTypes.Id, 0);
-            meld_info.add(info);
+            melds = writeAll(i);
+            playerSample.put(gameState.getPlayerData()[i].name, melds);
         }
 
 
+        playerSample.put(FileLoadTypes.Id, 0);
 
-        playerSample.put(FileLoadTypes.MeldsOnTable, meld_info);
 
-        playerSample.put(FileLoadTypes.Turn, 0);
-        playerSample.put(FileLoadTypes.CurrentPlayer, "");
-        playerSample.put(FileLoadTypes.Status, "");
-        playerSample.put(FileLoadTypes.TileDrawn, "");
-        playerSample.put(FileLoadTypes.Deck, 0);
-        playerSample.put(FileLoadTypes.MeldPlay, writeMeldToBePlayed());
+
+
+
+        playerSample.put(FileLoadTypes.MeldsOnTable, writeMeldPlayed());
+
+        playerSample.put(FileLoadTypes.Turn, gameState.getTurnNumber());
+        playerSample.put(FileLoadTypes.CurrentPlayer, gameState.getCurrentPlayer());
+        playerSample.put(FileLoadTypes.TileDrawn, gameState.getFreeTilesCount());
+        playerSample.put(FileLoadTypes.Deck, gameState.getFreeTilesCount());
+        playerSample.put(FileLoadTypes.MeldPlay, "");
+        playerSample.put(FileLoadTypes.FreeTiles , tiles);
 
 
         return playerSample;
     }
 
-    private JSONArray writeMeldToBePlayed() {
+    private JSONArray writeMeldPlayed() {
         JSONArray meld = new JSONArray();
         JSONArray melds = new JSONArray();
-        meld.add("C9");
-        meld.add("C8");
-        meld.add("C7");
-        melds.add(meld);
-        meld.clear();
-        meld.add("C8");
-        meld.add("C9");
-        meld.add("C10");
-        melds.add(meld);
-
-
+        for (Meld item: gameState.getTableData().melds) {
+            for (Tile tiles: item.tiles()) {
+                meld.add( tiles.color().toString().charAt(0) +"" +tiles.value());
+            }
+            melds.add(meld);
+        }
 
         return melds;
     }
 
-    private JSONObject writeAll(int player, int melds_amount) {
+    private JSONObject writeAll(int player) {
         JSONObject item = new JSONObject();
         JSONArray tiles = new JSONArray();
-
-
-
-
-        item.put(FileLoadTypes.Tiles, writeTiles());
-        item.put(FileLoadTypes.Name, "");
+        item.put(FileLoadTypes.Tiles, writeTiles(player));
+        item.put(FileLoadTypes.Status, gameState.getPlayerStatuses()[player].toString());
 
         return item;
     }
 
-    private JSONArray writeTiles() {
+    private JSONArray  writeFreeTiles() {
+        JSONObject item = new JSONObject();
+        JSONArray tiles = new JSONArray();
+        for (Tile tile: gameState.getTableData().freeTiles) {
+            tiles.add(tile.color().toString().charAt(0) + "" + tile.value());
+        }
+
+        return tiles;
+    }
+
+    private JSONArray writeTiles(int player) {
         JSONArray tiles_info = new JSONArray();
-        tiles_info.add("C8");
-        tiles_info.add("C0");
+        JSONObject item = new JSONObject();
+        for (Tile tile: gameState.getHandsData()[player].tiles) {
+            String str = tile.color().toString();
+            tiles_info.add(str.charAt(0) + "" + tile.value());
+       }
 
         return  tiles_info;
     }
 
-
-/***
- * {
- *      Playern {
- *       meld {
- *           // times are here
- *       }
- *        status: ""
- *        name: ""
- *
- *      }
- *
- *
- *
- * }
- */
 }

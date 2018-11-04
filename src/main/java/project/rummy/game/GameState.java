@@ -77,6 +77,7 @@ public class GameState extends Component {
     return turnStatus;
   }
 
+
   public void setTurnNumber(int turnNumber) {
     this.turnNumber = turnNumber;
   }
@@ -103,5 +104,12 @@ public class GameState extends Component {
   public void setCurrentPlayer(int currentPlayer) {
     this.currentPlayer = currentPlayer;
   }
+
+  public  void setTurnStatus (TurnStatus turnStatus) {
+    this.turnStatus = turnStatus;
+
+  }
+
+
 
 }
