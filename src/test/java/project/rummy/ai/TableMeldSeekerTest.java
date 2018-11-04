@@ -18,6 +18,7 @@ public class TableMeldSeekerTest {
     private static final Tile O7 = Tile.createTile(Color.ORANGE, 7);
     private static final Tile O8 = Tile.createTile(Color.ORANGE, 8);
     private static final Tile O9 = Tile.createTile(Color.ORANGE, 9);
+    private static final Tile  R9 = Tile.createTile(Color.RED, 9);
     private static final Tile R4 = Tile.createTile(Color.RED, 4);
     private static final Tile G4 = Tile.createTile(Color.GREEN, 4);
     private static final Tile B4 = Tile.createTile(Color.BLACK, 4);
@@ -93,6 +94,17 @@ public class TableMeldSeekerTest {
         assertEquals(melds.get(0).getId(), TableMeldSeeker.findDirectMeld(4, Color.ORANGE, melds));
         assertEquals(melds.get(0).getId(), TableMeldSeeker.findDirectMeld(9, Color.ORANGE, melds));
         assertEquals(melds.get(2).getId(), TableMeldSeeker.findDirectMeld(5, Color.RED, melds));
+
+
+    }
+
+    @Test
+    public void finDirectMeld_test2(){
+        melds.add(Meld.createMeld(R5, G5, B5, O5));
+        int id = TableMeldSeeker.findDirectMeld(9, Color.RED, melds);
+//        assertEquals(melds.get(0).getId(), TableMeldSeeker.findDirectMeld(4, Color.ORANGE, melds));
+//        assertEquals(melds.get(0).getId(), TableMeldSeeker.findDirectMeld(9, Color.ORANGE, melds));
+        assertEquals(0,id );
 
 
     }

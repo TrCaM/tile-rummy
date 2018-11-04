@@ -81,12 +81,12 @@ public class CombinationSeekerTest {
         assertEquals(2,map.size());
         assertTrue(map.containsKey(melds.get(0)));
         assertTrue(map.containsKey(melds.get(2)));
-        assertTrue(map.get(melds.get(2))==3);
-        assertTrue(map.get(melds.get(0))==5);
+        assertEquals(3, (int) map.get(melds.get(2)));
+        assertEquals(5, (int) map.get(melds.get(0)));
 
         Map<Meld, Integer> map2 = CombinationSeeker.formRunByDetaching(10, Color.RED, melds);
         assertEquals(1,map2.size());
-        assertTrue(map2.get(melds.get(2))==0);
+        assertEquals(0, (int) map2.get(melds.get(2)));
 
         Map<Meld, Integer> map3 = CombinationSeeker.formRunByDetaching(5, Color.ORANGE, melds);
         assertEquals(1, map3.size());

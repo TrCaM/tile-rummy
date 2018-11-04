@@ -34,7 +34,7 @@ public class SlowIceBreakingMoveMaker implements ComputerMoveMaker {
         }else {
             for(int i = 0 ; i < 4 ; i ++){
                 if((state.getPlayerStatuses()[i] == PlayerStatus.ICE_BROKEN && i!= state.getCurrentPlayer())){
-                    ComputerMoveMaker move = new FastIceBreakingMoveMaker();
+                    ComputerMoveMaker move = new PlayAllMeldsMoveMaker();
                     return move.calculateMove(state);
                 }
             }

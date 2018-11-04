@@ -2,15 +2,17 @@ package project.rummy.commands;
 
 import project.rummy.control.ActionHandler;
 import project.rummy.game.Game;
+import project.rummy.game.GameState;
 
-import java.awt.*;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class CommandProcessor {
   private Game game;
   private ActionHandler handler;
   private Queue<Command> commands;
+  private Queue<CommandChunks> chunks;
 
   private static final CommandProcessor INSTANCE = new CommandProcessor();
 
@@ -21,6 +23,7 @@ public class CommandProcessor {
 
   private CommandProcessor() {
     commands = new LinkedList<>();
+    chunks = new LinkedList<>();
     game = null;
     handler = null;
   }
@@ -51,22 +54,44 @@ public class CommandProcessor {
     if (handler == null || handler.isExpired()) {
       throw new IllegalStateException("ActionHandler was not set up properly before the turn");
     }
+    System.out.println(String.format("Processing %d", commands.size()));
+
     command.execute(handler);
     game.update(handler.getTurnStatus());
   }
 
-  public void processNextCommand() {
+  public void processNext() {
     if (!commands.isEmpty()) {
       apply(commands.remove());
+    } else if (!chunks.isEmpty()) {
+      applyChunk(chunks.remove());
     }
   }
+  public void applyChunk(CommandChunks chunks)  {
+      GameState gameState = GameState.generateState(game);
+      commands.addAll(chunks.execute(gameState, handler));
+      proccessAllCommands();
+  }
+
   public void proccessAllCommands(){
     while(!commands.isEmpty()){
       apply(commands.remove());
+    }
+    while(!chunks.isEmpty()){
+      applyChunk(chunks.remove());
     }
   }
 
   public void enqueueCommand(Command command) {
     commands.add(command);
+  }
+
+  public void enqueueChunks(CommandChunks chunk) {
+    chunks.add(chunk);
+  }
+
+  public void reset() {
+    commands.clear();
+    chunks.clear();
   }
 }
