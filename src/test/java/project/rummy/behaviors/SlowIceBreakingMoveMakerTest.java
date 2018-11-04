@@ -87,24 +87,19 @@ public class SlowIceBreakingMoveMakerTest {
         state = new GameState();
 
         List<List<Tile>> tileList = new ArrayList<>();
-        List<Tile> freeTiles = new ArrayList<>();
         List<Meld> tableMelds = new ArrayList<>();
 
         // Creating  list of tiles, free tiles and players
-        List<Tile> list1 = new ArrayList<>();
-        list1.addAll(Arrays.asList(O10, B10,  R1, B1, R4, G10, G1));
+        List<Tile> list1 = new ArrayList<>(Arrays.asList(O10, B10, R1, B1, R4, G10, G1));
         tileList.add(list1);
 
-        List<Tile> list2 = new ArrayList<>();
-        list2.addAll(Arrays.asList(B3, G7, B7, R7, G3, O10, O1));
+        List<Tile> list2 = new ArrayList<>(Arrays.asList(B3, G7, B7, R7, G3, O10, O1));
         tileList.add(list2);
 
-        List<Tile> list3 = new ArrayList<>();
-        list3.addAll(Arrays.asList(G1, G2, R1, R9, G8, O9, O5));
+        List<Tile> list3 = new ArrayList<>(Arrays.asList(G1, G2, R1, R9, G8, O9, O5));
         tileList.add(list3);
 
-        List<Tile> list4 = new ArrayList<>();
-        list4.addAll(Arrays.asList(R2, R9, B7, B9, B10, B13, G2, O1, O2, O5, O7, O9_2, O9, O13));
+        List<Tile> list4 = new ArrayList<>(Arrays.asList(R2, R9, B7, B9, B10, B13, G2, O1, O2, O5, O7, O9_2, O9, O13));
         tileList.add(list4);
 
         handsData = new HandData[4];
@@ -124,7 +119,7 @@ public class SlowIceBreakingMoveMakerTest {
 
 
         //Setting up deck
-        freeTiles.addAll(Arrays.asList(R5, R6, R7, R8, R9, R10));
+        List<Tile> freeTiles = new ArrayList<>(Arrays.asList(R5, R6, R7, R8, R9, R10));
 
         //Setting up table
         Table table = new Table(freeTiles);
@@ -167,24 +162,19 @@ public class SlowIceBreakingMoveMakerTest {
         state = new GameState();
 
         List<List<Tile>> tileList = new ArrayList<>();
-        List<Tile> freeTiles = new ArrayList<>();
         List<Meld> tableMelds = new ArrayList<>();
 
         // Creating  list of tiles, free tiles and players
-        List<Tile> list1 = new ArrayList<>();
-        list1.addAll(Arrays.asList(R2, R9, B7, B9, B10, B13, G2, O1, O2, O5, O7, O9_2, O9, O13));
+        List<Tile> list1 = new ArrayList<>(Arrays.asList(R2, R9, B7, B9, B10, B13, G2, O1, O2, O5, O7, O9_2, O9, O13));
         tileList.add(list1);
 
-        List<Tile> list2 = new ArrayList<>();
-        list2.addAll(Arrays.asList(B3, G7, B7, R7, G3, O10, O1));
+        List<Tile> list2 = new ArrayList<>(Arrays.asList(B3, G7, B7, R7, G3, O10, O1));
         tileList.add(list2);
 
-        List<Tile> list3 = new ArrayList<>();
-        list3.addAll(Arrays.asList(G1, G2, R1, R9, G8, O9, O5));
+        List<Tile> list3 = new ArrayList<>(Arrays.asList(G1, G2, R1, R9, G8, O9, O5));
         tileList.add(list3);
 
-        List<Tile> list4 = new ArrayList<>();
-        list4.addAll(Arrays.asList(R2, R9, B7));
+        List<Tile> list4 = new ArrayList<>(Arrays.asList(R2, R9, B7));
         tileList.add(list4);
 
         handsData = new HandData[4];
@@ -204,7 +194,7 @@ public class SlowIceBreakingMoveMakerTest {
 
 
         //Setting up deck
-        freeTiles.addAll(Arrays.asList(R5, R6, R7, R8, R9, R10));
+        List<Tile> freeTiles = new ArrayList<>(Arrays.asList(R5, R6, R7, R8, R9, R10));
 
         //Setting up table
         Table table = new Table(freeTiles);
