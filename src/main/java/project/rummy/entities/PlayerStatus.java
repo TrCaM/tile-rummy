@@ -9,6 +9,7 @@ public enum PlayerStatus {
     this.note = note;
   }
 
+
   @Override
   public String toString() {
     return note;
