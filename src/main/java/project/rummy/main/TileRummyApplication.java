@@ -61,7 +61,7 @@ public class TileRummyApplication extends GameApplication {
   @Override
   protected void initGame() {
     ReadGameState gm = new ReadGameState();
-    GameState temp = new GameState();
+    GameState temp;
       try {
           temp = gm.read();
           LoadGameInitializer initializer = new LoadGameInitializer(temp);
@@ -80,7 +80,8 @@ public class TileRummyApplication extends GameApplication {
     gameEntity = Entities.builder().type(GAME).build();
     gameEntity.addComponent(game);
     game.nextTurn();
-    state = temp;
+//    state = temp;
+    state = GameState.generateState(game);
     getGameWorld().addEntities(gameEntity);
     handView = EntitiesBuilder.buildHand(state);
     handView.setX(0);
