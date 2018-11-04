@@ -128,6 +128,7 @@ public class PlayOneTileMoveMaker implements ComputerMoveMaker {
                 handler.takeHandTile(handTiles.indexOf(tile));
                 ManipulationTable manip = handler.getManipulationTable();
                 List<Integer> meldids = new ArrayList<>();
+                meldids.add(manip.getMelds().get(0).getId());
                 for (Meld m : map3.keySet()){
                     handler.takeTableMeld(tableMelds.indexOf(m));
                     int index = manip.getMelds().indexOf(m);

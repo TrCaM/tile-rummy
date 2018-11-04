@@ -413,7 +413,7 @@ public class PlayOneTileMoveMakerTest {
         tileList.add(list1);
 
         List<Tile> list2 = new ArrayList<>();
-        list2.addAll(Arrays.asList(O1, B8_2));
+        list2.addAll(Arrays.asList(G2, G10));
         tileList.add(list2);
 
         List<Tile> list3 = new ArrayList<>();
@@ -442,6 +442,8 @@ public class PlayOneTileMoveMakerTest {
 //        tableMelds.add(Meld.createMeld(B4, B5, B6, B7, B8, B9, B10));
         tableMelds.add(Meld.createMeld(O3, O4, O5, O6));
         tableMelds.add(Meld.createMeld(R7, G7, B7, O7));
+        tableMelds.add(Meld.createMeld(R1, B1, G1, O1));
+        tableMelds.add(Meld.createMeld(B3, G3, O3, R3));
 
 
 
@@ -481,15 +483,16 @@ public class PlayOneTileMoveMakerTest {
         assertEquals(1,newState.getHandsData()[newState.getCurrentPlayer()].tiles.size());
         assertTrue(newState.getHandsData()[newState.getCurrentPlayer()].tiles.contains(G5));
 
-//        //O1, B8_2
-//        game.nextTurn();
-//        processor.proccessAllCommands();
-//        GameState newState2 = game.generateGameState();
-//        assertTrue(newState2.getHandsData()[newState2.getCurrentPlayer()].tiles.contains(O1));
-//        assertEquals(1,newState2.getHandsData()[newState2.getCurrentPlayer()].tiles.size());
+        //G2, G10
+        //manipulate meld [(R1, B1, G1, O1)], [(B3, G3, O3, R3)]
+        game.nextTurn();
+        processor.proccessAllCommands();
+        GameState newState2 = game.generateGameState();
+        assertTrue(newState2.getHandsData()[newState2.getCurrentPlayer()].tiles.contains(G10));
+        assertEquals(1,newState2.getHandsData()[newState2.getCurrentPlayer()].tiles.size());
 
 
-}
+    }
 
 //    @Test
 //    public void PlayOneTileMoveMaker_formFail() {
