@@ -21,7 +21,7 @@ public class Meld extends Component {
   private int tableRow;
 
 
-  private Meld(Tile tile) {
+   public Meld(Tile tile) {
     this.tiles = Collections.singletonList(tile);
     this.type = MeldType.SINGLE;
     this.source = MeldSource.HAND;

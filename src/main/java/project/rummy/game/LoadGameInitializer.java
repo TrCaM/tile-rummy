@@ -8,6 +8,7 @@ import project.rummy.entities.Hand;
 import project.rummy.entities.Player;
 import project.rummy.entities.Table;
 import project.rummy.entities.TableData;
+import project.rummy.game.GameReader.ReadGameState;
 import project.rummy.strategies.Strategy1;
 import project.rummy.strategies.Strategy2;
 import project.rummy.strategies.Strategy3;

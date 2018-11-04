@@ -103,5 +103,4 @@ public class GameState extends Component {
   public void setCurrentPlayer(int currentPlayer) {
     this.currentPlayer = currentPlayer;
   }
-
 }
