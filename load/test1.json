@@ -1,0 +1,29 @@
+{
+  "": {
+    "Status": "NOT PLAYED",
+    "Tiles": [
+      "R6",
+      "R7",
+      "R8",
+      "R12",
+      "B2",
+      "B2",
+      "B3",
+      "B3",
+      "B6",
+      "G8",
+      "G9",
+      "O1",
+      "O3",
+      "O13"
+    ]
+  },
+  "CurrentPlayer": 0,
+  "Deck": 48,
+  "TileDrawn": 48,
+  "Turn": 1,
+  "Id": 0,
+  "MeldPlay": "",
+  "FreeTiles": [],
+  "MeldsOnTable": []
+}

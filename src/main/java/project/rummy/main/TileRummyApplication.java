@@ -61,10 +61,9 @@ public class TileRummyApplication extends GameApplication {
   @Override
   protected void initGame() {
     ReadGameState gm = new ReadGameState();
-    GameState temp = new GameState();
       try {
-          temp = gm.read();
-          LoadGameInitializer initializer = new LoadGameInitializer(temp);
+          this.state = gm.read();
+          LoadGameInitializer initializer = new LoadGameInitializer(this.state);
       }
       catch (IOException e) {
           System.out.println("Whoops something went wrong");
@@ -80,7 +79,8 @@ public class TileRummyApplication extends GameApplication {
     gameEntity = Entities.builder().type(GAME).build();
     gameEntity.addComponent(game);
     game.nextTurn();
-    state = temp;
+    //state = temp;
+  //  state = GameState.generateState(game);
     getGameWorld().addEntities(gameEntity);
     handView = EntitiesBuilder.buildHand(state);
     handView.setX(0);
@@ -89,6 +89,7 @@ public class TileRummyApplication extends GameApplication {
     gameInfoView = EntitiesBuilder.buildGameInfo(state);
     gameInfoView.setX(1150);
     getGameWorld().addEntities(handView, tableView, gameInfoView);
+
 
     WriteGameState writeGameState = new WriteGameState(state);
     try {

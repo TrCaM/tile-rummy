@@ -17,6 +17,8 @@
       "O12",
       "O12"
     ],
+    "Name" : "",
+    "Controller" : "human",
     "Status": "NOT PLAYED"
   },
   "MeldPlay": [[]],
@@ -38,6 +40,8 @@
       "O3",
       "O13"
     ],
+    "Name" : "",
+    "Controller" : "strategy1",
     "Status": "NOT PLAYED"
   },
   "Id": 0,
@@ -60,6 +64,8 @@
       "G13",
       "O11"
     ],
+    "Name" : "",
+    "Controller" : "strategy2",
     "Status": "NOT PLAYED"
   },
   "Player 1": {
@@ -79,7 +85,15 @@
       "O8",
       "O13"
     ],
+    "Name" : "",
+    "Controller" : "strategy3",
     "Status": "NOT PLAYED"
   },
+  "FreeTiles": [ "B12", "B8", "B9", "B13"],
+   "canEnd": false,
+  "canDraw": true,
+  "canPlay": true,
+  "TurnEnd": false,
+  "IceBroken" : false,
   "CurrentPlayer": 0
 }

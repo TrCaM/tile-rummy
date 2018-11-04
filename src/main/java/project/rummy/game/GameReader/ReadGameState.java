@@ -1,6 +1,7 @@
 package project.rummy.game.GameReader;
 
 
+import com.almasb.fxgl.entity.component.Component;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -20,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ReadGameState {
+public class ReadGameState extends Component {
 
     public GameState read() throws IOException, ParseException {
         JSONParser jsonParser = new JSONParser();
@@ -37,8 +38,11 @@ public class ReadGameState {
         state.setCurrentPlayer(simpJson.get(FileLoadTypes.CurrentPlayer.name()).getAsInt());
         state.setFreeTilesCount(simpJson.get(FileLoadTypes.Deck.name()).getAsInt());
         state.setStatuses(load.getStatuses(jsonObject));
-
+        state.setPlayerData(load.getPlayerDatas(jsonObject));
         state.setTableData(load.getTableData(jsonObject));
+
+        state.setTurnStatus(load.getTurnStatuses(jsonObject));
+
         return state;
 
     }

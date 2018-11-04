@@ -36,7 +36,7 @@ public class WriteGameState {
     }
 
     private void writeToJSON(JSONObject object) throws  IOException {
-        FileWriter writer = new FileWriter("load\\test.json");
+        FileWriter writer = new FileWriter("load\\test1.json");
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String str = object.toJSONString();
         JsonElement parser = new JsonParser().parse(str);
@@ -53,11 +53,6 @@ public class WriteGameState {
         JSONArray tiles = new JSONArray();
 
 
-/**
-        for (PlayerLoadTypes types: PlayerLoadTypes.values()) {
-            playerSample.put(FileLoadTypes.Name, gameState.getHandsData().);
-        }
-**/
         for (int i = 0; i < gameState.getPlayerData().length; i++) {
             JSONObject melds = new JSONObject();
             melds = writeAll(i);
@@ -78,6 +73,7 @@ public class WriteGameState {
         playerSample.put(FileLoadTypes.TileDrawn, gameState.getFreeTilesCount());
         playerSample.put(FileLoadTypes.Deck, gameState.getFreeTilesCount());
         playerSample.put(FileLoadTypes.MeldPlay, "");
+        playerSample.put(FileLoadTypes.FreeTiles , tiles);
 
 
         return playerSample;
@@ -103,6 +99,16 @@ public class WriteGameState {
         item.put(FileLoadTypes.Status, gameState.getPlayerStatuses()[player].toString());
 
         return item;
+    }
+
+    private JSONArray  writeFreeTiles() {
+        JSONObject item = new JSONObject();
+        JSONArray tiles = new JSONArray();
+        for (Tile tile: gameState.getTableData().freeTiles) {
+            tiles.add(tile.color().toString().charAt(0) + "" + tile.value());
+        }
+
+        return tiles;
     }
 
     private JSONArray writeTiles(int player) {
