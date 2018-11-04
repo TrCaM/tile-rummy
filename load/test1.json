@@ -18,12 +18,12 @@
       "O13"
     ]
   },
-  "CurrentPlayer": 0,
-  "Deck": 48,
-  "TileDrawn": 48,
   "Turn": 1,
-  "Id": 0,
-  "MeldPlay": "",
   "FreeTiles": [],
-  "MeldsOnTable": []
+  "MeldsOnTable": [],
+  "CurrentPlayer": 0,
+  "TileDrawn": 6,
+  "Deck": 6,
+  "Id": 0,
+  "MeldPlay": ""
 }

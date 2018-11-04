@@ -74,7 +74,6 @@ public class PlayerLoad {
 
         for (JsonElement element: jsonObject.get("Tiles").getAsJsonArray()) {
             color = getColor(element.getAsString().charAt(0));
-
             tile_num = Integer.parseInt(element.getAsString().substring(1));
             tile = new Tile(color, tile_num);
             tiles.add(tile);
@@ -140,6 +139,7 @@ public class PlayerLoad {
         playerData = new PlayerData[4];
 
         playerData[0] = new PlayerData(jsonObject.get(FileLoadTypes.Name.name()).getAsString(), jsonObject.get(FileLoadTypes.Controller.name()).getAsString());
+
         parser = new JsonParser().parse(object.get("Player 1").toString());
         jsonObject = parser.getAsJsonObject();
 

@@ -30,11 +30,7 @@ public class LoadGameInitializer implements GameInitializer {
         Controller controller;
         Player[] players = new Player[4];
         Hand hand;
-
         for(int i=0; i<4; i++){
-
-            //System.out.println(state.getHandsData()[i].tiles.toString());
-
             hand = new Hand(state.getHandsData()[i].tiles, state.getHandsData()[i].melds);
 
             if(state.getPlayerData()[i].controllerType.equals("human")){

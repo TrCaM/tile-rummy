@@ -22,7 +22,7 @@
     "Status": "NOT PLAYED"
   },
   "MeldPlay": [[]],
-  "Turn": 1,
+  "Turn": 0,
   "Player 3": {
     "Tiles": [
       "R6",
@@ -41,7 +41,7 @@
       "O13"
     ],
     "Name" : "",
-    "Controller" : "strategy1",
+    "Controller" : "strategy3",
     "Status": "NOT PLAYED"
   },
   "Id": 0,
@@ -86,10 +86,15 @@
       "O13"
     ],
     "Name" : "",
-    "Controller" : "strategy3",
+    "Controller" : "strategy1",
     "Status": "NOT PLAYED"
   },
-  "FreeTiles": [ "B12", "B8", "B9", "B13"],
+  "FreeTiles": [ "B12",
+    "B8",
+    "O9",
+    "B13",
+     "G1",
+     "G7"],
    "canEnd": false,
   "canDraw": true,
   "canPlay": true,

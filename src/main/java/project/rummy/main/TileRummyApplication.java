@@ -1,10 +1,9 @@
 package project.rummy.main;
 
-import com.almasb.fxgl.app.FXGL;
+
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.entity.view.ScrollingBackgroundView;
 import com.almasb.fxgl.settings.GameSettings;
 import com.almasb.fxgl.texture.Texture;
 import javafx.geometry.Orientation;
@@ -61,26 +60,29 @@ public class TileRummyApplication extends GameApplication {
   @Override
   protected void initGame() {
     ReadGameState gm = new ReadGameState();
-      try {
-          this.state = gm.read();
-          LoadGameInitializer initializer = new LoadGameInitializer(this.state);
-      }
-      catch (IOException e) {
-          System.out.println("Whoops something went wrong");
-      }
-      catch (ParseException e) {
-          System.out.println("Not working");
+    try {
+      this.state = gm.read();
+      //  LoadGameInitializer initializer = new LoadGameInitializer(this.state);
+    }
+    catch (IOException e) {
+      System.out.println("Whoops something went wrong");
+    }
+    catch (ParseException e) {
+      System.out.println("Not working");
 
-      }
+    }
+    GameStore gameStore1 = new GameStore(new LoadGameInitializer(state));
+    game = gameStore1.initializeGame();
 
-    game = gameStore.initializeGame();
     processor = CommandProcessor.getInstance();
     processor.setUpGame(game);
     gameEntity = Entities.builder().type(GAME).build();
     gameEntity.addComponent(game);
     game.nextTurn();
     //state = temp;
-  //  state = GameState.generateState(game);
+    state = GameState.generateState(game);
+
+    // like the views here works...
     getGameWorld().addEntities(gameEntity);
     handView = EntitiesBuilder.buildHand(state);
     handView.setX(0);
