@@ -10,13 +10,13 @@ import com.almasb.fxgl.texture.Texture;
 import javafx.geometry.Orientation;
 import javafx.scene.image.Image;
 
+import org.json.simple.parser.ParseException;
 import project.rummy.commands.CommandProcessor;
 import project.rummy.control.ActionHandler;
 import project.rummy.entities.*;
-import project.rummy.game.DefaultGameInitializer;
-import project.rummy.game.Game;
-import project.rummy.game.GameState;
-import project.rummy.game.GameStore;
+import project.rummy.game.*;
+import project.rummy.game.GameReader.ReadGameState;
+import project.rummy.game.GameReader.WriteGameState;
 
 import project.rummy.gui.views.EntitiesBuilder;
 
@@ -31,6 +31,7 @@ public class TileRummyApplication extends GameApplication {
   private GameStore gameStore;
   private CommandProcessor processor;
   private Game game;
+  private GameState state;
 
   private Entity handView;
   private Entity tableView;
@@ -59,21 +60,44 @@ public class TileRummyApplication extends GameApplication {
 
   @Override
   protected void initGame() {
+    ReadGameState gm = new ReadGameState();
+    GameState temp = new GameState();
+      try {
+          temp = gm.read();
+          LoadGameInitializer initializer = new LoadGameInitializer(temp);
+      }
+      catch (IOException e) {
+          System.out.println("Whoops something went wrong");
+      }
+      catch (ParseException e) {
+          System.out.println("Not working");
+
+      }
+
     game = gameStore.initializeGame();
     processor = CommandProcessor.getInstance();
     processor.setUpGame(game);
     gameEntity = Entities.builder().type(GAME).build();
     gameEntity.addComponent(game);
     game.nextTurn();
-    GameState gameState = GameState.generateState(game);
+    state = temp;
     getGameWorld().addEntities(gameEntity);
-    handView = EntitiesBuilder.buildHand(gameState);
+    handView = EntitiesBuilder.buildHand(state);
     handView.setX(0);
     handView.setY(740);
-    tableView = EntitiesBuilder.buildTable(gameState);
-    gameInfoView = EntitiesBuilder.buildGameInfo(gameState);
+    tableView = EntitiesBuilder.buildTable(state);
+    gameInfoView = EntitiesBuilder.buildGameInfo(state);
     gameInfoView.setX(1150);
     getGameWorld().addEntities(handView, tableView, gameInfoView);
+
+    WriteGameState writeGameState = new WriteGameState(state);
+    try {
+      writeGameState.write();
+    }
+    catch (IOException e) {
+      System.out.println("Whoops something went wrong");
+    }
+
   }
 
   @Override

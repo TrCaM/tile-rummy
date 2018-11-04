@@ -12,6 +12,7 @@ import project.rummy.control.ActionHandler;
 import project.rummy.entities.*;
 import project.rummy.events.TileChooseEvent;
 import project.rummy.game.Game;
+import project.rummy.game.GameReader.WriteGameState;
 import project.rummy.game.GameState;
 import project.rummy.main.GameFXMLLoader;
 import project.rummy.observers.Observer;
@@ -58,6 +59,7 @@ public class HandView extends Pane implements Observer {
     setUpHandlers();
     Game game = FXGL.getGameWorld().getEntitiesByType(EntityType.GAME).get(0).getComponent(Game.class);
     game.registerObserver(this);
+
   }
 
   private void setUpHandlers() {
@@ -121,6 +123,7 @@ public class HandView extends Pane implements Observer {
 
   private void onDrawClick(MouseEvent event) {
     CommandProcessor.getInstance().enqueueCommand(ActionHandler::draw);
+
   }
 
   private void loadHandView(GameState state) {
