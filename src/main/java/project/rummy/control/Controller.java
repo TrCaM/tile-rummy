@@ -1,8 +1,11 @@
 package project.rummy.control;
 
 import project.rummy.commands.Command;
+import project.rummy.commands.CommandChunks;
 import project.rummy.commands.CommandProcessor;
 import project.rummy.entities.Player;
+
+import java.util.List;
 
 public abstract class Controller {
   protected Player player;
@@ -20,8 +23,9 @@ public abstract class Controller {
    */
   public abstract void playTurn();
 
-  protected void send(Command command) {
-    processor.enqueueCommand(command);
+  protected void send(List<Command> commands, List<CommandChunks> chunksList) {
+    commands.forEach(processor::enqueueCommand);
+    chunksList.forEach(processor::enqueueChunks);
   }
 
   public Controller setPlayer(Player player) {

@@ -491,5 +491,100 @@ public class PlayOneTileMoveMakerTest {
 
 }
 
+//    @Test
+//    public void PlayOneTileMoveMaker_formFail() {
+//        CommandProcessor processor = CommandProcessor.getInstance();
+//        state = new GameState();
+//
+//        List<List<Tile>> tileList = new ArrayList<>();
+//        List<Tile> freeTiles = new ArrayList<>();
+//        List<Meld> tableMelds = new ArrayList<>();
+//
+//        // Creating  list of tiles, free tiles and players
+//        List<Tile> list1 = new ArrayList<>();
+//        list1.addAll(Arrays.asList(R9, O1));
+//        tileList.add(list1);
+//
+//        List<Tile> list2 = new ArrayList<>();
+//        list2.addAll(Arrays.asList(O1, B8_2));
+//        tileList.add(list2);
+//
+//        List<Tile> list3 = new ArrayList<>();
+//        list3.addAll(Arrays.asList(O9, O8));
+//        tileList.add(list3);
+//
+//        List<Tile> list4 = new ArrayList<>();
+//        list4.addAll(Arrays.asList(O8, R2));
+//        tileList.add(list4);
+//
+//        handsData = new HandData[4];
+//        playerData = new PlayerData[4];
+//
+//        statuses = new PlayerStatus[4];
+//        for (int i = 0; i < 4; i++) {
+//            statuses[i] = PlayerStatus.ICE_BROKEN;
+//        }
+//
+//        for (int i = 0; i < 4; i++) {
+//            Hand hand = new Hand(tileList.get(i));
+//            handsData[i] = new HandData(hand);
+//            playerData[i] = new PlayerData("player" + i, "strategy1");
+//        }
+//
+////        tableMelds.add(Meld.createMeld(R1, R2, R3, R4, R5, R6));
+////        tableMelds.add(Meld.createMeld(B4, B5, B6, B7, B8, B9, B10));
+//  //      tableMelds.add(Meld.createMeld(O3, O4, O5, O6));
+//        tableMelds.add(Meld.createMeld(R5, O5, G5, B5));
+//
+//
+//
+//        //Setting up deck
+//        freeTiles.addAll(Arrays.asList(R5, R6, R7, R8, R9, R10));
+//
+//        //Setting up table
+//        Table table = new Table(freeTiles);
+//        for (Meld m : tableMelds) {
+//            table.addMeld(m);
+//        }
+//
+//
+//        //setup data
+//        turnNumber = 12;
+//        freeTilesCount = freeTiles.size();
+//        tableData = new TableData(table);
+//        currentPlayer = 3;
+//
+//        state.setTurnNumber(turnNumber);
+//        state.setFreeTilesCount(freeTiles.size());
+//        state.setTableData(table.toTableData());
+//        state.setHandsData(handsData);
+//        state.setPlayerData(playerData);
+//        state.setStatuses(statuses);
+//        state.setCurrentPlayer(currentPlayer);
+//
+//        GameStore gameStore = new GameStore(new LoadGameInitializer(state));
+//        Game game = gameStore.initializeGame();
+//
+//        processor.setUpGame(game);
+//
+//        //R9, O1
+//        game.nextTurn();
+//        processor.proccessAllCommands();
+//        GameState newState = game.generateGameState();
+//        assertEquals(3,newState.getHandsData()[newState.getCurrentPlayer()].tiles.size());
+//        assertTrue(newState.getHandsData()[newState.getCurrentPlayer()].tiles.contains(R9));
+//
+////        //O1, B8_2
+////        game.nextTurn();
+////        processor.proccessAllCommands();
+////        GameState newState2 = game.generateGameState();
+////        assertTrue(newState2.getHandsData()[newState2.getCurrentPlayer()].tiles.contains(O1));
+////        assertEquals(1,newState2.getHandsData()[newState2.getCurrentPlayer()].tiles.size());
+//
+//
+//    }
+
+
+
 
 }

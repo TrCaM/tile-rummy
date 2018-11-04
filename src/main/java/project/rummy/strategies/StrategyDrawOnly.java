@@ -1,6 +1,7 @@
 package project.rummy.strategies;
 
 import project.rummy.commands.Command;
+import project.rummy.commands.PlayDirection;
 import project.rummy.game.Game;
 import project.rummy.game.GameState;
 import project.rummy.observers.Observer;
@@ -16,18 +17,18 @@ public class StrategyDrawOnly implements Strategy, Observer {
     }
 
     @Override
-    public List<Command> iceBreak() {
+    public PlayDirection iceBreak() {
 
         List<Command> commands = new ArrayList<>();
         commands.add(handler -> handler.draw());
-        return commands;
+        return new PlayDirection(commands);
     }
 
     @Override
-    public List<Command> performFullTurn() {
+    public PlayDirection performFullTurn() {
         List<Command> commands = new ArrayList<>();
         commands.add(handler -> handler.draw());
-        return commands;
+        return new PlayDirection(commands);
     }
 
     @Override

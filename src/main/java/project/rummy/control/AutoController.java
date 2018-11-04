@@ -1,6 +1,7 @@
 package project.rummy.control;
 
 import project.rummy.commands.Command;
+import project.rummy.commands.PlayDirection;
 import project.rummy.entities.Player;
 import project.rummy.entities.PlayerStatus;
 import project.rummy.strategies.Strategy;
@@ -30,9 +31,9 @@ public class AutoController extends Controller {
 
   @Override
   public void playTurn() {
-    List<Command> commands =
+    PlayDirection commands =
         player.status() == PlayerStatus.START ? strategy.iceBreak() : strategy.performFullTurn();
 
-    commands.forEach(this::send);
+    send(commands.getCommands(), commands.getChunks());
   }
 }

@@ -2,6 +2,8 @@ package project.rummy.strategies;
 
 import project.rummy.behaviors.*;
 import project.rummy.commands.Command;
+import project.rummy.commands.CommandChunks;
+import project.rummy.commands.PlayDirection;
 import project.rummy.game.Game;
 import project.rummy.game.GameState;
 import project.rummy.observers.Observer;
@@ -17,45 +19,36 @@ import java.util.List;
  */
 public class Strategy1 implements Strategy, Observer {
   private GameState state;
-
   public Strategy1(Game game) {
     game.registerObserver(this);
   }
 
   @Override
-  public List<Command> iceBreak() {
+  public PlayDirection iceBreak() {
     ComputerMoveMaker move = new FastIceBreakingMoveMaker();
-    return move.calculateMove(state);
+    return new PlayDirection(move.calculateMove(state));
   }
 
   @Override
-  public List<Command> performFullTurn() {
-    List<Command> commands = new ArrayList<>();
-    List<Command> recievedCmd;
-    boolean mustDraw = true;
+  public PlayDirection performFullTurn() {
+    PlayDirection playDirection = new PlayDirection();
 
     ComputerMoveMaker playMeld = new PlayAllMeldsMoveMaker();
-
-    recievedCmd = playMeld.calculateMove(state);
-    if(!recievedCmd.isEmpty()){ commands.addAll(recievedCmd);}
-
-//    ComputerMoveMaker playTile = new FastTilesOnlyMoveMaker();
-////
-////    recievedCmd = playTile.calculateMove(state);
-////    while(!recievedCmd.isEmpty()){
-////      mustDraw = false;
-////      commands.addAll(recievedCmd);
-////      recievedCmd = playTile.calculateMove(state);
-////    }
     ComputerMoveMaker playTile = new PlayOneTileMoveMaker();
-    recievedCmd = playTile.calculateMove(state);
-    if (!recievedCmd.isEmpty()){
-      commands.addAll(recievedCmd);
-      mustDraw = false;
-    }
-    if(mustDraw){ commands.add(handler -> handler.draw()); }
 
-    return commands;
+    playDirection.addDirection((gameState, handler) -> playMeld.calculateMove(gameState));
+    playDirection.addDirection((gameState, handler) -> playTile.calculateMove(gameState));
+    playDirection.addDirection((gameState, handler)-> {
+      List<Command> commands = new ArrayList<>();
+      commands.add(handle -> {
+        if (handle.getTurnStatus().canDraw) {
+          handle.draw();
+        }
+      });
+      return commands;
+    });
+
+    return playDirection;
   }
 
   @Override

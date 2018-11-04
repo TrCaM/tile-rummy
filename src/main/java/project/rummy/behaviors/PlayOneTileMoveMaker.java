@@ -25,7 +25,9 @@ public class PlayOneTileMoveMaker implements ComputerMoveMaker {
         List<Tile> handTiles = state.getHandsData()[state.getCurrentPlayer()].tiles;
 
         int meldid = TableMeldSeeker.findDirectMeld(tile.value(), tile.color(), tableMelds);
+        //System.out.println(Meld.getMeldFromId(meldid, state.getTableData().melds));
         if(meldid != 0){
+            System.out.println("add" + tile.toString() +" to " + Meld.getMeldFromId(meldid, state.getTableData().melds).tiles().toString());
             Meld m = Meld.getMeldFromId(meldid, tableMelds);
             commands.add(handler ->{
                 handler.takeTableMeld(tableMelds.indexOf(m));

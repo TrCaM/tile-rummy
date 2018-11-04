@@ -61,6 +61,10 @@ public class ActionHandler {
     return status;
   }
 
+  public void forceUpdate(){
+    Game game = FXGL.getGameWorld().getEntitiesByType(EntityType.GAME).get(0).getComponent(Game.class);
+    game.update(getTurnStatus());
+  }
   public void backUpTurn() {
     this.backUpHand = hand.toHandData();
     this.backUpTable = table.toTableData();
