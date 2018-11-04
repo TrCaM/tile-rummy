@@ -95,7 +95,7 @@ public class HandView extends Pane implements Observer {
         List<Integer> meldIds = manipulationTable.split(key, splitAll);
         value.forEach(index -> combineMelds.add(meldIds.get(index)));
       });
-      Stream.of(handTileIndexes).forEach(handler::formMeld);
+      handler.formMeld(handTileIndexes);
       handler
           .playAllMeldFromHand()
           .forEach(meld -> combineMelds.add(meld.getId()));
@@ -153,5 +153,6 @@ public class HandView extends Pane implements Observer {
     this.tileRack.setDisable(!turnStatus.canPlay);
     this.meldRack.setDisable(!turnStatus.canPlay);
     this.endTurnButton.setDisable(!turnStatus.canEnd);
+    this.undoButton.setDisable(status.getCurrentPlayer() != 0);
   }
 }
