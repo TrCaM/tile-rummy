@@ -119,10 +119,11 @@ public class PlayOneTileMoveMaker implements ComputerMoveMaker {
         }
 
         Map<Meld, Integer> map3 = CombinationSeeker.formRunByDetaching(tile.value(), tile.color(), tableMelds);
-        for (Meld m : map3.keySet()) {
-            System.out.println(m.tiles().toString());
-        }
+
         if(map3.size() >= 2){
+            for(Meld k: map3.keySet()){
+                System.out.println("****" + tile.toString() +" to " + k.tiles().toString());
+            }
             commands.add(handler ->{
                 handler.takeHandTile(handTiles.indexOf(tile));
                 ManipulationTable manip = handler.getManipulationTable();
