@@ -145,13 +145,28 @@ public class PlayerLoad {
     }
 
     public TableData getTableData(JSONObject object) {
-        JsonElement parser = new JsonParser().parse(object.get("HUMAN").toString());
-        JsonObject jsonObject = parser.getAsJsonObject();
+        JsonElement parser = new JsonParser().parse(object.get(FileLoadTypes.MeldsOnTable.name()).toString());
+        JsonArray jsonArray = parser.getAsJsonArray();
         TableData data = new TableData();
+        Color color;
+        int tile_num;
+        Tile tile;
+        Meld meld;
+
+        for (JsonElement element : jsonArray){
+            color = getColor(element.getAsString().charAt(0));
+            tile_num = Integer.parseInt(element.getAsString().substring(1));
+            tile = new Tile(color, tile_num);
+            meld = new Meld(tile);
+            data.melds.add(meld);
+        }
 
 
-
-        return null;
+        return data;
     }
+
+    public  void getMeldOnTable() {}
+
+
 
 }

@@ -38,7 +38,7 @@ public class ReadGameState {
         state.setFreeTilesCount(simpJson.get(FileLoadTypes.Deck.name()).getAsInt());
         state.setStatuses(load.getStatuses(jsonObject));
 
-        state.setTableData(new TableData());
+        state.setTableData(load.getTableData(jsonObject));
         return state;
 
     }

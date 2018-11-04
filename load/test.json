@@ -19,7 +19,7 @@
     ],
     "Status": "NOT PLAYED"
   },
-  "MeldPlay": "",
+  "MeldPlay": [[]],
   "Turn": 1,
   "Player 3": {
     "Tiles": [
