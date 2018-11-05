@@ -77,25 +77,20 @@ public class SmartStateAnalyzerTest {
   public void setup() {
    state = new GameState();
     List<List<Tile>> tileList = new ArrayList<>();
-    List<Tile> freeTiles = new ArrayList<>();
     List<Player> players = new ArrayList<>();
     List<Meld> tableMelds = new ArrayList<>();
 
     // Creating  list of tiles, free tiles and players
-    List<Tile> list1 = new ArrayList<>();
-    list1.addAll(Arrays.asList(B10, G5, O1, B8, B9, O7, G1, B1, G9, O5));
+    List<Tile> list1 = new ArrayList<>(Arrays.asList(G5, O1, B8, B9, O7, G1, B1, G9, G7, O5));
     tileList.add(list1);
 
-    List<Tile> list2 = new ArrayList<>();
-    list2.addAll(Arrays.asList(B3, G7, B7, R7, G3, O10));
+    List<Tile> list2 = new ArrayList<>(Arrays.asList(B3, G7, B7, R7, G3, O10));
     tileList.add(list2);
 
-    List<Tile> list3 = new ArrayList<>();
-    list3.addAll(Arrays.asList(G1, G2, R1, R9, G8, O9));
+    List<Tile> list3 = new ArrayList<>(Arrays.asList(G1, G2, R1, R9, G8, O9));
     tileList.add(list3);
 
-    List<Tile> list4 = new ArrayList<>();
-    list4.addAll(Arrays.asList(O8, G5, G9, B1, B2, B5, R2, R3));
+    List<Tile> list4 = new ArrayList<>(Arrays.asList(O8, G5, G9, B1, B2, B5, R2, R3));
     tileList.add(list4);
 
     handsData = new HandData[4];
@@ -124,7 +119,7 @@ public class SmartStateAnalyzerTest {
 
 
     //Setting up deck
-    freeTiles.addAll(Arrays.asList(R5, R6, R7, R8, R9, R10));
+    List<Tile> freeTiles = new ArrayList<>(Arrays.asList(R5, R6, R7, R8, R9, R10));
 
     //Setting up table
     Table table = new Table(freeTiles);
@@ -163,9 +158,18 @@ public class SmartStateAnalyzerTest {
 
   @Test
   public void shouldWaitForSet() {
-    assertFalse(smartStateAnalyzer.shouldWaitForSet(O7));
+    assertTrue(smartStateAnalyzer.shouldWaitForSet(O7));
     assertTrue(smartStateAnalyzer.shouldWaitForSet(G9));
     assertTrue(smartStateAnalyzer.shouldWaitForSet(G1));
     assertFalse(smartStateAnalyzer.shouldWaitForSet(O5));
+  }
+
+  @Test
+  public void shouldWaitForRun() {
+    assertFalse(smartStateAnalyzer.shouldWaitForRun(O7));
+    assertTrue(smartStateAnalyzer.shouldWaitForRun(G9));
+    assertFalse(smartStateAnalyzer.shouldWaitForRun(B8));
+    assertFalse(smartStateAnalyzer.shouldWaitForRun(B9));
+    assertFalse(smartStateAnalyzer.shouldWaitForRun(O5));
   }
 }
