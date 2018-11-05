@@ -12,7 +12,11 @@
   "TileDrawn": 48,
   "HUMAN": {
     "Tiles": [
+<<<<<<< HEAD:load/TestCase1.json
       "R6", "R7", "R8", "R9", "B3" ,"B7", "B10", "G6", "G7", "G12", "O3", "O5", "O8", "O10"
+=======
+      "B3" ,"B7", "B10", "G6", "G7", "G12", "O3", "O5", "O7", "O10"
+>>>>>>> game:load/TestCase4a1.json
     ],
     "Name" : "",
     "Controller" : "human",
