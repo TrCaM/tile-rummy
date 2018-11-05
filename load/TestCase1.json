@@ -3,11 +3,7 @@
   "Turn": 0,
   "CurrentPlayer": 0,
 
-  "MeldsOnTable": [{
-    "Id" : 0,
-    "Meld" : []
-    }
-  ],
+  "MeldsOnTable": [],
 
   "HUMAN": {
     "Tiles": [

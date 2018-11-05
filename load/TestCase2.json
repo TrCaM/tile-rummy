@@ -3,11 +3,7 @@
   "Turn": 0,
   "CurrentPlayer": 0,
 
-  "MeldsOnTable": [{
-    "Id" : 0,
-    "Meld" : []
-    }
-  ],
+  "MeldsOnTable": [],
 
   "HUMAN": {
     "Tiles": [
@@ -17,7 +13,6 @@
     "Controller" : "human",
     "Status": "NOT PLAYED"
   },
-  "MeldPlay":
   "Player 3": {
     "Tiles": [
       "R8", "R12", "B1", "B4", "B5", "B8", "G1", "G4", "G5", "G8", "G12", "O1", "O2", "O12"
