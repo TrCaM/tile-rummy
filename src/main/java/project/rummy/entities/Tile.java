@@ -38,6 +38,6 @@ public class Tile extends Component {
   }
   @Override
   public String toString() {
-    return String.format("%s %d", color.toString(), value);
+    return String.format("%s%d", color.toString().charAt(0), value);
   }
 }

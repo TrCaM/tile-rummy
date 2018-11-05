@@ -72,8 +72,9 @@ public class TileRummyApplication extends GameApplication {
 
     }
     GameStore gameStore1 = new GameStore(new LoadGameInitializer(state));
-//    game = gameStore1.initializeGame();
-    game = gameStore.initializeGame();
+    game = gameStore1.initializeGame();
+   // game = gameStore.initializeGame();
+
 
     processor = CommandProcessor.getInstance();
     processor.setUpGame(game);
@@ -118,6 +119,5 @@ public class TileRummyApplication extends GameApplication {
   public static void main(String[] args) {
     launch(args);
   }
-
 
 }
