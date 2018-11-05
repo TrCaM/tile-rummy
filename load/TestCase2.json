@@ -11,13 +11,13 @@
 
   "HUMAN": {
     "Tiles": [
-      "R6" ,"R7", "R8", "R9", "B3", "B7", "B10", "G6", "G7", "G12", "O3", "O5", "O8", "O10"
+      "R1" ,"R2", "R3", "R4", "B5", "R6", "R7", "R8", "R9", "R10", "R11", "B11", "G11", "O11"
     ],
     "Name" : "Human",
     "Controller" : "human",
     "Status": "NOT PLAYED"
   },
-  "MeldPlay": [["R6", "R7", "R8", "R9"]],
+  "MeldPlay":
   "Player 3": {
     "Tiles": [
       "R8", "R12", "B1", "B4", "B5", "B8", "G1", "G4", "G5", "G8", "G12", "O1", "O2", "O12"
