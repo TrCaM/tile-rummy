@@ -19,7 +19,7 @@ public class DefaultGameInitializer implements GameInitializer {
         new ManualController(),
         new AutoController(game, new Strategy1()),
         new AutoController(game, new Strategy2()),
-        new AutoController(game, new Strategy2())};
+        new AutoController(game, new Strategy3())};
     Player[] players = new Player[4];
     players[0] = new Player("The HUMAN", controllers[0], 0);
     for (int i=1; i<4; i++) {

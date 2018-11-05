@@ -39,7 +39,7 @@ public class LoadGameInitializer implements GameInitializer {
             }else if("strategy2".equals(state.getPlayerData()[i].controllerType)) {
                 controller = new AutoController(game, new Strategy2());
             }else{
-                controller = new AutoController(game, new Strategy3(game));
+                controller = new AutoController(game, new Strategy3());
             }
 
             players[i] = new Player(state.getPlayerData()[i].name, controller, hand, state.getPlayerStatuses()[i], i);
