@@ -5,25 +5,15 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.settings.GameSettings;
-import com.almasb.fxgl.texture.Texture;
-import javafx.geometry.Orientation;
-import javafx.scene.image.Image;
-
 import org.json.simple.parser.ParseException;
 import project.rummy.commands.CommandProcessor;
-import project.rummy.control.ActionHandler;
-import project.rummy.entities.*;
 import project.rummy.game.*;
 import project.rummy.game.GameReader.ReadGameState;
 import project.rummy.game.GameReader.WriteGameState;
-
 import project.rummy.gui.views.EntitiesBuilder;
 
 import java.io.IOException;
-import java.util.Arrays;
 
-import static project.rummy.entities.PlayerStatus.ICE_BROKEN;
-import static project.rummy.entities.PlayerStatus.START;
 import static project.rummy.gui.views.EntityType.GAME;
 
 public class TileRummyApplication extends GameApplication {
@@ -31,11 +21,6 @@ public class TileRummyApplication extends GameApplication {
   private CommandProcessor processor;
   private Game game;
   private GameState state;
-
-  private Entity handView;
-  private Entity tableView;
-  private Entity gameInfoView;
-  private Entity gameEntity;
 
   public TileRummyApplication() {
     super();
@@ -52,9 +37,6 @@ public class TileRummyApplication extends GameApplication {
     settings.setHeight(1000);
     settings.setTitle("Tile Rummy");
     settings.setVersion("0.1");
-
-
-
   }
 
   @Override
@@ -77,7 +59,7 @@ public class TileRummyApplication extends GameApplication {
 
     processor = CommandProcessor.getInstance();
     processor.setUpGame(game);
-    gameEntity = Entities.builder().type(GAME).build();
+    Entity gameEntity = Entities.builder().type(GAME).build();
     gameEntity.addComponent(game);
     game.nextTurn();
     //state = temp;
@@ -85,11 +67,11 @@ public class TileRummyApplication extends GameApplication {
 
     // like the views here works...
     getGameWorld().addEntities(gameEntity);
-    handView = EntitiesBuilder.buildHand(state);
+    Entity handView = EntitiesBuilder.buildHand(state);
     handView.setX(0);
     handView.setY(740);
-    tableView = EntitiesBuilder.buildTable(state);
-    gameInfoView = EntitiesBuilder.buildGameInfo(state);
+    Entity tableView = EntitiesBuilder.buildTable(state);
+    Entity gameInfoView = EntitiesBuilder.buildGameInfo(state);
     gameInfoView.setX(1150);
     getGameWorld().addEntities(handView, tableView, gameInfoView);
 
