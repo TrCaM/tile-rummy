@@ -36,7 +36,13 @@ public class GameState extends Component {
         .map(Player::toPlayerData).toArray(PlayerData[]::new);
     gameState.turnStatus = game.turnStatus;
     gameState.isGameEnd = game.isGameEnd();
+    for(int i = 0; i < 4; i++){
+      System.out.println("player" + gameState.playerData[i].name + gameState.handsData[i].tiles);
+    }
 
+    for(Meld m : gameState.tableData.melds){
+      System.out.println(m.tiles().toString());
+    }
     return gameState;
   }
 

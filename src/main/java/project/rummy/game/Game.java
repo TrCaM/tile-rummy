@@ -153,13 +153,18 @@ public class Game extends Component implements Observable {
   }
 
   public void update(TurnStatus turnStatus) {
+    int winner = getWinner();
+    if (winner != -1) {
+      this.isGameEnd = true;
+      this.winnerName = players[winner].getName();
+      notifyObservers();
+    }
     this.turnStatus = turnStatus;
     if (turnStatus.goNextTurn) {
       PlayerStatus status = turnStatus.isIceBroken ? PlayerStatus.ICE_BROKEN : PlayerStatus.START;
       players[currentPlayer].setStatus(status);
       nextTurn();
     } else if (turnStatus.isTurnEnd) {
-      int winner = getWinner();
       if (winner != -1) {
         this.isGameEnd = true;
         this.winnerName = players[winner].getName();
