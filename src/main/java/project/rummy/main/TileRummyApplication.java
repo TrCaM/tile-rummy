@@ -94,6 +94,7 @@ public class TileRummyApplication extends GameApplication {
       this.getNotificationService().pushNotification(
           String.format("Player %s has won", game.getWinnerName()));
       getGameWorld().clear();
+      CommandProcessor.getInstance().reset();
 //      exit();
     }
   }

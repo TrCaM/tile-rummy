@@ -4,10 +4,7 @@
   "Turn": 0,
   "CurrentPlayer": 0,
   "Id": 0,
-  "MeldsOnTable": [{
-    "Id": 0,
-    "Meld" : []
-      }
+  "MeldsOnTable": [
     ],
   "TileDrawn": "",
   "MeldPlay": ["B11", "G11", "O11"],
