@@ -172,6 +172,11 @@ public class ActionHandler {
       throw new IllegalArgumentException("Invalid meld index");
     }
   }
+  public void takeTableMeld(Meld m) {
+    takeTableMeld(table.toTableData().melds.indexOf(m));
+  }
+
+
 
   public void takeHandTile(int tileIndex) {
     //TODO: Add a logging infomation here
@@ -184,6 +189,12 @@ public class ActionHandler {
       throw new IllegalArgumentException("Invalid tile index");
     }
   }
+
+  public void takeHandTile(Tile t) {
+    int index = hand.getTiles().indexOf(t);
+    takeHandTile(index);
+  }
+
 
   public void stash() {
     CommandProcessor processor = CommandProcessor.getInstance();

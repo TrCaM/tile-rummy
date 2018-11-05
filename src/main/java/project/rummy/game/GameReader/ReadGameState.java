@@ -18,7 +18,7 @@ public class ReadGameState extends Component {
     public GameState read() throws IOException, ParseException {
         JSONParser jsonParser = new JSONParser();
 
-        Object object = jsonParser.parse(new FileReader("load\\TestCase14a.json"));
+        Object object = jsonParser.parse(new FileReader("load/TestCase16.json"));
         JSONObject jsonObject = (JSONObject) object;
         JsonElement parse = new JsonParser().parse(jsonObject.toJSONString());
         JsonObject simpJson = parse.getAsJsonObject();

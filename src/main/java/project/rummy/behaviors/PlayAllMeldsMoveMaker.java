@@ -16,7 +16,10 @@ public class PlayAllMeldsMoveMaker implements ComputerMoveMaker {
 
     @Override
     public List<Command> calculateMove(GameState state) {
-
+        if (state.getHandsData()[state.getCurrentPlayer()].tiles.size() == 0) {
+            List<Command> pushCommands = new ArrayList<>();
+            return pushCommands;
+        }
         LinkedList<Command> commands = new LinkedList<>();
 
         List<Tile> handTiles = new ArrayList<>(state.getHandsData()[state.getCurrentPlayer()].tiles);

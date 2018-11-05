@@ -43,6 +43,31 @@ public class CombinationSeeker {
         return map;
     }
 
+
+    public static Map<Meld, Integer> formSet2(Tile t1, Tile t2, List<Meld> tableMelds){
+        List<Meld> copyMelds = new ArrayList<>(tableMelds);
+
+        //key is meld and value is tile index
+        Map<Meld, Integer> map = new HashMap<>();
+
+        for(Color c: Color.values()){
+            //boolean check = t2==null ? true : c!=t2.color();
+            if(c != t1.color() && c!=t2.color()){
+                int meldid = TableMeldSeeker.findDetachableIdenticalTile(t1.value(), c, copyMelds);
+                if(meldid != 0){
+                    Meld m = Meld.getMeldFromId(meldid, copyMelds);
+                    for(int i=0; i<m.tiles().size(); i++){
+                        if(m.tiles().get(i).value()==t1.value() && m.tiles().get(i).color()==c){
+                            map.put(m, i);
+                            copyMelds.remove(copyMelds.indexOf(m));
+                        }
+                    }
+                }
+            }
+        }
+        return map;
+    }
+
     /**
      *
      * @param tileValue

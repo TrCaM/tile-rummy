@@ -34,11 +34,15 @@ public class StrategyAnalyzingTable implements Strategy {
 
   @Override
   public PlayDirection performFullTurn(GameState state) {
+    List<Command> pushCommands = new ArrayList<>();
+    if (state.getHandsData()[state.getCurrentPlayer()].tiles.size() == 0) {
+      pushCommands.add(ActionHandler::endTurn);
+      return new PlayDirection(pushCommands);
+    }
     //find list of tiles that cannot form melds
-    List<Tile> handTiles = state.getHandsData()[state.getCurrentPlayer()].tiles;
+    List<Tile> handTiles = new ArrayList<>(state.getHandsData()[state.getCurrentPlayer()].tiles);
     List<Meld> allMelds = HandMeldSeeker.findBestMelds(handTiles);
     allMelds.forEach(meld -> meld.tiles().forEach(handTiles::remove));
-    List<Command> pushCommands = new ArrayList<>();
     if (handTiles.isEmpty() && !allMelds.isEmpty()) {
       pushCommands.addAll(playAllMelds.calculateMove(state));
     } else {
