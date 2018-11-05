@@ -2,7 +2,6 @@ package project.rummy.game.GameReader;
 
 
 import com.almasb.fxgl.entity.component.Component;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -18,7 +17,7 @@ public class ReadGameState extends Component {
 
     public GameState read() throws IOException, ParseException {
         JSONParser jsonParser = new JSONParser();
-        Object object = jsonParser.parse(new FileReader("load/strat2-savingTiles.json"));
+        Object object = jsonParser.parse(new FileReader("load/strategy.json"));
         JSONObject jsonObject = (JSONObject) object;
         JsonElement parse = new JsonParser().parse(jsonObject.toJSONString());
         JsonObject simpJson = parse.getAsJsonObject();

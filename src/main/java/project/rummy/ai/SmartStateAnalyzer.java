@@ -11,17 +11,11 @@ import project.rummy.observers.Observer;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SmartStateAnalyzer implements Observer {
+public class SmartStateAnalyzer {
   private GameState state;
 
   private int[] tableTileCounts;
   private int[] handTileCounts;
-
-  public SmartStateAnalyzer(Game game) {
-    game.registerObserver(this);
-    tableTileCounts = new int[52];
-    handTileCounts = new int[52];
-  }
 
   public SmartStateAnalyzer(GameState state) {
     tableTileCounts = new int[52];
@@ -53,7 +47,10 @@ public class SmartStateAnalyzer implements Observer {
   }
 
   public boolean shouldPlay(Tile tile) {
-    return false;
+    return !(isPartOfRun(tile)
+        || isPartOfSet(tile)
+        || shouldWaitForSet(tile)
+        || shouldWaitForRun(tile));
   }
 
   public boolean isPartOfRun(Tile tile) {
@@ -109,15 +106,12 @@ public class SmartStateAnalyzer implements Observer {
     if (handTileCounts[pos-1] > 0) {
       return tableTileCounts[pos+1] + tableTileCounts[pos-2] <= 2;
     }
-
     if (handTileCounts[pos+2] > 0) {
-      return tableTileCounts[pos+1] + tableTileCounts[pos-2] <= 2;
+      return tableTileCounts[pos+1] <= 1;
+    }
+    if (handTileCounts[pos-2] > 0) {
+      return tableTileCounts[pos-1] <= 1;
     }
     return false;
-  }
-
-  @Override
-  public void update(GameState status) {
-    this.state = status;
   }
 }

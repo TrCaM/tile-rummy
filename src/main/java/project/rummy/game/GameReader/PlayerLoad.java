@@ -188,8 +188,10 @@ public class PlayerLoad {
 
 
             }
-            meld = new Meld(tiles, MeldType.RUN);
-            data.melds.add(meld);
+            if (tiles.size() > 0) {
+                meld = new Meld(tiles, MeldType.RUN);
+                data.melds.add(meld);
+            }
         }
 
         System.out.println(data.melds.size());

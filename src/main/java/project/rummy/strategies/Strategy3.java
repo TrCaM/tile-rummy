@@ -22,22 +22,28 @@ import java.util.stream.IntStream;
 public class Strategy3 implements Strategy {
   private Strategy strategy1;
   private Strategy strategy2;
+  private Strategy activeStrategy;
+  private int turn;
 
   public Strategy3() {
     strategy1 = new Strategy1();
+    activeStrategy = strategy1;
     strategy2 = new Strategy2();
   }
 
   @Override
   public PlayDirection iceBreak(GameState state) {
+    this.turn = state.getTurnNumber();
     return strategy1.iceBreak(state);
   }
 
   @Override
   public PlayDirection performFullTurn(GameState gameState) {
-    return shouldPlayAggressive(gameState)
-        ? strategy1.performFullTurn(gameState)
-        : strategy2.performFullTurn(gameState);
+    if (gameState.getTurnNumber() > turn) {
+      activeStrategy = shouldPlayAggressive(gameState) ? strategy1 : strategy2;
+      this.turn = gameState.getTurnNumber();
+    }
+    return  activeStrategy.performFullTurn(gameState);
   }
 
   private boolean shouldPlayAggressive(GameState gameState) {
@@ -47,4 +53,3 @@ public class Strategy3 implements Strategy {
         .findAny().isPresent();
   }
 }
-
