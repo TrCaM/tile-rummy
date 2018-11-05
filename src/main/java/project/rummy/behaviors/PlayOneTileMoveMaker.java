@@ -34,7 +34,7 @@ public class PlayOneTileMoveMaker implements ComputerMoveMaker {
     public List<Command> tryAddDirectLy(Tile tile, GameState state) {
         List<Command> commands = new ArrayList<>();
         List<Meld> tableMelds = state.getTableData().melds;
-        List<Tile> handTiles = state.getHandsData()[state.getCurrentPlayer()].tiles;
+        //List<Tile> handTiles = state.getHandsData()[state.getCurrentPlayer()].tiles;
 
         int meldid = TableMeldSeeker.findDirectMeld(tile.value(), tile.color(), tableMelds);
         //System.out.println(Meld.getMeldFromId(meldid, state.getTableData().melds));
@@ -184,6 +184,76 @@ public class PlayOneTileMoveMaker implements ComputerMoveMaker {
         return commands;
     }
 
+
+    /**
+     *
+     */
+    public List<Command> tryFormSet2(Tile tile, GameState state){
+        List<Command> commands = new ArrayList<>();
+        List<Meld> tableMelds = new ArrayList<>(state.getTableData().melds);
+        List<Tile> unformedTiles = HandMeldSeeker.findRemainingTiles(state.getHandsData()[state.getCurrentPlayer()].tiles);
+
+        List<Tile> goodTiles = new ArrayList<>();
+        goodTiles.add(tile);
+
+
+        for(Tile t: unformedTiles){
+            if(t.value()==tile.value() && t.color()!=tile.color()){
+                goodTiles.add(t);
+            }
+        }
+
+        if(goodTiles.size()==1){ return tryFormSet(tile, state); }
+
+        Map<Meld,Integer> map = CombinationSeeker.formSet2(goodTiles.get(0), goodTiles.get(1), tableMelds);
+
+        if(goodTiles.size() + map.size() >= 3){
+            //console
+            System.out.print(state.getPlayerData()[state.getCurrentPlayer()].name + " uses ");
+            for(Tile t1: goodTiles){ System.out.print( "[" + t1.toString() + "] "); }
+            System.out.print("to form set with ");
+            for(Meld k: map.keySet()){ System.out.print(k.tiles().toString()); }
+            System.out.println();
+
+            commands.add(handler ->{
+                ManipulationTable manip = handler.getManipulationTable();
+
+                handler.takeHandTile(goodTiles.get(0));
+                handler.takeHandTile(goodTiles.get(1));
+
+                manip.combineMelds(0, 1);
+
+                for (Meld m : map.keySet()){
+                    handler.takeTableMeld(m);
+                    //handler.takeTableMeld(tableMelds.indexOf(m));
+                    int indexOnManip = manip.getMelds().size()-1;
+                    if(m.type() == MeldType.SET) {
+                        manip.detach(manip.getMelds().indexOf(m), map.get(m));
+                        //ids.add(manip.getMelds().get(manip.getMelds().size()-1).getId());
+                        manip.combineMelds(indexOnManip - 1, indexOnManip + 1);
+                    }else{
+                        if(map.get(m) == 0){
+                            manip.split(manip.getMelds().indexOf(m),1);
+                            //ids.add(manip.getMelds().get(manip.getMelds().size()-2).getId());
+                            manip.combineMelds(indexOnManip , indexOnManip - 1);
+                        }else{
+                            manip.split(manip.getMelds().indexOf(m),map.get(m));
+                            //ids.add(manip.getMelds().get(manip.getMelds().size()-1).getId());
+                            manip.combineMelds(indexOnManip-1 , indexOnManip + 1);
+                        }
+                    }
+                    tableMelds.remove(tableMelds.indexOf(m));
+                }
+               // manip.combineMelds(ids);
+                handler.submit();
+            });
+        }
+
+        return commands;
+    }
+
+
+
     /**
      *play a first playable tile from hand
      */
@@ -203,7 +273,7 @@ public class PlayOneTileMoveMaker implements ComputerMoveMaker {
         for(Tile t: handTiles){
             if (analyzer.shouldPlay(t)) {
                 if(!(commands = tryAddDirectLy(t,state)).isEmpty()){ break; }
-                if(!(commands = tryFormSet(t,state)).isEmpty()){ break; }
+                if(!(commands = tryFormSet2(t,state)).isEmpty()){ break; }
                 if(!(commands = tryFormRun(t,state)).isEmpty()){ break; }
             }
         }
