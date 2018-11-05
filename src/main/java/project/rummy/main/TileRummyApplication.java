@@ -55,7 +55,7 @@ public class TileRummyApplication extends GameApplication {
     }
     GameStore gameStore1 = new GameStore(new LoadGameInitializer(state));
     game = gameStore1.initializeGame();
-   // game = gameStore.initializeGame();
+//    game = gameStore.initializeGame();
 
 
     processor = CommandProcessor.getInstance();

@@ -44,12 +44,13 @@ public class Table {
 
     public Table(List<Meld> melds, List<Tile> freeTiles, int[][] setGrid1, int[][] setGrid2, int[][] runGrid) {
 
-    this.melds = new ArrayList<>(melds);
+    this.melds = new ArrayList<>();
     this.backupMelds = new ArrayList<>();
     this.freeTiles = new ArrayList<>(freeTiles);
     this.setGrid1 = copy2DimensionArray(setGrid1);
     this.setGrid2 = copy2DimensionArray(setGrid2);
     this.runGrid = copy2DimensionArray(runGrid);
+    melds.forEach(this::addMeld);
   }
 
 
