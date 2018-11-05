@@ -31,7 +31,7 @@ public class PlayOneTileMoveMaker implements ComputerMoveMaker {
             System.out.println(state.getPlayerData()[state.getCurrentPlayer()].name + " adds {"  + tile.toString() +"} to " + m.tiles().toString());
             commands.add(handler ->{
                 handler.takeTableMeld(tableMelds.indexOf(m));
-                handler.takeHandTile(handTiles.indexOf(tile));
+                handler.takeHandTile(handler.getHand().getTiles().indexOf(tile));
                 handler.getManipulationTable().combineMelds(0,1);
                 handler.submit();
             });

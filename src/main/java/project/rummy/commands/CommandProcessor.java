@@ -67,7 +67,8 @@ public class CommandProcessor {
       applyChunk(chunks.remove());
     }
   }
-  public void applyChunk(CommandChunks chunks)  {
+
+  private void applyChunk(CommandChunks chunks)  {
       GameState gameState = GameState.generateState(game);
       commands.addAll(chunks.execute(gameState, handler));
       proccessAllCommands();
