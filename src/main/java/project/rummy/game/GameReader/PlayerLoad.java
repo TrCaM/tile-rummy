@@ -168,7 +168,7 @@ public class PlayerLoad {
         Meld meld;
 
 
-        for (JsonElement element : jsonArray){
+        for (JsonElement element : jsonArray) {
             color = getColor(element.getAsString().charAt(0));
             tile_num = Integer.parseInt(element.getAsString().substring(1));
             tile = new Tile(color, tile_num);
@@ -179,8 +179,9 @@ public class PlayerLoad {
         parser = new JsonParser().parse(object.get(FileLoadTypes.MeldsOnTable.name()).toString());
         jsonArray = parser.getAsJsonArray();
 
-        for  (JsonElement element: jsonArray) {
-            for (JsonElement element1: element.getAsJsonObject().get(FileLoadTypes.Meld.name()).getAsJsonArray()) {
+        for (JsonElement element : jsonArray) {
+            tiles = new ArrayList<>();
+            for (JsonElement element1 : element.getAsJsonObject().get(FileLoadTypes.Meld.name()).getAsJsonArray()) {
                 color = getColor(element1.getAsString().charAt(0));
                 tile_num = Integer.parseInt(element1.getAsString().substring(1));
                 tile = new Tile(color, tile_num);
@@ -188,11 +189,11 @@ public class PlayerLoad {
 
 
             }
-            meld = new Meld(tiles, MeldType.RUN);
+            // fix this later
+            meld = Meld.createMeld(tiles);
+
             data.melds.add(meld);
         }
-
-        System.out.println(data.melds.size());
 
 
         return data;

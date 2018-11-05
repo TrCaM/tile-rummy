@@ -3,22 +3,22 @@
   "Turn": 0,
   "CurrentPlayer": 0,
 
-  "MeldsOnTable": [{
-    "Id": 0,
-    "Meld" : ["R6", "R7", "R8", "R9"]
-   }
 
+  "MeldsOnTable": [{
+      "Id": 1,
+      "Meld": []
+    }
   ],
-  "TileDrawn": 48,
+  "TileDrawn": "R2",
   "HUMAN": {
     "Tiles": [
-      "R6", "R7", "R8", "R9", "B3" ,"B7", "B10", "G6", "G7", "G12", "O3", "O5", "O7", "O10"
+      "R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10", "R11", "B11", "G11", "O11"
     ],
     "Name" : "",
     "Controller" : "human",
     "Status": "ICE BROKEN"
   },
-  "MeldPlay": [["R6", "R7", "R8", "R9"]],
+
   "Player 3": {
     "Tiles": [
       "R8", "R12", "B1", "B4", "B5", "B8", "G1", "G4", "G5", "G8", "G12", "O1", "O2", "O12"
@@ -29,21 +29,21 @@
   },
   "Player 2": {
     "Tiles": [
-      "R2", "R2", "R3", "R4", "B1", "B9", "G6", "G7", "G8", "O3", "O5", "O7", "O9", "O13"
+      "R2", "B1", "B9", "O3", "O5", "O7", "O9", "O13"
     ],
     "Name" : "",
-    "Controller" : "strategy2",
-    "Status": "NOT PLAYED"
+    "Controller" : "strategy1",
+    "Status": "ICE BROKEN"
   },
   "Player 1": {
     "Tiles": [
-      "R3", "R6", "R9",  "B2", "B5", "B6", "B11", "B12", "G2", "G11", "O2", "O4", "O4", "O11"
+      "R3", "R6", "R9",  "B2", "B5", "B6", "B12", "G2", "O3", "O4", "O4"
     ],
     "Name" : "",
     "Controller" : "strategy1",
     "Status": "NOT PLAYED"
   },
-  "FreeTiles": [ "B12",
+  "FreeTiles": [ "R2",
     "B8",
     "O9",
     "B13",

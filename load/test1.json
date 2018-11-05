@@ -6,8 +6,8 @@
       "R12",
       "B1",
       "B4",
-      "B5",
       "B8",
+      "B13",
       "G1",
       "G4",
       "G5",
@@ -18,13 +18,6 @@
       "O12"
     ]
   },
-  "FreeTiles": [],
-  "CurrentPlayer": 1,
-  "MeldPlay": "",
-  "Deck": 6,
-  "Turn": 2,
-  "TileDrawn": 6,
-  "Id": 0,
   "MeldsOnTable": [
     [
       "R6",
@@ -46,5 +39,12 @@
       "R8",
       "R9"
     ]
-  ]
+  ],
+  "Deck": 6,
+  "Turn": 2,
+  "MeldPlay": "",
+  "FreeTiles": [],
+  "Id": 0,
+  "TileDrawn": 6,
+  "CurrentPlayer": 1
 }
