@@ -10,6 +10,7 @@ import project.rummy.observers.Observer;
 import project.rummy.strategies.Strategy;
 import project.rummy.strategies.Strategy1;
 import project.rummy.strategies.Strategy2;
+import project.rummy.strategies.Strategy3;
 
 import java.util.List;
 
@@ -32,8 +33,11 @@ public class AutoController extends Controller implements Observer {
     if (strategy instanceof Strategy2) {
       return "strategy2";
     }
+    if (strategy instanceof Strategy3) {
+      return "strategy3";
+    }
 
-    return "strategy3";
+    return "strategy4";
   }
 
   @Override

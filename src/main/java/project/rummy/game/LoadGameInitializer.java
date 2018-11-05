@@ -12,6 +12,7 @@ import project.rummy.entities.TableData;
 import project.rummy.strategies.Strategy1;
 import project.rummy.strategies.Strategy2;
 import project.rummy.strategies.Strategy3;
+import project.rummy.strategies.Strategy4;
 
 /**
  * Initialize game from the predefined game state. Useful for testing
@@ -25,7 +26,7 @@ public class LoadGameInitializer implements GameInitializer {
 
     @Override
     public void initPlayers(Game game) {
-        // there are 4 types of controllers {"human", "strategy1", "strategy2", "strategy3"}
+        // there are 4 types of controllers {"human", "strategy1", "strategy2", "strategy3", "strategy4"}
 
         Controller controller;
         Player[] players = new Player[4];
@@ -39,8 +40,10 @@ public class LoadGameInitializer implements GameInitializer {
                 controller = new AutoController(game, new Strategy1());
             }else if("strategy2".equals(state.getPlayerData()[i].controllerType)) {
                 controller = new AutoController(game, new Strategy2());
-            }else{
+            }else if ("strategy3".equals(state.getPlayerData()[i].controllerType)){
                 controller = new AutoController(game, new Strategy3());
+            }else  {
+                controller = new AutoController(game, new Strategy4());
             }
 
             players[i] = new Player(state.getPlayerData()[i].name, controller, hand, state.getPlayerStatuses()[i], i);
