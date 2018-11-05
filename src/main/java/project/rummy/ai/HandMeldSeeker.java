@@ -1,6 +1,7 @@
 
 package project.rummy.ai;
 
+import project.rummy.entities.Color;
 import project.rummy.entities.Meld;
 import project.rummy.entities.Tile;
 
@@ -135,6 +136,15 @@ public class HandMeldSeeker {
             m.tiles().forEach(remainingTiles::remove);
         }
         return remainingTiles;
+    }
+
+    public static Tile findTile(int value, Color color, List<Tile> tiles){
+        for(Tile t: tiles){
+            if(t.color()!=color && t.value()==value){
+                return  t;
+            }
+        }
+        return null;
     }
 
 }
