@@ -41,9 +41,10 @@ public class TileRummyApplication extends GameApplication {
 
   @Override
   protected void initGame() {
+    String fileName = getParameters().getRaw().get(0);
     ReadGameState gm = new ReadGameState();
     try {
-      this.state = gm.read();
+      this.state = gm.read(fileName);
       //  LoadGameInitializer initializer = new LoadGameInitializer(this.state);
     }
     catch (IOException e) {
