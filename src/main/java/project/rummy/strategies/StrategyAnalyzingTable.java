@@ -40,7 +40,7 @@ public class StrategyAnalyzingTable implements Strategy {
       return new PlayDirection(pushCommands);
     }
     //find list of tiles that cannot form melds
-    List<Tile> handTiles = state.getHandsData()[state.getCurrentPlayer()].tiles;
+    List<Tile> handTiles = new ArrayList<>(state.getHandsData()[state.getCurrentPlayer()].tiles);
     List<Meld> allMelds = HandMeldSeeker.findBestMelds(handTiles);
     allMelds.forEach(meld -> meld.tiles().forEach(handTiles::remove));
     if (handTiles.isEmpty() && !allMelds.isEmpty()) {
