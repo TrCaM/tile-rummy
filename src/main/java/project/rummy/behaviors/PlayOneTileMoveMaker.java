@@ -2,6 +2,7 @@ package project.rummy.behaviors;
 
 import project.rummy.ai.CombinationSeeker;
 import project.rummy.ai.HandMeldSeeker;
+import project.rummy.ai.SmartStateAnalyzer;
 import project.rummy.ai.TableMeldSeeker;
 import project.rummy.commands.Command;
 import project.rummy.entities.ManipulationTable;
@@ -15,7 +16,18 @@ import java.util.List;
 import java.util.Map;
 
 public class PlayOneTileMoveMaker implements ComputerMoveMaker {
+    private boolean shouldAnalyzeTable;
+    private SmartStateAnalyzer analyzer;
 
+    public PlayOneTileMoveMaker() {
+        this.shouldAnalyzeTable = false;
+        this.analyzer = new SmartStateAnalyzer();
+    }
+
+    public PlayOneTileMoveMaker(boolean shouldAnalyzeTable) {
+        this.shouldAnalyzeTable = shouldAnalyzeTable;
+        this.analyzer = new SmartStateAnalyzer();
+    }
     /**
      *add tile to a meld directly
      */
@@ -184,10 +196,16 @@ public class PlayOneTileMoveMaker implements ComputerMoveMaker {
 
         allMelds.forEach(meld -> meld.tiles().forEach(handTiles::remove));
 
+        if (shouldAnalyzeTable) {
+           analyzer.setState(state);
+        }
+
         for(Tile t: handTiles){
-            if(!(commands = tryAddDirectLy(t,state)).isEmpty()){ break; }
-            if(!(commands = tryFormSet(t,state)).isEmpty()){ break; }
-            if(!(commands = tryFormRun(t,state)).isEmpty()){ break; }
+            if (analyzer.shouldPlay(t)) {
+                if(!(commands = tryAddDirectLy(t,state)).isEmpty()){ break; }
+                if(!(commands = tryFormSet(t,state)).isEmpty()){ break; }
+                if(!(commands = tryFormRun(t,state)).isEmpty()){ break; }
+            }
         }
         return commands;
     }

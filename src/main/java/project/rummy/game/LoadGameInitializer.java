@@ -8,6 +8,7 @@ import project.rummy.entities.Hand;
 import project.rummy.entities.Player;
 import project.rummy.entities.Table;
 import project.rummy.entities.TableData;
+
 import project.rummy.strategies.Strategy1;
 import project.rummy.strategies.Strategy2;
 import project.rummy.strategies.Strategy3;
@@ -56,7 +57,8 @@ public class LoadGameInitializer implements GameInitializer {
         Table table = new Table(data.melds, data.freeTiles, data.setGrid1, data.setGrid2, data.runGrid);
 
         for (int i = 0; i < state.getTableData().melds.size(); i++) {
-            table.addMeld(state.getTableData().melds.get(i));
+           table.addMeld(state.getTableData().melds.get(i));
+
         }
 
         // then per player plays a meld
