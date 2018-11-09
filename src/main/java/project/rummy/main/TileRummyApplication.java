@@ -41,7 +41,10 @@ public class TileRummyApplication extends GameApplication {
 
   @Override
   protected void initGame() {
-    String fileName = getParameters().getRaw().get(0);
+    String fileName="";
+    if(!getParameters().getRaw().isEmpty()) {
+      fileName = getParameters().getRaw().get(0);
+    }
     ReadGameState gm = new ReadGameState();
     try {
       this.state = gm.read(fileName);
@@ -55,8 +58,8 @@ public class TileRummyApplication extends GameApplication {
 
     }
     GameStore gameStore1 = new GameStore(new LoadGameInitializer(state));
-    game = gameStore1.initializeGame();
-//    game = gameStore.initializeGame();
+   // game = gameStore1.initializeGame();
+    game = gameStore.initializeGame();
 
 
     processor = CommandProcessor.getInstance();
