@@ -14,50 +14,27 @@ public class CombinationSeeker {
     /**
      * find all possible melds from which tiles can be detached
      * and form a new set with a given tile
-     * @param tileValue: value of the tile forming set with
-     * @param tileColor: color of the tile forming set with
      * @param tableMelds: all melds on the table
      * @return: map where key is a suitable meld, and value is the index of the needed tile
      */
 
-    public static Map<Meld, Integer> formSet(int tileValue, Color tileColor, List<Meld> tableMelds){
+    public static Map<Meld, Integer> formSet(List<Tile> tiles, List<Meld> tableMelds){
         List<Meld> copyMelds = new ArrayList<>(tableMelds);
 
         //key is meld and value is tile index
         Map<Meld, Integer> map = new HashMap<>();
 
         for(Color c: Color.values()){
-            if(c != tileColor){
-                int meldid = TableMeldSeeker.findDetachableIdenticalTile(tileValue, c, copyMelds);
-                if(meldid != 0){
-                    Meld m = Meld.getMeldFromId(meldid, copyMelds);
-                    for(int i=0; i<m.tiles().size(); i++){
-                        if(m.tiles().get(i).value()==tileValue && m.tiles().get(i).color()==c){
-                            map.put(m, i);
-                            copyMelds.remove(copyMelds.indexOf(m));
-                        }
-                    }
-                }
+            boolean color2 = true;
+            if(tiles.size()>1){
+                color2 = c!= tiles.get(1).color();
             }
-        }
-        return map;
-    }
-
-
-    public static Map<Meld, Integer> formSet2(Tile t1, Tile t2, List<Meld> tableMelds){
-        List<Meld> copyMelds = new ArrayList<>(tableMelds);
-
-        //key is meld and value is tile index
-        Map<Meld, Integer> map = new HashMap<>();
-
-        for(Color c: Color.values()){
-            //boolean check = t2==null ? true : c!=t2.color();
-            if(c != t1.color() && c!=t2.color()){
-                int meldid = TableMeldSeeker.findDetachableIdenticalTile(t1.value(), c, copyMelds);
+            if(c != tiles.get(0).color() && color2){
+                int meldid = TableMeldSeeker.findDetachableIdenticalTile(tiles.get(0).value(), c, copyMelds);
                 if(meldid != 0){
                     Meld m = Meld.getMeldFromId(meldid, copyMelds);
                     for(int i=0; i<m.tiles().size(); i++){
-                        if(m.tiles().get(i).value()==t1.value() && m.tiles().get(i).color()==c){
+                        if(m.tiles().get(i).value()== tiles.get(0).value() && m.tiles().get(i).color()==c){
                             map.put(m, i);
                             copyMelds.remove(copyMelds.indexOf(m));
                         }
