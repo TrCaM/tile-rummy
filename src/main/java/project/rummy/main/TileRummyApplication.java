@@ -9,6 +9,7 @@ import org.json.simple.parser.ParseException;
 import project.rummy.commands.CommandProcessor;
 import project.rummy.game.*;
 import project.rummy.game.GameReader.ReadGameState;
+import project.rummy.game.GameReader.SaveGame;
 import project.rummy.game.GameReader.WriteGameState;
 import project.rummy.gui.views.EntitiesBuilder;
 
@@ -48,7 +49,7 @@ public class TileRummyApplication extends GameApplication {
     ReadGameState gm = new ReadGameState();
     try {
       this.state = gm.read(fileName);
-      //  LoadGameInitializer initializer = new LoadGameInitializer(this.state);
+        LoadGameInitializer initializer = new LoadGameInitializer(this.state);
     }
     catch (IOException e) {
       System.out.println("Whoops something went wrong");
@@ -58,8 +59,8 @@ public class TileRummyApplication extends GameApplication {
 
     }
     GameStore gameStore1 = new GameStore(new LoadGameInitializer(state));
-   // game = gameStore1.initializeGame();
-    game = gameStore.initializeGame();
+    game = gameStore1.initializeGame();
+   // game = gameStore.initializeGame();
 
 
     processor = CommandProcessor.getInstance();
@@ -81,19 +82,20 @@ public class TileRummyApplication extends GameApplication {
     getGameWorld().addEntities(handView, tableView, gameInfoView);
 
 
-    WriteGameState writeGameState = new WriteGameState(state);
+    SaveGame saveGame = new SaveGame();
     try {
-      writeGameState.write();
+      saveGame.save(state);
     }
     catch (IOException e) {
       System.out.println("Whoops something went wrong");
     }
-
   }
 
   @Override
   protected void onUpdate(double tpf) {
     processor.processNext();
+
+
     if (game.isGameEnd()) {
       this.getNotificationService().pushNotification(
           String.format("Player %s has won", game.getWinnerName()));

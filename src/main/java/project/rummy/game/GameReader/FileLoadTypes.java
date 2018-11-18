@@ -1,7 +1,6 @@
 package project.rummy.game.GameReader;
 
 public enum FileLoadTypes {
-    // melds
     MeldsOnTable,
     Id,
     Meld,
