@@ -113,8 +113,8 @@ public class GameState extends Component {
 
   public  void setTurnStatus (TurnStatus turnStatus) {
     this.turnStatus = turnStatus;
-
   }
+
 
 
 
