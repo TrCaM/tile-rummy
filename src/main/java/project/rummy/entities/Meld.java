@@ -10,7 +10,7 @@ import java.util.stream.Stream;
  * Entity class for meld, which is a run or a set of tiles played by players and can be put on the table
  */
 public class Meld extends Component {
-    public static int nextId = 1;
+    private static int nextId = 1;
 
     public static Map<Integer, Meld> idsToMelds = new HashMap<>();
 
@@ -128,16 +128,27 @@ public class Meld extends Component {
 
     /**
      * Check if a meld is a RUN
+     * Assume that the array of Tiles has been sorted (Joker is always at the end)
      */
     //ToDo: update to use joker
     private static boolean isRun(Tile[] tiles) {
         //Initialize first tile colour and value to compare
+        if (tiles.length > 13) {
+            return false;
+        }
         Color color = tiles[0].color();
         int startValue = tiles[0].value();
+        int currentIndex = 0;
+        int jokerIndex = tiles.length - 1;
         //Check if two consecutive tiles have the same colour and increasing in value
         for (int i = 0; i < tiles.length; i++) {
-            if (tiles[i].color() != color || tiles[i].value() != startValue + i) {
-                return false;
+            if (!tiles[currentIndex].canFillToRun(color, startValue + i)) {
+                if (!tiles[jokerIndex].canFillToRun(color, startValue + i)) {
+                    return false;
+                }
+                jokerIndex--;
+            } else {
+                currentIndex++;
             }
         }
         return true;
