@@ -65,12 +65,12 @@ public class CombinationSeekerTest {
 
 
         List<Tile> t2 = new ArrayList<>();
-        t.add(R10);
+        t2.add(R10);
         Map<Meld, Integer> map2 = CombinationSeeker.formSet(t2, melds);
         assertEquals(0,map2.size());
 
         List<Tile> t3 = new ArrayList<>();
-        t.add(O5);
+        t3.add(O5);
         Map<Meld, Integer> map3 = CombinationSeeker.formSet(t3, melds);
         assertEquals(0, map3.size());
     }
