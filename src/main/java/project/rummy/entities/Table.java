@@ -14,12 +14,13 @@ public class Table {
   private int[][] setGrid1;
   private int[][] setGrid2;
   private int[][] runGrid;
+
   /**
    * Note for back up melds: It is used for restoring the table before each turn.
    */
   private List<Meld> backupMelds;
 
-  static final int MAX_VALUE = 13;
+  private static final int MAX_VALUE = 13;
   private static final int DECKS_AMOUNT = 2;
 
   public Table() {
@@ -56,28 +57,24 @@ public class Table {
   private static int[][] copy2DimensionArray(int[][] old) {
     int[][] current = new int[old.length][old[0].length];
     for (int i = 0; i < old.length; i++) {
-      for (int j = 0; j < old[i].length; j++) {
-        current[i][j] = old[i][j];
+      if (old[i].length >= 0) {
+        System.arraycopy(old[i], 0, current[i], 0, old[i].length);
       }
     }
     return current;
   }
 
-  public int[][] getSetGrid1() {
-//      return setGrid1;
+  int[][] getSetGrid1() {
     return copy2DimensionArray(setGrid1);
   }
 
-  public int[][] getSetGrid2() {
-//      return setGrid2;
+  int[][] getSetGrid2() {
     return copy2DimensionArray(setGrid2);
   }
 
-  public int[][] getRunGrid() {
-//      return runGrid;
+  int[][] getRunGrid() {
     return copy2DimensionArray(runGrid);
   }
-
 
   public Meld getMeldById(int meldid) {
     for (Meld m : melds) {
@@ -115,7 +112,7 @@ public class Table {
    * Storing the current list of melds so that we can restore the table as it was at the beginning
    * of each turn.
    */
-  public void backupMelds() {
+  void backupMelds() {
     for (Meld meld : melds) {
       Tile[] tiles = new Tile[meld.tiles().size()];
       meld.tiles().toArray(tiles);
@@ -130,20 +127,15 @@ public class Table {
     this.melds = backupMelds;
   }
 
-
   public List<Tile> getFreeTiles() {
     return new ArrayList<>(freeTiles);
-  }
-
-  public int getFreeTilesSize() {
-    return freeTiles.size();
   }
 
   public List<Meld> getPlayingMelds() {
     return new ArrayList<>(melds);
   }
 
-  public List<Meld> getBackupMelds() {
+  List<Meld> getBackupMelds() {
     return new ArrayList<>(backupMelds);
   }
 
@@ -160,12 +152,23 @@ public class Table {
     return true;
   }
 
+  /** Set position when add a new meld into the table. If the meld contains Joker, it should be added
+   * at the last 2 rows of the run grid
+   */
   private void setPosition(Meld meld) {
-
-    if (meld.type() == MeldType.RUN) {
+    if (meld.tiles().stream().anyMatch(Tile::isJoker)) {
+      setPositionForJoker(meld);
+    } else if (meld.type() == MeldType.RUN) {
       setPositionForRun(meld);
     } else {
       setPositionForSet(meld);
+    }
+  }
+
+  private void setPositionForJoker(Meld meld) {
+    int row = runGrid[11][0] == 0 ? 11 : 12;
+    for (int i = 0; i < meld.tiles().size(); i++) {
+      runGrid[row][i] = meld.getId();
     }
   }
 
@@ -191,13 +194,6 @@ public class Table {
       throw new IllegalStateException("Expected a Set, not other types of Meld");
     }
     int row = setMeld.getTile(0).value() - 1;
-//    if (setGrid[value *2][0] == 0 && setGrid[value *2 +1][0] != 0) {
-//      throw new IllegalStateException("Unexpected grid overlap");
-//    }
-//    int row = setGrid[value * 2] == null ? value*2 : (value*2 +1);
-//    for (int i=0; i<setMeld.tiles().size(); i++) {
-//      setGrid[row][i] = setMeld.getId();
-//    }
 
     if (setGrid1[row][0] == 0 && setGrid1[row][1] == 0) {
       for (int i = 0; i < setMeld.tiles().size(); i++) {
@@ -210,8 +206,8 @@ public class Table {
     }
   }
 
-  public Meld removeMeld(Meld meld) {
-    return removeMeld(melds.indexOf(meld));
+  void removeMeld(Meld meld) {
+    removeMeld(melds.indexOf(meld));
   }
 
   public Meld removeMeld(int index) {
@@ -256,11 +252,12 @@ public class Table {
   }
 
   public void resetForNewTurn() {
-    List<Tile> allTiles = new ArrayList<>();
-    melds.stream().map(Meld::tiles).reduce(allTiles, (middleList, meldTiles) -> {
-      middleList.addAll(meldTiles);
-      return middleList;
-    });
+    List<Tile> allTiles = melds.stream()
+        .map(Meld::tiles)
+        .reduce(new ArrayList<>(), (middleList, meldTiles) -> {
+          middleList.addAll(meldTiles);
+          return middleList;
+        });
     allTiles.forEach(tile -> tile.setHightlight(false));
   }
 }

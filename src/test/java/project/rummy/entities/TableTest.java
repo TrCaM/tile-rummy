@@ -4,12 +4,9 @@ package project.rummy.entities;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.awt.*;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.junit.Assert.*;
@@ -23,21 +20,13 @@ public class TableTest {
   private static final Tile R7 = Tile.createTile(Color.RED, 7);
   private static final Tile G3 = Tile.createTile(Color.GREEN, 3);
   private static final Tile G7 = Tile.createTile(Color.GREEN, 7);
-  private static final Tile G8 = Tile.createTile(Color.GREEN, 8);
   private static final Tile G9 = Tile.createTile(Color.GREEN, 9);
   private static final Tile B1 = Tile.createTile(Color.BLACK, 1);
   private static final Tile B2 = Tile.createTile(Color.BLACK, 2);
   private static final Tile B3 = Tile.createTile(Color.BLACK, 3);
-  private static final Tile B4 = Tile.createTile(Color.BLACK, 4);
   private static final Tile B5 = Tile.createTile(Color.BLACK, 5);
   private static final Tile B6 = Tile.createTile(Color.BLACK, 6);
   private static final Tile B7 = Tile.createTile(Color.BLACK, 7);
-  private static final Tile B8 = Tile.createTile(Color.BLACK, 8);
-  private static final Tile B9 = Tile.createTile(Color.BLACK, 9);
-  private static final Tile B10 = Tile.createTile(Color.BLACK, 10);
-  private static final Tile B11 = Tile.createTile(Color.BLACK, 11);
-  private static final Tile B12 = Tile.createTile(Color.BLACK, 12);
-  private static final Tile B13 = Tile.createTile(Color.BLACK, 13);
   private static final Tile JK1 = Tile.createTile(Color.ANY, 0);
   private static final Tile JK2 = Tile.createTile(Color.ANY, 0);
 
@@ -51,7 +40,6 @@ public class TableTest {
   static private final int TILES_AMOUNT = 106;
   static private final int SETS_AMOUNT = 8;
   static private final int SUITS_AMOUNT = 26;
-  static private final int JOKER_AMOUNT = 2;
 
   @Before
   public void setUp() {
@@ -170,18 +158,13 @@ public class TableTest {
 
   @Test
   public void addMeld_shouldSucceed() {
-    // Meld validRun1 = Meld.createMeld(B1, B2, B3, B4, B5, B6, B7, B8, B9, B10, B11, B12, B13);
     Meld validRun2 = Meld.createMeld(B1, B2, B3);
     Meld validRun4 = Meld.createMeld(B1, B2, B3);
-    Meld validRun3 = Meld.createMeld(G7, G8, G9);
     Meld validSet1 = Meld.createMeld(R3, B3, G3);
     Meld validSet2 = Meld.createMeld(O7, B7, G7, R7);
     Meld validSet3 = Meld.createMeld(O7, B7, G7);
     Meld validJokerMeld1 = Meld.createMeld(O7, B7, JK1);
     Meld validJokerMeld2 = Meld.createMeld(G7, JK2, G9);
-
-
-    //Meld invalidMeld = Meld.createMeld(R3, B3);
 
     assertTrue(table.addMeld(validSet1));
     assertTrue(table.addMeld(validSet2));
@@ -229,9 +212,9 @@ public class TableTest {
     table.removeMeld(run1);
     table.removeMeld(run3);
 
-    assertTrue(table.getRunGrid()[2][0] == 0);
-    assertTrue(table.getRunGrid()[2][4] == 0);
-    assertTrue(table.getRunGrid()[3][0] == run2.getId());
+    assertEquals(0, table.getRunGrid()[2][0]);
+    assertEquals(0, table.getRunGrid()[2][4]);
+    assertEquals(table.getRunGrid()[3][0], run2.getId());
   }
 
   @Test
@@ -242,14 +225,14 @@ public class TableTest {
     assertTrue(table.addMeld(set1));
     assertTrue(table.addMeld(set2));
 
-    assertTrue(table.getSetGrid1()[6][0] == set1.getId());
-    assertTrue(table.getSetGrid2()[6][0] == set2.getId());
+    assertEquals(table.getSetGrid1()[6][0], set1.getId());
+    assertEquals(table.getSetGrid2()[6][0], set2.getId());
 
     table.removeMeld(set1);
     table.removeMeld(set2);
 
-    assertTrue(table.getSetGrid1()[6][0] == 0);
-    assertTrue(table.getSetGrid1()[6][0] == 0);
+    assertEquals(0, table.getSetGrid1()[6][0]);
+    assertEquals(0, table.getSetGrid1()[6][0]);
   }
 
 }
