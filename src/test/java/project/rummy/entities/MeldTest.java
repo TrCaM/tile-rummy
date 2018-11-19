@@ -23,10 +23,15 @@ public class MeldTest {
   private static final Tile O7 = Tile.createTile(Color.ORANGE, 7);
   private static final Tile O8 = Tile.createTile(Color.ORANGE, 8);
   private static final Tile O9 = Tile.createTile(Color.ORANGE, 9);
+  private static final Tile O13 = Tile.createTile(Color.ORANGE, 13);
+  private static final Tile O11 = Tile.createTile(Color.ORANGE, 11);
+  private static final Tile O12 = Tile.createTile(Color.ORANGE, 12);
   private static final Tile R3 = Tile.createTile(Color.RED, 3);
   private static final Tile G3 = Tile.createTile(Color.GREEN, 3);
   private static final Tile B3 = Tile.createTile(Color.BLACK, 3);
   private static final Tile O3 = Tile.createTile(Color.ORANGE, 3);
+  private static final Tile JK = Tile.createTile(Color.ANY, 0);
+  private static final Tile JK2 = Tile.createTile(Color.ANY, 0);
 
   @Rule
   public MockitoRule mockitoRule = MockitoJUnit.rule();
@@ -163,5 +168,56 @@ public class MeldTest {
 
     assertThat(Meld.idsToMelds.get(meld.getId()), is(meld));
     assertThat(Meld.idsToMelds.get(meld2.getId()), is(meld2));
+  }
+
+
+  @Test(expected = IllegalArgumentException.class)
+  public void createMeld_invalidJoker_shouldThrow() {
+    Meld.createMeld(O5, O9, JK);
+  }
+
+
+  @Test
+  public void createMeld_JokerSet() {
+    Meld expectedMeld = Meld.createMeld(R3, G3, B3, JK);
+    assertEquals(expectedMeld.type(), MeldType.SET);
+    assertEquals(expectedMeld.source(), MeldSource.HAND);
+    assertTrue(expectedMeld.tiles().contains(JK));
+    assertTrue(expectedMeld.tiles().size() == 4);
+
+    Meld expectedMeld2 = Meld.createMeld(R3, G3, JK);
+    assertEquals(expectedMeld2.type(), MeldType.SET);
+    assertTrue(expectedMeld2.tiles().contains(JK));
+    assertTrue(expectedMeld2.tiles().size() == 3);
+
+    Meld expectedMeld3 = Meld.createMeld(R3, JK, JK2);
+    assertEquals(expectedMeld3.type(), MeldType.SET);
+    assertTrue(expectedMeld3.tiles().contains(JK2));
+    assertTrue(expectedMeld3.tiles().size() == 3);
+  }
+
+  @Test
+  public void createMeld_JokerRun() {
+    Meld expectedMeld = Meld.createMeld(O5, O6, O7, JK);
+    assertEquals(expectedMeld.type(), MeldType.RUN);
+    assertTrue(expectedMeld.tiles().contains(JK));
+    assertTrue(expectedMeld.tiles().size() == 4);
+
+    Meld expectedMeld2 = Meld.createMeld(O5, O6, O7, O9, JK);
+    assertEquals(expectedMeld2.type(), MeldType.RUN);
+    assertTrue(expectedMeld2.tiles().contains(JK));
+    assertTrue(expectedMeld2.tiles().size() == 5);
+
+    Meld expectedMeld3 = Meld.createMeld(O5, O7, O9, JK, JK2);
+    assertEquals(expectedMeld3.type(), MeldType.RUN);
+    assertTrue(expectedMeld3.tiles().contains(JK2));
+    assertTrue(expectedMeld3.tiles().size() == 5);
+
+
+    Meld expectedMeld4 = Meld.createMeld(O13, O12, O11, JK);
+    assertEquals(expectedMeld4.type(), MeldType.RUN);
+    assertTrue(expectedMeld4.tiles().contains(JK));
+    assertTrue(expectedMeld4.tiles().size() == 4);
+    assertTrue(expectedMeld4.tiles().get(0) == JK);
   }
 }
