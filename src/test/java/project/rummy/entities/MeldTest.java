@@ -7,9 +7,6 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import project.rummy.game.GameState;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
-
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.junit.Assert.*;
@@ -152,12 +149,8 @@ public class MeldTest {
     assertFalse(meld.isValidMeld());
   }
 
-  @Mock
-  private Hand hand;
-
-
   @Test
-  public void resetMapTest_shoudSuceed() {
+  public void resetMapTest_shouldSucceed() {
     Meld meld = Meld.createMeld(O5, O6, O7);
     Meld meld2 = Meld.createMeld(R3,G3, B3, O3);
     Table table = new Table();
@@ -190,17 +183,17 @@ public class MeldTest {
     assertEquals(expectedMeld.type(), MeldType.SET);
     assertEquals(expectedMeld.source(), MeldSource.HAND);
     assertTrue(expectedMeld.tiles().contains(JK));
-    assertTrue(expectedMeld.tiles().size() == 4);
+    assertEquals(4, expectedMeld.tiles().size());
 
     Meld expectedMeld2 = Meld.createMeld(R3, G3, JK);
     assertEquals(expectedMeld2.type(), MeldType.SET);
     assertTrue(expectedMeld2.tiles().contains(JK));
-    assertTrue(expectedMeld2.tiles().size() == 3);
+    assertEquals(3, expectedMeld2.tiles().size());
 
     Meld expectedMeld3 = Meld.createMeld(R3, JK, JK2);
     assertEquals(expectedMeld3.type(), MeldType.SET);
     assertTrue(expectedMeld3.tiles().contains(JK2));
-    assertTrue(expectedMeld3.tiles().size() == 3);
+    assertEquals(3, expectedMeld3.tiles().size());
 
     Meld expectedMeld5 = Meld.createMeld(JK, JK2);
     assertEquals(expectedMeld5.type(), MeldType.SET);
@@ -221,7 +214,7 @@ public class MeldTest {
     Meld expectedMeld = Meld.createMeld(O1, O2, O3, JK);
     assertEquals(expectedMeld.type(), MeldType.RUN);
     assertTrue(expectedMeld.tiles().contains(JK));
-    assertTrue(expectedMeld.tiles().size() == 4);
+    assertEquals(4, expectedMeld.tiles().size());
     assertSame(expectedMeld.tiles().get(0), O1);
     assertSame(expectedMeld.tiles().get(1), O2);
     assertSame(expectedMeld.tiles().get(2), O3);
@@ -251,7 +244,7 @@ public class MeldTest {
     Meld expectedMeld4 = Meld.createMeld(O13, O12, O11, JK);
     assertEquals(expectedMeld4.type(), MeldType.RUN);
     assertTrue(expectedMeld4.tiles().contains(JK));
-    assertTrue(expectedMeld4.tiles().size() == 4);
+    assertEquals(4, expectedMeld4.tiles().size());
     assertSame(expectedMeld4.tiles().get(0), JK);
     assertSame(expectedMeld4.tiles().get(1), O11);
     assertSame(expectedMeld4.tiles().get(2), O12);
@@ -260,7 +253,7 @@ public class MeldTest {
     Meld expectedMeld5 = Meld.createMeld(O13, JK2, O11, JK);
     assertEquals(expectedMeld5.type(), MeldType.RUN);
     assertTrue(expectedMeld5.tiles().contains(JK));
-    assertTrue(expectedMeld4.tiles().size() == 4);
+    assertEquals(4, expectedMeld4.tiles().size());
     assertSame(expectedMeld5.tiles().get(0), JK2);
     assertSame(expectedMeld5.tiles().get(1), O11);
     assertSame(expectedMeld5.tiles().get(2), JK);
