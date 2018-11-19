@@ -5,4 +5,5 @@ tile-rummy.iml
 .project
 .settings/
 /logs
+/system/fxgl.bundle
 uml-diagram.mdj
