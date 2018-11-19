@@ -178,6 +178,11 @@ public class MeldTest {
     Meld.createMeld(O5, O9, JK);
   }
 
+  @Test(expected = IllegalArgumentException.class)
+  public void createMeld_moreThan14_shouldThrow() {
+    Meld.createMeld(O5, O1, O2, O3, O5, O6, O7, O8, O9, O11, O12, O13, JK, JK2);
+  }
+
 
   @Test
   public void createMeld_JokerSet() {
@@ -202,6 +207,13 @@ public class MeldTest {
     assertTrue(expectedMeld5.tiles().contains(JK));
     assertTrue(expectedMeld5.tiles().contains(JK2));
 
+    Meld expectedMeld4 = Meld.createMeld(O13, JK2, JK);
+    assertEquals(expectedMeld4.type(), MeldType.SET);
+    assertTrue(expectedMeld4.tiles().contains(JK));
+    assertEquals(3, expectedMeld4.tiles().size());
+    assertSame(expectedMeld4.tiles().get(0), O13);
+    assertSame(expectedMeld4.tiles().get(1), JK2);
+    assertSame(expectedMeld4.tiles().get(2), JK);
   }
 
   @Test
@@ -210,43 +222,48 @@ public class MeldTest {
     assertEquals(expectedMeld.type(), MeldType.RUN);
     assertTrue(expectedMeld.tiles().contains(JK));
     assertTrue(expectedMeld.tiles().size() == 4);
-    assertTrue(expectedMeld.tiles().get(0) == O1);
-    assertTrue(expectedMeld.tiles().get(1) == O2);
-    assertTrue(expectedMeld.tiles().get(2) == O3);
-    assertTrue(expectedMeld.tiles().get(3) == JK);
+    assertSame(expectedMeld.tiles().get(0), O1);
+    assertSame(expectedMeld.tiles().get(1), O2);
+    assertSame(expectedMeld.tiles().get(2), O3);
+    assertSame(expectedMeld.tiles().get(3), JK);
 
     Meld expectedMeld2 = Meld.createMeld(O5, O6, O7, O9, JK);
     assertEquals(expectedMeld2.type(), MeldType.RUN);
     assertTrue(expectedMeld2.tiles().contains(JK));
-    assertTrue(expectedMeld2.tiles().size() == 5);
-    assertTrue(expectedMeld2.tiles().get(0) == O5);
-    assertTrue(expectedMeld2.tiles().get(1) == O6);
-    assertTrue(expectedMeld2.tiles().get(2) == O7);
-    assertTrue(expectedMeld2.tiles().get(3) == JK);
-    assertTrue(expectedMeld2.tiles().get(4) == O9);
+    assertEquals(5, expectedMeld2.tiles().size());
+    assertSame(expectedMeld2.tiles().get(0), O5);
+    assertSame(expectedMeld2.tiles().get(1), O6);
+    assertSame(expectedMeld2.tiles().get(2), O7);
+    assertSame(expectedMeld2.tiles().get(3), JK);
+    assertSame(expectedMeld2.tiles().get(4), O9);
 
     Meld expectedMeld3 = Meld.createMeld(O5, O7, O9, JK, JK2);
     assertEquals(expectedMeld3.type(), MeldType.RUN);
     assertTrue(expectedMeld3.tiles().contains(JK2));
-    assertTrue(expectedMeld3.tiles().size() == 5);
-    assertTrue(expectedMeld3.tiles().get(0) == O5);
-    assertTrue(expectedMeld3.tiles().get(1) == JK);
-    assertTrue(expectedMeld3.tiles().get(2) == O7);
-    assertTrue(expectedMeld3.tiles().get(3) == JK2);
-    assertTrue(expectedMeld3.tiles().get(4) == O9);
+    assertEquals(5, expectedMeld3.tiles().size());
+    assertSame(expectedMeld3.tiles().get(0), O5);
+    assertSame(expectedMeld3.tiles().get(1), JK2);
+    assertSame(expectedMeld3.tiles().get(2), O7);
+    assertSame(expectedMeld3.tiles().get(3), JK);
+    assertSame(expectedMeld3.tiles().get(4), O9);
 
 
     Meld expectedMeld4 = Meld.createMeld(O13, O12, O11, JK);
     assertEquals(expectedMeld4.type(), MeldType.RUN);
     assertTrue(expectedMeld4.tiles().contains(JK));
     assertTrue(expectedMeld4.tiles().size() == 4);
-    assertTrue(expectedMeld4.tiles().get(0) == JK);
-    assertTrue(expectedMeld4.tiles().get(1) == O11);
-    assertTrue(expectedMeld4.tiles().get(2) == O12);
-    assertTrue(expectedMeld4.tiles().get(3) == O13);
+    assertSame(expectedMeld4.tiles().get(0), JK);
+    assertSame(expectedMeld4.tiles().get(1), O11);
+    assertSame(expectedMeld4.tiles().get(2), O12);
+    assertSame(expectedMeld4.tiles().get(3), O13);
 
-
-
-
+    Meld expectedMeld5 = Meld.createMeld(O13, JK2, O11, JK);
+    assertEquals(expectedMeld5.type(), MeldType.RUN);
+    assertTrue(expectedMeld5.tiles().contains(JK));
+    assertTrue(expectedMeld4.tiles().size() == 4);
+    assertSame(expectedMeld5.tiles().get(0), JK2);
+    assertSame(expectedMeld5.tiles().get(1), O11);
+    assertSame(expectedMeld5.tiles().get(2), JK);
+    assertSame(expectedMeld5.tiles().get(3), O13);
   }
 }
