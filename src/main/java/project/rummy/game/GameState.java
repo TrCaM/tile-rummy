@@ -46,6 +46,7 @@ public class GameState extends Component {
     return gameState;
   }
 
+
   public boolean isGameEnd() {
     return isGameEnd;
   }

@@ -9,8 +9,6 @@ import org.json.simple.parser.ParseException;
 import project.rummy.commands.CommandProcessor;
 import project.rummy.game.*;
 import project.rummy.game.GameReader.ReadGameState;
-import project.rummy.game.GameReader.SaveGame;
-import project.rummy.game.GameReader.WriteGameState;
 import project.rummy.gui.views.EntitiesBuilder;
 
 import java.io.IOException;
@@ -76,19 +74,17 @@ public class TileRummyApplication extends GameApplication {
     Entity handView = EntitiesBuilder.buildHand(state);
     handView.setX(0);
     handView.setY(740);
+
+    Entity saveView = EntitiesBuilder.buildSave(state);
+    saveView.setX(1450);
+    saveView.setY(740);
+
     Entity tableView = EntitiesBuilder.buildTable(state);
     Entity gameInfoView = EntitiesBuilder.buildGameInfo(state);
     gameInfoView.setX(1150);
-    getGameWorld().addEntities(handView, tableView, gameInfoView);
 
+    getGameWorld().addEntities(handView, tableView, gameInfoView, saveView);
 
-    SaveGame saveGame = new SaveGame();
-    try {
-      saveGame.save(state);
-    }
-    catch (IOException e) {
-      System.out.println("Whoops something went wrong");
-    }
   }
 
   @Override

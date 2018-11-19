@@ -56,4 +56,13 @@ public class EntitiesBuilder {
     tableEntity.addComponent(gameState);
     return tableEntity;
   }
+
+  public static Entity buildSave(GameState gameState) {
+    Entity saveEntity = Entities.builder()
+            .type(EntityType.SAVE)
+            .viewFromNode(new SaveView(gameState))
+            .build();
+    saveEntity.addComponent(gameState);
+    return saveEntity;
+  }
 }

@@ -12,7 +12,6 @@ import project.rummy.control.ActionHandler;
 import project.rummy.entities.*;
 import project.rummy.events.TileChooseEvent;
 import project.rummy.game.Game;
-import project.rummy.game.GameReader.WriteGameState;
 import project.rummy.game.GameState;
 import project.rummy.main.GameFXMLLoader;
 import project.rummy.observers.Observer;
