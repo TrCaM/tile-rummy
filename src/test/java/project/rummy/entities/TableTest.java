@@ -38,6 +38,8 @@ public class TableTest {
   private static final Tile B11 = Tile.createTile(Color.BLACK, 11);
   private static final Tile B12 = Tile.createTile(Color.BLACK, 12);
   private static final Tile B13 = Tile.createTile(Color.BLACK, 13);
+  private static final Tile JK1 = Tile.createTile(Color.ANY, 0);
+  private static final Tile JK2 = Tile.createTile(Color.ANY, 0);
 
 
   private Table table = new Table();
@@ -175,6 +177,8 @@ public class TableTest {
     Meld validSet1 = Meld.createMeld(R3, B3, G3);
     Meld validSet2 = Meld.createMeld(O7, B7, G7, R7);
     Meld validSet3 = Meld.createMeld(O7, B7, G7);
+    Meld validJokerMeld1 = Meld.createMeld(O7, B7, JK1);
+    Meld validJokerMeld2 = Meld.createMeld(G7, JK2, G9);
 
 
     //Meld invalidMeld = Meld.createMeld(R3, B3);
@@ -182,24 +186,20 @@ public class TableTest {
     assertTrue(table.addMeld(validSet1));
     assertTrue(table.addMeld(validSet2));
     assertTrue(table.addMeld(validSet3));
-    //assertTrue(table.addMeld(validRun1));
     assertTrue(table.addMeld(validRun2));
-    // assertTrue(table.addMeld(validRun3));
     assertTrue(table.addMeld(validRun4));
+    assertTrue(table.addMeld(validJokerMeld1));
+    assertTrue(table.addMeld(validJokerMeld2));
 
-    // assertThat(table.getPlayingMelds(), contains(validMeld1, validMeld2));
-    // assertThat(table.getPlayingMelds(), not(contains(invalidMeld)));
+    assertEquals(table.getSetGrid1()[2][0], validSet1.getId());
+    assertEquals(table.getSetGrid1()[6][0], validSet2.getId());
+    assertEquals(table.getSetGrid2()[6][0], validSet3.getId());
 
-    assertTrue(table.getSetGrid1()[2][0] == validSet1.getId());
-    assertTrue(table.getSetGrid1()[6][0] == validSet2.getId());
-    assertTrue(table.getSetGrid2()[6][0] == validSet3.getId());
+    assertEquals(table.getRunGrid()[2][0], validRun2.getId());
+    assertEquals(table.getRunGrid()[3][0], validRun4.getId());
 
-    // assertTrue(table.getRunGrid()[2][0] == validRun1.getId());
-    assertTrue(table.getRunGrid()[2][0] == validRun2.getId());
-    //assertTrue(table.getRunGrid()[4][6] == validRun3.getId());
-    assertTrue(table.getRunGrid()[3][0] == validRun4.getId());
-
-
+    assertEquals(table.getRunGrid()[11][0], validJokerMeld1.getId());
+    assertEquals(table.getRunGrid()[12][0], validJokerMeld2.getId());
   }
 
   @Test
