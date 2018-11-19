@@ -1,28 +1,34 @@
 package project.rummy.entities;
+
 import java.util.*;
 
-    public class NumberTile extends Tile {
-    private boolean hightlight;
+public class NumberTile extends Tile {
+  private boolean hightlight;
 
-    public NumberTile(Color color, int value) {
-        super (color);
-        this.value = value;
-    }
+  NumberTile(Color color, int value) {
+    super(color);
+    this.value = value;
+  }
 
-    @Override
-    public boolean canFillToRun(int value) {
-        return this.value == value;
-    }
+  @Override
+  protected boolean isJoker() {
+    return false;
+  }
 
-    @Override
-    public boolean canFillToSet(Set<Color> existingcolor) {
-        return existingcolor.contains(this.color);
-    }
+  @Override
+  public boolean canFillToRun(int value) {
+    return this.value == value;
+  }
 
-    @Override
-    public String toString() {
-        return String.format("%s%d", color.toString().charAt(0), value);
-    }
+  @Override
+  public boolean canFillToSet(Set<Color> existingcolor) {
+    return existingcolor.contains(this.color);
+  }
+
+  @Override
+  public String toString() {
+    return String.format("%s%d", color.toString().charAt(0), value);
+  }
 
 // //TODO: test for compareTO
 //  @Override

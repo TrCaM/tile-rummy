@@ -2,14 +2,19 @@ package project.rummy.entities;
 
 import java.util.Set;
 
-public class Joker extends  Tile {
+public class Joker extends Tile {
 
     public Joker() {
         super();
         this.value = 30;
     }
 
-    @Override
+  @Override
+  protected boolean isJoker() {
+    return true;
+  }
+
+  @Override
     public boolean canFillToRun(int value) {
         return true;
     }

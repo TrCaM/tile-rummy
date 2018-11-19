@@ -12,7 +12,8 @@ public enum Color {
   public int value() {
     return this.value;
   }
-  private Color(int value){
+
+  Color(int value){
     this.value =value;
   }
 }

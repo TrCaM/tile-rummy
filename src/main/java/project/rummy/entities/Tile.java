@@ -30,6 +30,8 @@ public abstract class Tile extends Component {
         return new NumberTile(color, value);
     }
 
+    protected abstract boolean isJoker();
+
     public Color color() {
         return this.color;
     }
