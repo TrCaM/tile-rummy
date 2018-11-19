@@ -104,6 +104,7 @@ public class Hand {
    * - RED, BLACK, GREEN, ORANGE
    * - Increasing value number
    */
+
   public void sort() {
     tiles.sort((tile1, tile2) -> tile1.color() != tile2.color()
         ? tile1.color().compareTo(tile2.color())
