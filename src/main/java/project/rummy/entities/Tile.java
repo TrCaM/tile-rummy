@@ -30,7 +30,7 @@ public abstract class Tile extends Component {
         return new NumberTile(color, value);
     }
 
-    protected abstract boolean isJoker();
+    public abstract boolean isJoker();
 
     public Color color() {
         return this.color;
@@ -52,4 +52,5 @@ public abstract class Tile extends Component {
 
     public abstract boolean canFillToSet(Set<Color> existingcolor, int value);
 
+    public abstract String toSymbol();
 }

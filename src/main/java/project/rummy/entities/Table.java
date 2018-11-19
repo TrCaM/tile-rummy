@@ -213,7 +213,21 @@ public class Table {
   public Meld removeMeld(int index) {
     Meld meld = melds.get(index);
 
-    if (meld.type() == MeldType.SET) {
+
+    if (meld.tiles().stream().anyMatch(Tile::isJoker)) {
+      int row = 11;
+      if (runGrid[row][0] != meld.getId()) {
+        row++;
+      }
+      if (runGrid[row][0] != meld.getId()) {
+        throw new IllegalStateException("Grid error");
+      }
+      for (int i = 0; i < 13; i++) {
+        if (runGrid[row][i] == meld.getId()) {
+          runGrid[row][i] = 0;
+        }
+      }
+    } else if (meld.type() == MeldType.SET) {
       int row = meld.getTile(0).value() - 1;
 
       if (setGrid1[row][0] == meld.getId()) {

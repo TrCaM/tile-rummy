@@ -3,7 +3,6 @@ package project.rummy.entities;
 import java.util.*;
 
 public class NumberTile extends Tile {
-  private boolean hightlight;
 
   NumberTile(Color color, int value) {
     super(color);
@@ -11,7 +10,7 @@ public class NumberTile extends Tile {
   }
 
   @Override
-  protected boolean isJoker() {
+  public boolean isJoker() {
     return false;
   }
 
@@ -30,15 +29,8 @@ public class NumberTile extends Tile {
     return String.format("%s%d", color.toString().charAt(0), value);
   }
 
-// //TODO: test for compareTO
-//  @Override
-//  public int compareTo(@NotNull Tile tile) {
-//      if(this.color() != tile.color()){
-//        return this.color().compareTo(tile.color());
-//      }
-//      if(this.value() == 0 || tile.value() == 0){
-//        return 0;
-//      }
-//        return  this.value() - tile.value();
-//  }
+  @Override
+  public String toSymbol() {
+    return String.valueOf(value);
+  }
 }

@@ -2,6 +2,7 @@ package project.rummy.gui.views;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
@@ -23,6 +24,7 @@ public class TileView extends Pane {
   private int col;
 
   @FXML private Text value;
+  @FXML private ImageView face;
   @FXML private Rectangle border;
 
   public TileView(Tile tile, TileSource tileSource, int row, int col) {
@@ -58,7 +60,12 @@ public class TileView extends Pane {
       e.printStackTrace();
       throw new IllegalStateException("Can not load tile");
     }
-    value.setText(String.valueOf(tile.value()));
+    value.setText(tile.toSymbol());
+    if (tile.isJoker()) {
+      value.setVisible(false);
+      face.setVisible(true);
+      border.setStroke(javafx.scene.paint.Color.rgb(164, 14, 14));
+    }
     value.setFill(getColor(tile.color()));
     if (tile.isHightlight()) {
       border.getStyleClass().add("highlight");
@@ -74,8 +81,10 @@ public class TileView extends Pane {
         return javafx.scene.paint.Color.BLACK;
       case ORANGE:
         return javafx.scene.paint.Color.ORANGE;
-      default:
+      case GREEN:
         return javafx.scene.paint.Color.GREEN;
+      default:
+        return javafx.scene.paint.Color.PEACHPUFF;
     }
   }
 

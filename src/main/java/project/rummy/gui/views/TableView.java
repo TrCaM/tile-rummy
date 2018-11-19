@@ -84,6 +84,8 @@ public class TableView extends Pane implements Observer {
     switch (source) {
       case TABLE_RUN:
         return runPane;
+      case TABLE_JOKER_MELD:
+        return runPane;
       case TABLE_SET1:
         return setPane1;
       case TABLE_SET2:
@@ -95,6 +97,8 @@ public class TableView extends Pane implements Observer {
 
   private int[][] getGrid(TileSource source) {
     switch (source) {
+      case TABLE_JOKER_MELD:
+        return tableData.runGrid;
       case TABLE_RUN:
         return tableData.runGrid;
       case TABLE_SET1:
@@ -123,6 +127,7 @@ public class TableView extends Pane implements Observer {
     int[][] setGrid1 = tableData.setGrid1;
     int[][] setGrid2 = tableData.setGrid2;
     int[][] runGrid = tableData.runGrid;
+    // Render sets
     for (int row=0; row<13; row++) {
       for(int col=0; col<4; col++) {
         int meldId1 = setGrid1[row][col];
@@ -137,6 +142,7 @@ public class TableView extends Pane implements Observer {
         }
       }
     }
+    // Render melds
     for (int row=0; row<8; row++) {
       for (int col=0; col<13; col++) {
         int runId = runGrid[row][col];
@@ -144,6 +150,16 @@ public class TableView extends Pane implements Observer {
           Meld run = Meld.idsToMelds.get(runId);
           int firstVal = run.getTile(0).value();
           renderTile(run.getTile(col +1 - firstVal), TileSource.TABLE_RUN, runPane, row, col);
+        }
+      }
+    }
+    // Render Joker melds
+    for (int row = 11; row < 13; row++) {
+      for (int col=0; col<13; col++) {
+        int runId = runGrid[row][col];
+        if (runId != 0) {
+          Meld jokerMeld = Meld.idsToMelds.get(runId);
+          renderTile(jokerMeld.getTile(col), TileSource.TABLE_JOKER_MELD, runPane, row, col);
         }
       }
     }
