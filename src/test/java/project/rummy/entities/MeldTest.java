@@ -126,6 +126,19 @@ public class MeldTest {
 
     meld = Meld.createMeld(O5, O6, O7, O8);
     assertEquals(meld.getScore(), 26);
+
+    meld = Meld.createMeld(O5, O6, O8, JK);
+    assertEquals(meld.getScore(), 26);
+
+    meld = Meld.createMeld(O11, O12, O13, JK);
+    assertEquals(46, meld.getScore());
+
+    meld = Meld.createMeld(O1, O2, O3, JK);
+    assertEquals(meld.getScore(), 10);
+
+    meld = Meld.createMeld(O1, O3, JK, JK2);
+    assertEquals(10, meld.getScore());
+
   }
 
   @Test
@@ -135,6 +148,12 @@ public class MeldTest {
 
     meld = Meld.createMeld(R3, G3, B3, O3);
     assertEquals(meld.getScore(), 12);
+
+    meld = Meld.createMeld(R3, JK, B3, O3);
+    assertEquals(meld.getScore(), 12);
+
+    meld = Meld.createMeld(R3, JK, JK2);
+    assertEquals(meld.getScore(), 9);
   }
 
   @Test
