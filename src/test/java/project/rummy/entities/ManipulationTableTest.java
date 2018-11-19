@@ -18,6 +18,8 @@ public class ManipulationTableTest {
   private static final Tile G3 = Tile.createTile(Color.GREEN, 3);
   private static final Tile B3 = Tile.createTile(Color.BLACK, 3);
   private static final Tile O3 = Tile.createTile(Color.ORANGE, 3);
+  private static final Tile JK = Tile.createTile(Color.ANY, 0);
+  private static final Tile JK2 = Tile.createTile(Color.ANY, 0);
 
   private ManipulationTable table = ManipulationTable.getInstance();
 
@@ -104,6 +106,18 @@ public class ManipulationTableTest {
     assertThat(table.getMelds().get(0).tiles(), contains(R3, G3, B3, O3));
     assertThat(table.getMelds().get(1).tiles(), contains(O5, O6, O7));
     assertThat(table.getMelds().get(2).tiles(), contains(O8, O9));
+  }
+
+  @Test
+  public void split_Run_WithJoker() {
+    table.add(Meld.createMeld(O5, O6, O7, O9, JK));
+    table.split(0, 3);
+
+    assertEquals(2, table.getMelds().size());
+    assertThat(table.getMelds().get(0).tiles(), contains(O5, O6, O7));
+    assertTrue(table.getMelds().get(1).tiles().contains(JK));
+    assertTrue(table.getMelds().get(1).tiles().contains(O9));
+
   }
 
   @Test
@@ -256,6 +270,16 @@ public class ManipulationTableTest {
 
     assertThat(table.getMelds().get(0).tiles(), contains(R3, G3, B3, O3));
     assertThat(table.getMelds().get(1).tiles(), contains(O5, O6, O7, O8, O9));
+  }
+
+
+  @Test
+  public void combine_TwoRunsWithJoker() {
+
+    table.add(Meld.createMeld(O5, O6), Meld.createMeld(O8, O9, JK), Meld.createMeld(R3, G3, B3, O3));
+    table.combineMelds(0, 1);
+    assertThat(table.getMelds().get(1).tiles(), contains(O5, O6, JK, O8, O9));
+
   }
 
   @Test

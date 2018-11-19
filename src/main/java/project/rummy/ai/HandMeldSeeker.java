@@ -19,23 +19,34 @@ public class HandMeldSeeker {
 
         while (alist.size() > 2) {
             List<Tile> tempMeld = new ArrayList<>();
+
+            while(alist.get(0).isJoker()){
+              Tile t = alist.get(0);
+              alist.remove(0);
+              alist.add(t);
+            }
             tempMeld.add(alist.get(0));
+            List<Color> existedColor = new ArrayList<>();
+            existedColor.add(tempMeld.get(0).color());
 
             for (int i = 1; i < alist.size(); i++) {
-                if (alist.get(0).value() == alist.get(i).value()
-                        && alist.get(0).color() != alist.get(i).color()) {
-                    boolean exist = false;
-                    for(Tile t: tempMeld){
-                        if(t.value()==alist.get(i).value() && t.color() == alist.get(i).color()){
-                            exist = true;
-                        }
-                    }
-                    if(!exist){tempMeld.add(alist.get(i));}
+                if(alist.get(i).isJoker()){
+                  tempMeld.add(alist.get(i));
+                } else if (alist.get(0).value() == alist.get(i).value()
+                        && !existedColor.contains(alist.get(i).color())) {
+                    existedColor.add(alist.get(i).color());
+                    tempMeld.add(alist.get(i));
                 }
+
+                if(tempMeld.size()==4){ break;}
             }
 
-            if (tempMeld.size() >= 3) { possibleSets.add(Meld.createMeld(tempMeld)); }
-            tempMeld.forEach(alist::remove);
+            if (tempMeld.size() >= 3) {
+              possibleSets.add(Meld.createMeld(tempMeld));
+              tempMeld.forEach(alist::remove);
+            }else{
+              tempMeld.stream().filter(tile -> !tile.isJoker()).forEach(alist::remove);
+            }
         }
         return possibleSets;
     }
@@ -48,21 +59,57 @@ public class HandMeldSeeker {
         List<Tile> alist = new ArrayList<>(tilesList);
         alist.sort(Comparator.comparing(Tile::value));
 
-        while (alist.size() > 2) {
-            List<Tile> tempMeld = new ArrayList<>();
-            tempMeld.add(alist.get(0));
-
-            for (int i = 1; i < alist.size(); i++) {
-                if (tempMeld.get(0).color() == alist.get(i).color()
-                        && !tempMeld.contains(alist.get(i))
-                        && tempMeld.get(tempMeld.size() - 1).value() == alist.get(i).value() - 1) {
-                    tempMeld.add(alist.get(i));
-                }
-            }
-
-            if (tempMeld.size() >= 3) { possibleRuns.add(Meld.createMeld(tempMeld)); }
-            tempMeld.forEach(alist::remove);
+//        while (alist.size() > 2) {
+//            List<Tile> tempMeld = new ArrayList<>();
+//            tempMeld.add(alist.get(0));
+//
+//            for (int i = 1; i < alist.size(); i++) {
+//                if (tempMeld.get(0).color() == alist.get(i).color()
+//                        && !tempMeld.contains(alist.get(i))
+//                        && tempMeld.get(tempMeld.size() - 1).value() == alist.get(i).value() - 1) {
+//                    tempMeld.add(alist.get(i));
+//                }
+//            }
+//
+//            if (tempMeld.size() >= 3) { possibleRuns.add(Meld.createMeld(tempMeld)); }
+//            tempMeld.forEach(alist::remove);
+//        }
+      while (alist.size() > 2) {
+        List<Tile> tempMeld = new ArrayList<>();
+        while(alist.get(0).isJoker()){
+          Tile t = alist.get(0);
+          alist.remove(0);
+          alist.add(t);
         }
+        tempMeld.add(alist.get(0));
+        Color color = tempMeld.get(0).color();
+        int startValue = tempMeld.get(0).value();
+
+        for(int k=startValue; k<= 13; k++) {
+          boolean makeRun = false;
+          for (int i = 1; i < alist.size(); i++) {
+            if(k==13){
+              if (alist.get(i).canFillToRun(color, startValue-1) && !tempMeld.contains(alist.get(i))) {
+                tempMeld.add(alist.get(i));
+                makeRun = true;
+                break;
+              }
+            } else if (alist.get(i).canFillToRun(color, k+1) && !tempMeld.contains(alist.get(i))) {
+              tempMeld.add(alist.get(i));
+              makeRun = true;
+              break;
+            }
+          }
+          if(!makeRun){break;}
+        }
+
+        if (tempMeld.size() >= 3) {
+          possibleRuns.add(Meld.createMeld(tempMeld));
+          tempMeld.forEach(alist::remove);
+        }else{
+          tempMeld.stream().filter(tile -> !tile.isJoker()).forEach(alist::remove);
+        }
+      }
         return possibleRuns;
     }
 

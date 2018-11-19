@@ -15,6 +15,8 @@ public class HandMeldSeekerTest {
 
     private final Tile O5 = Tile.createTile(Color.ORANGE, 5);
     private final Tile O10 = Tile.createTile(Color.ORANGE, 10);
+    private final Tile O12 = Tile.createTile(Color.ORANGE, 12);
+    private final Tile O13 = Tile.createTile(Color.ORANGE, 13);
     private final Tile R3 = Tile.createTile(Color.RED, 3);
     private final Tile R8 = Tile.createTile(Color.RED, 8);
     private final Tile B5 = Tile.createTile(Color.BLACK, 5);
@@ -25,6 +27,8 @@ public class HandMeldSeekerTest {
     private final Tile O6 = Tile.createTile(Color.ORANGE, 6);
     private final Tile O7 = Tile.createTile(Color.ORANGE, 7);
     private final Tile O8 = Tile.createTile(Color.ORANGE, 8);
+    private final Tile JK = Tile.createTile(Color.ANY, 0);
+    private final Tile JK2 = Tile.createTile(Color.ANY, 0);
 
 
     @Before
@@ -57,6 +61,29 @@ public class HandMeldSeekerTest {
         assertTrue(sets.get(1).tiles().contains(G11));
     }
 
+
+  @Test
+  public void findPossibleSets_withJoker() {
+    List<Tile> tiles = Arrays.asList(O5, O10, R3,R11, B11, R8, B5, G11, G5, JK, JK2);
+
+    List<Meld> sets = HandMeldSeeker.findPossibleSets(tiles);
+
+    assertEquals(sets.size(), 2);
+
+    assertEquals(4, sets.get(0).tiles().size());
+    assertTrue(sets.get(0).tiles().contains(O5));
+    assertTrue(sets.get(0).tiles().contains(B5));
+    assertTrue(sets.get(0).tiles().contains(G5));
+    assertTrue(sets.get(0).tiles().contains(JK));
+//    assertTrue(sets.get(0).tiles().contains(JK2));
+
+    assertEquals(4, sets.get(1).tiles().size());
+    assertTrue(sets.get(1).tiles().contains(R11));
+    assertTrue(sets.get(1).tiles().contains(B11));
+    assertTrue(sets.get(1).tiles().contains(G11));
+    //assertTrue(sets.get(1).tiles().contains(JK2));
+  }
+
     @Test
     public void findPossibleRuns_noRunsFound() {
         List<Tile> tiles = Arrays.asList(O5, O10, R3,R11);
@@ -78,6 +105,41 @@ public class HandMeldSeekerTest {
         assertTrue(runs.get(0).tiles().contains(O7));
         assertTrue(runs.get(0).tiles().contains(O8));
     }
+  @Test
+  public void findPossibleRuns_withJoker() {
+    List<Tile> tiles = Arrays.asList(O5, O10, R3, O8, B11, R8, JK, G11, O6);
+    List<Meld> runs = HandMeldSeeker.findPossibleRuns(tiles);
+
+    assertEquals(1, runs.size());
+    assertTrue(runs.get(0).tiles().contains(O5));
+    assertTrue(runs.get(0).tiles().contains(O6));
+    assertTrue(runs.get(0).tiles().contains(JK));
+    assertTrue(runs.get(0).tiles().contains(O8));
+  }
+
+  @Test
+  public void findPossibleRuns_with2Jokers() {
+    List<Tile> tiles = Arrays.asList(O5, O10, R3, O8, B11, R8, JK, G11, O6, JK2);
+    List<Meld> runs = HandMeldSeeker.findPossibleRuns(tiles);
+
+    assertEquals(1, runs.size());
+    assertTrue(runs.get(0).tiles().contains(R3));
+    assertTrue(runs.get(0).tiles().contains(JK));
+    assertTrue(runs.get(0).tiles().contains(JK2));
+
+  }
+
+  @Test
+  public void findPossibleRuns_withJoker13() {
+    List<Tile> tiles = Arrays.asList(O12, O13, B5, G11, JK);
+    List<Meld> runs = HandMeldSeeker.findPossibleRuns(tiles);
+
+    assertEquals(1, runs.size());
+    assertTrue(runs.get(0).tiles().contains(JK));
+    assertTrue(runs.get(0).tiles().contains(O12));
+    assertTrue(runs.get(0).tiles().contains(O13));
+
+  }
 
     @Test
     public void findPossibleRuns_noMeldsFound() {
@@ -160,7 +222,7 @@ public class HandMeldSeekerTest {
 
     @Test
     public void findNextMelds_onlySet() {
-        List<Tile> tiles = Arrays.asList(O5, O10, B5, R3, O8, B11, G5, R8, G11, O6);
+        List<Tile> tiles = Arrays.asList(O5, O10, B5, R3, O8, B11, G5, R8, O6);
 
         //set: O5 B5 G5
 
