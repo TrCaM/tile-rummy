@@ -4,8 +4,8 @@ import java.util.Set;
 
 public class Joker extends  Tile {
 
-    public Joker(Color color) {
-        super(color);
+    public Joker() {
+        super();
         this.value = 30;
     }
 
@@ -15,7 +15,7 @@ public class Joker extends  Tile {
     }
 
     @Override
-    public boolean canFillToSet(Set<Color> existingcolor) {
+    public boolean canFillToSet(Set<Color> existingColor) {
         return true;
     }
 }

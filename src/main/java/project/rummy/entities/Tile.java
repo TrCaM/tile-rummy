@@ -13,15 +13,19 @@ public abstract class Tile extends Component {
 
     private boolean hightlight;
 
-    public Tile(Color color) {
+    protected Tile(Color color) {
         this.color = color;
         this.hightlight = false;
     }
 
+    protected Tile() {
+        this.color = Color.ANY;
+        this.hightlight = false;
+    }
+
     public static Tile createTile(Color color, int value) {
-        //TODO check if value is 0 , yes => create Joker
         if (value == 0) {
-            return new Joker(color);
+            return new Joker();
         }
         return new NumberTile(color, value);
     }

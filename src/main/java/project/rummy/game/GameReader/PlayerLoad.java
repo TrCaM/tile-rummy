@@ -5,11 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import project.rummy.entities.*;
-import project.rummy.game.GameState;
 
-import javax.xml.bind.Element;
 import java.util.*;
 
 public class PlayerLoad {
@@ -36,7 +33,7 @@ public class PlayerLoad {
         for (JsonElement element: jsonObject.get("Tiles").getAsJsonArray()) {
             color = getColor(element.getAsString().charAt(0));
             tile_num = Integer.parseInt(element.getAsString().substring(1));
-            tile = new Tile(color, tile_num);
+            tile = Tile.createTile(color, tile_num);
             tiles.add(tile);
         }
         ArrayList<Meld> test = new ArrayList<Meld>();
@@ -52,7 +49,7 @@ public class PlayerLoad {
         for (JsonElement element: jsonObject.get("Tiles").getAsJsonArray()) {
             color = getColor(element.getAsString().charAt(0));
             tile_num = Integer.parseInt(element.getAsString().substring(1));
-            tile = new Tile(color, tile_num);
+            tile = Tile.createTile(color, tile_num);
             tiles.add(tile);
         }
 
@@ -65,7 +62,7 @@ public class PlayerLoad {
         for (JsonElement element: jsonObject.get("Tiles").getAsJsonArray()) {
             color = getColor(element.getAsString().charAt(0));
             tile_num = Integer.parseInt(element.getAsString().substring(1));
-            tile = new Tile(color, tile_num);
+            tile = Tile.createTile(color, tile_num);
             tiles.add(tile);
         }
         data[2] = new HandData(new Hand(tiles, new ArrayList<Meld>()));
@@ -77,7 +74,7 @@ public class PlayerLoad {
         for (JsonElement element: jsonObject.get("Tiles").getAsJsonArray()) {
             color = getColor(element.getAsString().charAt(0));
             tile_num = Integer.parseInt(element.getAsString().substring(1));
-            tile = new Tile(color, tile_num);
+            tile = Tile.createTile(color, tile_num);
             tiles.add(tile);
         }
         data[3] = new HandData(new Hand(tiles, new ArrayList<Meld>()));
@@ -171,7 +168,7 @@ public class PlayerLoad {
         for (JsonElement element : jsonArray) {
             color = getColor(element.getAsString().charAt(0));
             tile_num = Integer.parseInt(element.getAsString().substring(1));
-            tile = new Tile(color, tile_num);
+            tile = Tile.createTile(color, tile_num);
             data.freeTiles.add(tile);
         }
 
@@ -184,7 +181,7 @@ public class PlayerLoad {
             for (JsonElement element1 : element.getAsJsonObject().get(FileLoadTypes.Meld.name()).getAsJsonArray()) {
                 color = getColor(element1.getAsString().charAt(0));
                 tile_num = Integer.parseInt(element1.getAsString().substring(1));
-                tile = new Tile(color, tile_num);
+                tile = Tile.createTile(color, tile_num);
                 tiles.add(tile);
 
 

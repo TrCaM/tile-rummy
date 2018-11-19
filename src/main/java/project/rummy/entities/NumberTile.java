@@ -9,14 +9,6 @@ import java.util.*;
         this.value = value;
     }
 
-    public void setHightlight(boolean hightlight) {
-        this.hightlight = hightlight;
-    }
-
-    public boolean isHightlight() {
-        return hightlight;
-    }
-
     @Override
     public boolean canFillToRun(int value) {
         return this.value == value;
