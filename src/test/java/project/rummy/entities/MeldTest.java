@@ -18,6 +18,9 @@ import static org.mockito.Mockito.when;
 public class MeldTest {
   private Meld meld;
 
+  private static final Tile O1 = Tile.createTile(Color.ORANGE, 1);
+  private static final Tile O2 = Tile.createTile(Color.ORANGE, 2);
+  private static final Tile O3 = Tile.createTile(Color.ORANGE, 3);
   private static final Tile O5 = Tile.createTile(Color.ORANGE, 5);
   private static final Tile O6 = Tile.createTile(Color.ORANGE, 6);
   private static final Tile O7 = Tile.createTile(Color.ORANGE, 7);
@@ -29,7 +32,6 @@ public class MeldTest {
   private static final Tile R3 = Tile.createTile(Color.RED, 3);
   private static final Tile G3 = Tile.createTile(Color.GREEN, 3);
   private static final Tile B3 = Tile.createTile(Color.BLACK, 3);
-  private static final Tile O3 = Tile.createTile(Color.ORANGE, 3);
   private static final Tile JK = Tile.createTile(Color.ANY, 0);
   private static final Tile JK2 = Tile.createTile(Color.ANY, 0);
 
@@ -194,24 +196,44 @@ public class MeldTest {
     assertEquals(expectedMeld3.type(), MeldType.SET);
     assertTrue(expectedMeld3.tiles().contains(JK2));
     assertTrue(expectedMeld3.tiles().size() == 3);
+
+    Meld expectedMeld5 = Meld.createMeld(JK, JK2);
+    assertEquals(expectedMeld5.type(), MeldType.SET);
+    assertTrue(expectedMeld5.tiles().contains(JK));
+    assertTrue(expectedMeld5.tiles().contains(JK2));
+
   }
 
   @Test
   public void createMeld_JokerRun() {
-    Meld expectedMeld = Meld.createMeld(O5, O6, O7, JK);
+    Meld expectedMeld = Meld.createMeld(O1, O2, O3, JK);
     assertEquals(expectedMeld.type(), MeldType.RUN);
     assertTrue(expectedMeld.tiles().contains(JK));
     assertTrue(expectedMeld.tiles().size() == 4);
+    assertTrue(expectedMeld.tiles().get(0) == O1);
+    assertTrue(expectedMeld.tiles().get(1) == O2);
+    assertTrue(expectedMeld.tiles().get(2) == O3);
+    assertTrue(expectedMeld.tiles().get(3) == JK);
 
     Meld expectedMeld2 = Meld.createMeld(O5, O6, O7, O9, JK);
     assertEquals(expectedMeld2.type(), MeldType.RUN);
     assertTrue(expectedMeld2.tiles().contains(JK));
     assertTrue(expectedMeld2.tiles().size() == 5);
+    assertTrue(expectedMeld2.tiles().get(0) == O5);
+    assertTrue(expectedMeld2.tiles().get(1) == O6);
+    assertTrue(expectedMeld2.tiles().get(2) == O7);
+    assertTrue(expectedMeld2.tiles().get(3) == JK);
+    assertTrue(expectedMeld2.tiles().get(4) == O9);
 
     Meld expectedMeld3 = Meld.createMeld(O5, O7, O9, JK, JK2);
     assertEquals(expectedMeld3.type(), MeldType.RUN);
     assertTrue(expectedMeld3.tiles().contains(JK2));
     assertTrue(expectedMeld3.tiles().size() == 5);
+    assertTrue(expectedMeld3.tiles().get(0) == O5);
+    assertTrue(expectedMeld3.tiles().get(1) == JK);
+    assertTrue(expectedMeld3.tiles().get(2) == O7);
+    assertTrue(expectedMeld3.tiles().get(3) == JK2);
+    assertTrue(expectedMeld3.tiles().get(4) == O9);
 
 
     Meld expectedMeld4 = Meld.createMeld(O13, O12, O11, JK);
@@ -219,5 +241,12 @@ public class MeldTest {
     assertTrue(expectedMeld4.tiles().contains(JK));
     assertTrue(expectedMeld4.tiles().size() == 4);
     assertTrue(expectedMeld4.tiles().get(0) == JK);
+    assertTrue(expectedMeld4.tiles().get(1) == O11);
+    assertTrue(expectedMeld4.tiles().get(2) == O12);
+    assertTrue(expectedMeld4.tiles().get(3) == O13);
+
+
+
+
   }
 }
