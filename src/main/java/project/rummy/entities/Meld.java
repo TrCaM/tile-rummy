@@ -99,11 +99,12 @@ public class Meld extends Component {
         if (tiles.length == 1) {
             return new Meld(tiles[0]);
         }
-        if (isRun(tiles)) {
-            return new Meld(Arrays.asList(tiles), MeldType.RUN);
-        } else if (isSet(tiles)) {
+        if (isSet(tiles)) {
             return new Meld(Arrays.asList(tiles), MeldType.SET);
+        }else if (isRun(tiles)) {
+            return new Meld(Arrays.asList(tiles), MeldType.RUN);
         }
+
         throw new IllegalArgumentException(String.format("Invalid tiles input: %s", Arrays.deepToString(tiles)));
     }
 
@@ -157,18 +158,20 @@ public class Meld extends Component {
         /**
          * Check if a meld is a SET
          */
-    //Todo: update to use joker
     private static boolean isSet(Tile[] tiles) {
-        //Check for existing colours in a meld (no duplicate)
-        Set<Color> existedColors = new HashSet<>();
-        int value = tiles[0].value();
-        for (Tile tile : tiles) {
-            if (value == 0 && tile.value() != 0){
-                value = tile.value();
+        Arrays.sort(tiles, Comparator.comparing(Tile::value));
+        int tileValue = tiles[0].value;
+        if(tiles.length > 4) { return false;}
+        Set<Color> existingColors = new HashSet<>();
+        for(Color c: Color.values()){
+            if(c != Color.ANY){ existingColors.add(c);}
+        }
+
+        for(Tile t: tiles){
+            if(!t.canFillToSet(existingColors,tileValue)){
+                return false;
             }
-            if (!existedColors.add(tile.color()) || tile.value() != value || tile.value() != 0) {
-                    return false;
-                }
+            existingColors.remove(t.color);
         }
         return true;
     }
