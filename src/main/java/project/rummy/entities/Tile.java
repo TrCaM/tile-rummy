@@ -48,8 +48,8 @@ public abstract class Tile extends Component {
         return hightlight;
     }
 
-    public abstract boolean canFillToRun(int value);
+    public abstract boolean canFillToRun(Color color, int value);
 
-    public abstract boolean canFillToSet(Set<Color> existingcolor);
+    public abstract boolean canFillToSet(Set<Color> existingcolor, int value);
 
 }

@@ -16,13 +16,13 @@ public class NumberTile extends Tile {
   }
 
   @Override
-  public boolean canFillToRun(int value) {
-    return this.value == value;
+  public boolean canFillToRun(Color color, int value) {
+    return this.color == color && this.value == value;
   }
 
   @Override
-  public boolean canFillToSet(Set<Color> existingcolor) {
-    return existingcolor.contains(this.color);
+  public boolean canFillToSet(Set<Color> existingcolor, int value) {
+    return existingcolor.contains(this.color) && this.value == value;
   }
 
   @Override

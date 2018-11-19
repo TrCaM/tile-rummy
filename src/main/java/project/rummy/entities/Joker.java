@@ -15,12 +15,12 @@ public class Joker extends Tile {
   }
 
   @Override
-    public boolean canFillToRun(int value) {
+    public boolean canFillToRun(Color color, int value) {
         return true;
     }
 
     @Override
-    public boolean canFillToSet(Set<Color> existingColor) {
+    public boolean canFillToSet(Set<Color> existingColor, int value) {
         return true;
     }
 }
