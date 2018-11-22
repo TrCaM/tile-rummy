@@ -6,9 +6,7 @@ import project.rummy.entities.Color;
 import project.rummy.entities.Meld;
 import project.rummy.entities.Tile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -33,6 +31,8 @@ public class CombinationSeekerTest {
     private static final Tile G11 = Tile.createTile(Color.GREEN, 11);
     private static final Tile B11 = Tile.createTile(Color.BLACK, 11);
     private static final Tile O11 = Tile.createTile(Color.ORANGE, 11);
+    private static final Tile JK = Tile.createTile(Color.ANY, 0);
+    private static final Tile JK2 = Tile.createTile(Color.ANY, 0);
 
 
     private List<Meld> melds;
@@ -74,6 +74,22 @@ public class CombinationSeekerTest {
         Map<Meld, Integer> map3 = CombinationSeeker.formSet(t3, melds);
         assertEquals(0, map3.size());
     }
+
+    @Test
+    public void formSet_withJoker() {
+        melds.add(Meld.createMeld(JK, O5, O6, O7, O8, O9));
+        melds.add(Meld.createMeld(R4, G4, B4, O4));
+        melds.add(Meld.createMeld(G5, B5, O5, JK2));
+
+        List<Tile> t = new ArrayList<>();
+        t.add(R4);
+
+        Map<Meld, Integer> map = CombinationSeeker.formSet(t, melds);
+    assertEquals(3,map.size());
+    assertEquals(map.get(melds.get(1)).intValue(), 1);
+    assertEquals(map.get(melds.get(0)).intValue(), 5);
+    assertEquals(map.get(melds.get(2)).intValue(), 3);
+}
 
 
     @Test
