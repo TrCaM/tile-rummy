@@ -16,36 +16,39 @@ public class HandMeldSeeker {
 
         List<Meld> possibleSets = new ArrayList<>();
         List<Tile> alist = new ArrayList<>(tiles);
+        alist.sort(Comparator.comparing(Tile::value).reversed());
 
         while (alist.size() > 2) {
             List<Tile> tempMeld = new ArrayList<>();
 
-            while(alist.get(0).isJoker()){
-              Tile t = alist.get(0);
-              alist.remove(0);
-              alist.add(t);
+            while (alist.get(0).isJoker()) {
+                Tile t = alist.get(0);
+                alist.remove(0);
+                alist.add(t);
             }
             tempMeld.add(alist.get(0));
             List<Color> existedColor = new ArrayList<>();
             existedColor.add(tempMeld.get(0).color());
 
             for (int i = 1; i < alist.size(); i++) {
-                if(alist.get(i).isJoker()){
-                  tempMeld.add(alist.get(i));
+                if (alist.get(i).isJoker()) {
+                    tempMeld.add(alist.get(i));
                 } else if (alist.get(0).value() == alist.get(i).value()
                         && !existedColor.contains(alist.get(i).color())) {
                     existedColor.add(alist.get(i).color());
                     tempMeld.add(alist.get(i));
                 }
 
-                if(tempMeld.size()==4){ break;}
+                if (tempMeld.size() == 4) {
+                    break;
+                }
             }
 
             if (tempMeld.size() >= 3) {
-              possibleSets.add(Meld.createMeld(tempMeld));
-              tempMeld.forEach(alist::remove);
-            }else{
-              tempMeld.stream().filter(tile -> !tile.isJoker()).forEach(alist::remove);
+                possibleSets.add(Meld.createMeld(tempMeld));
+                tempMeld.forEach(alist::remove);
+            } else {
+                tempMeld.stream().filter(tile -> !tile.isJoker()).forEach(alist::remove);
             }
         }
         return possibleSets;
@@ -56,60 +59,51 @@ public class HandMeldSeeker {
      */
     public static List<Meld> findPossibleRuns(List<Tile> tilesList) {
         List<Meld> possibleRuns = new ArrayList<>();
-        List<Tile> alist = new ArrayList<>(tilesList);
-        alist.sort(Comparator.comparing(Tile::value));
+        List<Tile> alist = new ArrayList<>();
+        tilesList.stream()
+                .filter(tile -> !tile.isJoker())
+                .sorted(Comparator.comparing(Tile::value).reversed())
+                .forEach(alist::add);
+        tilesList.stream()
+                .filter(tile -> tile.isJoker())
+                .forEach(alist::add);
 
-//        while (alist.size() > 2) {
-//            List<Tile> tempMeld = new ArrayList<>();
-//            tempMeld.add(alist.get(0));
-//
-//            for (int i = 1; i < alist.size(); i++) {
-//                if (tempMeld.get(0).color() == alist.get(i).color()
-//                        && !tempMeld.contains(alist.get(i))
-//                        && tempMeld.get(tempMeld.size() - 1).value() == alist.get(i).value() - 1) {
-//                    tempMeld.add(alist.get(i));
-//                }
-//            }
-//
-//            if (tempMeld.size() >= 3) { possibleRuns.add(Meld.createMeld(tempMeld)); }
-//            tempMeld.forEach(alist::remove);
-//        }
-      while (alist.size() > 2) {
-        List<Tile> tempMeld = new ArrayList<>();
-        while(alist.get(0).isJoker()){
-          Tile t = alist.get(0);
-          alist.remove(0);
-          alist.add(t);
-        }
-        tempMeld.add(alist.get(0));
-        Color color = tempMeld.get(0).color();
-        int startValue = tempMeld.get(0).value();
+        while (alist.size() > 2) {
+            List<Tile> tempMeld = new ArrayList<>();
+            tempMeld.add(alist.get(0));
+            Color color = tempMeld.get(0).color();
+            int endValue = tempMeld.get(0).value();
 
-        for(int k=startValue; k<= 13; k++) {
-          boolean makeRun = false;
-          for (int i = 1; i < alist.size(); i++) {
-            if(k==13){
-              if (alist.get(i).canFillToRun(color, startValue-1) && !tempMeld.contains(alist.get(i))) {
-                tempMeld.add(alist.get(i));
-                makeRun = true;
-                break;
-              }
-            } else if (alist.get(i).canFillToRun(color, k+1) && !tempMeld.contains(alist.get(i))) {
-              tempMeld.add(alist.get(i));
-              makeRun = true;
-              break;
+            for (int k = endValue - 1; k >= 1; k--) {
+                boolean tileFound = false;
+                for (int i = 1; i < alist.size(); i++) {
+                    if (k == 1) {
+                        if (alist.get(i).canFillToRun(color, endValue + 1) && !tempMeld.contains(alist.get(i))) {
+                            tempMeld.add(alist.get(i));
+                            tileFound = true;
+                            break;
+                        }
+                    } else if (alist.get(i).canFillToRun(color, k) && !tempMeld.contains(alist.get(i))) {
+                        tempMeld.add(alist.get(i));
+                        tileFound = true;
+                        break;
+                    }
+                }
+                if (!tileFound) {
+                    break;
+                }
             }
-          }
-          if(!makeRun){break;}
-        }
 
-        if (tempMeld.size() >= 3) {
-          possibleRuns.add(Meld.createMeld(tempMeld));
-          tempMeld.forEach(alist::remove);
-        }else{
-          tempMeld.stream().filter(tile -> !tile.isJoker()).forEach(alist::remove);
+            if (tempMeld.size() >= 3) {
+                possibleRuns.add(Meld.createMeld(tempMeld));
+                tempMeld.forEach(alist::remove);
+            } else {
+                tempMeld.stream().filter(tile -> !tile.isJoker()).forEach(alist::remove);
+            }
         }
-      }
+//        for (Meld m : possibleRuns) {
+//            System.out.println(m.tiles().toString());
+//        }
         return possibleRuns;
     }
 
@@ -126,7 +120,9 @@ public class HandMeldSeeker {
         //sets first then runs
         List<Meld> bestMelds_1 = findPossibleSets(tilesList);
 
-        for(Meld m : bestMelds_1) { m.tiles().forEach(tilesList::remove);}
+        for (Meld m : bestMelds_1) {
+            m.tiles().forEach(tilesList::remove);
+        }
         bestMelds_1.addAll(findPossibleRuns(tilesList));
 
         int score_1 = bestMelds_1.stream().mapToInt(Meld::getScore).sum();
@@ -136,7 +132,9 @@ public class HandMeldSeeker {
         List<Meld> bestMelds_2 = findPossibleRuns(tilesList);
 
 
-        for(Meld m : bestMelds_2) {m.tiles().forEach(tilesList::remove); }
+        for (Meld m : bestMelds_2) {
+            m.tiles().forEach(tilesList::remove);
+        }
 
         bestMelds_2.addAll(findPossibleSets(tilesList));
 
@@ -157,7 +155,7 @@ public class HandMeldSeeker {
 
         Meld maxSet = null;
         int setScore = 0;
-        if(!sets.isEmpty()) {
+        if (!sets.isEmpty()) {
             maxSet = Collections.max(sets, Comparator.comparing(Meld::getScore));
             setScore = maxSet.getScore();
         }
@@ -165,7 +163,7 @@ public class HandMeldSeeker {
 
         Meld maxRun = null;
         int runScore = 0;
-        if(!runs.isEmpty()) {
+        if (!runs.isEmpty()) {
             maxRun = Collections.max(runs, Comparator.comparing(Meld::getScore));
             runScore = maxRun.getScore();
         }
@@ -176,19 +174,19 @@ public class HandMeldSeeker {
     /**
      * find remaining tiles that cannot form melds
      */
-    public static List<Tile> findRemainingTiles(List<Tile> tiles){
+    public static List<Tile> findRemainingTiles(List<Tile> tiles) {
         List<Meld> allMelds = findBestMelds(tiles);
         List<Tile> remainingTiles = new ArrayList<>(tiles);
-        for(Meld m: allMelds){
+        for (Meld m : allMelds) {
             m.tiles().forEach(remainingTiles::remove);
         }
         return remainingTiles;
     }
 
-    public static Tile findTile(int value, Color color, List<Tile> tiles){
-        for(Tile t: tiles){
-            if(t.color()!=color && t.value()==value){
-                return  t;
+    public static Tile findTile(int value, Color color, List<Tile> tiles) {
+        for (Tile t : tiles) {
+            if (t.color() != color && t.value() == value) {
+                return t;
             }
         }
         return null;

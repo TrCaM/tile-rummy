@@ -38,7 +38,7 @@ public class CombinationSeeker {
                             if (m.tiles().get(i).isJoker()
                                 || m.tiles().get(i).canFillToRun(c, tiles.get(0).value())) {
                                 map.put(m, i);
-                                copyMelds.remove(copyMelds.indexOf(m));
+                                copyMelds.remove(m);
                             }
                         }
                     }
@@ -70,7 +70,7 @@ public class CombinationSeeker {
             if (meldid != 0) {
                 Meld m = Meld.getMeldFromId(meldid, copyMelds);
                 for (int i = 0; i < m.tiles().size(); i++) {
-                    if (m.tiles().get(i).value() == rightValue && m.tiles().get(i).color() == tileColor) {
+                    if (m.tiles().get(i).canFillToRun(tileColor,rightValue)) {
                         map.put(m, i);
                         copyMelds.remove(copyMelds.indexOf(m));
                     }
@@ -86,7 +86,7 @@ public class CombinationSeeker {
             if (meldid != 0) {
                 Meld m = Meld.getMeldFromId(meldid, copyMelds);
                 for (int i = 0; i < m.tiles().size(); i++) {
-                    if (m.tiles().get(i).value() == leftValue && m.tiles().get(i).color() == tileColor) {
+                    if (m.tiles().get(i).canFillToRun(tileColor, leftValue)) {
                         map.put(m, i);
                         copyMelds.remove(copyMelds.indexOf(m));
                     }
