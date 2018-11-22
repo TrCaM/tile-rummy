@@ -2,6 +2,7 @@ package project.rummy.ai;
 
 import project.rummy.entities.Color;
 import project.rummy.entities.Meld;
+import project.rummy.entities.MeldType;
 import project.rummy.entities.Tile;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class CombinationSeeker {
         //key is meld and value is tile index
         Map<Meld, Integer> map = new HashMap<>();
 
+        int tileValue = tiles.get(0).value();
         for(Color c: Color.values()){
             if(c != Color.ANY) {
                 boolean color2 = true;
@@ -35,7 +37,13 @@ public class CombinationSeeker {
                     if (meldid != 0) {
                         Meld m = Meld.getMeldFromId(meldid, copyMelds);
                         for (int i = 0; i < m.tiles().size(); i++) {
-                            if (m.tiles().get(i).isJoker()
+                            if(m.type() == MeldType.RUN){
+                                if (m.tiles().get(i).canFillToRun(c, tileValue)
+                                        && (i==0 || i == m.tiles().size()-1)) {
+                                    map.put(m, i);
+                                    copyMelds.remove(m);
+                                }
+                            } else if (m.tiles().get(i).isJoker()
                                 || m.tiles().get(i).canFillToRun(c, tiles.get(0).value())) {
                                 map.put(m, i);
                                 copyMelds.remove(m);
