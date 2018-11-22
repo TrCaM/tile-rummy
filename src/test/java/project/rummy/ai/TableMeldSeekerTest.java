@@ -27,6 +27,8 @@ public class TableMeldSeekerTest {
     private static final Tile R5 = Tile.createTile(Color.RED, 5);
     private static final Tile B5 = Tile.createTile(Color.BLACK, 5);
     private static final Tile B10 = Tile.createTile(Color.BLACK, 10);
+  private static final Tile JK = Tile.createTile(Color.ANY, 0);
+  private static final Tile JK2 = Tile.createTile(Color.ANY, 0);
 
     private List<Meld> melds;
 
@@ -48,6 +50,17 @@ public class TableMeldSeekerTest {
         assertEquals(melds.get(1).getId(), TableMeldSeeker.findDetachableIdenticalTile(4, Color.GREEN, melds));
         assertEquals(melds.get(0).getId(), TableMeldSeeker.findDetachableIdenticalTile(4, Color.ORANGE, melds));
         assertEquals(melds.get(0).getId(), TableMeldSeeker.findDetachableIdenticalTile(9, Color.ORANGE, melds));
+
+    }
+    @Test
+    public void findDetachableIdenticalTile_withJoker(){
+        melds.add(Meld.createMeld(O4, O5, O6, O7, O8, JK2));
+        melds.add(Meld.createMeld(R4, JK, B4, O4));
+        melds.add(Meld.createMeld(G5, B5, O5));
+
+      assertEquals(melds.get(0).getId(), TableMeldSeeker.findDetachableIdenticalTile(4, Color.GREEN, melds));
+      assertEquals(melds.get(0).getId(), TableMeldSeeker.findDetachableIdenticalTile(9, Color.ORANGE, melds));
+      assertEquals(melds.get(0).getId(), TableMeldSeeker.findDetachableIdenticalTile(4, Color.ORANGE, melds));
 
     }
 

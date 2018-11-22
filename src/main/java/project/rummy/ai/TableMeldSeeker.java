@@ -20,7 +20,7 @@ public class TableMeldSeeker {
 
         for(Meld m: meldsFound){
             for(Tile t: m.tiles()){
-                if(t.value()== tileValue && t.color()== tileColor){
+                if(t.canFillToRun(tileColor, tileValue)){
                     if(m.type() == MeldType.SET
                             || m.tiles().indexOf(t) == 0
                             || m.tiles().indexOf(t) == m.tiles().size()-1){
@@ -45,7 +45,7 @@ public class TableMeldSeeker {
         if(tileValue < 1 || tileValue > 11){ return 0;}
         for(Meld m: melds){
             for(Tile t: m.tiles()){
-                if(t.value()==tileValue && t.color()==tileColor
+                if(t.canFillToRun(tileColor,tileValue)
                         && m.type() == MeldType.RUN
                         && m.tiles().indexOf(t) > 0
                         && m.tiles().size() - m.tiles().indexOf(t) >= 3){
@@ -69,7 +69,7 @@ public class TableMeldSeeker {
         if(tileValue > 12 || tileValue < 3){ return 0;}
         for(Meld m: melds){
             for(Tile t: m.tiles()){
-                if(t.value()==tileValue && t.color()==tileColor
+                if(t.canFillToRun(tileColor, tileValue)
                         && m.type() == MeldType.RUN
                         && m.tiles().indexOf(t) != m.tiles().size()-1
                         && m.tiles().indexOf(t) >= 2){
@@ -97,10 +97,22 @@ public class TableMeldSeeker {
                 }
                 if(!exist){ return m.getId(); }
             }else if(m.type()==MeldType.RUN){
-                int first = m.tiles().get(0).value();
+                int first = 0;
+                if(!m.tiles().get(0).isJoker()){
+                    first = m.tiles().get(0).value();
+                }else{
+                    if(m.tiles().get(1).isJoker()) {
+                        first = m.tiles().get(2).value() - 2;
+                    }else {
+                        first = m.tiles().get(1).value() - 1;
+                    }
+                }
+
+
+
                 int last = first + m.tiles().size() - 1;
 
-                if (m.tiles().get(0).color() == tileColor
+                if ((m.tiles().get(0).color() == tileColor || tileColor == Color.ANY)
                         && (tileValue == first - 1 || tileValue == last + 1)) {
                     return m.getId();
                 }

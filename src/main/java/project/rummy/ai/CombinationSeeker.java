@@ -25,23 +25,29 @@ public class CombinationSeeker {
         Map<Meld, Integer> map = new HashMap<>();
 
         for(Color c: Color.values()){
-            boolean color2 = true;
-            if(tiles.size()>1){
-                color2 = c!= tiles.get(1).color();
-            }
-            if(c != tiles.get(0).color() && color2){
-                int meldid = TableMeldSeeker.findDetachableIdenticalTile(tiles.get(0).value(), c, copyMelds);
-                if(meldid != 0){
-                    Meld m = Meld.getMeldFromId(meldid, copyMelds);
-                    for(int i=0; i<m.tiles().size(); i++){
-                        if(m.tiles().get(i).value()== tiles.get(0).value() && m.tiles().get(i).color()==c){
-                            map.put(m, i);
-                            copyMelds.remove(copyMelds.indexOf(m));
+            if(c != Color.ANY) {
+                boolean color2 = true;
+                if (tiles.size() > 1) {
+                    color2 = c != tiles.get(1).color();
+                }
+                if (c != tiles.get(0).color() && color2) {
+                    int meldid = TableMeldSeeker.findDetachableIdenticalTile(tiles.get(0).value(), c, copyMelds);
+                    if (meldid != 0) {
+                        Meld m = Meld.getMeldFromId(meldid, copyMelds);
+                        for (int i = 0; i < m.tiles().size(); i++) {
+                            if (m.tiles().get(i).isJoker()
+                                || m.tiles().get(i).canFillToRun(c, tiles.get(0).value())) {
+                                map.put(m, i);
+                                copyMelds.remove(copyMelds.indexOf(m));
+                            }
                         }
                     }
                 }
             }
         }
+//        for(Meld m: map.keySet()){
+//            System.out.println(m.tiles().toString() + "    " + m.tiles().get(map.get(m)));
+//        }
         return map;
     }
 
@@ -138,8 +144,6 @@ public class CombinationSeeker {
                 if(leftMeld.tiles().get(i).value()== tileValue && leftMeld.tiles().get(i).color() == tileColor){
                     //this is the number of tiles that we can detach
                     if(i >= 2){
-                        System.out.println(tileValue + tileColor.toString());
-                        System.out.println(leftMeld.tiles().toString());
                         map.put(leftMeld, i);
                         return map;
                     }
