@@ -52,13 +52,13 @@ public class HandMeldSeekerTest {
 
         assertEquals(sets.size(), 2);
 
-        assertTrue(sets.get(0).tiles().contains(O5));
-        assertTrue(sets.get(0).tiles().contains(B5));
-        assertTrue(sets.get(0).tiles().contains(G5));
+        assertTrue(sets.get(1).tiles().contains(O5));
+        assertTrue(sets.get(1).tiles().contains(B5));
+        assertTrue(sets.get(1).tiles().contains(G5));
 
-        assertTrue(sets.get(1).tiles().contains(R11));
-        assertTrue(sets.get(1).tiles().contains(B11));
-        assertTrue(sets.get(1).tiles().contains(G11));
+        assertTrue(sets.get(0).tiles().contains(R11));
+        assertTrue(sets.get(0).tiles().contains(B11));
+        assertTrue(sets.get(0).tiles().contains(G11));
     }
 
 
@@ -71,16 +71,16 @@ public class HandMeldSeekerTest {
     assertEquals(sets.size(), 2);
 
     assertEquals(4, sets.get(0).tiles().size());
-    assertTrue(sets.get(0).tiles().contains(O5));
-    assertTrue(sets.get(0).tiles().contains(B5));
-    assertTrue(sets.get(0).tiles().contains(G5));
+    assertTrue(sets.get(1).tiles().contains(O5));
+    assertTrue(sets.get(1).tiles().contains(B5));
+    assertTrue(sets.get(1).tiles().contains(G5));
     assertTrue(sets.get(0).tiles().contains(JK));
 //    assertTrue(sets.get(0).tiles().contains(JK2));
 
     assertEquals(4, sets.get(1).tiles().size());
-    assertTrue(sets.get(1).tiles().contains(R11));
-    assertTrue(sets.get(1).tiles().contains(B11));
-    assertTrue(sets.get(1).tiles().contains(G11));
+    assertTrue(sets.get(0).tiles().contains(R11));
+    assertTrue(sets.get(0).tiles().contains(B11));
+    assertTrue(sets.get(0).tiles().contains(G11));
     //assertTrue(sets.get(1).tiles().contains(JK2));
   }
 
@@ -95,7 +95,7 @@ public class HandMeldSeekerTest {
 
     @Test
     public void findPossibleRuns_test() {
-        List<Tile> tiles = Arrays.asList(O5, O10, R3, O8, B11, R8, O7, G11, O6);
+        List<Tile> tiles = Arrays.asList(O5,  R3, O8, R8, O7, O6);
 
         List<Meld> runs = HandMeldSeeker.findPossibleRuns(tiles);
 
@@ -111,10 +111,9 @@ public class HandMeldSeekerTest {
     List<Meld> runs = HandMeldSeeker.findPossibleRuns(tiles);
 
     assertEquals(1, runs.size());
-    assertTrue(runs.get(0).tiles().contains(O5));
-    assertTrue(runs.get(0).tiles().contains(O6));
-    assertTrue(runs.get(0).tiles().contains(JK));
+    assertTrue(runs.get(0).tiles().contains(O10));
     assertTrue(runs.get(0).tiles().contains(O8));
+    assertTrue(runs.get(0).tiles().contains(JK));
   }
 
   @Test
@@ -123,7 +122,7 @@ public class HandMeldSeekerTest {
     List<Meld> runs = HandMeldSeeker.findPossibleRuns(tiles);
 
     assertEquals(1, runs.size());
-    assertTrue(runs.get(0).tiles().contains(R3));
+    assertTrue(runs.get(0).tiles().contains(B11));
     assertTrue(runs.get(0).tiles().contains(JK));
     assertTrue(runs.get(0).tiles().contains(JK2));
 
@@ -157,13 +156,13 @@ public class HandMeldSeekerTest {
 
         assertEquals(melds.size(), 2);
 
-        assertTrue(melds.get(0).tiles().contains(O5));
-        assertTrue(melds.get(0).tiles().contains(B5));
-        assertTrue(melds.get(0).tiles().contains(G5));
+        assertTrue(melds.get(1).tiles().contains(O5));
+        assertTrue(melds.get(1).tiles().contains(B5));
+        assertTrue(melds.get(1).tiles().contains(G5));
 
-        assertTrue(melds.get(1).tiles().contains(R11));
-        assertTrue(melds.get(1).tiles().contains(B11));
-        assertTrue(melds.get(1).tiles().contains(G11));
+        assertTrue(melds.get(0).tiles().contains(R11));
+        assertTrue(melds.get(0).tiles().contains(B11));
+        assertTrue(melds.get(0).tiles().contains(G11));
     }
 
     @Test

@@ -24,6 +24,7 @@ public class CombinationSeekerTest {
     private static final Tile O4 = Tile.createTile(Color.ORANGE, 4);
     private static final Tile G5 = Tile.createTile(Color.GREEN, 5);
     private static final Tile B5 = Tile.createTile(Color.BLACK, 5);
+    private static final Tile R5 = Tile.createTile(Color.RED, 5);
 
     private static final Tile R10 = Tile.createTile(Color.RED, 10);
 
@@ -33,6 +34,17 @@ public class CombinationSeekerTest {
     private static final Tile O11 = Tile.createTile(Color.ORANGE, 11);
     private static final Tile JK = Tile.createTile(Color.ANY, 0);
     private static final Tile JK2 = Tile.createTile(Color.ANY, 0);
+
+    private static final Tile R13 = Tile.createTile(Color.RED, 13);
+    private static final Tile G13 = Tile.createTile(Color.GREEN, 13);
+    private static final Tile B13 = Tile.createTile(Color.BLACK, 13);
+    private static final Tile O13 = Tile.createTile(Color.ORANGE, 13);
+
+    private static final Tile R6 = Tile.createTile(Color.RED, 6);
+    private static final Tile G6 = Tile.createTile(Color.GREEN, 6);
+    private static final Tile B6 = Tile.createTile(Color.BLACK, 6);
+
+
 
 
     private List<Meld> melds;
@@ -73,6 +85,16 @@ public class CombinationSeekerTest {
         t3.add(O5);
         Map<Meld, Integer> map3 = CombinationSeeker.formSet(t3, melds);
         assertEquals(0, map3.size());
+    }
+    @Test
+    public void formRunByDetaching_test2(){
+        melds.add(Meld.createMeld(R6,O6,B6,G6));
+        melds.add(Meld.createMeld(R13,G13,O13,B13));
+
+        List<Tile> t = new ArrayList<>();
+        t.add(R5);
+        Map<Meld, Integer> map = CombinationSeeker.formRunByDetaching(5, Color.RED, melds);
+        assertEquals(1,map.size());
     }
 
     @Test

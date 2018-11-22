@@ -34,7 +34,7 @@ public class PlayAllMeldsMoveMaker implements ComputerMoveMaker {
                     indecies.add(handTiles.indexOf(m.tiles().get(i)));
                 }
                 commands.add(handler -> {
-                    handler.formMeld(indecies.stream().mapToInt(Integer::intValue).toArray());
+                    handler.formOneMeld(indecies.stream().mapToInt(Integer::intValue).toArray());
                     handler.playFromHand(0);
                     handler.submit();
                 });

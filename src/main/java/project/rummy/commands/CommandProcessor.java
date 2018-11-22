@@ -54,7 +54,7 @@ public class CommandProcessor {
     if (handler == null || handler.isExpired()) {
       throw new IllegalStateException("ActionHandler was not set up properly before the turn");
     }
-    System.out.println(String.format("Processing %d", commands.size()));
+    //System.out.println(String.format("Processing %d", commands.size()));
 
     command.execute(handler);
     game.update(handler.getTurnStatus());

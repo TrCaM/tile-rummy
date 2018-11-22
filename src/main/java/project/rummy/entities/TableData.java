@@ -25,7 +25,7 @@ public class TableData extends Component {
     melds = new ArrayList<>();
     setGrid1 = new int[13][4];
     setGrid2 = new int[13][4];
-    runGrid = new int[8][13];
+    runGrid = new int[13][13];
   }
 
   public static Table toTable(TableData data) {

@@ -63,6 +63,25 @@ public class Hand {
     return new HandData(this);
   }
 
+
+  public Meld formOneMeld(int ...tileIndexes){
+    Arrays.sort(tileIndexes);
+    Tile[] meldTiles = new Tile[tileIndexes.length];
+    if (tileIndexes[0] < 0 || tileIndexes[tileIndexes.length-1] >= tiles.size()) {
+      throw new IllegalArgumentException(String.format(
+              "Invalid tile index: %s, tiles: %s",
+              Arrays.toString(tileIndexes),
+              tiles.toString()));
+    }
+
+    for(int i = tileIndexes.length - 1; i >= 0; i--) {
+      meldTiles[i] = tiles.remove(tileIndexes[i]);
+    }
+    Meld newMeld = Meld.createMeld(meldTiles);
+    melds.add(newMeld);
+    return  newMeld;
+  }
+
   public List<Meld> formMeld(int ...tileIndexes) {
     Arrays.sort(tileIndexes);
     Tile[] meldTiles = new Tile[tileIndexes.length];

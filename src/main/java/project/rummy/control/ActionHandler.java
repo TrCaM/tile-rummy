@@ -107,6 +107,13 @@ public class ActionHandler {
     hand.formMeld(indexes);
   }
 
+  public void formOneMeld(int... indexes) {
+    if (indexes.length == 0) {
+      return;
+    }
+    hand.formOneMeld(indexes);
+  }
+
   private boolean canEndTurn() {
     if (turnType == START) {
       return (startPoint - hand.getScore() >= 30 || hand.getScore() > startPoint)

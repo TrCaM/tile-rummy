@@ -84,7 +84,7 @@ public class PlayOneTileMoveMaker implements ComputerMoveMaker {
         Map<Meld, Integer> map3 = CombinationSeeker.formRunByDetaching(tile.value(), tile.color(), tableMelds);
 
         if(map3.size() >= 2){
-            System.out.print(state.getPlayerData()[state.getCurrentPlayer()].name + " use {"  + tile.toString() +"} to form set with ");
+            System.out.print(state.getPlayerData()[state.getCurrentPlayer()].name + " use {"  + tile.toString() +"} to form run with ");
             for(Meld k: map3.keySet()){
                 System.out.print(k.tiles().toString());
             }
