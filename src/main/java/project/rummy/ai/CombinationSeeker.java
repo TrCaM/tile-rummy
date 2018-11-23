@@ -80,7 +80,7 @@ public class CombinationSeeker {
                 for (int i = 0; i < m.tiles().size(); i++) {
                     if (m.tiles().get(i).canFillToRun(tileColor,rightValue)) {
                         map.put(m, i);
-                        copyMelds.remove(copyMelds.indexOf(m));
+                        copyMelds.remove(m);
                     }
                 }
                 rightValue ++;

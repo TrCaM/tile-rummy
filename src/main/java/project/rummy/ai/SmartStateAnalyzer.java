@@ -19,24 +19,24 @@ public class SmartStateAnalyzer {
 
   public SmartStateAnalyzer() {
     this.state = null;
-    tableTileCounts = new int[52];
-    handTileCounts = new int[52];
+    tableTileCounts = new int[53];
+    handTileCounts = new int[53];
   }
 
   public SmartStateAnalyzer(GameState state) {
-    tableTileCounts = new int[52];
-    handTileCounts = new int[52];
+    tableTileCounts = new int[53];
+    handTileCounts = new int[53];
     this.state = state;
     analyzeCurrentHand();
     analyzeTableState();
   }
 
   private static int calculatePosition(Tile tile) {
-    return tile.value() + tile.color().value() * 13 - 1;
+    return !tile.isJoker() ? tile.value() + tile.color().value() * 13 - 1 : 52;
   }
 
   private void analyzeTableState() {
-    tableTileCounts = new int[52];
+    tableTileCounts = new int[53];
     TableData tableData = state.getTableData();
     for (Meld meld : tableData.melds) {
       for (Tile tile : meld.tiles()) {
@@ -56,6 +56,10 @@ public class SmartStateAnalyzer {
     if (state == null) {
       return true;
     }
+    if(tile.isJoker()){
+      return state.getHandsData()[state.getCurrentPlayer()].tiles.size()>1 ? false : true;
+    }
+
     return !(isPartOfRun(tile)
         || isPartOfSet(tile)
         || shouldWaitForSet(tile)
@@ -64,12 +68,26 @@ public class SmartStateAnalyzer {
 
   public boolean isPartOfRun(Tile tile) {
     int pos = calculatePosition(tile);
+    if(handTileCounts[52]==2){
+      return true;
+    }
+
+    if(handTileCounts[52]==1) {
+      return (pos < 50 && (handTileCounts[pos + 1] > 0 || handTileCounts[pos + 2] > 0))
+              || (pos > 0 && pos < 51 && (handTileCounts[pos - 1] > 0 || handTileCounts[pos + 1] > 0))
+              || (pos > 1 && (handTileCounts[pos - 1] > 0 || handTileCounts[pos - 2] > 0));
+    }
+
     return (pos < 50 && handTileCounts[pos + 1] > 0 && handTileCounts[pos + 2] > 0)
-        || (pos > 0 && pos < 51 && handTileCounts[pos - 1] > 0 && handTileCounts[pos + 1] > 0)
-        || (pos > 1 && handTileCounts[pos - 1] > 0 && handTileCounts[pos - 2] > 0);
+            || (pos > 0 && pos < 51 && handTileCounts[pos - 1] > 0 && handTileCounts[pos + 1] > 0)
+            || (pos > 1 && handTileCounts[pos - 1] > 0 && handTileCounts[pos - 2] > 0);
+
   }
 
   public boolean isPartOfSet(Tile tile) {
+//    if(tile.isJoker()){
+//      return true;
+//    }
     int value = tile.value();
     int tileCount = 0;
     for (int i = 0; i < 4; i++) {
@@ -77,11 +95,16 @@ public class SmartStateAnalyzer {
         tileCount++;
       }
     }
+    tileCount += handTileCounts[52];
     return tileCount >= 3;
   }
 
   public boolean shouldWaitForSet(Tile tile) {
     Set<Integer> set = new HashSet<>();
+//    if(tile.isJoker()){
+//      return true;
+//    }
+
     int value = tile.value();
     for (int i = 0; i < 4; i++) {
       int pos = i * 13 + value - 1;
@@ -89,10 +112,10 @@ public class SmartStateAnalyzer {
         set.add(pos);
       }
     }
-    if (set.size() == 1) {
+    if (set.size() + handTileCounts[52] == 1) {
       return false;
     }
-    if (set.size() == 2) {
+    if (set.size() + handTileCounts[52] == 2) {
       int tablePoints = 0;
       for (int i = 0; i < 4; i++) {
         int pos = i * 13 + value - 1;
@@ -100,7 +123,8 @@ public class SmartStateAnalyzer {
           tablePoints += tableTileCounts[pos];
         }
       }
-      return tablePoints <= 2;
+//      return tablePoints  <= 2;
+      return tablePoints +tableTileCounts[52]  <= 3;
     }
     return true;
   }
@@ -142,6 +166,7 @@ public class SmartStateAnalyzer {
         return tableTileCounts[50] <= 1;
       }
     }
+
     if (handTileCounts[pos + 1] > 0) {
       return tableTileCounts[pos + 2] + tableTileCounts[pos - 1] <= 2;
     }
