@@ -96,7 +96,7 @@ public class CombinationSeeker {
                 for (int i = 0; i < m.tiles().size(); i++) {
                     if (m.tiles().get(i).canFillToRun(tileColor, leftValue)) {
                         map.put(m, i);
-                        copyMelds.remove(copyMelds.indexOf(m));
+                        copyMelds.remove(m);
                     }
                 }
                 leftValue --;
