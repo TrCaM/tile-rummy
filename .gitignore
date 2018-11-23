@@ -6,3 +6,5 @@ tile-rummy.iml
 .settings/
 /logs
 uml-diagram.mdj
+system/fxgl.bundle
+load/test1.json
