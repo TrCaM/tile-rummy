@@ -2,7 +2,9 @@ package project.rummy.entities;
 
 import project.rummy.control.Controller;
 
-public class PlayerData {
+import java.io.Serializable;
+
+public class PlayerData implements Serializable {
     public String controllerType;
     public String name;
 

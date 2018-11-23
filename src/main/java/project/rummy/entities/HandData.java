@@ -2,10 +2,11 @@ package project.rummy.entities;
 
 import com.almasb.fxgl.entity.component.Component;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-public class HandData extends Component {
+public class HandData extends Component implements Serializable {
   public List<Tile> tiles;
   public List<Meld> melds;
 

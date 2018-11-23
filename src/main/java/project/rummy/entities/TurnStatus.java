@@ -1,6 +1,8 @@
 package project.rummy.entities;
 
-public class TurnStatus{
+import java.io.Serializable;
+
+public class TurnStatus implements Serializable {
   public boolean canEnd;
   public boolean canDraw;
   public boolean canPlay;

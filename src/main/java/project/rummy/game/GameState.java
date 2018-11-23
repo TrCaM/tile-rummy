@@ -3,13 +3,14 @@ package project.rummy.game;
 import com.almasb.fxgl.entity.component.Component;
 import project.rummy.entities.*;
 
+import java.io.Serializable;
 import java.util.stream.Stream;
 
 /**
  * Generate a general data object for displaying the game, or for the strategies to analyze and find
  * the best possible moves.
  */
-public class GameState extends Component {
+public class GameState extends Component implements Serializable {
   private int turnNumber;
   private int freeTilesCount;
   private TableData tableData;
@@ -21,6 +22,7 @@ public class GameState extends Component {
 
   private boolean isGameEnd;
 
+  private static final long serialVersionUID = 1L;
 
   public static GameState generateState(Game game) {
     GameState gameState = new GameState();

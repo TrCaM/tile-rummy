@@ -2,14 +2,17 @@ package project.rummy.entities;
 
 import com.almasb.fxgl.entity.component.Component;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
  * Represents tiles in the game
  */
-public abstract class Tile extends Component {
+public abstract class Tile extends Component implements Serializable {
     protected final Color color;
     protected  int value;
+
+    private static final long serialVersionUID = 1L;
 
     private boolean hightlight;
 
