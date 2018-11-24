@@ -9,8 +9,21 @@ import java.util.List;
 import java.util.Map;
 
 public class PlayerSupporter {
+    private List<Tile> handTiles;
+    private List<Meld> tableMelds;
 
-    public boolean suggestFormMeld(List<Tile> handTiles){
+    public PlayerSupporter(List<Tile> tiles, List<Meld> melds){
+        this.handTiles = tiles;
+        this.tableMelds = melds;
+    }
+
+    private void initTileSuggestion(){
+        handTiles.stream().forEach(tile -> tile.setSuggestion(false));
+        tableMelds.forEach(meld -> meld.tiles().forEach(tile -> tile.setSuggestion(false)));
+    }
+
+    private  boolean suggestFormMeld(){
+        initTileSuggestion();
         Meld goodMeld = HandMeldSeeker.findNextMelds(handTiles);
         if(goodMeld != null){
             goodMeld.tiles().stream().forEach(tile -> tile.setSuggestion(true));
@@ -19,9 +32,22 @@ public class PlayerSupporter {
         return false;
     }
 
+    private boolean suggestAddDirectly(){
+        initTileSuggestion();
+        for(Tile tile: handTiles){
+            int id = TableMeldSeeker.findDirectMeld(tile.value(), tile.color(), tableMelds);
+            if(id != 0){
+                tile.setSuggestion(true);
+                Meld.getMeldFromId(id, tableMelds).tiles().stream().forEach(tile1 -> tile1.setSuggestion(true));
+                return  true;
+            }
+        }
+        return false;
+    }
 
-    public boolean suggestManipulationSet(List<Tile> handTiles, List<Meld> tableMelds){
 
+    private boolean suggestManipulationSet(){
+        initTileSuggestion();
         for(Tile tile: handTiles) {
             List<Tile> goodTiles = new ArrayList<>();
             Map<Meld, Integer> map;
@@ -43,20 +69,27 @@ public class PlayerSupporter {
         return false;
     }
 
-    public boolean suggestManipulationRun(List<Tile> handTiles, List<Meld> tableMelds){
+    private boolean suggestManipulationRun(){
+        initTileSuggestion();
 
         for(Tile tile: handTiles) {
             Map<Meld, Integer> map = CombinationSeeker.formRunBySplitRight(tile.value(), tile.color(),tableMelds);
 
-            if(map.isEmpty()){
-                map = CombinationSeeker.formRunByDetaching(tile.value(), tile.color(),tableMelds);
-            }
-
             if(!map.isEmpty()){
                 tile.setSuggestion(true);
                 for(Meld m: map.keySet()){
-                    m.tiles().get(map.get(m)).setSuggestion(true);
+                    for(int i=map.get(m); i<m.tiles().size(); i++){
+                        m.tiles().get(i).setSuggestion(true);
+                    }
                 }
+                return true;
+            }
+
+            Map<Meld, Integer> map2 = CombinationSeeker.formRunByDetaching(tile.value(), tile.color(),tableMelds);
+
+            if(!map2.isEmpty()){
+                tile.setSuggestion(true);
+                map2.keySet().stream().forEach(meld -> meld.tiles().get(map2.get(meld)).setSuggestion(true));
                 return true;
             }
         }
@@ -65,14 +98,19 @@ public class PlayerSupporter {
     }
 
 
-    public void showSuggestion(List<Tile> handTiles, List<Meld> tableMeld){
-
-        if(suggestFormMeld(handTiles)){
-            return;
+    public boolean showSuggestion(){
+        if(suggestFormMeld()){
+            return true;
         }
-        if(suggestManipulationSet(handTiles,tableMeld)){
-            return;
+        if(suggestAddDirectly()){
+            return true;
         }
-        suggestManipulationRun(handTiles, tableMeld);
+        if(suggestManipulationSet()){
+            return true;
+        }
+        if(suggestManipulationRun()){
+            return true;
+        }
+        return false;
     }
 }

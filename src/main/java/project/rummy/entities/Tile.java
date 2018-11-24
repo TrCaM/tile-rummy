@@ -33,6 +33,10 @@ public abstract class Tile extends Component {
         return new NumberTile(color, value);
     }
 
+    public boolean isSuggested(){
+        return this.suggestion;
+    }
+
     public void setSuggestion(boolean suggestion){
         this.suggestion = suggestion;
     }
