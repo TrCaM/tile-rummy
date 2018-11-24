@@ -1,6 +1,5 @@
 package project.rummy.control;
 
-import project.rummy.commands.Command;
 import project.rummy.commands.PlayDirection;
 import project.rummy.entities.PlayerStatus;
 import project.rummy.game.Game;
@@ -10,11 +9,6 @@ import project.rummy.strategies.Strategy;
 import project.rummy.strategies.Strategy1;
 import project.rummy.strategies.Strategy2;
 import project.rummy.strategies.Strategy3;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-
-import java.util.List;
-import java.util.Timer;
 
 public class AutoController extends Controller implements Observer {
   private Strategy strategy;

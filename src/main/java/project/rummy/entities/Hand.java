@@ -63,6 +63,13 @@ public class Hand {
     return new HandData(this);
   }
 
+  public void update(HandData data) {
+    melds.clear();
+    melds.addAll(data.melds);
+    tiles.clear();
+    tiles.addAll(data.tiles);
+  }
+
 
   public Meld formOneMeld(int ...tileIndexes){
     Arrays.sort(tileIndexes);
