@@ -26,6 +26,7 @@ public class DefaultGameInitializer implements GameInitializer {
       players[i] = new Player(String.format("Player %d", i), controllers[i], i);
     }
     game.setUpPlayer(players);
+    game.setControlledPlayer(0);
   }
 
   @Override

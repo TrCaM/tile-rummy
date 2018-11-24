@@ -2,7 +2,6 @@ package project.rummy.control;
 
 import project.rummy.commands.Command;
 import project.rummy.commands.PlayDirection;
-import project.rummy.entities.Player;
 import project.rummy.entities.PlayerStatus;
 import project.rummy.game.Game;
 import project.rummy.game.GameState;
@@ -11,8 +10,11 @@ import project.rummy.strategies.Strategy;
 import project.rummy.strategies.Strategy1;
 import project.rummy.strategies.Strategy2;
 import project.rummy.strategies.Strategy3;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Timer;
 
 public class AutoController extends Controller implements Observer {
   private Strategy strategy;
@@ -48,6 +50,28 @@ public class AutoController extends Controller implements Observer {
   @Override
   public void endTurn() {
     this.activate = false;
+  }
+
+  @Override
+  public void closeInput() {
+    this.activate = false;
+    endTurnIn(3000);
+  }
+
+  /**
+   * End this turn after a fixed duration
+   * @param msec the duration in milliseconds
+   */
+  private void endTurnIn(int msec) {
+    new java.util.Timer().schedule(
+        new java.util.TimerTask() {
+          @Override
+          public void run() {
+            send(ActionHandler::nextTurn);
+          }
+        },
+        msec
+    );
   }
 
   @Override

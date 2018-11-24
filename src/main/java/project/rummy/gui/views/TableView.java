@@ -34,7 +34,7 @@ public class TableView extends Pane implements Observer {
 
   private TableData tableData;
 
-  public TableView(GameState gameState) {
+  public TableView(Player controlledPlayer, GameState gameState) {
     super();
     this.loader = new GameFXMLLoader("table");
     loader.setController(this);
