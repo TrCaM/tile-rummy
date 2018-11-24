@@ -95,6 +95,9 @@ public class PlayerLoad {
         if (c == 'O') {
             return Color.ORANGE;
         }
+        if (c == 'A') {
+            return Color.ANY;
+        }
 
 
         // color is not detected
