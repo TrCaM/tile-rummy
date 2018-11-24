@@ -5,25 +5,39 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.settings.GameSettings;
+import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.serialization.ClassResolvers;
+import io.netty.handler.codec.serialization.ObjectDecoder;
+import io.netty.handler.codec.serialization.ObjectEncoder;
 import org.json.simple.parser.ParseException;
 import project.rummy.commands.CommandProcessor;
 import project.rummy.game.*;
 import project.rummy.game.GameReader.ReadGameState;
 import project.rummy.game.GameReader.SaveGame;
-import project.rummy.game.GameReader.WriteGameState;
 import project.rummy.gui.views.EntitiesBuilder;
+import project.rummy.networking.ObjectEchoClientHandler;
 
 import java.io.IOException;
 
 import static project.rummy.gui.views.EntityType.GAME;
 
-public class TileRummyApplication extends GameApplication {
+public class TileRummyNetworkApplication extends GameApplication {
   private GameStore gameStore;
   private CommandProcessor processor;
   private Game game;
   private GameState state;
 
-  public TileRummyApplication() {
+  static final String HOST = System.getProperty("host", "127.0.0.1");
+  static final int PORT = Integer.parseInt(System.getProperty("port", "9999"));
+  static final int SIZE = Integer.parseInt(System.getProperty("size", "256"));
+
+  public TileRummyNetworkApplication() {
     super();
     gameStore = new GameStore(new DefaultGameInitializer());
   }
@@ -42,24 +56,22 @@ public class TileRummyApplication extends GameApplication {
 
   @Override
   protected void initGame() {
-    String fileName="";
-    if(!getParameters().getRaw().isEmpty()) {
+    String fileName = "";
+    if (!getParameters().getRaw().isEmpty()) {
       fileName = getParameters().getRaw().get(0);
     }
     ReadGameState gm = new ReadGameState();
     try {
       this.state = gm.read(fileName);
-        LoadGameInitializer initializer = new LoadGameInitializer(this.state);
-    }
-    catch (IOException e) {
+      LoadGameInitializer initializer = new LoadGameInitializer(this.state);
+    } catch (IOException e) {
       System.out.println("Whoops something went wrong");
-    }
-    catch (ParseException e) {
+    } catch (ParseException e) {
       System.out.println("Not working");
 
     }
     GameStore gameStore1 = new GameStore(new LoadGameInitializer(state));
-  //game = gameStore1.initializeGame();
+    //game = gameStore1.initializeGame();
     game = gameStore.initializeGame();
 
 
@@ -85,8 +97,7 @@ public class TileRummyApplication extends GameApplication {
     SaveGame saveGame = new SaveGame();
     try {
       saveGame.save(state);
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       System.out.println("Whoops something went wrong");
     }
   }
@@ -94,8 +105,6 @@ public class TileRummyApplication extends GameApplication {
   @Override
   protected void onUpdate(double tpf) {
     processor.processNext();
-
-
     if (game.isGameEnd()) {
       this.getNotificationService().pushNotification(
           String.format("Player %s has won", game.getWinnerName()));

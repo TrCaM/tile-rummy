@@ -15,15 +15,18 @@ public abstract class Tile extends Component implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private boolean hightlight;
+    private boolean suggestion;
 
     protected Tile(Color color) {
         this.color = color;
         this.hightlight = false;
+        this.suggestion = false;
     }
 
     protected Tile() {
         this.color = Color.ANY;
         this.hightlight = false;
+        this.suggestion = false;
     }
 
     public static Tile createTile(Color color, int value) {
@@ -31,6 +34,10 @@ public abstract class Tile extends Component implements Serializable {
             return new Joker();
         }
         return new NumberTile(color, value);
+    }
+
+    public void setSuggestion(boolean suggestion){
+        this.suggestion = suggestion;
     }
 
     public abstract boolean isJoker();
