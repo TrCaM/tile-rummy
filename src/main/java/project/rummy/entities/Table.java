@@ -257,6 +257,16 @@ public class Table {
     return melds.remove(index);
   }
 
+  public void update(TableData tableData) {
+    freeTiles.clear();
+    freeTiles.addAll(tableData.freeTiles);
+    melds.clear();
+    melds.addAll(tableData.melds);
+    setGrid1 = tableData.setGrid1;
+    setGrid2 = tableData.setGrid2;
+    runGrid = tableData.runGrid;
+  }
+
   public Tile drawTile() {
     return freeTiles.remove(freeTiles.size() - 1);
   }

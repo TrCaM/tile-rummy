@@ -21,6 +21,7 @@ public class Game extends Component implements Observable {
   private String winnerName;
   TurnStatus turnStatus;
   private boolean preventUpdate;
+  private int controlledPlayer;
 
   Game() {
     super();
@@ -33,6 +34,14 @@ public class Game extends Component implements Observable {
     this.players = players;
     this.turnNumber = 0;
     this.currentPlayer = 0;
+  }
+
+  public void setControlledPlayer(int index) {
+    this.controlledPlayer = index;
+  }
+
+  public Player getControlledPlayer() {
+    return players[controlledPlayer];
   }
 
   public void setUpTable(Table table) {
@@ -69,7 +78,7 @@ public class Game extends Component implements Observable {
   }
 
   public void endTurn() {
-    this.players[currentPlayer].getController().endTurn();
+    this.players[currentPlayer].getController().closeInput();
     commandProcessor.reset();
   }
 

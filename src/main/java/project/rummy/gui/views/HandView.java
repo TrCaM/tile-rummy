@@ -9,6 +9,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import project.rummy.commands.CommandProcessor;
 import project.rummy.control.ActionHandler;
+import project.rummy.control.ManualController;
 import project.rummy.entities.*;
 import project.rummy.events.TileChooseEvent;
 import project.rummy.game.Game;
@@ -48,7 +49,7 @@ public class HandView extends Pane implements Observer {
   @FXML
   private Button undoButton;
 
-  public HandView(GameState state) {
+  public HandView(Player controlledPlayer, GameState state) {
     super();
     this.loader = new GameFXMLLoader("hand");
     loader.setController(this);
@@ -59,7 +60,8 @@ public class HandView extends Pane implements Observer {
     setUpHandlers();
     Game game = FXGL.getGameWorld().getEntitiesByType(EntityType.GAME).get(0).getComponent(Game.class);
     game.registerObserver(this);
-
+    ManualController controller = (ManualController) controlledPlayer.getController();
+    controller.addControlledNode(this);
   }
 
   private void setUpHandlers() {

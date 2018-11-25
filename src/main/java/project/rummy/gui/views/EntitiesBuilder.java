@@ -2,10 +2,7 @@ package project.rummy.gui.views;
 
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
-import project.rummy.entities.HandData;
-import project.rummy.entities.Meld;
-import project.rummy.entities.TableData;
-import project.rummy.entities.Tile;
+import project.rummy.entities.*;
 import project.rummy.game.GameState;
 
 import java.util.List;
@@ -30,19 +27,19 @@ public class EntitiesBuilder {
     return meldEntity;
   }
 
-  public static Entity buildHand(GameState gameState) {
+  public static Entity buildHand(Player controlledPlayer, GameState gameState) {
     Entity handEntity = Entities.builder()
         .type(EntityType.HAND)
-        .viewFromNode(new HandView(gameState))
+        .viewFromNode(new HandView(controlledPlayer, gameState))
         .build();
     handEntity.addComponent(gameState.getHandsData()[0]);
     return handEntity;
   }
 
-  public static Entity buildTable(GameState gameState) {
+  public static Entity buildTable(Player controlledPlayer, GameState gameState) {
     Entity tableEntity = Entities.builder()
         .type(EntityType.TABLE)
-        .viewFromNode(new TableView(gameState))
+        .viewFromNode(new TableView(controlledPlayer, gameState))
         .build();
     tableEntity.addComponent(gameState.getTableData());
     return tableEntity;

@@ -58,12 +58,14 @@ public class TileRummyApplication extends GameApplication {
       System.out.println("Not working");
 
     }
+
     GameStore gameStore1 = new GameStore(new LoadGameInitializer(state), new StartGameInitializer());
     game = gameStore1.initializeGame();
     //game = gameStore.initializeGameStart();
       GameStart start = new GameStart(game);
       int startGamePlayer = start.getPlayerValue();
       //   game = gameStore.initializeGame();
+
 
     processor = CommandProcessor.getInstance();
     processor.setUpGame(game);
@@ -76,10 +78,10 @@ public class TileRummyApplication extends GameApplication {
 
     // like the views here works...
     getGameWorld().addEntities(gameEntity);
-    Entity handView = EntitiesBuilder.buildHand(state);
+    Entity handView = EntitiesBuilder.buildHand(game.getControlledPlayer(), state);
     handView.setX(0);
     handView.setY(740);
-    Entity tableView = EntitiesBuilder.buildTable(state);
+    Entity tableView = EntitiesBuilder.buildTable(game.getControlledPlayer(), state);
     Entity gameInfoView = EntitiesBuilder.buildGameInfo(state);
     gameInfoView.setX(1150);
     getGameWorld().addEntities(handView, tableView, gameInfoView);

@@ -169,7 +169,6 @@ public class ActionHandler {
   }
 
   public void takeTableMeld(int meldIndex) {
-    //TODO: Add a logging infomation here
     if (!canUseTable) {
       throw new IllegalStateException("Cannot manipulate table");
     }
@@ -183,10 +182,19 @@ public class ActionHandler {
     takeTableMeld(table.toTableData().melds.indexOf(m));
   }
 
-
+  public void updateFromData(TableData tableData, HandData data, TurnStatus status) {
+    table.update(tableData);
+    hand.update(data);
+    if (status != null) {
+      isIceBroken = status.isIceBroken;
+      isTurnEnd = status.isTurnEnd;
+      goNextTurn = status.goNextTurn;
+      canDraw = status.canDraw;
+      canPlay = status.canPlay;
+    }
+  }
 
   public void takeHandTile(int tileIndex) {
-    //TODO: Add a logging infomation here
     if (!canUseTable) {
       throw new IllegalStateException("Cannot manipulate table");
     }

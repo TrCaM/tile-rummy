@@ -5,7 +5,6 @@ import project.rummy.game.Game;
 import project.rummy.game.GameState;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 public class CommandProcessor {
@@ -54,8 +53,6 @@ public class CommandProcessor {
     if (handler == null || handler.isExpired()) {
       throw new IllegalStateException("ActionHandler was not set up properly before the turn");
     }
-    //System.out.println(String.format("Processing %d", commands.size()));
-
     command.execute(handler);
     game.update(handler.getTurnStatus());
   }
