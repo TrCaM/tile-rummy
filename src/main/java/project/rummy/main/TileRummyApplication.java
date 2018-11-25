@@ -25,7 +25,7 @@ public class TileRummyApplication extends GameApplication {
 
   public TileRummyApplication() {
     super();
-    gameStore = new GameStore(new DefaultGameInitializer());
+    gameStore = new GameStore(new DefaultGameInitializer(), new StartGameInitializer());
   }
 
   @Override
@@ -58,10 +58,12 @@ public class TileRummyApplication extends GameApplication {
       System.out.println("Not working");
 
     }
-    GameStore gameStore1 = new GameStore(new LoadGameInitializer(state));
-//    game = gameStore1.initializeGame();
-    game = gameStore.initializeGame();
-
+    GameStore gameStore1 = new GameStore(new LoadGameInitializer(state), new StartGameInitializer());
+    game = gameStore1.initializeGame();
+    //game = gameStore.initializeGameStart();
+      GameStart start = new GameStart(game);
+      int startGamePlayer = start.getPlayerValue();
+      //   game = gameStore.initializeGame();
 
     processor = CommandProcessor.getInstance();
     processor.setUpGame(game);
@@ -70,6 +72,7 @@ public class TileRummyApplication extends GameApplication {
     game.nextTurn();
     //state = temp;
     state = GameState.generateState(game);
+    state.setCurrentPlayer(startGamePlayer);
 
     // like the views here works...
     getGameWorld().addEntities(gameEntity);

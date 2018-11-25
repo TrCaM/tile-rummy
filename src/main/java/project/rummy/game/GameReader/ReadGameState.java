@@ -55,7 +55,12 @@ public class ReadGameState extends Component {
         PlayerLoad load = new PlayerLoad();
         state.setHandsData(load.configHandData(jsonObject));
         state.setTurnNumber(simpJson.get(FileLoadTypes.Turn.name()).getAsInt());
-        state.setCurrentPlayer(simpJson.get(FileLoadTypes.CurrentPlayer.name()).getAsInt());
+
+        if (!simpJson.get(FileLoadTypes.CurrentPlayer.name()).isJsonNull()) {
+            state.setCurrentPlayer(simpJson.get(FileLoadTypes.CurrentPlayer.name()).getAsInt());
+        }
+
+
         state.setFreeTilesCount(simpJson.get(FileLoadTypes.Deck.name()).getAsInt());
         state.setStatuses(load.getStatuses(jsonObject));
         state.setPlayerData(load.getPlayerDatas(jsonObject));
