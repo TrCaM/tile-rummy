@@ -6,10 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
 import project.rummy.entities.*;
-import project.rummy.game.Game;
-import project.rummy.game.GameState;
-import project.rummy.game.GameStore;
-import project.rummy.game.LoadGameInitializer;
+import project.rummy.game.*;
 
 import static org.junit.Assert.*;
 
@@ -153,7 +150,7 @@ class LoadGameInitializerTest {
         state.setStatuses(statuses);
         state.setCurrentPlayer(currentPlayer);
 
-        GameStore gameStore = new GameStore(new LoadGameInitializer(state));
+        GameStore gameStore = new GameStore(new LoadGameInitializer(state), new StartGameInitializer());
         Game game = gameStore.initializeGame();
 
         GameState stateTest = game.generateGameState();
