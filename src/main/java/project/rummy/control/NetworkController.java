@@ -38,19 +38,6 @@ public class NetworkController extends Controller implements Observer {
 
   @Override
   public void closeInput() {
-    endTurnIn(3000);
-  }
-
-  private void endTurnIn(int msec) {
-    new java.util.Timer().schedule(
-        new java.util.TimerTask() {
-          @Override
-          public void run() {
-            send(ActionHandler::nextTurn);
-          }
-        },
-        msec
-    );
   }
 
   public void update(GameState state) {

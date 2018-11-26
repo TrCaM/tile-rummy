@@ -32,6 +32,7 @@ public class ActionHandler {
   private PlayerStatus turnType;
   private boolean preventUpdate;
   private boolean tryEndTurn;
+  private boolean canEndTurn;
 
   private static Logger logger = Logger.getLogger(ActionHandler.class);
   private boolean goNextTurn;
@@ -52,6 +53,7 @@ public class ActionHandler {
     this.isIceBroken = player.status() == ICE_BROKEN;
     this.preventUpdate = false;
     this.tryEndTurn = false;
+    this.canEndTurn = false;
   }
 
   public Hand getHand() {
@@ -118,6 +120,9 @@ public class ActionHandler {
   }
 
   private boolean canEndTurn() {
+    if (canEndTurn) {
+      return true;
+    }
     if (turnType == START) {
       return (startPoint - hand.getScore() >= 30 || hand.getScore() > startPoint)
           && manipulationTable.isEmpty();
@@ -194,6 +199,7 @@ public class ActionHandler {
       goNextTurn = status.goNextTurn;
       canDraw = status.canDraw;
       canPlay = status.canPlay;
+      canEndTurn = status.canEnd;
     }
   }
 
