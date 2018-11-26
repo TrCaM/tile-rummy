@@ -41,5 +41,6 @@ public class NetworkGameInitializer extends LoadGameInitializer {
 
     game.setUpPlayer(players);
     game.setTurnNumber(state.getTurnNumber());
+    game.setControlledPlayer(playerId);
   }
 }
