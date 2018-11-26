@@ -42,6 +42,14 @@ public class Meld extends Component implements Serializable {
     idsToMelds.put(id, this);
   }
 
+  public static int getNextId() {
+    return nextId;
+  }
+
+  public static void syncMeldId(int id) {
+    nextId = id;
+  }
+
   public static Meld getMeldFromId(int meldid, List<Meld> melds) {
     for (Meld m : melds) {
       if (m.getId() == meldid) {

@@ -2,6 +2,7 @@ package project.rummy.networks;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelId;
+import project.rummy.entities.Meld;
 import project.rummy.game.*;
 import project.rummy.main.TileRummyApplication;
 import project.rummy.messages.GameStateMessage;
@@ -55,6 +56,8 @@ public class ClientGameManager implements Observable, Observer {
 
   public void onGameStateUpdated(GameState state) {
     this.gameState = state;
+    Meld.cleanUpMap(state);
+    Meld.syncMeldId(state.getNextMeldId());
     notifyObservers();
   }
 

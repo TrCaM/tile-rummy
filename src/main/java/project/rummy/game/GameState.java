@@ -20,6 +20,7 @@ public class GameState extends Component implements Serializable {
   private TurnStatus turnStatus;
   private int currentPlayer;
   private GameStatus status;
+  private int nextMeldId;
 
   private boolean isGameEnd;
 
@@ -39,6 +40,7 @@ public class GameState extends Component implements Serializable {
     gameState.turnStatus = game.turnStatus;
     gameState.isGameEnd = game.isGameEnd();
     gameState.status = game.getStatus();
+    gameState.nextMeldId = Meld.getNextId() + 100;
 //    for(int i = 0; i < 4; i++){
 //      System.out.println("player" + gameState.playerData[i].name + gameState.handsData[i].tiles);
 //    }
@@ -123,5 +125,9 @@ public class GameState extends Component implements Serializable {
 
   public void setGameStatus(GameStatus status) {
     this.status = status;
+  }
+
+  public int getNextMeldId() {
+    return nextMeldId;
   }
 }
