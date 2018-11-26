@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import project.rummy.entities.HandData;
+import project.rummy.entities.Player;
 import project.rummy.entities.TileSource;
 import project.rummy.game.Game;
 import project.rummy.game.GameState;
@@ -39,10 +40,11 @@ public class GameInfoView extends Pane implements Observer {
   @FXML private Node oppoHands;
   @FXML private Button debugButton;
 
+  private int playerId;
 
   private boolean debugMode;
 
-  public GameInfoView(GameState gameState) {
+  public GameInfoView(Player controlledPlayer, GameState gameState) {
     super();
     this.loader = new GameFXMLLoader("gameInfo");
     loader.setController(this);
@@ -51,6 +53,7 @@ public class GameInfoView extends Pane implements Observer {
     game.registerObserver(this);
     this.debugMode = false;
     setUpHandlers();
+    this.playerId = controlledPlayer.getId();
   }
 
   private void setUpHandlers() {
@@ -80,6 +83,10 @@ public class GameInfoView extends Pane implements Observer {
     oppo3Tiles.setText("" + gameState.getHandsData()[3].tiles.size() + " Tiles");
     humanTiles.setText("" + gameState.getHandsData()[0].tiles.size() + " Tiles");
     // Update current player
+    you.setText(gameState.getPlayerData()[0].name);
+    oppo1.setText(gameState.getPlayerData()[1].name);
+    oppo2.setText(gameState.getPlayerData()[2].name);
+    oppo3.setText(gameState.getPlayerData()[3].name);
     Label currentLabel;
     you.getStyleClass().clear();
     oppo1.getStyleClass().clear();
@@ -116,7 +123,15 @@ public class GameInfoView extends Pane implements Observer {
   }
 
   private void loadOpponentHand(GameState status) {
-    HandData[] data = status.getHandsData();
+    HandData[] data = new HandData[4];
+    int current = 1;
+    for (int i=0; i<4; i++) {
+      if (i == playerId) {
+        data[0] = status.getHandsData()[i];
+      } else {
+        data[current++] = status.getHandsData()[i];
+      }
+    }
     oppo1Hand.getChildren().clear();
     oppo2Hand.getChildren().clear();
     oppo3Hand.getChildren().clear();

@@ -19,7 +19,6 @@ public class NetworkGameManager {
   private PlayerInfo[] playersInfo;
   private int nextPlayer;
   private Game game;
-  private GameStore gameStore;
   private GameState gameState;
 
   public static NetworkGameManager INSTANCE;
@@ -33,9 +32,8 @@ public class NetworkGameManager {
 
   private NetworkGameManager() {
     channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
-    playersInfo = new PlayerInfo[MAX_PLAYERS];
+    playersInfo = new PlayerInfo[4];
     nextPlayer = 0;
-    gameStore = new GameStore(new DefaultGameInitializer());
   }
 
   public void onChannelConnected(Channel channel) {
@@ -67,7 +65,7 @@ public class NetworkGameManager {
 
   private void tryStartGame() {
     if (nextPlayer == MAX_PLAYERS) {
-      game = gameStore.initializeGame();
+      game = new GameStore(new ServerGameInitializer(playersInfo)).initializeGame();
       game.setStatus(GameStatus.STARTING);
       GameState gameState = game.generateGameState();
       channels.writeAndFlush(new GameStateMessage(gameState));

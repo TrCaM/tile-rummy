@@ -45,10 +45,10 @@ public class EntitiesBuilder {
     return tableEntity;
   }
 
-  public static Entity buildGameInfo(GameState gameState) {
+  public static Entity buildGameInfo(Player controlledPlayer, GameState gameState) {
     Entity tableEntity = Entities.builder()
         .type(EntityType.GAME_INFO)
-        .viewFromNode(new GameInfoView(gameState))
+        .viewFromNode(new GameInfoView(controlledPlayer, gameState))
         .build();
     tableEntity.addComponent(gameState);
     return tableEntity;

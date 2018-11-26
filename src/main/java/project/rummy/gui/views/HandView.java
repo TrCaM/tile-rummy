@@ -141,7 +141,7 @@ public class HandView extends Pane implements Observer {
 
   @Override
   public void update(GameState status) {
-    HandData data = status.getHandsData()[0];
+    HandData data = status.getHandsData()[playerId];
     this.chosenTiles.clear();
     tileRack.getChildren().clear();
     meldRack.getChildren().clear();
