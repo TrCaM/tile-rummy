@@ -35,4 +35,8 @@ public class ConnectionData implements Serializable {
   }
 
   private boolean isReady;
+
+  public void setPlayerId(int playerId) {
+    this.playerId = playerId;
+  }
 }

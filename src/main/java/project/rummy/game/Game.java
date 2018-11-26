@@ -22,18 +22,26 @@ public class Game extends Component implements Observable {
   TurnStatus turnStatus;
   private boolean preventUpdate;
   private int controlledPlayer;
+  private GameStatus status;
+  private boolean isNetworkGame;
 
-  Game() {
+  Game(boolean isNetworkGame) {
     super();
     this.observers = new ArrayList<>();
     this.commandProcessor = CommandProcessor.getInstance();
     this.preventUpdate = false;
+    this.status = GameStatus.NOT_STARTED;
+    this.isNetworkGame = isNetworkGame;
   }
 
   public void setUpPlayer(Player[] players) {
     this.players = players;
     this.turnNumber = 0;
     this.currentPlayer = 0;
+  }
+
+  public void setStatus(GameStatus status) {
+    this.status = status;
   }
 
   public void setControlledPlayer(int index) {
@@ -63,11 +71,21 @@ public class Game extends Component implements Observable {
    * + Redraw the components that need to be re-rendered after each iteration
    * + Constantly check the state of the game and check for when the game should end
    */
+  public void tryEndTurn() {
+    this.status = GameStatus.TURN_END;
+    if (!isNetworkGame) {
+      nextTurn();
+    } else {
+      notifyObservers();
+    }
+  }
+
   public void nextTurn() {
+    turnNumber++;
     this.players[currentPlayer].getController().endTurn();
     commandProcessor.reset();
     resetTileHightlight();
-    turnNumber++;
+    this.status = GameStatus.RUNNING;
     currentPlayer = (turnNumber - 1) % 4;
     ActionHandler handler = new ActionHandler(players[currentPlayer], table);
     commandProcessor.setUpHandler(handler);
@@ -75,7 +93,16 @@ public class Game extends Component implements Observable {
     handler.backUpTurn();
     notifyObservers();
     this.players[currentPlayer].getController().playTurn();
+
   }
+
+//  private void setGameStatusForNextTurn() {
+//    if (controlledPlayer == currentPlayer) {
+//      this.status = GameStatus.TURN_END;
+//    } else {
+//      this.status = GameStatus.RUNNING;
+//    }
+//  }
 
   public void endTurn() {
     this.players[currentPlayer].getController().closeInput();
@@ -173,6 +200,10 @@ public class Game extends Component implements Observable {
       PlayerStatus status = turnStatus.isIceBroken ? PlayerStatus.ICE_BROKEN : PlayerStatus.START;
       players[currentPlayer].setStatus(status);
       nextTurn();
+    } else if (turnStatus.tryEndTurn) {
+      PlayerStatus status = turnStatus.isIceBroken ? PlayerStatus.ICE_BROKEN : PlayerStatus.START;
+      players[currentPlayer].setStatus(status);
+      tryEndTurn();
     } else if (turnStatus.isTurnEnd) {
       if (winner != -1) {
         this.isGameEnd = true;
@@ -205,5 +236,9 @@ public class Game extends Component implements Observable {
 
   public void enableUpdate() {
     this.preventUpdate = false;
+  }
+
+  public GameStatus getStatus() {
+    return status;
   }
 }

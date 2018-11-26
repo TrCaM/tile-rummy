@@ -11,7 +11,7 @@ public class GameStore {
   }
 
   public Game initializeGame() {
-    Game game = new Game();
+    Game game = new Game(initializer instanceof NetworkGameInitializer);
     initializer.initPlayers(game);
     initializer.initTable(game);
     initializer.initializeGameState(game.getPlayers(), game.getTable());

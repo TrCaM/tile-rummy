@@ -10,8 +10,8 @@ public class ServerProcessor implements MessageProcessor {
 
   private NetworkGameManager gameManager;
 
-  ServerProcessor(NetworkGameManager gameManager) {
-    this.gameManager = gameManager;
+  ServerProcessor() {
+    this.gameManager = NetworkGameManager.getInstance();
   }
 
   @Override
@@ -21,12 +21,13 @@ public class ServerProcessor implements MessageProcessor {
 
   @Override
   public void processGameState(Channel channel, GameState state) {
-    System.out.println("Received GameState");
+    gameManager.onGameUpdate(channel.id(), state);
   }
 
   @Override
   public void processString(Channel channel, String message) {
     System.out.println("Oh, A string: " + message);
+    gameManager.goNextTurn();
   }
 
   @Override

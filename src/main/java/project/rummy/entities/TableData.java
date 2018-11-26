@@ -2,10 +2,11 @@ package project.rummy.entities;
 
 import com.almasb.fxgl.entity.component.Component;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TableData extends Component {
+public class TableData extends Component implements Serializable {
   public List<Tile> freeTiles;
   public List<Meld> melds;
   public int[][] setGrid1;

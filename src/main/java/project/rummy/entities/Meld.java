@@ -3,13 +3,14 @@ package project.rummy.entities;
 import com.almasb.fxgl.entity.component.Component;
 import project.rummy.game.GameState;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Stream;
 
 /**
  * Entity class for meld, which is a run or a set of tiles played by players and can be put on the table
  */
-public class Meld extends Component {
+public class Meld extends Component implements Serializable {
   private static int nextId = 1;
 
   public static Map<Integer, Meld> idsToMelds = new HashMap<>();

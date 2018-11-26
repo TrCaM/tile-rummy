@@ -3,13 +3,14 @@ package project.rummy.game;
 import com.almasb.fxgl.entity.component.Component;
 import project.rummy.entities.*;
 
+import java.io.Serializable;
 import java.util.stream.Stream;
 
 /**
  * Generate a general data object for displaying the game, or for the strategies to analyze and find
  * the best possible moves.
  */
-public class GameState extends Component {
+public class GameState extends Component implements Serializable {
   private int turnNumber;
   private int freeTilesCount;
   private TableData tableData;
@@ -18,6 +19,7 @@ public class GameState extends Component {
   private PlayerStatus[] statuses;
   private TurnStatus turnStatus;
   private int currentPlayer;
+  private GameStatus status;
 
   private boolean isGameEnd;
 
@@ -36,6 +38,7 @@ public class GameState extends Component {
         .map(Player::toPlayerData).toArray(PlayerData[]::new);
     gameState.turnStatus = game.turnStatus;
     gameState.isGameEnd = game.isGameEnd();
+    gameState.status = game.getStatus();
 //    for(int i = 0; i < 4; i++){
 //      System.out.println("player" + gameState.playerData[i].name + gameState.handsData[i].tiles);
 //    }
@@ -83,6 +86,9 @@ public class GameState extends Component {
     return turnStatus;
   }
 
+  public GameStatus getGameStatus() {
+    return status;
+  }
 
   public void setTurnNumber(int turnNumber) {
     this.turnNumber = turnNumber;
@@ -111,11 +117,11 @@ public class GameState extends Component {
     this.currentPlayer = currentPlayer;
   }
 
-  public  void setTurnStatus (TurnStatus turnStatus) {
+  public void setTurnStatus (TurnStatus turnStatus) {
     this.turnStatus = turnStatus;
   }
 
-
-
-
+  public void setGameStatus(GameStatus status) {
+    this.status = status;
+  }
 }

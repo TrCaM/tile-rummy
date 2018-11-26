@@ -1,6 +1,8 @@
 package project.rummy.entities;
 
-public enum PlayerStatus {
+import java.io.Serializable;
+
+public enum PlayerStatus implements Serializable {
   START("NOT PLAYED"), ICE_BROKEN("ICE BROKEN");
 
   private String note;

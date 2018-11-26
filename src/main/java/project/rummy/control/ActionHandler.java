@@ -31,6 +31,7 @@ public class ActionHandler {
   private int startPoint;
   private PlayerStatus turnType;
   private boolean preventUpdate;
+  private boolean tryEndTurn;
 
   private static Logger logger = Logger.getLogger(ActionHandler.class);
   private boolean goNextTurn;
@@ -50,6 +51,7 @@ public class ActionHandler {
     this.turnType = player.status();
     this.isIceBroken = player.status() == ICE_BROKEN;
     this.preventUpdate = false;
+    this.tryEndTurn = false;
   }
 
   public Hand getHand() {
@@ -64,6 +66,7 @@ public class ActionHandler {
     status.isIceBroken = isIceBroken;
     status.canEnd = canEndTurn();
     status.goNextTurn = goNextTurn;
+    status.tryEndTurn = tryEndTurn;
     return status;
   }
 
@@ -226,10 +229,19 @@ public class ActionHandler {
     isTurnEnd = true;
   }
 
+  public void tryEndTurn() {
+    if (!canEndTurn()) {
+      throw new IllegalStateException("Can not end the turn now");
+    }
+    tryEndTurn = true;
+    goNextTurn = false;
+  }
+
   public void nextTurn() {
     if (!isTurnEnd) {
       endTurn();
     }
+    tryEndTurn = false;
     goNextTurn = true;
   }
 

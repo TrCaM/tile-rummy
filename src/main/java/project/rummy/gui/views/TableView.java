@@ -8,6 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import project.rummy.commands.CommandProcessor;
+import project.rummy.control.ManualController;
 import project.rummy.entities.*;
 import project.rummy.events.TileChooseEvent;
 import project.rummy.game.Game;
@@ -31,6 +32,7 @@ public class TableView extends Pane implements Observer {
   @FXML private Button borrowMeldsButton;
 
   private Set<Meld> chosenMelds;
+  private int playerId;
 
   private TableData tableData;
 
@@ -45,6 +47,7 @@ public class TableView extends Pane implements Observer {
 
     Game game = FXGL.getGameWorld().getEntitiesByType(EntityType.GAME).get(0).getComponent(Game.class);
     game.registerObserver(this);
+    this.playerId = controlledPlayer.getId();
   }
 
   private void setUpHandlers() {
@@ -176,7 +179,7 @@ public class TableView extends Pane implements Observer {
     setPane2.getChildren().clear();
     this.tableData = state.getTableData();
     renderMelds(state.getTableData());
-    setDisable(state.getPlayerStatuses()[state.getCurrentPlayer()] == PlayerStatus.START);
+    setDisable(state.getCurrentPlayer() != playerId || state.getPlayerStatuses()[state.getCurrentPlayer()] == PlayerStatus.START);
   }
 }
 

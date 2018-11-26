@@ -18,7 +18,7 @@ import project.rummy.strategies.Strategy4;
  * Initialize game from the predefined game state. Useful for testing
  */
 public class LoadGameInitializer implements GameInitializer {
-    private GameState state;
+    protected GameState state;
 
     public LoadGameInitializer(GameState state) {
         this.state = state;

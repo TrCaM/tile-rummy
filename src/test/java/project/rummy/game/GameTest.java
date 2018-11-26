@@ -49,7 +49,7 @@ public class GameTest {
 
     @Test
     public void playerWinWithNoTiles() {
-        Game game = new Game();
+        Game game = new Game(false);
         initializer.initPlayers(game);
         initializer.initTable(game);
         game.nextTurn();
@@ -68,7 +68,7 @@ public class GameTest {
 
     @Test
     public void playerWinWithLeastPoint() {
-        Game game = new Game();
+        Game game = new Game(false);
         initializer.initPlayers(game);
         initializer.initEmptyTable(game);
         game.nextTurn();

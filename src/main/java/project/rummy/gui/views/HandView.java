@@ -28,6 +28,7 @@ public class HandView extends Pane implements Observer {
 
   private Node handView;
   private TurnStatus turnStatus;
+  private int playerId;
 
   @FXML
   private FlowPane tileRack;
@@ -60,8 +61,7 @@ public class HandView extends Pane implements Observer {
     setUpHandlers();
     Game game = FXGL.getGameWorld().getEntitiesByType(EntityType.GAME).get(0).getComponent(Game.class);
     game.registerObserver(this);
-    ManualController controller = (ManualController) controlledPlayer.getController();
-    controller.addControlledNode(this);
+    this.playerId = controlledPlayer.getId();
   }
 
   private void setUpHandlers() {
@@ -73,7 +73,7 @@ public class HandView extends Pane implements Observer {
   }
 
   private void onNextTurnButtonClick(MouseEvent mouseEvent) {
-    CommandProcessor.getInstance().enqueueCommand(ActionHandler::nextTurn);
+    CommandProcessor.getInstance().enqueueCommand(ActionHandler::tryEndTurn);
   }
 
   private void onPlayMeldButtonClick(MouseEvent mouseEvent) {
@@ -158,6 +158,6 @@ public class HandView extends Pane implements Observer {
     this.tileRack.setDisable(!turnStatus.canPlay);
     this.meldRack.setDisable(!turnStatus.canPlay);
     this.nextTurnButton.setDisable(!turnStatus.canEnd);
-    this.undoButton.setDisable(status.getCurrentPlayer() != 0);
+    this.setDisable(status.getCurrentPlayer() != playerId);
   }
 }
