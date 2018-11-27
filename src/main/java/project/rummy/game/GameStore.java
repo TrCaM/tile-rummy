@@ -10,7 +10,16 @@ public class GameStore {
     this.initializer = initializer;
   }
 
+
   public Game initializeGame() {
+    Game game = new Game();
+    initializer.initPlayers(game);
+    initializer.initTable(game);
+    initializer.initializeGameState(game.getPlayers(), game.getTable());
+    return game;
+  }
+
+  public Game initializeGameStart() {
     Game game = new Game();
     initializer.initPlayers(game);
     initializer.initTable(game);
