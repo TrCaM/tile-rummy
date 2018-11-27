@@ -133,7 +133,7 @@ public class Game extends Component implements Observable {
     return this.table;
   }
 
-  Player[] getPlayers() {
+  public Player[] getPlayers() {
     return players;
   }
 
@@ -185,6 +185,10 @@ public class Game extends Component implements Observable {
     if (!preventUpdate) {
       notifyObservers();
     }
+  }
+
+  public void setCurrentPlayer(int player) {
+    this.currentPlayer = player;
   }
 
   public void setTurnStatus(TurnStatus turnStatus) {
