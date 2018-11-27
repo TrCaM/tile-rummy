@@ -243,12 +243,16 @@ public class ActionHandler {
     goNextTurn = false;
   }
 
-  public void nextTurn() {
-    if (!isTurnEnd) {
+  public void nextTurn(boolean doCheck) {
+    if (doCheck || isTurnEnd) {
       endTurn();
     }
     tryEndTurn = false;
     goNextTurn = true;
+  }
+
+  public void nextTurn() {
+    nextTurn(true);
   }
 
   public void submit() {

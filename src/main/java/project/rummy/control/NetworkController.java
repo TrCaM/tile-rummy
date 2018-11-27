@@ -5,18 +5,21 @@ import project.rummy.entities.HandData;
 import project.rummy.entities.TableData;
 import project.rummy.entities.TurnStatus;
 import project.rummy.game.*;
-import project.rummy.messages.StringMessage;
 import project.rummy.networks.ClientGameManager;
 import project.rummy.observers.Observer;
 
 public class NetworkController extends Controller implements Observer {
+  private int playerId;
   private Channel channel;
   private boolean isPlaying;
+  private boolean canEndTurn;
 
-  public NetworkController(Channel channel, ClientGameManager gameManager) {
+  public NetworkController(Channel channel, ClientGameManager gameManager, int playerId) {
     this.channel = channel;
     gameManager.registerObserver(this);
     this.isPlaying = false;
+    this.canEndTurn = false;
+    this.playerId = playerId;
   }
 
   @Override
@@ -27,6 +30,7 @@ public class NetworkController extends Controller implements Observer {
   @Override
   public void playTurn() {
     isPlaying = true;
+    canEndTurn = false;
 //    send(ActionHandler::draw);
 //    channel.writeAndFlush(new StringMessage("Signaling"));
   }
@@ -42,13 +46,14 @@ public class NetworkController extends Controller implements Observer {
 
   public void update(GameState state) {
     if (isPlaying) {
-      if (state.getGameStatus() == GameStatus.TURN_END) {
-        send(ActionHandler::nextTurn);
+      if (state.getGameStatus() == GameStatus.TURN_END && state.getCurrentPlayer() == playerId) {
+        send(handler -> handler.nextTurn(false));
       } else if (state.getCurrentPlayer() == player.getId()){
         HandData handData = state.getHandsData()[player.getId()];
         TableData tableData = state.getTableData();
         TurnStatus turnStatus = state.getTurnStatus();
         send(handler -> handler.updateFromData(tableData, handData, turnStatus));
+        canEndTurn = true;
       }
     }
   }

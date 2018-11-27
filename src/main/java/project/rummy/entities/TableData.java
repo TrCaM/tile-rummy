@@ -4,7 +4,9 @@ import com.almasb.fxgl.entity.component.Component;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TableData extends Component implements Serializable {
   public List<Tile> freeTiles;
@@ -12,6 +14,7 @@ public class TableData extends Component implements Serializable {
   public int[][] setGrid1;
   public int[][] setGrid2;
   public int[][] runGrid;
+  public Map<Integer, Meld> meldMap;
 
   public TableData(Table table) {
     freeTiles = table.getFreeTiles();
@@ -19,6 +22,13 @@ public class TableData extends Component implements Serializable {
     setGrid1 = table.getSetGrid1();
     setGrid2 = table.getSetGrid2();
     runGrid = table.getRunGrid();
+    meldMap = buildMeldMap(table.getPlayingMelds());
+  }
+
+  private Map<Integer, Meld> buildMeldMap(List<Meld> melds) {
+    Map<Integer, Meld> map = new HashMap<>();
+    melds.forEach(meld -> map.put(meld.getId(), meld));
+    return map;
   }
 
   public TableData() {

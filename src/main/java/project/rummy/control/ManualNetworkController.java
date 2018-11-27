@@ -21,7 +21,7 @@ public class ManualNetworkController extends ManualController implements Observe
   @Override
   public void update(GameState state) {
     if (state.getCurrentPlayer() == player.getId() && state.getGameStatus() == GameStatus.TURN_END) {
-      send(ActionHandler::nextTurn);
+      send(handler -> handler.nextTurn(false));
     }
   }
 }

@@ -15,7 +15,7 @@ import project.rummy.messages.*;
 
 public class NetworkGameManager {
   private ChannelGroup channels;
-  private final int MAX_PLAYERS = 2;
+  private final int MAX_PLAYERS = 4;
   private PlayerInfo[] playersInfo;
   private int nextPlayer;
   private Game game;

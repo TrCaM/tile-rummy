@@ -121,12 +121,13 @@ public class TableView extends Pane implements Observer {
       e.printStackTrace();
       throw new IllegalStateException("Can not load table");
     }
-    renderMelds(tableData);
+    renderMelds(state);
     getChildren().setAll(tableView);
     update(state);
   }
 
-  private void renderMelds(TableData tableData) {
+  private void renderMelds(GameState gameState) {
+    TableData tableData = gameState.getTableData();
     int[][] setGrid1 = tableData.setGrid1;
     int[][] setGrid2 = tableData.setGrid2;
     int[][] runGrid = tableData.runGrid;
@@ -136,11 +137,11 @@ public class TableView extends Pane implements Observer {
         int meldId1 = setGrid1[row][col];
         int meldId2 = setGrid2[row][col];
         if (meldId1 != 0) {
-          Meld meld1 = Meld.idsToMelds.get(meldId1);
+          Meld meld1 = tableData.meldMap.get(meldId1);
           renderTile(meld1.getTile(col), TileSource.TABLE_SET1, setPane1, row, col);
         }
         if (meldId2 != 0) {
-          Meld meld2 = Meld.idsToMelds.get(meldId2);
+          Meld meld2 = tableData.meldMap.get(meldId2);
           renderTile(meld2.getTile(col), TileSource.TABLE_SET2, setPane2, row, col);
         }
       }
@@ -150,7 +151,7 @@ public class TableView extends Pane implements Observer {
       for (int col=0; col<13; col++) {
         int runId = runGrid[row][col];
         if (runId != 0) {
-          Meld run = Meld.idsToMelds.get(runId);
+          Meld run = tableData.meldMap.get(runId);
           int firstVal = run.getTile(0).value();
           renderTile(run.getTile(col +1 - firstVal), TileSource.TABLE_RUN, runPane, row, col);
         }
@@ -161,7 +162,7 @@ public class TableView extends Pane implements Observer {
       for (int col=0; col<13; col++) {
         int runId = runGrid[row][col];
         if (runId != 0) {
-          Meld jokerMeld = Meld.idsToMelds.get(runId);
+          Meld jokerMeld = tableData.meldMap.get(runId);
           renderTile(jokerMeld.getTile(col), TileSource.TABLE_JOKER_MELD, runPane, row, col);
         }
       }
@@ -178,7 +179,7 @@ public class TableView extends Pane implements Observer {
     setPane1.getChildren().clear();
     setPane2.getChildren().clear();
     this.tableData = state.getTableData();
-    renderMelds(state.getTableData());
+    renderMelds(state);
     setDisable(state.getCurrentPlayer() != playerId || state.getPlayerStatuses()[state.getCurrentPlayer()] == PlayerStatus.START);
   }
 }

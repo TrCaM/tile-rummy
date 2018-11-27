@@ -33,7 +33,7 @@ public class NetworkGameInitializer extends LoadGameInitializer {
       if(i == playerId){
         controller = new ManualNetworkController(channel, gameManager);
       } else {
-        controller = new NetworkController(channel, gameManager);
+        controller = new NetworkController(channel, gameManager, i);
       }
 
       players[i] = new Player(state.getPlayerData()[i].name, controller, hand, state.getPlayerStatuses()[i], i);
