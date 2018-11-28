@@ -99,7 +99,7 @@ public class TileRummyApplication extends GameApplication {
     int startGamePlayer = start.getPlayerValue();
     Entity gameEntity = Entities.builder().type(GAME).build();
     gameEntity.addComponent(game);
-    game.nextTurn();
+    game.startGame();
     state = GameState.generateState(game);
     state.setCurrentPlayer(startGamePlayer);
 

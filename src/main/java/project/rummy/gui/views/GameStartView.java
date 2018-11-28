@@ -23,7 +23,7 @@ import java.io.IOException;
 import static project.rummy.gui.views.EntityType.GAME;
 
 
-public class gameStartView extends Pane implements Observer {
+public class GameStartView extends Pane implements Observer {
     private GameFXMLLoader loader;
     private Node StartView;
     private int playerNum;
@@ -35,7 +35,7 @@ public class gameStartView extends Pane implements Observer {
     private Button ok;
 
 
-    public gameStartView(GameState state, int playerStart) {
+    public GameStartView(GameState state, int playerStart) {
         super();
         this.loader = new GameFXMLLoader("gameStart");
         loader.setController(this);
@@ -66,10 +66,10 @@ public class gameStartView extends Pane implements Observer {
         processor.setUpGame(game);
         Entity gameEntity = Entities.builder().type(GAME).build();
         gameEntity.addComponent(game);
-        game.nextTurn();
+        game.setCurrentPlayer(playerNum);
+        game.startGame();
         FXGL.getGameWorld().addEntities(gameEntity);
  //
-        game.setCurrentPlayer(playerNum);
         game.registerObserver(this);
         state = GameState.generateState(game);
 

@@ -6,8 +6,6 @@ import com.almasb.fxgl.entity.Entity;
 import project.rummy.entities.*;
 import project.rummy.game.GameState;
 
-import java.util.List;
-
 public class EntitiesBuilder {
 
 //  public static Entity buildTile(Tile tile) {
@@ -58,7 +56,7 @@ public class EntitiesBuilder {
   public  static Entity buildGameStart(GameState gameState, int playerStart) {
     Entity startEntity = Entities.builder()
             .type(EntityType.GAMESTART)
-            .viewFromNode(new gameStartView(gameState, playerStart))
+            .viewFromNode(new GameStartView(gameState, playerStart))
             .build();
     startEntity.addComponent(gameState);
     return startEntity;
