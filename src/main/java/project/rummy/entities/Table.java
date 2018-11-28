@@ -47,9 +47,9 @@ public class Table {
     this.melds = new ArrayList<>();
     this.backupMelds = new ArrayList<>();
     this.freeTiles = new ArrayList<>(freeTiles);
-    this.setGrid1 = copy2DimensionArray(setGrid1);
-    this.setGrid2 = copy2DimensionArray(setGrid2);
-    this.runGrid = copy2DimensionArray(runGrid);
+    this.setGrid1 = new int[13][4];
+    this.setGrid2 = new int[13][4];
+    this.runGrid = new int[13][13];
     melds.forEach(this::addMeld);
   }
 

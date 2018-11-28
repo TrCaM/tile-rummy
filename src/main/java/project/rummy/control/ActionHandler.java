@@ -101,7 +101,7 @@ public class ActionHandler {
     game.setUpTable(table);
     game.getCurrentPlayerObject().setHand(hand);
     game.getCurrentPlayerObject().resetForNewTurn();
-    //table.resetForNewTurn();
+    table.resetForNewTurn();
     this.manipulationTable.clear();
     this.isTurnEnd = false;
     this.canDraw = true;
