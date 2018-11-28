@@ -157,7 +157,7 @@ public class TileRummyApplication extends GameApplication {
         CommandProcessor.getInstance().reset();
       }
     } else if (isStarting) {
-      if (!game.isNetworkGame()) {
+      if (game.isNetworkGame()) {
         startNetWorkGame();
       } else {
         startGame();
