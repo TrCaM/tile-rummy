@@ -120,13 +120,13 @@ public class TileRummyApplication extends GameApplication {
     getGameWorld().addEntities(handView, tableView, gameInfoView, startView);
 
 
-    SaveGame saveGame = new SaveGame();
-    try {
-      saveGame.save(state);
-    }
-    catch (IOException e) {
-      System.out.println("Whoops something went wrong");
-    }
+//    SaveGame saveGame = new SaveGame();
+//    try {
+//      saveGame.save(state);
+//    }
+//    catch (IOException e) {
+//      System.out.println("Whoops something went wrong");
+//    }
   }
 
   @Override
