@@ -160,7 +160,7 @@ public class GameInfoView extends Pane implements Observer {
       if (timeline != null) {
         timeline.stop();
       }
-      timeSeconds = 5;
+      timeSeconds = 20;
       timer.setText(timeSeconds.toString());
       timeline = new Timeline();
       timeline.setCycleCount(Timeline.INDEFINITE);
@@ -171,8 +171,9 @@ public class GameInfoView extends Pane implements Observer {
                 timer.setText(
                     timeSeconds.toString());
                 if (timeSeconds <= 0) {
-                  timeline.stop();
+                  timer.setText("0");
                   if (status.getCurrentPlayer() == playerId) {
+                    timeline.stop();
                     CommandProcessor.getInstance().enqueueCommand(handler -> {
                       handler.restoreTurn();
                       handler.draw();
@@ -180,6 +181,11 @@ public class GameInfoView extends Pane implements Observer {
                     CommandProcessor.getInstance().enqueueCommand(handler -> {
                       handler.nextTurn();
                     });
+                  } else if (timeSeconds <= -5) {
+                    CommandProcessor.getInstance().enqueueCommand(handler -> {
+                      handler.nextTurn();
+                    });
+                    timeline.stop();
                   }
                 }
               }));
