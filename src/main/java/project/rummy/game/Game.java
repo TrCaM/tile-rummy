@@ -99,6 +99,8 @@ public class Game extends Component implements Observable {
     playTurn();
   }
 
+
+
   public void startGame() {
     startGame(false);
   }
