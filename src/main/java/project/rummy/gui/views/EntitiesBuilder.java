@@ -2,6 +2,7 @@ package project.rummy.gui.views;
 
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
+
 import project.rummy.entities.*;
 import project.rummy.game.GameState;
 
@@ -53,4 +54,14 @@ public class EntitiesBuilder {
     tableEntity.addComponent(gameState);
     return tableEntity;
   }
+
+  public  static Entity buildGameStart(GameState gameState, int playerStart) {
+    Entity startEntity = Entities.builder()
+            .type(EntityType.GAMESTART)
+            .viewFromNode(new gameStartView(gameState, playerStart))
+            .build();
+    startEntity.addComponent(gameState);
+    return startEntity;
+  }
+
 }

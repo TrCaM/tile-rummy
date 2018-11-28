@@ -11,7 +11,6 @@ import project.rummy.commands.CommandProcessor;
 import project.rummy.game.*;
 import project.rummy.game.GameReader.ReadGameState;
 import project.rummy.game.GameReader.SaveGame;
-import project.rummy.game.GameReader.WriteGameState;
 import project.rummy.gui.views.EntitiesBuilder;
 import project.rummy.messages.StringMessage;
 import project.rummy.networks.ClientGameManager;
@@ -23,6 +22,9 @@ import static project.rummy.gui.views.EntityType.GAME;
 
 public class TileRummyApplication extends GameApplication {
   private GameStore gameStore;
+  private GameStore startStore;
+
+
   private CommandProcessor processor;
   private Game game;
   private GameState state;
@@ -36,7 +38,7 @@ public class TileRummyApplication extends GameApplication {
 
   public TileRummyApplication() {
     super();
-    gameStore = new GameStore(new DefaultGameInitializer());
+    gameStore = new GameStore(new StartGameInitializer());
   }
 
   @Override
@@ -53,14 +55,15 @@ public class TileRummyApplication extends GameApplication {
 
   @Override
   protected void initGame() {
-    clientGameManager = new ClientGameManager(this);
-    try {
-      new GameClientTask(PLAYER_NAME, clientGameManager).connectToServer().subscribe(this::setChannel);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-//    setUpGame(gameStore.initializeGame());
+//    clientGameManager = new ClientGameManager(this);
+//    try {
+//      new GameClientTask(PLAYER_NAME, clientGameManager).connectToServer().subscribe(this::setChannel);
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//    }
+    setUpGame(gameStore.initializeGame());
   }
+
 
   public void setUpGame(Game game) {
     this.game = game;
@@ -90,14 +93,18 @@ public class TileRummyApplication extends GameApplication {
 //    GameStore gameStore1 = new GameStore(new LoadGameInitializer(state));
 //    //game = gameStore1.initializeGame();
 //    game = gameStore.initializeGame();
+    setUpGame(game);
+    GameStart start = new GameStart(game);
+    game.setStatus(GameStatus.RUNNING);
+    int startGamePlayer = start.getPlayerValue();
     Entity gameEntity = Entities.builder().type(GAME).build();
     gameEntity.addComponent(game);
     game.nextTurn();
-    game.setStatus(GameStatus.RUNNING);
-    //state = temp;
     state = GameState.generateState(game);
+    state.setCurrentPlayer(startGamePlayer);
 
     // like the views here works...
+
     getGameWorld().addEntities(gameEntity);
     Entity handView = EntitiesBuilder.buildHand(game.getControlledPlayer(), state);
     handView.setX(0);
@@ -105,7 +112,13 @@ public class TileRummyApplication extends GameApplication {
     Entity tableView = EntitiesBuilder.buildTable(game.getControlledPlayer(), state);
     Entity gameInfoView = EntitiesBuilder.buildGameInfo(state);
     gameInfoView.setX(1150);
-    getGameWorld().addEntities(handView, tableView, gameInfoView);
+
+    Entity startView = EntitiesBuilder.buildGameStart(state, startGamePlayer);
+    startView.setX(500);
+    startView.setY(500);
+
+    getGameWorld().addEntities(handView, tableView, gameInfoView, startView);
+
 
     SaveGame saveGame = new SaveGame();
     try {
