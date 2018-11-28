@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane prefHeight="52.0" prefWidth="40.0" stylesheets="@../css/tile.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<Pane prefHeight="52.0" prefWidth="40.0" stylesheets="@../css/tile.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
    <children>
       <Rectangle fx:id="border" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="52.0" stroke="#2c0404" strokeType="INSIDE" strokeWidth="2.0" width="40.0" />
       <Text id="value" fx:id="value" layoutX="-1.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10" textAlignment="CENTER" wrappingWidth="40.99999964237213">

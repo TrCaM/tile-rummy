@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane prefHeight="436.0" prefWidth="646.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="436.0" prefWidth="646.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
    <children>
       <TextArea editable="false" layoutX="26.0" layoutY="109.0" prefHeight="324.0" prefWidth="575.0" text="Oppoent 1 just draws O7sdfsd fs sdf sdf sdf sdf sdf sdfsd fsd fsdf sd&#10;The Game is Brokens s&#10;ssdf&#10;sd f&#10;sdf&#10; sd&#10;f s&#10;df&#10; sdf&#10; sd&#10;f &#10;sdf&#10;...&#10;...&#10;..&#10;Human wins&#10;" wrapText="true">
          <font>

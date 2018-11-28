@@ -9,7 +9,7 @@
 <?language java>
 
 <?import javafx.scene.layout.GridPane?>
-<VBox prefHeight="900" prefWidth="1200" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1 " fx:controller="project.rummy.gui.GameScreen.GameViewLoader">
+<VBox prefHeight="900" prefWidth="1200" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml " fx:controller="project.rummy.gui.GameScreen.GameViewLoader">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
