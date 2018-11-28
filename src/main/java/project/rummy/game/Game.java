@@ -132,7 +132,8 @@ public class Game extends Component implements Observable {
 
   public void endTurn() {
     this.players[currentPlayer].getController().closeInput();
-    commandProcessor.reset();
+    //commandProcessor.reset();
+
   }
 
   private void resetTileHightlight() {
