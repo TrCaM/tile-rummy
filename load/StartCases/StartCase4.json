@@ -1,0 +1,51 @@
+{
+  "Deck": 48,
+  "Turn": 0,
+  "CurrentPlayer": 0,
+
+  "MeldsOnTable": [],
+
+  "HUMAN": {
+    "Tiles": [
+      "R6"
+    ],
+    "Name" : "Human",
+    "Controller" : "human",
+    "Status": "NOT PLAYED"
+  },
+  "Player 3": {
+    "Tiles": [
+      "R8"
+    ],
+    "Name" : "Player 3",
+    "Controller" : "strategy3",
+    "Status": "NOT PLAYED"
+  },
+  "Player 2": {
+    "Tiles": [
+      "R1"
+    ],
+    "Name" : "Player 2",
+    "Controller" : "strategy2",
+    "Status": "NOT PLAYED"
+  },
+  "Player 1": {
+    "Tiles": [
+      "R13"
+    ],
+    "Name" : "Player 1",
+    "Controller" : "strategy1",
+    "Status": "NOT PLAYED"
+  },
+  "FreeTiles": [ "R2",
+    "B8",
+    "O9",
+    "B13",
+    "G1",
+    "G7"],
+  "canEnd": false,
+  "canDraw": true,
+  "canPlay": true,
+  "TurnEnd": false,
+  "IceBroken" : false
+}

@@ -90,7 +90,7 @@ public class TableMeldSeeker {
 
         //the suitable meld will be the first one appears
         for(Meld m: melds){
-            if(m.type() == MeldType.SET && m.tiles().get(0).value()==tileValue){
+            if(m.type() == MeldType.SET && m.tiles().size()==3 && m.getScore()/3==tileValue){
                 boolean exist = false;
                 for(Tile t: m.tiles()){
                     if(t.color() == tileColor && t.value()==tileValue){ exist=true; }

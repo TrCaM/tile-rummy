@@ -17,5 +17,4 @@ public class GameStore {
     initializer.initializeGameState(game.getPlayers(), game.getTable());
     return game;
   }
-
 }
