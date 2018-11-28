@@ -24,6 +24,7 @@ public class Game extends Component implements Observable {
   private int controlledPlayer;
   private GameStatus status;
   private boolean isNetworkGame;
+  private  boolean isTurnStart;
 
   Game(boolean isNetworkGame) {
     super();
@@ -117,6 +118,7 @@ public class Game extends Component implements Observable {
     this.turnStatus = handler.getTurnStatus();
     handler.backUpTurn();
     this.players[currentPlayer].getController().playTurn();
+    isTurnStart = true;
     notifyObservers();
   }
 
@@ -217,6 +219,7 @@ public class Game extends Component implements Observable {
   }
 
   public void update(TurnStatus turnStatus) {
+    isTurnStart = false;
     int winner = getWinner();
     if (winner != -1) {
       this.isGameEnd = true;
@@ -272,5 +275,9 @@ public class Game extends Component implements Observable {
 
   public GameStatus getStatus() {
     return status;
+  }
+
+  public boolean isTurnBeginning() {
+    return isTurnStart;
   }
 }

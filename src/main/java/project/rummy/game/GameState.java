@@ -21,7 +21,15 @@ public class GameState extends Component implements Serializable {
   private int currentPlayer;
   private GameStatus status;
   private int nextMeldId;
+  private boolean isTurnBeginning;
 
+  public boolean isTurnBeginning() {
+    return isTurnBeginning;
+  }
+
+  public void setTurnBeginning(boolean turnBeginning) {
+    isTurnBeginning = turnBeginning;
+  }
 
   private boolean isGameEnd;
 
@@ -42,6 +50,7 @@ public class GameState extends Component implements Serializable {
     gameState.isGameEnd = game.isGameEnd();
     gameState.status = game.getStatus();
     gameState.nextMeldId = Meld.getNextId() + 100;
+    gameState.isTurnBeginning = game.isTurnBeginning();
 
 //    for(int i = 0; i < 4; i++){
 //      System.out.println("player" + gameState.playerData[i].name + gameState.handsData[i].tiles);
@@ -109,6 +118,7 @@ public class GameState extends Component implements Serializable {
   public void setPlayerData(PlayerData[] playerData) {
     this.playerData = playerData;
   }
+
   public void setHandsData(HandData[] handsData) {
     this.handsData = handsData;
   }
@@ -121,7 +131,7 @@ public class GameState extends Component implements Serializable {
     this.currentPlayer = currentPlayer;
   }
 
-  public void setTurnStatus (TurnStatus turnStatus) {
+  public void setTurnStatus(TurnStatus turnStatus) {
     this.turnStatus = turnStatus;
   }
 
