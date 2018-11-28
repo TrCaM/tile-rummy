@@ -174,6 +174,10 @@ public class Game extends Component implements Observable {
     }
   }
 
+  public boolean isNetworkGame() {
+    return isNetworkGame;
+  }
+
   public boolean isGameEnd() {
     return isGameEnd;
   }

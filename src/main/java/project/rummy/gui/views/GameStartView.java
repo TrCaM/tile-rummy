@@ -24,80 +24,83 @@ import static project.rummy.gui.views.EntityType.GAME;
 
 
 public class GameStartView extends Pane implements Observer {
-    private GameFXMLLoader loader;
-    private Node StartView;
-    private int playerNum;
-    private GameState state;
-    private Game game;
+  private GameFXMLLoader loader;
+  private Node StartView;
+  private int playerNum;
+  private GameState state;
+  private Game game;
 
-    @FXML
-    private Text playerStart;
-    @FXML
-    private Button ok;
+  @FXML
+  private Text playerStart;
+  @FXML
+  private Button ok;
 
 
-    public GameStartView(Game game, GameState state, int playerStart) {
-        super();
-        this.loader = new GameFXMLLoader("gameStart");
-        loader.setController(this);
-        loadGameStartView(state);
-        this.state = state;
-        this.playerNum = playerStart;
+  public GameStartView(Game game, GameState state, int playerStart) {
+    super();
+    this.loader = new GameFXMLLoader("gameStart");
+    loader.setController(this);
+    loadGameStartView(state);
+    this.state = state;
+    this.playerNum = playerStart;
 
-        playerText(state, playerStart);
-        this.ok.setOnMouseClicked(this::onOkClicked);
-        this.game = game;
-        // I get this is causing lag
-        game.registerObserver(this);
-    }
+    playerText(state, playerStart);
+    this.ok.setOnMouseClicked(this::onOkClicked);
+    this.game = game;
+    // I get this is causing lag
+    game.registerObserver(this);
+  }
 
-    private void playerText(GameState state, int player) {
-        playerStart.setText("Player " + player + " starts");
-    }
+  private void playerText(GameState state, int player) {
+    playerStart.setText("Player " + player + " starts");
+  }
 
-    private void onOkClicked(MouseEvent mouseEvent) {
-        // this should load a new game
+  private void onOkClicked(MouseEvent mouseEvent) {
+    // this should load a new game
 //        Game game = store.initializeGame();
-        CommandProcessor processor;
-        FXGL.getGameWorld().clear();
 
-        processor = CommandProcessor.getInstance();
-        processor.setUpGame(game);
-        Entity gameEntity = Entities.builder().type(GAME).build();
-        gameEntity.addComponent(game);
-        game.setCurrentPlayer(playerNum);
-        game.startGame(true);
-        FXGL.getGameWorld().addEntities(gameEntity);
- //
-        game.registerObserver(this);
-        state = GameState.generateState(game);
+    if (!game.isNetworkGame()) {
+      CommandProcessor processor;
+      FXGL.getGameWorld().clear();
+      processor = CommandProcessor.getInstance();
+      processor.setUpGame(game);
+      Entity gameEntity = Entities.builder().type(GAME).build();
+      gameEntity.addComponent(game);
+      game.setStatus(GameStatus.RUNNING);
+      game.setCurrentPlayer(playerNum);
+      game.startGame(true);
+      FXGL.getGameWorld().addEntities(gameEntity);
+      //
+      game.registerObserver(this);
+      state = GameState.generateState(game);
 
 
-        Entity handView = EntitiesBuilder.buildHand(game.getControlledPlayer(), state);
-        handView.setX(0);
-        handView.setY(740);
-        Entity tableView = EntitiesBuilder.buildTable(game.getControlledPlayer(), state);
-        Entity gameInfoView = EntitiesBuilder.buildGameInfo(game.getControlledPlayer(), state);
-        gameInfoView.setX(1150);
+      Entity handView = EntitiesBuilder.buildHand(game.getControlledPlayer(), state);
+      handView.setX(0);
+      handView.setY(740);
+      Entity tableView = EntitiesBuilder.buildTable(game.getControlledPlayer(), state);
+      Entity gameInfoView = EntitiesBuilder.buildGameInfo(game.getControlledPlayer(), state);
+      gameInfoView.setX(1150);
 
-        FXGL.getGameWorld().addEntities(handView, tableView, gameInfoView);
+      FXGL.getGameWorld().addEntities(handView, tableView, gameInfoView);
     }
+  }
 
-    private void loadGameStartView(GameState gameState) {
-        Node gameStateView;
-        try {
-            gameStateView = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new IllegalStateException("Can not load table");
-        }
-        update(gameState);
-        getChildren().setAll(gameStateView);
+  private void loadGameStartView(GameState gameState) {
+    Node gameStateView;
+    try {
+      gameStateView = loader.load();
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new IllegalStateException("Can not load table");
     }
+    update(gameState);
+    getChildren().setAll(gameStateView);
+  }
 
-    public void update(GameState status) {
-        status = this.state;
-    }
+  public void update(GameState status) {
+    status = this.state;
+  }
 
 
 }

@@ -72,7 +72,33 @@ public class TileRummyApplication extends GameApplication {
     this.isStarting = true;
   }
 
-  public void startGame() {
+  private void startNetWorkGame() {
+    isGameStarted = true;
+    int startGamePlayer = 0;
+    game.startGame();
+    state = GameState.generateState(game);
+    state.setCurrentPlayer(startGamePlayer);
+
+    // like the views here works...
+    buildGameView();
+
+  }
+
+  private void buildGameView() {
+    Entity gameEntity = Entities.builder().type(GAME).build();
+    gameEntity.addComponent(game);
+    getGameWorld().addEntities(gameEntity);
+    Entity handView = EntitiesBuilder.buildHand(game.getControlledPlayer(), state);
+    handView.setX(0);
+    handView.setY(740);
+    Entity tableView = EntitiesBuilder.buildTable(game.getControlledPlayer(), state);
+    Entity gameInfoView = EntitiesBuilder.buildGameInfo(game.getControlledPlayer(), state);
+    gameInfoView.setX(1150);
+
+    getGameWorld().addEntities(handView, tableView, gameInfoView);
+  }
+
+  private void startGame() {
     isGameStarted = true;
 //    String fileName="";
 //    if(!getParameters().getRaw().isEmpty()) {
@@ -93,31 +119,22 @@ public class TileRummyApplication extends GameApplication {
 //    GameStore gameStore1 = new GameStore(new LoadGameInitializer(state));
 //    //game = gameStore1.initializeGame();
 //    game = gameStore.initializeGame();
-    setUpGame(game);
     GameStart start = new GameStart(game);
-    game.setStatus(GameStatus.RUNNING);
+    game.setStatus(GameStatus.STARTING);
     int startGamePlayer = start.getPlayerValue();
-    Entity gameEntity = Entities.builder().type(GAME).build();
-    gameEntity.addComponent(game);
     game.startGame();
     state = GameState.generateState(game);
     state.setCurrentPlayer(startGamePlayer);
 
     // like the views here works...
 
-    getGameWorld().addEntities(gameEntity);
-    Entity handView = EntitiesBuilder.buildHand(game.getControlledPlayer(), state);
-    handView.setX(0);
-    handView.setY(740);
-    Entity tableView = EntitiesBuilder.buildTable(game.getControlledPlayer(), state);
-    Entity gameInfoView = EntitiesBuilder.buildGameInfo(game.getControlledPlayer(), state);
-    gameInfoView.setX(1150);
+    buildGameView();
 
     Entity startView = EntitiesBuilder.buildGameStart(game, state, startGamePlayer);
     startView.setX(500);
     startView.setY(500);
 
-    getGameWorld().addEntities(handView, tableView, gameInfoView, startView);
+    getGameWorld().addEntity(startView);
 
 
 //    SaveGame saveGame = new SaveGame();
@@ -140,7 +157,11 @@ public class TileRummyApplication extends GameApplication {
         CommandProcessor.getInstance().reset();
       }
     } else if (isStarting) {
-      startGame();
+      if (!game.isNetworkGame()) {
+        startNetWorkGame();
+      } else {
+        startGame();
+      }
     }
   }
 
