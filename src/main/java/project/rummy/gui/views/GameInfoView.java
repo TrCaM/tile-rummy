@@ -176,7 +176,9 @@ public class GameInfoView extends Pane implements Observer {
                     CommandProcessor.getInstance().enqueueCommand(handler -> {
                       handler.restoreTurn();
                       handler.draw();
-                      handler.tryEndTurn();
+                    });
+                    CommandProcessor.getInstance().enqueueCommand(handler -> {
+                      handler.endTurn();
                     });
                   }
                 }
