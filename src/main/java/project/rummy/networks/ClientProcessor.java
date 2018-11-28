@@ -17,8 +17,9 @@ public class ClientProcessor implements MessageProcessor {
   @Override
   public void processConnection(Channel channel, ConnectionData data) {
     if (data.isApproved()) {
-      manager.onLobbyJoined(channel.id(), data.getPlayerId(), data.getName());
-    } else {
+      manager.onLobbyJoined(data.getChannelId(), data.getPlayerId(), data.getName());
+    } else if (data.isDisconnecting()){
+      manager.endGame();
       channel.close();
     }
   }

@@ -19,6 +19,12 @@ public class MessageHandler extends SimpleChannelInboundHandler<Message> {
   }
 
   @Override
+  public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+    gameManager.onChannelDisconnect(ctx.channel());
+  }
+
+
+  @Override
   public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
     System.out.println(cause.getMessage());
   }

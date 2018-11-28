@@ -36,16 +36,17 @@ public class ClientGameManager implements Observable, Observer {
 
   public void onLobbyUpdated(PlayerInfo[] playerInfos) {
     this.playerInfos = playerInfos;
-    for (PlayerInfo info : playerInfos) {
-      System.out.println("Connected " + info.getName());
-      if (info.getChannelId() == channelId) {
-        playerId = info.getPlayerId();
-        playerName = info.getName();
+    for (int i = 0; i < playerInfos.length; i++) {
+      System.out.println("Connected " + playerInfos[i].getName());
+      if (playerInfos[i].getChannelId().equals(channelId)) {
+        playerId = i;
+        playerName = playerInfos[i].getName();
       }
     }
   }
 
   public void initializeGame(GameState initialState) {
+    System.out.println(playerId);
     Game game =
         new GameStore(new NetworkGameInitializer(initialState, playerId, gameApplication.getChannel(), this))
             .initializeGame();
@@ -59,6 +60,10 @@ public class ClientGameManager implements Observable, Observer {
     Meld.cleanUpMap(state);
     Meld.syncMeldId(state.getNextMeldId());
     notifyObservers();
+  }
+
+  public void endGame() {
+    System.exit(0);
   }
 
   public boolean isGameStarted() {

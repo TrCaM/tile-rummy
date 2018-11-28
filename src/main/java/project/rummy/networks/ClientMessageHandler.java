@@ -30,7 +30,7 @@ public class ClientMessageHandler extends SimpleChannelInboundHandler<Message> {
 
   @Override
   public void channelActive(ChannelHandlerContext ctx) throws Exception {
-    ConnectionData connectionData = new ConnectionData(playerName, 0);
+    ConnectionData connectionData = new ConnectionData(playerName, 0, ctx.channel().id());
     ctx.writeAndFlush(new ConnectionMessage(connectionData));
   }
 }

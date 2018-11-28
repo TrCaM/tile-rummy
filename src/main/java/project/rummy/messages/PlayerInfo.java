@@ -33,7 +33,12 @@ public class PlayerInfo implements Serializable {
   }
 
   public ConnectionMessage getApprovedMessage() {
-    ConnectionData data = new ConnectionData(name, playerId, true);
+    ConnectionData data = new ConnectionData(name, playerId, channelId, true);
+    return new ConnectionMessage(data);
+  }
+
+  public ConnectionMessage getDisconnectMessage() {
+    ConnectionData data = new ConnectionData(name, playerId, channelId, false);
     return new ConnectionMessage(data);
   }
 }

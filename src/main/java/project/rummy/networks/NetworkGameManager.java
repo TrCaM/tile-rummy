@@ -13,13 +13,16 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 import project.rummy.game.*;
 import project.rummy.messages.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class NetworkGameManager {
   private ChannelGroup channels;
   private final int MAX_PLAYERS = 4;
-  private PlayerInfo[] playersInfo;
-  private int nextPlayer;
+  private List<PlayerInfo> playersInfo;
   private Game game;
   private GameState gameState;
+  private boolean isGameRunning;
 
   public static NetworkGameManager INSTANCE;
 
@@ -32,8 +35,8 @@ public class NetworkGameManager {
 
   private NetworkGameManager() {
     channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
-    playersInfo = new PlayerInfo[4];
-    nextPlayer = 0;
+    playersInfo = new ArrayList<>(4);
+    isGameRunning = false;
   }
 
   public void onChannelConnected(Channel channel) {
@@ -42,6 +45,31 @@ public class NetworkGameManager {
     } else {
       channel.writeAndFlush(new StringMessage("The lobby is full")).addListener(ChannelFutureListener.CLOSE);
     }
+  }
+
+  public void onChannelDisconnect(Channel channel) {
+    System.out.println("Channel Disconnected");
+    for (PlayerInfo info : playersInfo) {
+      if (channel.id().equals(info.getChannelId())) {
+        playersInfo.remove(info); 
+      }
+    }
+    if (isGameRunning) {
+      notifyGameEnd();
+    } else {
+      notifyPlayerConnected();
+    }
+  }
+
+  private void notifyGameEnd() {
+    channels.close().addListener(future -> resetServer());
+  }
+
+  private void resetServer() {
+    playersInfo.clear();
+    game = null;
+    gameState = null;
+    isGameRunning = false;
   }
 
   public void initChannel(Channel channel) {
@@ -55,25 +83,30 @@ public class NetworkGameManager {
 
   public void onConnectionDataReceived(Channel channel, ConnectionData data) {
     channels.add(channel);
-    data.setPlayerId(nextPlayer);
-    playersInfo[nextPlayer] = new PlayerInfo(channel.id(), data);
+    playersInfo.add(new PlayerInfo(data.getChannelId(), data));
     channel
-        .writeAndFlush(playersInfo[nextPlayer++].getApprovedMessage())
+        .writeAndFlush(playersInfo.get(playersInfo.size()-1).getApprovedMessage())
         .addListener(channelFuture -> notifyPlayerConnected())
         .addListener(channelFuture -> tryStartGame());
   }
 
   private void tryStartGame() {
-    if (nextPlayer == MAX_PLAYERS) {
-      game = new GameStore(new ServerGameInitializer(playersInfo)).initializeGame();
+    if (playersInfo.size() == MAX_PLAYERS) {
+      game = new GameStore(new ServerGameInitializer(toPlayerInfoArray(playersInfo))).initializeGame();
       game.setStatus(GameStatus.STARTING);
       GameState gameState = game.generateGameState();
-      channels.writeAndFlush(new GameStateMessage(gameState));
+      channels
+          .writeAndFlush(new GameStateMessage(gameState))
+          .addListener(future -> isGameRunning = true);
     }
+  }
+  
+  private PlayerInfo[] toPlayerInfoArray(List<PlayerInfo> infos) {
+    return playersInfo.toArray(new PlayerInfo[0]);
   }
 
   private void notifyPlayerConnected() {
-    channels.writeAndFlush(new LobbyMessage(playersInfo));
+    channels.writeAndFlush(new LobbyMessage(toPlayerInfoArray(playersInfo)));
   }
 
   public void goNextTurn() {
@@ -97,6 +130,5 @@ public class NetworkGameManager {
           .filter(channel -> !channel.id().equals(channelId))
           .forEach(channel -> channel.writeAndFlush(new GameStateMessage(state)));
     }
-
   }
 }
