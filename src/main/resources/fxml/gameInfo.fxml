@@ -141,5 +141,11 @@
             <Font size="19.0" />
          </font>
       </Button>
+      <Label layoutX="424.0" layoutY="103.0" prefHeight="45.0" prefWidth="48.0" text="Time: " textFill="#e41212">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="timer" layoutX="478.0" layoutY="116.0" prefHeight="24.0" prefWidth="42.0" text="10" />
    </children>
 </AnchorPane>
