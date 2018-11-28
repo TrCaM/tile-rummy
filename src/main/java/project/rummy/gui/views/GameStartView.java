@@ -78,7 +78,7 @@ public class GameStartView extends Pane implements Observer {
         handView.setX(0);
         handView.setY(740);
         Entity tableView = EntitiesBuilder.buildTable(game.getControlledPlayer(), state);
-        Entity gameInfoView = EntitiesBuilder.buildGameInfo(state);
+        Entity gameInfoView = EntitiesBuilder.buildGameInfo(game.getControlledPlayer(), state);
         gameInfoView.setX(1150);
 
         FXGL.getGameWorld().addEntities(handView, tableView, gameInfoView);
