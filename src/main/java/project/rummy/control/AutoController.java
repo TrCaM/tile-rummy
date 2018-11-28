@@ -14,6 +14,7 @@ public class AutoController extends Controller implements Observer {
   private Strategy strategy;
   private GameState state;
   private boolean activate;
+  private boolean hasPlayed;
 
   public AutoController(Game game, Strategy strategy) {
     game.registerObserver(this);
@@ -39,6 +40,7 @@ public class AutoController extends Controller implements Observer {
   @Override
   public void playTurn() {
     this.activate = true;
+    this.hasPlayed = false;
   }
 
   @Override
@@ -70,11 +72,17 @@ public class AutoController extends Controller implements Observer {
 
   @Override
   public void update(GameState status) {
-    this.state = status;
-    if (activate) {
+//    if (state.getMove() != status.getMove()) {
+//      this.state = status;
+//    }
+    int current = status.getCurrentPlayer();
+    if (activate &&
+        (!hasPlayed || state.getHandsData()[current].tiles.size() != status.getHandsData()[current].tiles.size())) {
       PlayDirection commands =
-          player.status() == PlayerStatus.START ? strategy.iceBreak(state) : strategy.performFullTurn(state);
+          player.status() == PlayerStatus.START ? strategy.iceBreak(status) : strategy.performFullTurn(status);
       send(commands.getCommands(), commands.getChunks());
+      hasPlayed = true;
     }
+    this.state = status;
   }
 }
