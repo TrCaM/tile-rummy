@@ -1,12 +1,21 @@
 package project.rummy.gui.views;
 
 import com.almasb.fxgl.app.FXGL;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import javafx.util.Duration;
+import project.rummy.commands.CommandProcessor;
+import project.rummy.control.ActionHandler;
 import project.rummy.entities.HandData;
 import project.rummy.entities.Player;
 import project.rummy.entities.TileSource;
@@ -16,31 +25,57 @@ import project.rummy.main.GameFXMLLoader;
 import project.rummy.observers.Observer;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class GameInfoView extends Pane implements Observer {
   private GameFXMLLoader loader;
 
-  @FXML private Label humanTiles;
-  @FXML private Label oppo1Tiles;
-  @FXML private Label oppo2Tiles;
-  @FXML private Label oppo3Tiles;
-  @FXML private Label status0;
-  @FXML private Label status1;
-  @FXML private Label status2;
-  @FXML private Label status3;
-  @FXML private Label freeTiles;
-  @FXML private Label turnNum;
-  @FXML private Label you;
-  @FXML private Label oppo1;
-  @FXML private Label oppo2;
-  @FXML private Label oppo3;
-  @FXML private FlowPane oppo1Hand;
-  @FXML private FlowPane oppo2Hand;
-  @FXML private FlowPane oppo3Hand;
-  @FXML private Node oppoHands;
-  @FXML private Button debugButton;
+  @FXML
+  private Label humanTiles;
+  @FXML
+  private Label oppo1Tiles;
+  @FXML
+  private Label oppo2Tiles;
+  @FXML
+  private Label oppo3Tiles;
+  @FXML
+  private Label status0;
+  @FXML
+  private Label status1;
+  @FXML
+  private Label status2;
+  @FXML
+  private Label status3;
+  @FXML
+  private Label freeTiles;
+  @FXML
+  private Label turnNum;
+  @FXML
+  private Label you;
+  @FXML
+  private Label oppo1;
+  @FXML
+  private Label oppo2;
+  @FXML
+  private Label oppo3;
+  @FXML
+  private FlowPane oppo1Hand;
+  @FXML
+  private FlowPane oppo2Hand;
+  @FXML
+  private FlowPane oppo3Hand;
+  @FXML
+  private Node oppoHands;
+  @FXML
+  private Button debugButton;
+  @FXML
+  private Label timer;
 
+  private Timeline timeline;
   private int playerId;
+  private Integer timeSeconds = 120;
+
 
   private boolean debugMode;
 
@@ -120,12 +155,38 @@ public class GameInfoView extends Pane implements Observer {
   public void update(GameState status) {
     renderGameInfo(status);
     loadOpponentHand(status);
+    if (status.isTurnBeginning()) {
+      //System.out.println(status.getTurnNumber()  );
+      if (timeline != null) {
+        timeline.stop();
+      }
+      timeSeconds = 20;
+      timer.setText(timeSeconds.toString());
+      timeline = new Timeline();
+      timeline.setCycleCount(Timeline.INDEFINITE);
+      timeline.getKeyFrames().add(
+          new KeyFrame(Duration.seconds(1),
+              (EventHandler) event -> {
+                timeSeconds--;
+                timer.setText(
+                    timeSeconds.toString());
+                if (timeSeconds <= 0) {
+                  timeline.stop();
+                  CommandProcessor.getInstance().enqueueCommand(handler -> {
+                    handler.restoreTurn();
+                    handler.draw();
+                    handler.tryEndTurn();
+                  });
+                }
+              }));
+      timeline.playFromStart();
+    }
   }
 
   private void loadOpponentHand(GameState status) {
     HandData[] data = new HandData[4];
     int current = 1;
-    for (int i=0; i<4; i++) {
+    for (int i = 0; i < 4; i++) {
       if (i == playerId) {
         data[0] = status.getHandsData()[i];
       } else {

@@ -10,4 +10,5 @@ public class TurnStatus implements Serializable {
   public boolean isIceBroken;
   public boolean goNextTurn;
   public boolean tryEndTurn;
+
 }
