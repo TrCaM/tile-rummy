@@ -28,6 +28,7 @@ public class GameStartView extends Pane implements Observer {
     private Node StartView;
     private int playerNum;
     private GameState state;
+    private Game game;
 
     @FXML
     private Text playerStart;
@@ -35,7 +36,7 @@ public class GameStartView extends Pane implements Observer {
     private Button ok;
 
 
-    public GameStartView(GameState state, int playerStart) {
+    public GameStartView(Game game, GameState state, int playerStart) {
         super();
         this.loader = new GameFXMLLoader("gameStart");
         loader.setController(this);
@@ -45,8 +46,8 @@ public class GameStartView extends Pane implements Observer {
 
         playerText(state, playerStart);
         this.ok.setOnMouseClicked(this::onOkClicked);
+        this.game = game;
         // I get this is causing lag
-        Game game = FXGL.getGameWorld().getEntitiesByType(EntityType.GAME).get(0).getComponent(Game.class);
         game.registerObserver(this);
     }
 
@@ -56,9 +57,7 @@ public class GameStartView extends Pane implements Observer {
 
     private void onOkClicked(MouseEvent mouseEvent) {
         // this should load a new game
-        GameStore store = new GameStore(new DefaultGameInitializer());
-
-        Game game = store.initializeGame();
+//        Game game = store.initializeGame();
         CommandProcessor processor;
         FXGL.getGameWorld().clear();
 
@@ -67,7 +66,7 @@ public class GameStartView extends Pane implements Observer {
         Entity gameEntity = Entities.builder().type(GAME).build();
         gameEntity.addComponent(game);
         game.setCurrentPlayer(playerNum);
-        game.startGame();
+        game.startGame(true);
         FXGL.getGameWorld().addEntities(gameEntity);
  //
         game.registerObserver(this);

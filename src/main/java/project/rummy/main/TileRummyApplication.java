@@ -32,7 +32,7 @@ public class TileRummyApplication extends GameApplication {
   private boolean isConnected;
   private boolean isGameStarted;
   private boolean isStarting;
-  private final String PLAYER_NAME = "Thang";
+  private final String PLAYER_NAME = "Tri";
   private ClientGameManager clientGameManager;
 
 
@@ -55,13 +55,13 @@ public class TileRummyApplication extends GameApplication {
 
   @Override
   protected void initGame() {
-    clientGameManager = new ClientGameManager(this);
-    try {
-      new GameClientTask(PLAYER_NAME, clientGameManager).connectToServer().subscribe(this::setChannel);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    //setUpGame(gameStore.initializeGame());
+//    clientGameManager = new ClientGameManager(this);
+//    try {
+//      new GameClientTask(PLAYER_NAME, clientGameManager).connectToServer().subscribe(this::setChannel);
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//    }
+    setUpGame(gameStore.initializeGame());
   }
 
 
@@ -113,7 +113,7 @@ public class TileRummyApplication extends GameApplication {
     Entity gameInfoView = EntitiesBuilder.buildGameInfo(game.getControlledPlayer(), state);
     gameInfoView.setX(1150);
 
-    Entity startView = EntitiesBuilder.buildGameStart(state, startGamePlayer);
+    Entity startView = EntitiesBuilder.buildGameStart(game, state, startGamePlayer);
     startView.setX(500);
     startView.setY(500);
 

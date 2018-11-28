@@ -90,10 +90,23 @@ public class Game extends Component implements Observable {
     playTurn();
   }
 
-  public void startGame() {
+  public void startGame(boolean reset) {
+    if (reset) {
+      initGameTable();
+    }
     turnNumber = 1;
     this.status = GameStatus.RUNNING;
     playTurn();
+  }
+
+  public void startGame() {
+    startGame(false);
+  }
+
+  public void initGameTable() {
+    GameInitializer initializer = new DefaultGameInitializer();
+    initializer.initTable(this);
+    initializer.initializeGameState(players, table);
   }
 
   private void playTurn() {

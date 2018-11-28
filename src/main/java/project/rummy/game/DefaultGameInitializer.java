@@ -52,6 +52,7 @@ public class DefaultGameInitializer implements GameInitializer {
     // the table is empty
     //
     Stream.of(players).forEach(player -> {
+      player.hand().clearHand();
       for (int i=0; i<14; i++) {
         player.hand().addTile(table.drawTile());
       }

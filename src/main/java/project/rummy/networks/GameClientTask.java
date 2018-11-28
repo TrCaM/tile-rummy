@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 import java.net.InetSocketAddress;
 
 public class GameClientTask {
-  static final String HOST = System.getProperty("host", "127.0.0.1");
+  static final String HOST = System.getProperty("host", "172.20.10.5");
   static final int PORT = Integer.parseInt(System.getProperty("port", "8080"));
   static final int SIZE = Integer.parseInt(System.getProperty("size", "256"));
   private final String playerName;

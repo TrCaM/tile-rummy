@@ -201,4 +201,9 @@ public class Hand {
     }
     return sum;
   }
+
+  public void clearHand() {
+    tiles.clear();
+    melds.clear();
+  }
 }
