@@ -8,6 +8,7 @@ import project.rummy.game.Game;
 import project.rummy.gui.views.EntityType;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static project.rummy.entities.PlayerStatus.ICE_BROKEN;
@@ -29,6 +30,7 @@ public class ActionHandler {
   private TableData backUpTable;
   private String playerName;
   private int startPoint;
+  private int tableStartPoint;
   private PlayerStatus turnType;
   private boolean preventUpdate;
   private boolean tryEndTurn;
@@ -44,6 +46,7 @@ public class ActionHandler {
     this.manipulationTable = ManipulationTable.getInstance();
     manipulationTable.clear();
     this.startPoint = hand.getScore();
+    this.tableStartPoint = table.getPlayingMelds().stream().mapToInt(Meld::getScore).sum();
     this.isTurnEnd = false;
     this.goNextTurn = false;
     this.playerName = player.getName();
@@ -123,8 +126,15 @@ public class ActionHandler {
     if (canEndTurn) {
       return true;
     }
+//    if (turnType == START) {
+//      return (startPoint - hand.getScore() >= 30 || hand.getScore() > startPoint)
+//          && manipulationTable.isEmpty();
+//    }
+
+    int newTableScore = table.getPlayingMelds().stream().mapToInt(Meld::getScore).sum();
+
     if (turnType == START) {
-      return (startPoint - hand.getScore() >= 30 || hand.getScore() > startPoint)
+      return (newTableScore-tableStartPoint >= 30 || hand.getScore() > startPoint)
           && manipulationTable.isEmpty();
     }
     return hand.getScore() != startPoint && manipulationTable.isEmpty();
@@ -259,7 +269,11 @@ public class ActionHandler {
     this.canDraw = false;
     manipulationTable.submit(table);
     manipulationTable.clear();
-    if (turnType == ICE_BROKEN || startPoint - hand.getScore() >= 30) {
+//    if (turnType == ICE_BROKEN || startPoint - hand.getScore() >= 30) {
+//      this.isIceBroken = true;
+//    }
+    int newTableScore = table.getPlayingMelds().stream().mapToInt(Meld::getScore).sum();
+    if (turnType == ICE_BROKEN || newTableScore - tableStartPoint >= 30) {
       this.isIceBroken = true;
     }
   }
@@ -267,7 +281,11 @@ public class ActionHandler {
   public void submit(Meld meld) {
     manipulationTable.submit(meld, table);
     this.canDraw = false;
-    if (turnType == ICE_BROKEN || startPoint - hand.getScore() >= 30) {
+//    if (turnType == ICE_BROKEN || startPoint - hand.getScore() >= 30) {
+//      this.isIceBroken = true;
+//    }
+    int newTableScore = table.getPlayingMelds().stream().mapToInt(Meld::getScore).sum();
+    if (turnType == ICE_BROKEN || newTableScore - tableStartPoint >= 30) {
       this.isIceBroken = true;
     }
   }
