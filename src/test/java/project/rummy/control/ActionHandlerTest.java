@@ -51,11 +51,22 @@ public class ActionHandlerTest {
   public void draw_shouldSucceed() {
     when(table.drawTile()).thenReturn(O5).thenReturn(R3);
 
-    handler.draw();
-    handler.draw();
+    handler.drawAndEndTurn();
+    handler.drawAndEndTurn();
 
     assertThat(player.hand().getTiles(), contains(R3, O5));
     verify(table, times(2)).drawTile();
+  }
+
+  @Test
+  public void timeout_shouldSucceed() {
+    when(table.drawTile()).thenReturn(O5).thenReturn(R3).thenReturn(G3);
+
+    handler.getManipulationTable().add(Meld.createMeld(R3));
+    handler.timeOutEndTurn();
+
+    assertThat(player.hand().getTiles(), contains(R3, G3, O5));
+    verify(table, times(3)).drawTile();
   }
 
   @Test

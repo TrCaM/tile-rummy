@@ -34,22 +34,22 @@ public class CommandProcessorTest {
   @Test(expected = IllegalStateException.class)
   public void noHandler_shouldThrow() {
     processor.setUpHandler(null);
-    processor.apply(ActionHandler::draw);
+    processor.apply(ActionHandler::drawAndEndTurn);
   }
 
   @Test(expected = IllegalStateException.class)
   public void handlerExpired_shouldThrow() {
     when(handler.isExpired()).thenReturn(true);
     processor.setUpHandler(handler);
-    processor.apply(ActionHandler::draw);
+    processor.apply(ActionHandler::drawAndEndTurn);
   }
 
   @Test()
   public void handlerOkay_shouldSucceed() {
     when(handler.isExpired()).thenReturn(false);
     processor.setUpHandler(handler);
-    processor.apply(ActionHandler::draw);
+    processor.apply(ActionHandler::drawAndEndTurn);
 
-    verify(handler).draw();
+    verify(handler).drawAndEndTurn();
   }
 }
