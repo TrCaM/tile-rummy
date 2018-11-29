@@ -32,7 +32,7 @@ public class TileRummyApplication extends GameApplication {
   private boolean isConnected;
   private boolean isGameStarted;
   private boolean isStarting;
-  private final String PLAYER_NAME = "Tri Tatoo";
+  private final String PLAYER_NAME = "Tri Tha Thu";
   private ClientGameManager clientGameManager;
 
 

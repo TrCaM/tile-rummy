@@ -12,13 +12,11 @@ public class NetworkController extends Controller implements Observer {
   private int playerId;
   private Channel channel;
   private boolean isPlaying;
-  private boolean canEndTurn;
 
   public NetworkController(Channel channel, ClientGameManager gameManager, int playerId) {
     this.channel = channel;
     gameManager.registerObserver(this);
     this.isPlaying = false;
-    this.canEndTurn = false;
     this.playerId = playerId;
   }
 
@@ -30,9 +28,6 @@ public class NetworkController extends Controller implements Observer {
   @Override
   public void playTurn() {
     isPlaying = true;
-    canEndTurn = false;
-//    send(ActionHandler::draw);
-//    channel.writeAndFlush(new StringMessage("Signaling"));
   }
 
   @Override
@@ -53,7 +48,6 @@ public class NetworkController extends Controller implements Observer {
         TableData tableData = state.getTableData();
         TurnStatus turnStatus = state.getTurnStatus();
         send(handler -> handler.updateFromData(tableData, handData, turnStatus));
-        canEndTurn = true;
       }
     }
   }
