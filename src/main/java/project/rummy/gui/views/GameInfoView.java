@@ -1,12 +1,8 @@
 package project.rummy.gui.views;
 
 import com.almasb.fxgl.app.FXGL;
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -25,22 +21,18 @@ import project.rummy.main.GameFXMLLoader;
 import project.rummy.observers.Observer;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 public class GameInfoView extends Pane implements Observer {
   private GameFXMLLoader loader;
 
   @FXML
-  private Label humanTiles;
+  private Label player1Tiles;
   @FXML
-  private Label oppo1Tiles;
+  private Label player2Tiles;
   @FXML
-  private Label oppo2Tiles;
+  private Label player3Tiles;
   @FXML
-  private Label oppo3Tiles;
-  @FXML
-  private Label status0;
+  private Label player4Tiles;
   @FXML
   private Label status1;
   @FXML
@@ -48,17 +40,19 @@ public class GameInfoView extends Pane implements Observer {
   @FXML
   private Label status3;
   @FXML
+  private Label status4;
+  @FXML
   private Label freeTiles;
   @FXML
   private Label turnNum;
   @FXML
-  private Label you;
+  private Label player1;
   @FXML
-  private Label oppo1;
+  private Label player2;
   @FXML
-  private Label oppo2;
+  private Label player3;
   @FXML
-  private Label oppo3;
+  private Label player4;
   @FXML
   private FlowPane oppo1Hand;
   @FXML
@@ -113,39 +107,39 @@ public class GameInfoView extends Pane implements Observer {
   private void renderGameInfo(GameState gameState) {
     // Update the num tiles
 
-    oppo1Tiles.setText("" + gameState.getHandsData()[1].tiles.size() + " Tiles");
-    oppo2Tiles.setText("" + gameState.getHandsData()[2].tiles.size() + " Tiles");
-    oppo3Tiles.setText("" + gameState.getHandsData()[3].tiles.size() + " Tiles");
-    humanTiles.setText("" + gameState.getHandsData()[0].tiles.size() + " Tiles");
+    player2Tiles.setText("" + gameState.getHandsData()[1].tiles.size() + " Tiles");
+    player3Tiles.setText("" + gameState.getHandsData()[2].tiles.size() + " Tiles");
+    player4Tiles.setText("" + gameState.getHandsData()[3].tiles.size() + " Tiles");
+    player1Tiles.setText("" + gameState.getHandsData()[0].tiles.size() + " Tiles");
     // Update current player
-    you.setText(gameState.getPlayerData()[0].name);
-    oppo1.setText(gameState.getPlayerData()[1].name);
-    oppo2.setText(gameState.getPlayerData()[2].name);
-    oppo3.setText(gameState.getPlayerData()[3].name);
+    player1.setText(gameState.getPlayerData()[0].name);
+    player2.setText(gameState.getPlayerData()[1].name);
+    player3.setText(gameState.getPlayerData()[2].name);
+    player4.setText(gameState.getPlayerData()[3].name);
     Label currentLabel;
-    you.getStyleClass().clear();
-    oppo1.getStyleClass().clear();
-    oppo2.getStyleClass().clear();
-    oppo3.getStyleClass().clear();
+    player1.getStyleClass().clear();
+    player2.getStyleClass().clear();
+    player3.getStyleClass().clear();
+    player4.getStyleClass().clear();
     switch (gameState.getCurrentPlayer()) {
       case 0:
-        currentLabel = you;
+        currentLabel = player1;
         break;
       case 1:
-        currentLabel = oppo1;
+        currentLabel = player2;
         break;
       case 2:
-        currentLabel = oppo2;
+        currentLabel = player3;
         break;
       default:
-        currentLabel = oppo3;
+        currentLabel = player4;
     }
     currentLabel.getStyleClass().add("current");
     // Update status
-    status0.setText(gameState.getPlayerStatuses()[0].toString());
-    status1.setText(gameState.getPlayerStatuses()[1].toString());
-    status2.setText(gameState.getPlayerStatuses()[2].toString());
-    status3.setText(gameState.getPlayerStatuses()[3].toString());
+    status1.setText(gameState.getPlayerStatuses()[0].toString());
+    status2.setText(gameState.getPlayerStatuses()[1].toString());
+    status3.setText(gameState.getPlayerStatuses()[2].toString());
+    status4.setText(gameState.getPlayerStatuses()[3].toString());
     // Update the rest
     freeTiles.setText(Integer.toString(gameState.getFreeTilesCount()));
     turnNum.setText(Integer.toString(gameState.getTurnNumber()));
@@ -171,13 +165,13 @@ public class GameInfoView extends Pane implements Observer {
                 if (timeSeconds <= 0) {
                   timer.setText("0");
                   if (status.getCurrentPlayer() == playerId) {
-                    timeline.stop();
                     CommandProcessor.getInstance().enqueueCommand(handler -> {
                       handler.restoreTurn();
                       handler.draw();
                     });
                     CommandProcessor.getInstance().enqueueCommand(ActionHandler::tryEndTurn);
                   }
+                  timeline.stop();
                 }
               }));
       timeline.playFromStart();
