@@ -25,6 +25,7 @@ public class Game extends Component implements Observable {
   private GameStatus status;
   private boolean isNetworkGame;
   private  boolean isTurnStart;
+  private int playersCount;
 
   Game(boolean isNetworkGame) {
     super();
@@ -39,6 +40,7 @@ public class Game extends Component implements Observable {
     this.players = players;
     this.turnNumber = 0;
     this.currentPlayer = 0;
+    this.playersCount = players.length;
   }
 
   public void setStatus(GameStatus status) {
@@ -57,7 +59,7 @@ public class Game extends Component implements Observable {
     this.table = table;
   }
 
-  public void setTurnNumber(int num) {
+  void setTurnNumber(int num) {
     this.turnNumber = num;
   }
 
@@ -72,7 +74,7 @@ public class Game extends Component implements Observable {
    * + Redraw the components that need to be re-rendered after each iteration
    * + Constantly check the state of the game and check for when the game should end
    */
-  public void tryEndTurn() {
+  private void tryEndTurn() {
     this.status = GameStatus.TURN_END;
     if (!isNetworkGame) {
       nextTurn();
@@ -81,13 +83,13 @@ public class Game extends Component implements Observable {
     }
   }
 
-  public void nextTurn() {
+  void nextTurn() {
     turnNumber++;
     this.players[currentPlayer].getController().endTurn();
     commandProcessor.reset();
     resetTileHightlight();
     this.status = GameStatus.RUNNING;
-    currentPlayer = (currentPlayer + 1) % 4;
+    currentPlayer = (currentPlayer + 1) % playersCount;
     playTurn();
   }
 
@@ -106,7 +108,7 @@ public class Game extends Component implements Observable {
     startGame(false);
   }
 
-  public void initGameTable() {
+  private void initGameTable() {
     GameInitializer initializer = new DefaultGameInitializer();
     initializer.initTable(this);
     initializer.initializeGameState(players, table);
@@ -130,7 +132,7 @@ public class Game extends Component implements Observable {
 //    }
 //  }
 
-  public void endTurn() {
+  private void endTurn() {
     this.players[currentPlayer].getController().closeInput();
     //commandProcessor.reset();
 
@@ -159,7 +161,7 @@ public class Game extends Component implements Observable {
    * tile or has the least points in hand when there's no tile to drawAndEndTurn and play.
    * Return -1 if the game is not ended.
    */
-  public int getWinner() {
+  int getWinner() {
     if (players[currentPlayer].hand().size() == 0) {
       return currentPlayer;
     } else if (players[currentPlayer].hand().size() != 0 && table.getFreeTiles().isEmpty()) {
@@ -278,7 +280,11 @@ public class Game extends Component implements Observable {
     return status;
   }
 
-  public boolean isTurnBeginning() {
+  boolean isTurnBeginning() {
     return isTurnStart;
+  }
+
+  public int getPlayersCount() {
+    return playersCount;
   }
 }

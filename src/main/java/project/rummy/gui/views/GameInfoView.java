@@ -21,6 +21,8 @@ import project.rummy.main.GameFXMLLoader;
 import project.rummy.observers.Observer;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class GameInfoView extends Pane implements Observer {
   private GameFXMLLoader loader;
@@ -69,23 +71,46 @@ public class GameInfoView extends Pane implements Observer {
   private Timeline timeline;
   private int playerId;
   private Integer timeSeconds = 120;
+  private int playersCount;
+  private List<Label> playersTiles;
+  private List<FlowPane> opponentsHand;
+  private List<Label> playerNames;
+  private List<Label> statuses;
 
 
   private boolean debugMode;
 
   public GameInfoView(Player controlledPlayer, GameState gameState) {
     super();
+    this.playersCount = gameState.getPlayerData().length;
     this.loader = new GameFXMLLoader("gameInfo");
     loader.setController(this);
     loadGameInfoView(gameState);
     Game game = FXGL.getGameWorld().getEntitiesByType(EntityType.GAME).get(0).getComponent(Game.class);
     game.registerObserver(this);
     this.debugMode = false;
-    setUpHandlers();
     this.playerId = controlledPlayer.getId();
   }
 
-  private void setUpHandlers() {
+  private void setup() {
+    playerNames = Arrays.asList(player1, player2, player3, player4);
+    playersTiles = Arrays.asList(player1Tiles, player2Tiles, player3Tiles, player4Tiles);
+    opponentsHand = Arrays.asList(oppo1Hand, oppo2Hand, oppo3Hand);
+    statuses = Arrays.asList(status1, status2, status3, status4);
+    playerNames.forEach(label -> label.setVisible(false));
+    playersTiles.forEach(label -> label.setVisible(false));
+    playerNames.forEach(label -> label.setVisible(false));
+    statuses.forEach(label -> label.setVisible(false));
+
+    playerNames = playerNames.subList(0, playersCount);
+    playersTiles = playersTiles.subList(0, playersCount);
+    opponentsHand = opponentsHand.subList(0, playersCount - 1);
+    statuses = statuses.subList(0, playersCount);
+    playerNames.forEach(label -> label.setVisible(true));
+    playersTiles.forEach(label -> label.setVisible(true));
+    playerNames.forEach(label -> label.setVisible(true));
+    statuses.forEach(label -> label.setVisible(true));
+
     this.debugButton.setOnMouseClicked(event -> {
       debugMode = !debugMode;
       oppoHands.setVisible(debugMode);
@@ -100,6 +125,7 @@ public class GameInfoView extends Pane implements Observer {
       e.printStackTrace();
       throw new IllegalStateException("Can not load table");
     }
+    setup();
     update(gameState);
     getChildren().setAll(gameStateView);
   }
@@ -107,40 +133,14 @@ public class GameInfoView extends Pane implements Observer {
   private void renderGameInfo(GameState gameState) {
     // Update the num tiles
 
-    player2Tiles.setText("" + gameState.getHandsData()[1].tiles.size() + " Tiles");
-    player3Tiles.setText("" + gameState.getHandsData()[2].tiles.size() + " Tiles");
-    player4Tiles.setText("" + gameState.getHandsData()[3].tiles.size() + " Tiles");
-    player1Tiles.setText("" + gameState.getHandsData()[0].tiles.size() + " Tiles");
-    // Update current player
-    player1.setText(gameState.getPlayerData()[0].name);
-    player2.setText(gameState.getPlayerData()[1].name);
-    player3.setText(gameState.getPlayerData()[2].name);
-    player4.setText(gameState.getPlayerData()[3].name);
-    Label currentLabel;
-    player1.getStyleClass().clear();
-    player2.getStyleClass().clear();
-    player3.getStyleClass().clear();
-    player4.getStyleClass().clear();
-    switch (gameState.getCurrentPlayer()) {
-      case 0:
-        currentLabel = player1;
-        break;
-      case 1:
-        currentLabel = player2;
-        break;
-      case 2:
-        currentLabel = player3;
-        break;
-      default:
-        currentLabel = player4;
+    for (int i = 0;  i < playersCount; i++ ) {
+      playersTiles.get(i).setText("" + gameState.getHandsData()[i].tiles.size() + " Tiles");
+      playerNames.get(i).setText(gameState.getPlayerData()[i].name);
+      playerNames.get(i).getStyleClass().remove("current");
+      statuses.get(i).setText(gameState.getPlayerStatuses()[i].toString());
     }
-    currentLabel.getStyleClass().add("current");
-    // Update status
-    status1.setText(gameState.getPlayerStatuses()[0].toString());
-    status2.setText(gameState.getPlayerStatuses()[1].toString());
-    status3.setText(gameState.getPlayerStatuses()[2].toString());
-    status4.setText(gameState.getPlayerStatuses()[3].toString());
     // Update the rest
+    playerNames.get(gameState.getCurrentPlayer()).getStyleClass().add("current");
     freeTiles.setText(Integer.toString(gameState.getFreeTilesCount()));
     turnNum.setText(Integer.toString(gameState.getTurnNumber()));
   }
@@ -176,27 +176,23 @@ public class GameInfoView extends Pane implements Observer {
   }
 
   private void loadOpponentHand(GameState status) {
-    HandData[] data = new HandData[4];
+    HandData[] data = new HandData[playersCount];
     int current = 1;
-    for (int i = 0; i < 4; i++) {
+    opponentsHand.forEach(view -> view.getChildren().clear());
+    for (int i = 0; i < data.length; i++) {
       if (i == playerId) {
         data[0] = status.getHandsData()[i];
       } else {
         data[current++] = status.getHandsData()[i];
       }
     }
-    oppo1Hand.getChildren().clear();
-    oppo2Hand.getChildren().clear();
-    oppo3Hand.getChildren().clear();
-    data[1].tiles.stream()
-        .map(tile -> new TileView(tile, TileSource.HAND, 0, data[1].tiles.indexOf(tile)))
-        .forEach(view -> oppo1Hand.getChildren().add(view));
-    data[2].tiles.stream()
-        .map(tile -> new TileView(tile, TileSource.HAND, 0, data[2].tiles.indexOf(tile)))
-        .forEach(view -> oppo2Hand.getChildren().add(view));
-    data[3].tiles.stream()
-        .map(tile -> new TileView(tile, TileSource.HAND, 0, data[3].tiles.indexOf(tile)))
-        .forEach(view -> oppo3Hand.getChildren().add(view));
+
+    for (int i = 1; i < data.length; i++) {
+      int index = i;
+      data[index].tiles.stream()
+          .map(tile -> new TileView(tile, TileSource.HAND, 0, data[index].tiles.indexOf(tile)))
+          .forEach(view -> opponentsHand.get(index-1).getChildren().add(view));
+    }
     oppoHands.setVisible(debugMode);
   }
 }
