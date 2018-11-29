@@ -10,16 +10,21 @@ import project.rummy.strategies.Strategy1;
 import project.rummy.strategies.Strategy2;
 import project.rummy.strategies.Strategy3;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class AutoController extends Controller implements Observer {
   private Strategy strategy;
   private GameState state;
   private boolean activate;
   private boolean hasPlayed;
+  private Timer timer;
 
   public AutoController(Game game, Strategy strategy) {
     game.registerObserver(this);
     this.strategy = strategy;
     this.activate = false;
+    this.timer = new Timer();
   }
 
   @Override
@@ -56,17 +61,17 @@ public class AutoController extends Controller implements Observer {
 
   /**
    * End this turn after a fixed duration
-   * @param msec the duration in milliseconds
+   * @param milliseconds the duration in milliseconds
    */
-  private void endTurnIn(int msec) {
-    new java.util.Timer().schedule(
-        new java.util.TimerTask() {
+  private void endTurnIn(int milliseconds) {
+    timer.schedule(
+        new TimerTask() {
           @Override
           public void run() {
             send(ActionHandler::nextTurn);
           }
         },
-        msec
+        milliseconds
     );
   }
 

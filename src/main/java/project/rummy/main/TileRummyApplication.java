@@ -55,13 +55,13 @@ public class TileRummyApplication extends GameApplication {
 
   @Override
   protected void initGame() {
-    clientGameManager = new ClientGameManager(this);
-    try {
-      new GameClientTask(PLAYER_NAME, clientGameManager).connectToServer().subscribe(this::setChannel);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-//    setUpGame(gameStore.initializeGame());
+//    clientGameManager = new ClientGameManager(this);
+//    try {
+//      new GameClientTask(PLAYER_NAME, clientGameManager).connectToServer().subscribe(this::setChannel);
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//    }
+    setUpGame(gameStore.initializeGame());
   }
 
 
@@ -163,6 +163,12 @@ public class TileRummyApplication extends GameApplication {
         startGame();
       }
     }
+  }
+
+  @Override
+  protected void exit() {
+    super.exit();
+    System.exit(0);
   }
 
   public Channel getChannel() {
