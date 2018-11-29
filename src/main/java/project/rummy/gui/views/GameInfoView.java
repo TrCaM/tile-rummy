@@ -160,7 +160,7 @@ public class GameInfoView extends Pane implements Observer {
       if (timeline != null) {
         timeline.stop();
       }
-      timeSeconds = 20;
+      timeSeconds = 120;
       timer.setText(timeSeconds.toString());
       timeline = new Timeline();
       timeline.setCycleCount(Timeline.INDEFINITE);
