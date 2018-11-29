@@ -178,9 +178,14 @@ public class GameInfoView extends Pane implements Observer {
                       handler.restoreTurn();
                       handler.draw();
                     });
-//                    CommandProcessor.getInstance().enqueueCommand(handler -> {
-//                      handler.nextTurn();
-//                    });
+                    CommandProcessor.getInstance().enqueueCommand(handler -> {
+                      handler.nextTurn();
+                    });
+                  } else if (timeSeconds <= -3) {
+                    CommandProcessor.getInstance().enqueueCommand(handler -> {
+                      handler.nextTurn();
+                    });
+                    timeline.stop();
                   }
                 }
               }));
