@@ -63,4 +63,19 @@ public class EntitiesBuilder {
     return startEntity;
   }
 
+  public  static Entity buildMainMenu() {
+    Entity mainMenu = Entities.builder()
+            .type(EntityType.MainMenu)
+            .viewFromNode(new MainMenuView())
+            .build();
+    return mainMenu;
+  }
+  public  static Entity buildGameSelect() {
+    Entity gameSelect = Entities.builder()
+            .type(EntityType.GameType)
+            .viewFromNode(new GameTypeStart())
+            .build();
+    return gameSelect;
+  }
+
 }
