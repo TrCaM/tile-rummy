@@ -8,25 +8,6 @@ import project.rummy.game.Game;
 import project.rummy.game.GameState;
 
 public class EntitiesBuilder {
-
-//  public static Entity buildTile(Tile tile) {
-//    Entity tileEntity = Entities.builder()
-//        .type(EntityType.TILE)
-//        .viewFromNode(new TileView(tile))
-//        .build();
-//    tileEntity.addComponent(tile);
-//    return tileEntity;
-//  }
-
-  public static Entity buildMeld(Meld meld) {
-    Entity meldEntity = Entities.builder()
-        .type(EntityType.MELD)
-        .viewFromNode(new MeldView(meld))
-        .build();
-    meldEntity.addComponent(meld);
-    return meldEntity;
-  }
-
   public static Entity buildHand(Player controlledPlayer, GameState gameState) {
     Entity handEntity = Entities.builder()
         .type(EntityType.HAND)
@@ -54,28 +35,26 @@ public class EntitiesBuilder {
     return tableEntity;
   }
 
-  public  static Entity buildGameStart(Game game, GameState gameState, int playerStart) {
+  public static Entity buildGameStart(Game game, GameState gameState, int playerStart) {
     Entity startEntity = Entities.builder()
-            .type(EntityType.GAMESTART)
-            .viewFromNode(new GameStartView(game, gameState, playerStart))
-            .build();
+        .type(EntityType.GAMESTART)
+        .viewFromNode(new GameStartView(game, gameState, playerStart))
+        .build();
     startEntity.addComponent(gameState);
     return startEntity;
   }
 
-  public  static Entity buildMainMenu() {
-    Entity mainMenu = Entities.builder()
-            .type(EntityType.MainMenu)
-            .viewFromNode(new MainMenuView())
-            .build();
-    return mainMenu;
-  }
-  public  static Entity buildGameSelect() {
-    Entity gameSelect = Entities.builder()
-            .type(EntityType.GameType)
-            .viewFromNode(new GameTypeStart())
-            .build();
-    return gameSelect;
+  public static Entity buildMainMenu() {
+    return Entities.builder()
+        .type(EntityType.MainMenu)
+        .viewFromNode(new MainMenuView())
+        .build();
   }
 
+  static Entity buildGameSelect() {
+    return Entities.builder()
+        .type(EntityType.GameType)
+        .viewFromNode(new GameTypeStart())
+        .build();
+  }
 }
