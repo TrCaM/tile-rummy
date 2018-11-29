@@ -119,7 +119,6 @@ public class ActionHandlerTest {
     handler.takeTableMeld(1);
 
     assertThat(handler.getManipulationTable().getMelds().get(0).tiles(), contains(R3, G3, B3));
-    verify(table).getPlayingMelds();
     verify(table).removeMeld(1);
   }
 

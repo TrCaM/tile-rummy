@@ -52,7 +52,7 @@ public class GameTest {
         Game game = new Game(false);
         initializer.initPlayers(game);
         initializer.initTable(game);
-        game.nextTurn();
+        game.startGame();
 
         game.getPlayers()[0].hand().addTiles();
         game.getPlayers()[1].hand().addTiles(B5, B12);
