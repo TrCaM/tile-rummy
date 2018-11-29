@@ -91,7 +91,7 @@ public class ActionHandler {
   public void backUpTurn() {
     this.backUpHand = hand.toHandData();
     this.backUpTable = table.toTableData();
-    manipulationTable.clear();
+//    manipulationTable.clear();
   }
 
   public void restoreTurn() {
@@ -167,11 +167,10 @@ public class ActionHandler {
     if (canEndTurn()) {
       endTurn();
     } else if (manipulationTable.getMelds().isEmpty()) {
-      backUpTurn();
       drawAndEndTurn();
     } else {
       // Penalty if player leaves a invalid state
-      backUpTurn();
+      restoreTurn();
       draw(3);
       endTurn();
     }

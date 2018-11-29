@@ -165,10 +165,7 @@ public class GameInfoView extends Pane implements Observer {
                 if (timeSeconds <= 0) {
                   timer.setText("0");
                   if (status.getCurrentPlayer() == playerId) {
-                    CommandProcessor.getInstance().enqueueCommand(handler -> {
-                      handler.restoreTurn();
-                      handler.drawAndEndTurn();
-                    });
+                    CommandProcessor.getInstance().enqueueCommand(ActionHandler::timeOutEndTurn);
                     CommandProcessor.getInstance().enqueueCommand(ActionHandler::tryEndTurn);
                   }
                   timeline.stop();
