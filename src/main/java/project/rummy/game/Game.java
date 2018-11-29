@@ -153,10 +153,10 @@ public class Game extends Component implements Observable {
   /**
    * Check the current state of the game to see that if the game has ended:
    * + When a player has win the game (no tile in hand)
-   * + When there's no free tile to draw.
+   * + When there's no free tile to drawAndEndTurn.
    *
    * @return the player index who won the game. That player either is the only player who has no
-   * tile or has the least points in hand when there's no tile to draw and play.
+   * tile or has the least points in hand when there's no tile to drawAndEndTurn and play.
    * Return -1 if the game is not ended.
    */
   public int getWinner() {

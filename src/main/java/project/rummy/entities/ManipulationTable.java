@@ -53,7 +53,7 @@ public class ManipulationTable {
       throw new IllegalArgumentException("invalid meld index.");
     }
 
-    if(melds.get(meldIndex).source() == MeldSource.MANIPULATION) {
+    if (melds.get(meldIndex).source() == MeldSource.MANIPULATION) {
       throw new IllegalArgumentException("wrong meld source.");
     }
     return melds.remove(meldIndex);
@@ -177,7 +177,7 @@ public class ManipulationTable {
     newMeldIds.add(m2.getId());
 
     add(m2, m1);
-    return  newMeldIds;
+    return newMeldIds;
   }
 
   public List<Integer> split(Meld meld, int... tileIndexes) {
@@ -197,90 +197,91 @@ public class ManipulationTable {
       return Meld.idsToMelds.get(meldIds.get(0));
     }
     int[] indexes = new int[meldIds.size()];
-    for (int i=0; i< meldIds.size(); i++) {
+    for (int i = 0; i < meldIds.size(); i++) {
       Integer indexOf = melds.indexOf(Meld.idsToMelds.get(meldIds.get(i)));
       indexes[i] = indexOf;
     }
     return combineMelds(indexes);
   }
 
-    /**
-     * Combine melds into a single big meld.
-     * after combining, the original melds will be removed, and new meld will be added to the end of list
-     *
-     * @param meldIndexes the indexes of the melds to be combined.
-     */
-    public Meld combineMelds (int...meldIndexes){
+  /**
+   * Combine melds into a single big meld.
+   * after combining, the original melds will be removed, and new meld will be added to the end of list
+   *
+   * @param meldIndexes the indexes of the melds to be combined.
+   */
+  public Meld combineMelds(int... meldIndexes) {
 
-      Arrays.sort(meldIndexes);
-      List<Tile> tilesFromMelds = new ArrayList<>();
+    Arrays.sort(meldIndexes);
+    List<Tile> tilesFromMelds = new ArrayList<>();
 
 
-      //checking for invalid indexes
-      if (meldIndexes.length < 2) {
+    //checking for invalid indexes
+    if (meldIndexes.length < 2) {
+      throw new IllegalArgumentException("Invalid indexes input");
+    }
+
+    for (int i = 0; i < meldIndexes.length; i++) {
+      if (meldIndexes[i] < 0 || meldIndexes[i] >= melds.size()) {
         throw new IllegalArgumentException("Invalid indexes input");
       }
-
-      for (int i = 0; i < meldIndexes.length; i++) {
-        if (meldIndexes[i] < 0 || meldIndexes[i] >= melds.size()) {
+      for (int k = i + 1; k < meldIndexes.length; k++) {
+        if (meldIndexes[k] == meldIndexes[i]) {
           throw new IllegalArgumentException("Invalid indexes input");
         }
-        for (int k = i + 1; k < meldIndexes.length; k++) {
-          if (meldIndexes[k] == meldIndexes[i]) {
-            throw new IllegalArgumentException("Invalid indexes input");
-          }
-        }
-
-        //add tiles from melds to a list of tiles
-        tilesFromMelds.addAll(melds.get(meldIndexes[i]).tiles());
       }
 
-      tilesFromMelds.sort(Comparator.comparing(Tile::value));
-
-      Meld newMeld = Meld.createMeld(tilesFromMelds.toArray(new Tile[tilesFromMelds.size()]));
-
-      for (int i = meldIndexes.length - 1; i >= 0; i--) {
-        melds.remove(meldIndexes[i]);
-      }
-
-      newMeld.setSource(MeldSource.MANIPULATION);
-      add(newMeld);
-      return newMeld;
+      //add tiles from melds to a list of tiles
+      tilesFromMelds.addAll(melds.get(meldIndexes[i]).tiles());
     }
 
-    /**
-     * Submit the melds to the table, if all melds are valid (has more than 3 tiles). Otherwise return
-     * false.
-     */
-    public boolean submit (Table table){
+    tilesFromMelds.sort(Comparator.comparing(Tile::value));
 
-      for (Meld e : melds) {
-        if (!e.isValidMeld()) {
-          return false;
-        }
-      }
+    Meld newMeld = Meld.createMeld(tilesFromMelds.toArray(new Tile[tilesFromMelds.size()]));
 
-      for (Meld m : melds) {
-        m.setSource(MeldSource.TABLE);
-        m.tiles().forEach(tile -> tile.setHightlight(true));
-        table.addMeld(m);
-      }
-
-      return true;
+    for (int i = meldIndexes.length - 1; i >= 0; i--) {
+      melds.remove(meldIndexes[i]);
     }
 
-    public boolean submit(Meld m, Table table) {
-      if (!m.isValidMeld()) {
+    newMeld.setSource(MeldSource.MANIPULATION);
+    add(newMeld);
+    return newMeld;
+  }
+
+  /**
+   * Submit the melds to the table, if all melds are valid (has more than 3 tiles). Otherwise return
+   * false.
+   */
+  public boolean submit(Table table) {
+
+    for (Meld e : melds) {
+      if (!e.isValidMeld()) {
         return false;
       }
+    }
+
+    for (Meld m : melds) {
       m.setSource(MeldSource.TABLE);
       m.tiles().forEach(tile -> tile.setHightlight(true));
       table.addMeld(m);
-      melds.remove(m);
-      return true;
     }
 
-    public void clear() {
-      this.melds.clear();
-    }
+    return true;
   }
+
+  public boolean submit(Meld m, Table table) {
+    if (!m.isValidMeld()) {
+      return false;
+    }
+    m.setSource(MeldSource.TABLE);
+    m.tiles().forEach(tile -> tile.setHightlight(true));
+    table.addMeld(m);
+    melds.remove(m);
+    return true;
+  }
+
+  public void clear() {
+    this.melds.clear();
+  }
+
+}

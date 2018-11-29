@@ -40,7 +40,7 @@ public class SlowIceBreakingMoveMaker implements ComputerMoveMaker {
                     return move.calculateMove(state);
                 }
             }
-            commands.add(ActionHandler::draw);
+            commands.add(ActionHandler::drawAndEndTurn);
             return  commands;
         }
     }

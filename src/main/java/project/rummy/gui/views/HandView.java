@@ -9,11 +9,9 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import project.rummy.commands.CommandProcessor;
 import project.rummy.control.ActionHandler;
-import project.rummy.control.ManualController;
 import project.rummy.entities.*;
 import project.rummy.events.TileChooseEvent;
 import project.rummy.game.Game;
-import project.rummy.game.GameReader.WriteGameState;
 import project.rummy.game.GameState;
 import project.rummy.main.GameFXMLLoader;
 import project.rummy.observers.Observer;
@@ -21,7 +19,6 @@ import project.rummy.observers.Observer;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class HandView extends Pane implements Observer {
   private GameFXMLLoader loader;
@@ -124,7 +121,7 @@ public class HandView extends Pane implements Observer {
   }
 
   private void onDrawClick(MouseEvent event) {
-    CommandProcessor.getInstance().enqueueCommand(ActionHandler::draw);
+    CommandProcessor.getInstance().enqueueCommand(ActionHandler::drawAndEndTurn);
 
   }
 

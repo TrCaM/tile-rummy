@@ -44,11 +44,11 @@ public class DefaultGameInitializer implements GameInitializer {
   }
 
   /**
-   * Generate a normal game (draw 14 cards to each player)
+   * Generate a normal game (drawAndEndTurn 14 cards to each player)
    */
   @Override
   public void initializeGameState(Player[] players, Table table) {
-    // TODO: Generate the initial game state for players (draw 14 tiles for each), making sure that
+    // TODO: Generate the initial game state for players (drawAndEndTurn 14 tiles for each), making sure that
     // the table is empty
     //
     Stream.of(players).forEach(player -> {

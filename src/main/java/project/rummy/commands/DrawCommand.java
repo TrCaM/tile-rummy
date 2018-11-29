@@ -6,6 +6,6 @@ public class DrawCommand implements Command{
 
   @Override
   public void execute(ActionHandler handler) {
-    handler.draw();
+    handler.drawAndEndTurn();
   }
 }

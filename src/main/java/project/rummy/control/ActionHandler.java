@@ -8,7 +8,6 @@ import project.rummy.game.Game;
 import project.rummy.gui.views.EntityType;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import static project.rummy.entities.PlayerStatus.ICE_BROKEN;
@@ -92,6 +91,7 @@ public class ActionHandler {
   public void backUpTurn() {
     this.backUpHand = hand.toHandData();
     this.backUpTable = table.toTableData();
+    manipulationTable.clear();
   }
 
   public void restoreTurn() {
@@ -126,11 +126,6 @@ public class ActionHandler {
     if (canEndTurn) {
       return true;
     }
-//    if (turnType == START) {
-//      return (startPoint - hand.getScore() >= 30 || hand.getScore() > startPoint)
-//          && manipulationTable.isEmpty();
-//    }
-
     int newTableScore = table.getPlayingMelds().stream().mapToInt(Meld::getScore).sum();
 
     if (turnType == START) {
@@ -144,6 +139,11 @@ public class ActionHandler {
     return this.goNextTurn;
   }
 
+  public void drawAndEndTurn() {
+    draw();
+    endTurn();
+  }
+
   public void draw() {
     Tile tile = table.drawTile();
     tile.setHightlight(true);
@@ -151,15 +151,37 @@ public class ActionHandler {
     hand.sort();
     this.canDraw = false;
     this.canPlay = false;
-    System.out.println(String.format("%s has draw %s", playerName, tile));
-    endTurn();
+    System.out.println(String.format("%s has drawAndEndTurn %s", playerName, tile));
+  }
+
+  /**
+   * The player drawAndEndTurn 3 cards on penaties
+   */
+  public void draw(int times) {
+    for (int i = 0 ; i < times; i++) {
+      draw();
+    }
+  }
+
+  public void timeOutEndTurn() {
+    if (canEndTurn()) {
+      endTurn();
+    } else if (manipulationTable.getMelds().isEmpty()) {
+      backUpTurn();
+      drawAndEndTurn();
+    } else {
+      // Penalty if player leaves a invalid state
+      backUpTurn();
+      draw(3);
+      endTurn();
+    }
   }
 
   public void drawOrEndTurn() {
     if (canEndTurn()) {
       endTurn();
     } else {
-      draw();
+      drawAndEndTurn();
     }
   }
 
