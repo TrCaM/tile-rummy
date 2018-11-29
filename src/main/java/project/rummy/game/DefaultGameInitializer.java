@@ -48,9 +48,6 @@ public class DefaultGameInitializer implements GameInitializer {
    */
   @Override
   public void initializeGameState(Player[] players, Table table) {
-    // TODO: Generate the initial game state for players (drawAndEndTurn 14 tiles for each), making sure that
-    // the table is empty
-    //
     Stream.of(players).forEach(player -> {
       player.hand().clearHand();
       for (int i=0; i<14; i++) {

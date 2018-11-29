@@ -89,7 +89,7 @@
             <AnchorPane layoutX="75.0" layoutY="47.0" prefHeight="452.0" prefWidth="269.0">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#2590f553" height="452.0" layoutX="1.0" layoutY="2.0" stroke="#da3a12" strokeType="INSIDE" strokeWidth="5.0" width="269.0" />
-                  <TextField layoutX="34.0" layoutY="23.0" prefHeight="44.0" prefWidth="203.0" styleClass="text-field" stylesheets="@../css/menu.css" text="Player 1" />
+                  <TextField fx:id="name1" layoutX="34.0" layoutY="23.0" prefHeight="44.0" prefWidth="203.0" styleClass="text-field" stylesheets="@../css/menu.css" text="Player 1" />
                   <RadioButton layoutX="48.0" layoutY="104.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="173.0" selected="true" styleClass="radioButton" text="Human">
                      <toggleGroup>
                         <ToggleGroup fx:id="players" />
@@ -104,7 +104,7 @@
             <AnchorPane layoutX="383.0" layoutY="47.0" prefHeight="452.0" prefWidth="269.0">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#2590f553" height="452.0" layoutX="1.0" layoutY="2.0" stroke="#da3a12" strokeType="INSIDE" strokeWidth="5.0" width="269.0" />
-                  <TextField layoutX="34.0" layoutY="23.0" prefHeight="44.0" prefWidth="203.0" styleClass="text-field" stylesheets="@../css/menu.css" text="Player 2" />
+                  <TextField fx:id="name2" layoutX="34.0" layoutY="23.0" prefHeight="44.0" prefWidth="203.0" styleClass="text-field" stylesheets="@../css/menu.css" text="Player 2" />
                   <RadioButton layoutX="48.0" layoutY="104.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="173.0" selected="true" styleClass="radioButton" text="Human">
                      <toggleGroup>
                         <ToggleGroup fx:id="players1" />
@@ -119,7 +119,7 @@
             <AnchorPane layoutX="686.0" layoutY="47.0" prefHeight="452.0" prefWidth="269.0">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#2590f553" height="452.0" layoutX="1.0" layoutY="2.0" stroke="#da3a12" strokeType="INSIDE" strokeWidth="5.0" width="269.0" />
-                  <TextField layoutX="34.0" layoutY="23.0" prefHeight="44.0" prefWidth="203.0" styleClass="text-field" stylesheets="@../css/menu.css" text="Player 3" />
+                  <TextField fx:id="name3" layoutX="34.0" layoutY="23.0" prefHeight="44.0" prefWidth="203.0" styleClass="text-field" stylesheets="@../css/menu.css" text="Player 3" />
                   <RadioButton layoutX="48.0" layoutY="104.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="173.0" selected="true" styleClass="radioButton" text="Human">
                      <toggleGroup>
                         <ToggleGroup fx:id="players2" />
@@ -134,7 +134,7 @@
             <AnchorPane layoutX="992.0" layoutY="48.0" prefHeight="452.0" prefWidth="269.0">
                <children>
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#2590f553" height="452.0" layoutX="1.0" layoutY="2.0" stroke="#da3a12" strokeType="INSIDE" strokeWidth="5.0" width="269.0" />
-                  <TextField layoutX="34.0" layoutY="23.0" prefHeight="44.0" prefWidth="203.0" styleClass="text-field" stylesheets="@../css/menu.css" text="Player 4" />
+                  <TextField fx:id="name4" layoutX="34.0" layoutY="23.0" prefHeight="44.0" prefWidth="203.0" styleClass="text-field" stylesheets="@../css/menu.css" text="Player 4" />
                   <RadioButton layoutX="48.0" layoutY="104.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="173.0" selected="true" styleClass="radioButton" text="Human">
                      <toggleGroup>
                         <ToggleGroup fx:id="players3" />

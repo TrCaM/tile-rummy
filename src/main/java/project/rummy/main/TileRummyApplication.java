@@ -8,6 +8,7 @@ import com.almasb.fxgl.settings.GameSettings;
 import io.netty.channel.Channel;
 import org.json.simple.parser.ParseException;
 import project.rummy.commands.CommandProcessor;
+import project.rummy.entities.PlayerData;
 import project.rummy.game.*;
 import project.rummy.game.GameReader.ReadGameState;
 import project.rummy.game.GameReader.SaveGame;
@@ -17,6 +18,7 @@ import project.rummy.networks.ClientGameManager;
 import project.rummy.networks.GameClientTask;
 
 import java.io.IOException;
+import java.util.List;
 
 import static project.rummy.gui.views.EntityType.GAME;
 
@@ -35,10 +37,17 @@ public class TileRummyApplication extends GameApplication {
   private final String PLAYER_NAME = "Tri Tha Thu";
   private ClientGameManager clientGameManager;
 
+  private static TileRummyApplication INSTANCE;
+
+  public static TileRummyApplication getInstance() {
+    return INSTANCE;
+  }
+
 
   public TileRummyApplication() {
     super();
     gameStore = new GameStore(new StartGameInitializer());
+    INSTANCE = this;
   }
 
   @Override
@@ -53,6 +62,11 @@ public class TileRummyApplication extends GameApplication {
     settings.setVersion("0.1");
   }
 
+  public void startGame(List<PlayerData> playerDataList) {
+    gameStore.setInitializer(new CustomGameInitializer(playerDataList));
+    setUpGame(gameStore.initializeGame());
+  }
+
   @Override
   protected void initGame() {
 //    clientGameManager = new ClientGameManager(this);
@@ -61,7 +75,9 @@ public class TileRummyApplication extends GameApplication {
 //    } catch (Exception e) {
 //      e.printStackTrace();
 //    }
-    setUpGame(gameStore.initializeGame());
+//    setUpGame(gameStore.initializeGame());
+    Entity mainMenuView = EntitiesBuilder.buildMainMenu();
+    getGameWorld().addEntities(mainMenuView);
   }
 
 
@@ -85,6 +101,7 @@ public class TileRummyApplication extends GameApplication {
   }
 
   private void buildGameView() {
+    getGameWorld().clear();
     Entity gameEntity = Entities.builder().type(GAME).build();
     gameEntity.addComponent(game);
     getGameWorld().addEntities(gameEntity);
@@ -160,7 +177,7 @@ public class TileRummyApplication extends GameApplication {
       if (game.isNetworkGame()) {
         startNetWorkGame();
       } else {
-        startGame();
+        startNetWorkGame();
       }
     }
   }

@@ -4,17 +4,21 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import project.rummy.control.AutoController;
+import project.rummy.control.Controller;
+import project.rummy.control.ManualController;
+import project.rummy.entities.Player;
+import project.rummy.entities.PlayerData;
 import project.rummy.main.GameFXMLLoader;
+import project.rummy.main.TileRummyApplication;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 class MainMenuView extends Pane {
   private GameFXMLLoader loader;
@@ -48,9 +52,18 @@ class MainMenuView extends Pane {
   private ToggleGroup players3;
   @FXML
   private Button playButton;
+  @FXML
+  private TextField name1;
+  @FXML
+  private TextField name2;
+  @FXML
+  private TextField name3;
+  @FXML
+  private TextField name4;
 
   private Map<String, Pane> menus;
   private List<ToggleGroup> groups;
+  private List<TextField> names;
 
   MainMenuView() {
     super();
@@ -63,9 +76,11 @@ class MainMenuView extends Pane {
     this.credits.setOnMouseClicked(this::onCreditsClicked);
     this.exit.setOnMouseClicked(this::onExitClicked);
     this.offlineButton.setOnMouseClicked(event -> this.openMenu("setup"));
+    this.playButton.setOnMouseClicked(this::onPlayButtonClicked);
     this.disableClick = false;
     menus = new HashMap<>();
     groups = Arrays.asList(players, players1, players2, players3);
+    names = Arrays.asList(name1, name2, name3, name4);
     setup();
   }
 
@@ -74,6 +89,28 @@ class MainMenuView extends Pane {
     menus.put("setup", gameSetupMenu);
 
     groups.forEach(group -> group.selectedToggleProperty().addListener(this::onGameOptionChanged));
+  }
+
+  private void onPlayButtonClicked(MouseEvent mouseEvent) {
+    List<PlayerData> playerDataList = new ArrayList<>();
+    for (int i = 0; i < 4; i++) {
+      int index = groups.get(i).getToggles().indexOf(groups.get(i).getSelectedToggle());
+      switch (index) {
+        case 0:
+          playerDataList.add(new PlayerData(names.get(i).getText(), "human"));
+          break;
+        case 1:
+          playerDataList.add(new PlayerData(names.get(i).getText(), "strategy1"));
+          break;
+        case 2:
+          playerDataList.add(new PlayerData(names.get(i).getText(), "strategy2"));
+          break;
+        case 3:
+          playerDataList.add(new PlayerData(names.get(i).getText(), "strategy3"));
+          break;
+      }
+    }
+    TileRummyApplication.getInstance().startGame(playerDataList);
   }
 
   private void loadMainMenuView() {
