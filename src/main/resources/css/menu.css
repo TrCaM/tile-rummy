@@ -1,0 +1,48 @@
+.menuButton:hover {
+    -fx-font-size: 30;
+    -fx-text-fill: #9ba810;
+}
+
+.gameMode > Rectangle {
+    -fx-fill: burlywood;
+    -fx-opacity: 0.7;
+}
+
+.gameMode:hover > Rectangle {
+    -fx-fill: #cd4141;
+    -fx-opacity: 0.7;
+}
+
+.gameMode:hover > Label {
+    -fx-text-fill: #10fa07;
+}
+
+.text-field {
+    -fx-border-color: #10fa07;
+    -fx-border-width: 0 0 2 0;
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 25;
+}
+.text-field:focused {
+    -fx-border-color: #10fa07;
+    -fx-border-width: 0 0 2 0;
+    -fx-background-color: transparent;
+}
+
+.radioButton {
+    -fx-text-fill: white;
+    -fx-font-size: 20;
+}
+
+.playButton {
+    -fx-background-color: white;
+    -fx-font-size: 30;
+    -fx-text-fill: #9ba810;
+}
+
+.playButton:hover {
+    -fx-background-color: #9ba810;
+    -fx-font-size: 50;
+    -fx-text-fill: #cd4141;
+}
