@@ -29,6 +29,7 @@ public class Player {
 
   public void resetForNewTurn() {
     hand.getTiles().forEach(tile -> tile.setHightlight(false));
+    hand.getTiles().forEach(tile -> tile.setSuggestion(false));
   }
   public Controller getController() {
     return this.controller;

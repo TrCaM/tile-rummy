@@ -2,6 +2,7 @@ package project.rummy.control;
 
 import com.almasb.fxgl.app.FXGL;
 import org.apache.log4j.Logger;
+import project.rummy.ai.PlayerSupporter;
 import project.rummy.commands.CommandProcessor;
 import project.rummy.entities.*;
 import project.rummy.game.Game;
@@ -131,6 +132,12 @@ public class ActionHandler {
           && manipulationTable.isEmpty();
     }
     return hand.getScore() != startPoint && manipulationTable.isEmpty();
+  }
+
+  public void displayHints(){
+    List<Meld> tableMelds = table.getPlayingMelds();
+    List<Tile> handTiles = hand.getTiles();
+    new PlayerSupporter(handTiles, tableMelds).strat1Suggestion();
   }
 
   public boolean isExpired() {
