@@ -21,8 +21,8 @@ public class ClientGameManager implements Observable, Observer {
   private List<Observer> observers;
   private GameState gameState;
 
-  public ClientGameManager(TileRummyApplication application) {
-    this.gameApplication = application;
+  public ClientGameManager() {
+    this.gameApplication = TileRummyApplication.getInstance();
     this.observers = new ArrayList<>();
   }
 
@@ -44,14 +44,8 @@ public class ClientGameManager implements Observable, Observer {
   }
 
   void initializeGame(GameState initialState) {
-    System.out.println(playerId);
-    //TODO
-//    Game game =
-//        new GameStore(new NetworkGameInitializer(initialState, playerId, gameApplication.getChannel(), this))
-//            .initializeGame();
-//    gameApplication.setUpGame(game);
-//    game.registerObserver(this);
-//    isGameStarted = true;
+    gameApplication.startNetworkGame(initialState, playerId);
+    isGameStarted = true;
   }
 
   void onGameStateUpdated(GameState state) {

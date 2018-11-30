@@ -203,6 +203,8 @@ public class TableView extends Pane implements Observer {
       findFirstPane.setVisible(false);
     } else if (state.getGameStatus() == GameStatus.FINDING_FIRST) {
       renderFirstPlayerInfo(state);
+    } else {
+      findFirstPane.setVisible(false);
     }
   }
 }

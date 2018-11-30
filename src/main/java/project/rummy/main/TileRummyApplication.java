@@ -12,6 +12,7 @@ import project.rummy.game.*;
 import project.rummy.game.GameReader.ReadGameState;
 import project.rummy.gui.views.EntitiesBuilder;
 import project.rummy.networks.ClientGameManager;
+import project.rummy.networks.GameClientTask;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,7 +28,6 @@ public class TileRummyApplication extends GameApplication {
   private GameState state = null;
   private Channel channel = null;
   private boolean isConnected;
-  private boolean isGameStarted = false;
   private boolean isStarting = false;
   private final String PLAYER_NAME = "Tri Tha Thu";
   private ClientGameManager clientGameManager = null;
@@ -115,13 +115,29 @@ public class TileRummyApplication extends GameApplication {
     showMainMenu();
   }
 
+  public void startNetworkClient() {
+    clientGameManager = new ClientGameManager();
+    try {
+      new GameClientTask(PLAYER_NAME, clientGameManager).connectToServer().subscribe(this::setChannel);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    getGameWorld().clear();
+  }
+
+  public void startNetworkGame(GameState initialState, int playerId) {
+    game = new GameStore(new NetworkGameInitializer(initialState, playerId, channel, clientGameManager))
+        .initializeGame();
+    game.setStatus(GameStatus.NETWORK_START);
+    game.registerObserver(clientGameManager);
+    processor = CommandProcessor.getInstance();
+    processor.setUpGame(game);
+  }
+
   private void startNetWorkGame() {
-    isGameStarted = true;
     int startGamePlayer = 0;
     game.startGame();
-    state = GameState.generateState(game);
     state.setCurrentPlayer(startGamePlayer);
-
     // like the views here works...
     buildGameView();
 
@@ -144,7 +160,6 @@ public class TileRummyApplication extends GameApplication {
   }
 
   private void startSinglePlayerGame() {
-    isGameStarted = true;
     GameStart start = new GameStart(game);
     game.setStatus(GameStatus.STARTING);
     int startGamePlayer = start.getPlayerValue();
@@ -178,6 +193,10 @@ public class TileRummyApplication extends GameApplication {
         case NOT_STARTED:
           game.findFirstPlayer();
           buildGameView();
+          break;
+        case NETWORK_START:
+          buildGameView();
+          game.setStatus(GameStatus.STARTING);
           break;
         case FINDING_FIRST:
           readyToPlay();

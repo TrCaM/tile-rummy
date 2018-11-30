@@ -197,7 +197,9 @@ public class Game extends Component implements Observable {
   }
 
   public void startGame() {
-    startGame(false);
+    turnNumber = 1;
+    this.status = GameStatus.RUNNING;
+    playTurn();
   }
 
   private void playTurn() {

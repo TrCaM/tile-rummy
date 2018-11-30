@@ -75,6 +75,7 @@ class MainMenuView extends Pane {
     this.credits.setOnMouseClicked(this::onCreditsClicked);
     this.exit.setOnMouseClicked(this::onExitClicked);
     this.offlineButton.setOnMouseClicked(event -> this.openMenu("setup"));
+    this.onlineButton.setOnMouseClicked(event -> this.startNetworkGame());
     this.playButton.setOnMouseClicked(this::onPlayButtonClicked);
     menus = new HashMap<>();
     groups = Arrays.asList(players, players1, players2, players3);
@@ -111,6 +112,10 @@ class MainMenuView extends Pane {
 
   private void startLoadGame(String fileName) {
     TileRummyApplication.getInstance().startLoadedGame(fileName);
+  }
+
+  private void startNetworkGame() {
+    TileRummyApplication.getInstance().startNetworkClient();
   }
 
   private void onPlayButtonClicked(MouseEvent mouseEvent) {
