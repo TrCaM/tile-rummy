@@ -56,13 +56,13 @@ public class GameInfoView extends Pane implements Observer {
   @FXML
   private Label player4;
   @FXML
-  private FlowPane oppo1Hand;
+  private FlowPane opponent1Hand;
   @FXML
-  private FlowPane oppo2Hand;
+  private FlowPane opponent2Hand;
   @FXML
-  private FlowPane oppo3Hand;
+  private FlowPane opponent3Hand;
   @FXML
-  private Node oppoHands;
+  private Node debugArea;
   @FXML
   private Button debugButton;
   @FXML
@@ -95,7 +95,7 @@ public class GameInfoView extends Pane implements Observer {
   private void setup() {
     playerNames = Arrays.asList(player1, player2, player3, player4);
     playersTiles = Arrays.asList(player1Tiles, player2Tiles, player3Tiles, player4Tiles);
-    opponentsHand = Arrays.asList(oppo1Hand, oppo2Hand, oppo3Hand);
+    opponentsHand = Arrays.asList(opponent1Hand, opponent2Hand, opponent3Hand);
     statuses = Arrays.asList(status1, status2, status3, status4);
     playerNames.forEach(label -> label.setVisible(false));
     playersTiles.forEach(label -> label.setVisible(false));
@@ -113,7 +113,7 @@ public class GameInfoView extends Pane implements Observer {
 
     this.debugButton.setOnMouseClicked(event -> {
       debugMode = !debugMode;
-      oppoHands.setVisible(debugMode);
+      debugArea.setVisible(debugMode);
     });
   }
 
@@ -140,6 +140,7 @@ public class GameInfoView extends Pane implements Observer {
       statuses.get(i).setText(gameState.getPlayerStatuses()[i].toString());
     }
     // Update the rest
+    playerNames.get(playerId).getStyleClass().add("you");
     playerNames.get(gameState.getCurrentPlayer()).getStyleClass().add("current");
     freeTiles.setText(Integer.toString(gameState.getFreeTilesCount()));
     turnNum.setText(Integer.toString(gameState.getTurnNumber()));
@@ -193,7 +194,7 @@ public class GameInfoView extends Pane implements Observer {
           .map(tile -> new TileView(tile, TileSource.HAND, 0, data[index].tiles.indexOf(tile)))
           .forEach(view -> opponentsHand.get(index-1).getChildren().add(view));
     }
-    oppoHands.setVisible(debugMode);
+    debugArea.setVisible(debugMode);
   }
 }
 

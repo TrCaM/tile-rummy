@@ -1,3 +1,11 @@
 .current {
     -fx-text-fill: #9ba810
 }
+
+.you {
+    -fx-text-fill: darkred;
+}
+
+.you.current {
+   -fx-text-fill: red;
+}
