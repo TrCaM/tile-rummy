@@ -27,6 +27,7 @@ public class HandView extends Pane implements Observer {
   private Node handView;
   private TurnStatus turnStatus;
   private int playerId;
+  private GameState state;
 
   @FXML
   private FlowPane tileRack;
@@ -50,6 +51,7 @@ public class HandView extends Pane implements Observer {
 
   public HandView(Player controlledPlayer, GameState state) {
     super();
+    this.state = state;
     this.loader = new GameFXMLLoader("hand");
     loader.setController(this);
     this.chosenTiles = new HashSet<>();
@@ -73,7 +75,7 @@ public class HandView extends Pane implements Observer {
 
 
   private void onHintsButtonClick(MouseEvent mouseEvent) {
-    CommandProcessor.getInstance().enqueueCommand(ActionHandler::displayHints);
+    CommandProcessor.getInstance().enqueueCommand(handler -> handler.displayHints(state));
   }
 
   private void onNextTurnButtonClick(MouseEvent mouseEvent) {
@@ -145,6 +147,7 @@ public class HandView extends Pane implements Observer {
 
   @Override
   public void update(GameState status) {
+    this.state = status;
     HandData data = status.getHandsData()[playerId];
     if (status.getGameStatus() == GameStatus.RUNNING) {
       this.chosenTiles.clear();

@@ -67,12 +67,21 @@ public class TileView extends Pane {
       border.setStroke(javafx.scene.paint.Color.rgb(164, 14, 14));
     }
     value.setFill(getColor(tile.color()));
-    if (tile.isHightlight()) {
-      border.getStyleClass().add("highlight");
-    }
-    if(tile.isSuggested()){
+
+    if(tile.isSuggested() && tile.isHightlight()){
       border.setStroke(javafx.scene.paint.Color.rgb(86, 244, 65));
+    }else {
+      if (tile.isHightlight()) {
+        border.getStyleClass().add("highlight");
+      }
+      if (tile.isSuggested()) {
+        border.setStroke(javafx.scene.paint.Color.rgb(86, 244, 65));
+      }
     }
+
+
+
+
     getChildren().setAll(tileView);
   }
 
