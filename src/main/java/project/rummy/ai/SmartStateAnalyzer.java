@@ -134,14 +134,15 @@ public class SmartStateAnalyzer {
       return true;
     }
     int pos = tile.value() + tile.color().value() * 13 - 1;
-    if (pos == 0) {
+    if(pos==52){
+      return true;
+    } else if (pos == 0) {
       if (handTileCounts[1] > 0) {
         return tableTileCounts[2] <= 1;
       } else {
         return tableTileCounts[1] <= 1;
       }
-    }
-    if (pos == 1) {
+    } else if (pos == 1) {
       if (handTileCounts[0] > 0) {
         return tableTileCounts[2] <= 1;
       } else if (handTileCounts[2] > 0) {
@@ -149,8 +150,7 @@ public class SmartStateAnalyzer {
       } else {
         return tableTileCounts[1] <= 2;
       }
-    }
-    if (pos == 50) {
+    }else if (pos == 50) {
       if (handTileCounts[51] > 0) {
         return tableTileCounts[49] <= 1;
       } else if (handTileCounts[49] > 0) {
@@ -158,26 +158,26 @@ public class SmartStateAnalyzer {
       } else {
         return tableTileCounts[49] <= 1;
       }
-    }
-    if (pos == 51) {
+    }else if (pos == 51) {
       if (handTileCounts[50] > 0) {
         return tableTileCounts[49] <= 1;
       } else if (handTileCounts[49] > 0) {
         return tableTileCounts[50] <= 1;
       }
-    }
+    }else {
 
-    if (handTileCounts[pos + 1] > 0) {
-      return tableTileCounts[pos + 2] + tableTileCounts[pos - 1] <= 2;
-    }
-    if (handTileCounts[pos - 1] > 0) {
-      return tableTileCounts[pos + 1] + tableTileCounts[pos - 2] <= 2;
-    }
-    if (handTileCounts[pos + 2] > 0) {
-      return tableTileCounts[pos + 1] <= 1;
-    }
-    if (handTileCounts[pos - 2] > 0) {
-      return tableTileCounts[pos - 1] <= 1;
+      if (handTileCounts[pos + 1] > 0) {
+        return tableTileCounts[pos + 2] + tableTileCounts[pos - 1] <= 2;
+      }
+      if (handTileCounts[pos - 1] > 0) {
+        return tableTileCounts[pos + 1] + tableTileCounts[pos - 2] <= 2;
+      }
+      if (handTileCounts[pos + 2] > 0) {
+        return tableTileCounts[pos + 1] <= 1;
+      }
+      if (handTileCounts[pos - 2] > 0) {
+        return tableTileCounts[pos - 1] <= 1;
+      }
     }
     return false;
   }
