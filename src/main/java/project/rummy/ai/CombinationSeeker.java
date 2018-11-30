@@ -81,6 +81,9 @@ public class CombinationSeeker {
                     if (m.tiles().get(i).canFillToRun(tileColor,rightValue)) {
                         map.put(m, i);
                         copyMelds.remove(m);
+                        if(!m.tiles().get(i).isJoker()){
+                            break;
+                        }
                     }
                 }
                 rightValue ++;
@@ -97,6 +100,9 @@ public class CombinationSeeker {
                     if (m.tiles().get(i).canFillToRun(tileColor, leftValue)) {
                         map.put(m, i);
                         copyMelds.remove(m);
+                        if(!m.tiles().get(i).isJoker()){
+                            break;
+                        }
                     }
                 }
                 leftValue --;

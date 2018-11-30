@@ -6,6 +6,7 @@ import project.rummy.ai.PlayerSupporter;
 import project.rummy.commands.CommandProcessor;
 import project.rummy.entities.*;
 import project.rummy.game.Game;
+import project.rummy.game.GameState;
 import project.rummy.gui.views.EntityType;
 import java.util.Collection;
 import java.util.List;
@@ -134,10 +135,8 @@ public class ActionHandler {
     return hand.getScore() != startPoint && manipulationTable.isEmpty();
   }
 
-  public void displayHints(){
-    List<Meld> tableMelds = table.getPlayingMelds();
-    List<Tile> handTiles = hand.getTiles();
-    new PlayerSupporter(handTiles, tableMelds).strat1Suggestion();
+  public void displayHints(GameState state){
+    new PlayerSupporter(state).displayHints_4();
   }
 
   public boolean isExpired() {
