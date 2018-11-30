@@ -20,7 +20,7 @@ public class DefaultGameInitializerTest {
 
   @Test
   public void initPlayers_shouldSucceed() {
-    Game game = new Game(false);
+    Game game = new Game(initializer, false);
     initializer.initPlayers(game);
 
     assertThat(game.getPlayers().length, is(4));
