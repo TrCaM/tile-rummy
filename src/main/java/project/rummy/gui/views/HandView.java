@@ -38,7 +38,7 @@ public class HandView extends Pane implements Observer {
   Set<Meld> chosenMelds;
 
   @FXML
-  private Button formMeldButton;
+  private Button hintsButton;
   @FXML
   private Button playMeldButton;
   @FXML
@@ -68,6 +68,12 @@ public class HandView extends Pane implements Observer {
     this.playMeldButton.setOnMouseClicked(this::onPlayMeldButtonClick);
     this.undoButton.setOnMouseClicked(this::onUndoButtonClick);
     this.nextTurnButton.setOnMouseClicked(this::onNextTurnButtonClick);
+    this.hintsButton.setOnMouseClicked(this::onHintsButtonClick);
+  }
+
+
+  private void onHintsButtonClick(MouseEvent mouseEvent) {
+    CommandProcessor.getInstance().enqueueCommand(ActionHandler::displayHints);
   }
 
   private void onNextTurnButtonClick(MouseEvent mouseEvent) {
@@ -117,7 +123,7 @@ public class HandView extends Pane implements Observer {
       chosenTiles.remove(event.getTarget());
     }
     Tile[] tiles = chosenTiles.stream().map(TileView::getTile).toArray(Tile[]::new);
-    formMeldButton.setDisable(!Meld.canFormMeld(tiles));
+    //formMeldButton.setDisable(!Meld.canFormMeld(tiles));
     playMeldButton.setDisable(!turnStatus.canPlay || !Meld.canPlayOnTable(tiles));
   }
 

@@ -70,6 +70,9 @@ public class TileView extends Pane {
     if (tile.isHightlight()) {
       border.getStyleClass().add("highlight");
     }
+    if(tile.isSuggested()){
+      border.setStroke(javafx.scene.paint.Color.rgb(86, 244, 65));
+    }
     getChildren().setAll(tileView);
   }
 

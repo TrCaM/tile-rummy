@@ -43,7 +43,7 @@ public class PlayerSupporterTest {
         List<Tile> tiles = Arrays.asList(O5, O10, O6, O7, R3,R11);
         List<Meld> melds = new ArrayList<>();
 
-        boolean suggestion = new PlayerSupporter(tiles, melds).showSuggestion();
+        boolean suggestion = new PlayerSupporter(tiles, melds).strat1Suggestion();
 
         assertEquals(true, suggestion);
         assertEquals(true, tiles.get(0).isSuggested());
@@ -61,7 +61,7 @@ public class PlayerSupporterTest {
         List<Meld> melds = new ArrayList<>();
         melds.add(Meld.createMeld(O6, O7, O8));
 
-        boolean suggestion = new PlayerSupporter(tiles, melds).showSuggestion();
+        boolean suggestion = new PlayerSupporter(tiles, melds).strat1Suggestion();
 
         assertEquals(true, suggestion);
         assertEquals(true, tiles.get(0).isSuggested());
@@ -80,7 +80,7 @@ public class PlayerSupporterTest {
         melds.add(Meld.createMeld(R5, R6, R7, R8));
         melds.add(Meld.createMeld(B5, G5, O5_2, R5));
 
-        boolean suggestion = new PlayerSupporter(tiles, melds).showSuggestion();
+        boolean suggestion = new PlayerSupporter(tiles, melds).strat1Suggestion();
 
         assertEquals(true, suggestion);
         assertEquals(true, tiles.get(0).isSuggested());
@@ -104,7 +104,7 @@ public class PlayerSupporterTest {
         melds.add(Meld.createMeld(O6, R6, B6, G6));
         melds.add(Meld.createMeld(B5, G5, O5, R5));
 
-        boolean suggestion = new PlayerSupporter(tiles, melds).showSuggestion();
+        boolean suggestion = new PlayerSupporter(tiles, melds).strat1Suggestion();
 
         assertEquals(true, suggestion);
         assertEquals(true, tiles.get(0).isSuggested());

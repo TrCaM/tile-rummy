@@ -283,5 +283,6 @@ public class Table {
           return middleList;
         });
     allTiles.forEach(tile -> tile.setHightlight(false));
+    allTiles.forEach(tile -> tile.setSuggestion(false));
   }
 }

@@ -17,13 +17,13 @@ public class PlayerSupporter {
         this.tableMelds = melds;
     }
 
-    private void initTileSuggestion(){
+    private void clearHints(){
         handTiles.stream().forEach(tile -> tile.setSuggestion(false));
         tableMelds.forEach(meld -> meld.tiles().forEach(tile -> tile.setSuggestion(false)));
     }
 
     private  boolean suggestFormMeld(){
-        initTileSuggestion();
+        clearHints();
         Meld goodMeld = HandMeldSeeker.findNextMelds(handTiles);
         if(goodMeld != null){
             goodMeld.tiles().stream().forEach(tile -> tile.setSuggestion(true));
@@ -33,7 +33,7 @@ public class PlayerSupporter {
     }
 
     private boolean suggestAddDirectly(){
-        initTileSuggestion();
+        clearHints();
         for(Tile tile: handTiles){
             int id = TableMeldSeeker.findDirectMeld(tile.value(), tile.color(), tableMelds);
             if(id != 0){
@@ -47,7 +47,7 @@ public class PlayerSupporter {
 
 
     private boolean suggestManipulationSet(){
-        initTileSuggestion();
+        clearHints();
         for(Tile tile: handTiles) {
             List<Tile> goodTiles = new ArrayList<>();
             Map<Meld, Integer> map;
@@ -70,7 +70,7 @@ public class PlayerSupporter {
     }
 
     private boolean suggestManipulationRun(){
-        initTileSuggestion();
+        clearHints();
 
         for(Tile tile: handTiles) {
             Map<Meld, Integer> map = CombinationSeeker.formRunBySplitRight(tile.value(), tile.color(),tableMelds);
@@ -97,8 +97,14 @@ public class PlayerSupporter {
 
     }
 
+//    public boolean hasHints(){
+//        boolean hasHints = showSuggestion();
+//        clearHints();
+//        return hasHints;
+//    }
 
-    public boolean showSuggestion(){
+
+    public boolean strat1Suggestion(){
         if(suggestFormMeld()){
             return true;
         }
