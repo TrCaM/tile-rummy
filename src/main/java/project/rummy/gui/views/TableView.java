@@ -4,7 +4,9 @@ import com.almasb.fxgl.app.FXGL;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import project.rummy.commands.CommandProcessor;
@@ -13,14 +15,12 @@ import project.rummy.entities.*;
 import project.rummy.events.TileChooseEvent;
 import project.rummy.game.Game;
 import project.rummy.game.GameState;
+import project.rummy.game.GameStatus;
 import project.rummy.main.GameFXMLLoader;
 import project.rummy.observers.Observer;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class TableView extends Pane implements Observer {
   private GameFXMLLoader loader;
@@ -30,10 +30,16 @@ public class TableView extends Pane implements Observer {
   @FXML private GridPane setPane2;
   @FXML private GridPane runPane;
   @FXML private Button borrowMeldsButton;
+  @FXML private FlowPane tiles1;
+  @FXML private FlowPane tiles2;
+  @FXML private FlowPane tiles3;
+  @FXML private FlowPane tiles4;
+  @FXML private Label firstPlayer;
+  @FXML private Pane findFirstPane;
 
   private Set<Meld> chosenMelds;
   private int playerId;
-
+  private List<FlowPane> pregameTiles;
   private TableData tableData;
 
   public TableView(Player controlledPlayer, GameState gameState) {
@@ -173,14 +179,31 @@ public class TableView extends Pane implements Observer {
     pane.add(new TileView(tile, source, row, col), col, row);
   }
 
+  private void renderFirstPlayerInfo(GameState state) {
+    int numPlayers = state.getPlayerData().length;
+    pregameTiles = Arrays.asList(tiles1, tiles2, tiles3, tiles4).subList(0, numPlayers);
+    for (int i = 0; i < numPlayers; i++) {
+      int index = i;
+      state.getFindFirstTileList().get(i).stream()
+          .map(tile -> new TileView(tile, TileSource.HAND, 0, 0))
+          .forEach(view -> pregameTiles.get(index).getChildren().add(view));
+    }
+    firstPlayer.setText(state.getPlayerData()[state.getCurrentPlayer()].name);
+  }
+
   @Override
   public void update(GameState state) {
-    runPane.getChildren().clear();
-    setPane1.getChildren().clear();
-    setPane2.getChildren().clear();
-    this.tableData = state.getTableData();
-    renderMelds(state);
-    setDisable(state.getCurrentPlayer() != playerId || state.getPlayerStatuses()[state.getCurrentPlayer()] == PlayerStatus.START);
+    if (state.getGameStatus() == GameStatus.RUNNING) {
+      runPane.getChildren().clear();
+      setPane1.getChildren().clear();
+      setPane2.getChildren().clear();
+      this.tableData = state.getTableData();
+      renderMelds(state);
+      setDisable(state.getCurrentPlayer() != playerId || state.getPlayerStatuses()[state.getCurrentPlayer()] == PlayerStatus.START);
+      findFirstPane.setVisible(false);
+    } else if (state.getGameStatus() == GameStatus.FINDING_FIRST) {
+      renderFirstPlayerInfo(state);
+    }
   }
 }
 

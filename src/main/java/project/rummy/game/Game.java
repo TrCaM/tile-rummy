@@ -24,25 +24,42 @@ public class Game extends Component implements Observable {
   private int controlledPlayer;
   private GameStatus status;
   private boolean isNetworkGame;
-  private  boolean isTurnStart;
+  private boolean isTurnStart;
   private int playersCount;
+  private List<List<Tile>> findFirstTileList;
+  private GameInitializer initializer;
 
-  Game(boolean isNetworkGame) {
+  public Game(GameInitializer initializer, boolean isNetworkGame) {
     super();
+    this.initializer = initializer;
     this.observers = new ArrayList<>();
     this.commandProcessor = CommandProcessor.getInstance();
     this.preventUpdate = false;
     this.status = GameStatus.NOT_STARTED;
     this.isNetworkGame = isNetworkGame;
+    findFirstTileList = new ArrayList<>();
   }
 
-  public void setUpPlayer(Player[] players) {
+  /////////////////
+  // SET UP GAME //
+  /////////////////
+  public void setUpPlayers() {
+    this.initializer.initPlayers(this);
+  }
+  public void setUpPlayers(Player[] players) {
     this.players = players;
     this.turnNumber = 0;
     this.currentPlayer = 0;
     this.playersCount = players.length;
   }
 
+  public void setUpTable(Table table) {
+    this.table = table;
+  }
+
+  ////////////////////////
+  // SETTERS AND GETTER //
+  ////////////////////////
   public void setStatus(GameStatus status) {
     this.status = status;
   }
@@ -51,29 +68,158 @@ public class Game extends Component implements Observable {
     this.controlledPlayer = index;
   }
 
-  public Player getControlledPlayer() {
-    return players[controlledPlayer];
+  void setTurnNumber(int num) {
+    this.turnNumber = num;
   }
 
-  public void setUpTable(Table table) {
+  public void setTable(Table table) {
     this.table = table;
   }
 
-  void setTurnNumber(int num) {
-    this.turnNumber = num;
+  public void setCurrentPlayer(int player) {
+    this.currentPlayer = player;
+  }
+
+  public void setTurnStatus(TurnStatus turnStatus) {
+    this.turnStatus = turnStatus;
+  }
+
+  public Player getControlledPlayer() {
+    return players[controlledPlayer];
   }
 
   public Player getCurrentPlayerObject() {
     return players[currentPlayer];
   }
 
-  /**
-   * Start the game specifically:
-   * + It create the game loops to keep looping until the game is done
-   * + Each loop will represent a single move that requires the interface update
-   * + Redraw the components that need to be re-rendered after each iteration
-   * + Constantly check the state of the game and check for when the game should end
-   */
+  Table getTable() {
+    return this.table;
+  }
+
+  public Player[] getPlayers() {
+    return players;
+  }
+
+  int getCurrentPlayer() {
+    return currentPlayer;
+  }
+
+  int getTurnNumber() {
+    return turnNumber;
+  }
+
+  public boolean isNetworkGame() {
+    return isNetworkGame;
+  }
+
+  public boolean isGameEnd() {
+    return isGameEnd;
+  }
+
+  public String getWinnerName() {
+    return this.winnerName;
+  }
+
+  public GameStatus getStatus() {
+    return status;
+  }
+
+  boolean isTurnBeginning() {
+    return isTurnStart;
+  }
+
+  public int getPlayersCount() {
+    return playersCount;
+  }
+
+  public List<List<Tile>> getFindFirstTileList() {
+    return findFirstTileList;
+  }
+
+  ////////////////
+  // GAME LOGIC //
+  ////////////////
+  private void initGameTable() {
+    GameInitializer initializer = new DefaultGameInitializer();
+    initializer.initTable(this);
+    initializer.initializeGameState(players, table);
+  }
+
+  public void findFirstPlayer() {
+    this.status = GameStatus.FINDING_FIRST;
+    initializer.initTable(this);
+    findFirstTileList.clear();
+    for (int i = 0; i < playersCount; i++) {
+      findFirstTileList.add(new ArrayList<>());
+    }
+    int turn = 1;
+    int count = 0;
+    int max;
+    boolean[] status = new boolean[playersCount];
+    int outs = 0;
+    while (outs < 3) {
+      max = 0;
+      for (int i = 0; i < playersCount; i++) {
+        if (!status[i]) {
+          Tile tile = table.drawTile();
+          findFirstTileList.get(i).add(tile);
+          max = tile.value() > max ? tile.value() : max;
+        }
+      }
+      for (int i = 0; i < playersCount; i++) {
+        if (!status[i] && findFirstTileList.get(i).get(turn - 1).value() < max) {
+          status[i] = true;
+          outs++;
+        }
+      }
+      turn++;
+    }
+
+    for (int i = 0; i < playersCount; i++) {
+      if (!status[i]) {
+        currentPlayer = i;
+      }
+    }
+    notifyObservers();
+  }
+
+  public void startGame(boolean reset) {
+    initializer.initTable(this);
+    initializer.initializeGameState(players, table);
+    turnNumber = 1;
+    this.status = GameStatus.RUNNING;
+    playTurn();
+  }
+
+  public void startGame() {
+    startGame(false);
+  }
+
+  private void playTurn() {
+    ActionHandler handler = new ActionHandler(players[currentPlayer], table);
+    commandProcessor.setUpHandler(handler);
+    this.turnStatus = handler.getTurnStatus();
+    handler.backUpTurn();
+    this.players[currentPlayer].getController().playTurn();
+    isTurnStart = true;
+    notifyObservers();
+  }
+
+  private void resetTileHighlight() {
+    players[currentPlayer].resetForNewTurn();
+    table.resetForNewTurn();
+  }
+
+  public void restoreTurn(Hand hand, Table table) {
+    players[currentPlayer].setHand(hand);
+    this.table = table;
+  }
+
+  private void endTurn() {
+    this.players[currentPlayer].getController().closeInput();
+    //commandProcessor.reset();
+  }
+
   private void tryEndTurn() {
     this.status = GameStatus.TURN_END;
     if (!isNetworkGame) {
@@ -87,69 +233,10 @@ public class Game extends Component implements Observable {
     turnNumber++;
     this.players[currentPlayer].getController().endTurn();
     commandProcessor.reset();
-    resetTileHightlight();
+    resetTileHighlight();
     this.status = GameStatus.RUNNING;
     currentPlayer = (currentPlayer + 1) % playersCount;
     playTurn();
-  }
-
-  public void startGame(boolean reset) {
-    if (reset) {
-      initGameTable();
-    }
-    turnNumber = 1;
-    this.status = GameStatus.RUNNING;
-    playTurn();
-  }
-
-
-
-  public void startGame() {
-    startGame(false);
-  }
-
-  private void initGameTable() {
-    GameInitializer initializer = new DefaultGameInitializer();
-    initializer.initTable(this);
-    initializer.initializeGameState(players, table);
-  }
-
-  private void playTurn() {
-    ActionHandler handler = new ActionHandler(players[currentPlayer], table);
-    commandProcessor.setUpHandler(handler);
-    this.turnStatus = handler.getTurnStatus();
-    handler.backUpTurn();
-    this.players[currentPlayer].getController().playTurn();
-    isTurnStart = true;
-    notifyObservers();
-  }
-
-//  private void setGameStatusForNextTurn() {
-//    if (controlledPlayer == currentPlayer) {
-//      this.status = GameStatus.TURN_END;
-//    } else {
-//      this.status = GameStatus.RUNNING;
-//    }
-//  }
-
-  private void endTurn() {
-    this.players[currentPlayer].getController().closeInput();
-    //commandProcessor.reset();
-
-  }
-
-  private void resetTileHightlight() {
-    players[currentPlayer].resetForNewTurn();
-    table.resetForNewTurn();
-  }
-
-  public void setTable(Table table) {
-    this.table = table;
-  }
-
-  public void restoreTurn(Hand hand, Table table) {
-    players[currentPlayer].setHand(hand);
-    this.table = table;
   }
 
   /**
@@ -181,28 +268,19 @@ public class Game extends Component implements Observable {
     }
   }
 
-  public boolean isNetworkGame() {
-    return isNetworkGame;
+  ///////////////////////
+  // UPDATE AND NOTIFY //
+  ///////////////////////
+  public GameState generateGameState() {
+    return GameState.generateState(this);
   }
 
-  public boolean isGameEnd() {
-    return isGameEnd;
+  public void preventUpdate() {
+    this.preventUpdate = true;
   }
 
-  Table getTable() {
-    return this.table;
-  }
-
-  public Player[] getPlayers() {
-    return players;
-  }
-
-  int getCurrentPlayer() {
-    return currentPlayer;
-  }
-
-  int getTurnNumber() {
-    return turnNumber;
+  public void enableUpdate() {
+    this.preventUpdate = false;
   }
 
   @Override
@@ -223,12 +301,14 @@ public class Game extends Component implements Observable {
 
   public void update(TurnStatus turnStatus) {
     isTurnStart = false;
-    int winner = getWinner();
-    if (winner != -1) {
-      this.isGameEnd = true;
-      this.winnerName = players[winner].getName();
+    hasWinner();
+    handleTurnStatus(turnStatus);
+    if (!preventUpdate) {
       notifyObservers();
     }
+  }
+
+  private void handleTurnStatus(TurnStatus turnStatus) {
     this.turnStatus = turnStatus;
     if (turnStatus.goNextTurn) {
       PlayerStatus status = turnStatus.isIceBroken ? PlayerStatus.ICE_BROKEN : PlayerStatus.START;
@@ -239,52 +319,16 @@ public class Game extends Component implements Observable {
       players[currentPlayer].setStatus(status);
       tryEndTurn();
     } else if (turnStatus.isTurnEnd) {
-      if (winner != -1) {
-        this.isGameEnd = true;
-        this.winnerName = players[winner].getName();
-        notifyObservers();
-      } else {
-        endTurn();
-      }
+      endTurn();
     }
-    if (!preventUpdate) {
+  }
+
+  private void hasWinner() {
+    int winner = getWinner();
+    if (winner != -1) {
+      this.isGameEnd = true;
+      this.winnerName = players[winner].getName();
       notifyObservers();
     }
-  }
-
-  public void setCurrentPlayer(int player) {
-    this.currentPlayer = player;
-  }
-
-  public void setTurnStatus(TurnStatus turnStatus) {
-    this.turnStatus = turnStatus;
-  }
-
-  public String getWinnerName() {
-    return this.winnerName;
-  }
-
-  public GameState generateGameState() {
-    return GameState.generateState(this);
-  }
-
-  public void preventUpdate() {
-    this.preventUpdate = true;
-  }
-
-  public void enableUpdate() {
-    this.preventUpdate = false;
-  }
-
-  public GameStatus getStatus() {
-    return status;
-  }
-
-  boolean isTurnBeginning() {
-    return isTurnStart;
-  }
-
-  public int getPlayersCount() {
-    return playersCount;
   }
 }

@@ -50,7 +50,7 @@ public class LoadGameInitializer implements GameInitializer {
         }
 
 
-        game.setUpPlayer(players);
+        game.setUpPlayers(players);
         game.setTurnNumber(state.getTurnNumber());
     }
 

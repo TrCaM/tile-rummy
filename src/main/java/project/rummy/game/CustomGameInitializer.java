@@ -49,6 +49,6 @@ public class CustomGameInitializer extends DefaultGameInitializer {
       }
       players[i] = new Player(playerDataList.get(i).name, controller, i);
     }
-    game.setUpPlayer(players);
+    game.setUpPlayers(players);
   }
 }

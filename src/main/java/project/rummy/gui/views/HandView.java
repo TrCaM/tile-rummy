@@ -13,6 +13,7 @@ import project.rummy.entities.*;
 import project.rummy.events.TileChooseEvent;
 import project.rummy.game.Game;
 import project.rummy.game.GameState;
+import project.rummy.game.GameStatus;
 import project.rummy.main.GameFXMLLoader;
 import project.rummy.observers.Observer;
 
@@ -139,22 +140,26 @@ public class HandView extends Pane implements Observer {
   @Override
   public void update(GameState status) {
     HandData data = status.getHandsData()[playerId];
-    this.chosenTiles.clear();
-    tileRack.getChildren().clear();
-    meldRack.getChildren().clear();
-    data.tiles.stream()
-        .map(tile -> new TileView(tile, TileSource.HAND, 0, data.tiles.indexOf(tile)))
-        .forEach(view -> tileRack.getChildren().add(view));
-    List<Meld> manipulatingMelds = ManipulationTable.getInstance().getMelds();
-    manipulatingMelds.stream()
-        .map(MeldView::new)
-        .forEach(view -> meldRack.getChildren().add(view));
-    turnStatus = status.getTurnStatus();
-    drawButton.setDisable(!turnStatus.canDraw);
-    playMeldButton.setDisable(true);
-    this.tileRack.setDisable(!turnStatus.canPlay);
-    this.meldRack.setDisable(!turnStatus.canPlay);
-    this.nextTurnButton.setDisable(!turnStatus.canEnd);
-    this.setDisable(status.getCurrentPlayer() != playerId);
+    if (status.getGameStatus() == GameStatus.RUNNING) {
+      this.chosenTiles.clear();
+      tileRack.getChildren().clear();
+      meldRack.getChildren().clear();
+      data.tiles.stream()
+          .map(tile -> new TileView(tile, TileSource.HAND, 0, data.tiles.indexOf(tile)))
+          .forEach(view -> tileRack.getChildren().add(view));
+      List<Meld> manipulatingMelds = ManipulationTable.getInstance().getMelds();
+      manipulatingMelds.stream()
+          .map(MeldView::new)
+          .forEach(view -> meldRack.getChildren().add(view));
+      turnStatus = status.getTurnStatus();
+      drawButton.setDisable(!turnStatus.canDraw);
+      playMeldButton.setDisable(true);
+      this.tileRack.setDisable(!turnStatus.canPlay);
+      this.meldRack.setDisable(!turnStatus.canPlay);
+      this.nextTurnButton.setDisable(!turnStatus.canEnd);
+      this.setDisable(status.getCurrentPlayer() != playerId);
+    } else {
+      this.setDisable(true);
+    }
   }
 }

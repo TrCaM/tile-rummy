@@ -6,8 +6,6 @@ import project.rummy.control.ManualController;
 import project.rummy.entities.Player;
 import project.rummy.entities.Table;
 import project.rummy.strategies.Strategy1;
-import project.rummy.strategies.Strategy2;
-import project.rummy.strategies.Strategy4;
 
 import java.util.stream.Stream;
 
@@ -25,7 +23,7 @@ public class DefaultGameInitializer implements GameInitializer {
     for (int i=1; i<4; i++) {
       players[i] = new Player(String.format("Player %d", i), controllers[i], i);
     }
-    game.setUpPlayer(players);
+    game.setUpPlayers(players);
     game.setControlledPlayer(0);
   }
 

@@ -6,19 +6,15 @@ import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.settings.GameSettings;
 import io.netty.channel.Channel;
-import org.json.simple.parser.ParseException;
 import project.rummy.commands.CommandProcessor;
 import project.rummy.entities.PlayerData;
 import project.rummy.game.*;
-import project.rummy.game.GameReader.ReadGameState;
-import project.rummy.game.GameReader.SaveGame;
 import project.rummy.gui.views.EntitiesBuilder;
-import project.rummy.messages.StringMessage;
 import project.rummy.networks.ClientGameManager;
-import project.rummy.networks.GameClientTask;
 
-import java.io.IOException;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static project.rummy.gui.views.EntityType.GAME;
 
@@ -62,9 +58,27 @@ public class TileRummyApplication extends GameApplication {
     settings.setVersion("0.1");
   }
 
-  public void startGame(List<PlayerData> playerDataList) {
-    gameStore.setInitializer(new CustomGameInitializer(playerDataList));
-    setUpGame(gameStore.initializeGame());
+  public void startSinglePlayerGame(List<PlayerData> playerDataList) {
+    game = new Game(new CustomGameInitializer(playerDataList), false);
+    processor = CommandProcessor.getInstance();
+    processor.setUpGame(game);
+    game.setUpPlayers();
+//    game.findFirstPlayer();
+//    this.isStarting = true;
+//    buildGameView();
+  }
+
+  private void readyToPlay() {
+    Timer timer = new Timer();
+    timer.schedule(
+        new TimerTask() {
+          @Override
+          public void run() {
+            game.setStatus(GameStatus.STARTING);
+          }
+        },
+        3000
+    );
   }
 
   @Override
@@ -78,14 +92,6 @@ public class TileRummyApplication extends GameApplication {
 //    setUpGame(gameStore.initializeGame());
     Entity mainMenuView = EntitiesBuilder.buildMainMenu();
     getGameWorld().addEntities(mainMenuView);
-  }
-
-
-  public void setUpGame(Game game) {
-    this.game = game;
-    processor = CommandProcessor.getInstance();
-    processor.setUpGame(game);
-    this.isStarting = true;
   }
 
   private void startNetWorkGame() {
@@ -102,6 +108,7 @@ public class TileRummyApplication extends GameApplication {
 
   private void buildGameView() {
     getGameWorld().clear();
+    state = game.generateGameState();
     Entity gameEntity = Entities.builder().type(GAME).build();
     gameEntity.addComponent(game);
     getGameWorld().addEntities(gameEntity);
@@ -115,7 +122,7 @@ public class TileRummyApplication extends GameApplication {
     getGameWorld().addEntities(handView, tableView, gameInfoView);
   }
 
-  private void startGame() {
+  private void startSinglePlayerGame() {
     isGameStarted = true;
 //    String fileName="";
 //    if(!getParameters().getRaw().isEmpty()) {
@@ -165,21 +172,42 @@ public class TileRummyApplication extends GameApplication {
 
   @Override
   protected void onUpdate(double tpf) {
-    if (isGameStarted) {
-      processor.processNext();
-      if (game.isGameEnd()) {
-        this.getNotificationService().pushNotification(
-            String.format("Player %s has won", game.getWinnerName()));
-        getGameWorld().clear();
-        CommandProcessor.getInstance().reset();
-      }
-    } else if (isStarting) {
-      if (game.isNetworkGame()) {
-        startNetWorkGame();
-      } else {
-        startNetWorkGame();
+    if (game != null) {
+      switch (game.getStatus()) {
+        case NOT_STARTED:
+          game.findFirstPlayer();
+          buildGameView();
+          break;
+        case FINDING_FIRST:
+          readyToPlay();
+          game.setStatus(GameStatus.WAITING);
+          break;
+        case STARTING:
+          game.setStatus(GameStatus.WAITING);
+          game.startGame(true);
+          break;
+        case RUNNING:
+          processor.processNext();
+          if (game.isGameEnd()) {
+            this.getNotificationService().pushNotification(
+                String.format("Player %s has won", game.getWinnerName()));
+            getGameWorld().clear();
+            CommandProcessor.getInstance().reset();
+          }
+          break;
       }
     }
+////    switch (game.getStatus()) {
+////      //TODO
+////    }
+//    if (isGameStarted) {
+//    } else if (isStarting) {
+//      if (game.isNetworkGame()) {
+//        startNetWorkGame();
+//      } else {
+//        startNetWorkGame();
+//      }
+//    }
   }
 
   @Override

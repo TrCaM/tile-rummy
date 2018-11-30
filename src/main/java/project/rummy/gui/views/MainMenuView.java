@@ -102,7 +102,7 @@ class MainMenuView extends Pane {
           break;
       }
     }
-    TileRummyApplication.getInstance().startGame(playerDataList);
+    TileRummyApplication.getInstance().startSinglePlayerGame(playerDataList);
   }
 
   private void loadMainMenuView() {

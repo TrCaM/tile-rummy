@@ -45,12 +45,13 @@ public class ClientGameManager implements Observable, Observer {
 
   void initializeGame(GameState initialState) {
     System.out.println(playerId);
-    Game game =
-        new GameStore(new NetworkGameInitializer(initialState, playerId, gameApplication.getChannel(), this))
-            .initializeGame();
-    gameApplication.setUpGame(game);
-    game.registerObserver(this);
-    isGameStarted = true;
+    //TODO
+//    Game game =
+//        new GameStore(new NetworkGameInitializer(initialState, playerId, gameApplication.getChannel(), this))
+//            .initializeGame();
+//    gameApplication.setUpGame(game);
+//    game.registerObserver(this);
+//    isGameStarted = true;
   }
 
   void onGameStateUpdated(GameState state) {

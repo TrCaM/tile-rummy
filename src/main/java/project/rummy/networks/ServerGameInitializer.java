@@ -2,7 +2,6 @@ package project.rummy.networks;
 
 import project.rummy.control.Controller;
 import project.rummy.control.ManualController;
-import project.rummy.control.NetworkController;
 import project.rummy.entities.Player;
 import project.rummy.game.DefaultGameInitializer;
 import project.rummy.game.Game;
@@ -30,7 +29,7 @@ public class ServerGameInitializer extends DefaultGameInitializer {
         players[i] = new Player(playerInfos[i].getName(), controllers[i], i);
       }
     }
-    game.setUpPlayer(players);
+    game.setUpPlayers(players);
     game.setControlledPlayer(0);
   }
 }
