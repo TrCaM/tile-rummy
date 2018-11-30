@@ -1,6 +1,5 @@
 package project.rummy.main;
 
-
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
@@ -158,7 +157,6 @@ public class TileRummyApplication extends GameApplication {
     startView.setY(500);
 
     getGameWorld().addEntity(startView);
-
 
 //    SaveGame saveGame = new SaveGame();
 //    try {

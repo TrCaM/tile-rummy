@@ -81,7 +81,7 @@ public class Game extends Component implements Observable {
     this.currentPlayer = player;
   }
 
-  public void setTurnStatus(TurnStatus turnStatus) {
+  private void setTurnStatus(TurnStatus turnStatus) {
     this.turnStatus = turnStatus;
   }
 

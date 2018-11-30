@@ -6,7 +6,6 @@ import project.rummy.commands.CommandProcessor;
 import project.rummy.entities.*;
 import project.rummy.game.Game;
 import project.rummy.gui.views.EntityType;
-
 import java.util.Collection;
 import java.util.List;
 
@@ -31,7 +30,6 @@ public class ActionHandler {
   private int startPoint;
   private int tableStartPoint;
   private PlayerStatus turnType;
-  private boolean preventUpdate;
   private boolean tryEndTurn;
   private boolean canEndTurn;
 
@@ -53,7 +51,7 @@ public class ActionHandler {
     this.canPlay = true;
     this.turnType = player.status();
     this.isIceBroken = player.status() == ICE_BROKEN;
-    this.preventUpdate = false;
+    boolean preventUpdate = false;
     this.tryEndTurn = false;
     this.canEndTurn = false;
   }
@@ -144,7 +142,7 @@ public class ActionHandler {
     endTurn();
   }
 
-  public void draw() {
+  private void draw() {
     Tile tile = table.drawTile();
     tile.setHightlight(true);
     hand.addTile(tile);
@@ -155,9 +153,9 @@ public class ActionHandler {
   }
 
   /**
-   * The player drawAndEndTurn 3 cards on penaties
+   * The player drawAndEndTurn 3 cards on penalties
    */
-  public void draw(int times) {
+  private void draw(int times) {
     for (int i = 0 ; i < times; i++) {
       draw();
     }
@@ -193,7 +191,7 @@ public class ActionHandler {
     }
   }
 
-  public void playFromHand(Meld meld) {
+  void playFromHand(Meld meld) {
     //TODO: Add a logging infomation here
     playFromHand(hand.getMelds().indexOf(meld));
   }
@@ -221,7 +219,7 @@ public class ActionHandler {
     takeTableMeld(table.toTableData().melds.indexOf(m));
   }
 
-  public void updateFromData(TableData tableData, HandData data, TurnStatus status) {
+  void updateFromData(TableData tableData, HandData data, TurnStatus status) {
     table.update(tableData);
     hand.update(data);
     if (status != null) {
@@ -274,7 +272,7 @@ public class ActionHandler {
     goNextTurn = false;
   }
 
-  public void nextTurn(boolean doCheck) {
+  void nextTurn(boolean doCheck) {
     if (doCheck || isTurnEnd) {
       endTurn();
     }
@@ -282,7 +280,7 @@ public class ActionHandler {
     goNextTurn = true;
   }
 
-  public void nextTurn() {
+  void nextTurn() {
     nextTurn(true);
   }
 
@@ -290,21 +288,16 @@ public class ActionHandler {
     this.canDraw = false;
     manipulationTable.submit(table);
     manipulationTable.clear();
-//    if (turnType == ICE_BROKEN || startPoint - hand.getScore() >= 30) {
-//      this.isIceBroken = true;
-//    }
-    int newTableScore = table.getPlayingMelds().stream().mapToInt(Meld::getScore).sum();
-    if (turnType == ICE_BROKEN || newTableScore - tableStartPoint >= 30) {
-      this.isIceBroken = true;
-    }
+    setStatusOnSubmit();
   }
 
   public void submit(Meld meld) {
     manipulationTable.submit(meld, table);
     this.canDraw = false;
-//    if (turnType == ICE_BROKEN || startPoint - hand.getScore() >= 30) {
-//      this.isIceBroken = true;
-//    }
+    setStatusOnSubmit();
+  }
+
+  private void setStatusOnSubmit() {
     int newTableScore = table.getPlayingMelds().stream().mapToInt(Meld::getScore).sum();
     if (turnType == ICE_BROKEN || newTableScore - tableStartPoint >= 30) {
       this.isIceBroken = true;

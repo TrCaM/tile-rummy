@@ -27,7 +27,7 @@ public class NetworkGameInitializer extends LoadGameInitializer {
     Hand hand;
     for(int i=0; i<4; i++){
       Controller controller;
-      hand = new Hand(state.getHandsData()[i].tiles, state.getHandsData()[i].melds);
+      hand = new Hand(getState().getHandsData()[i].tiles, getState().getHandsData()[i].melds);
 
       if(i == playerId){
         controller = new ManualNetworkController(channel, gameManager);
@@ -35,11 +35,11 @@ public class NetworkGameInitializer extends LoadGameInitializer {
         controller = new NetworkController(channel, gameManager, i);
       }
 
-      players[i] = new Player(state.getPlayerData()[i].name, controller, hand, state.getPlayerStatuses()[i], i);
+      players[i] = new Player(getState().getPlayerData()[i].name, controller, hand, getState().getPlayerStatuses()[i], i);
     }
 
     game.setUpPlayers(players);
-    game.setTurnNumber(state.getTurnNumber());
+    game.setTurnNumber(getState().getTurnNumber());
     game.setControlledPlayer(playerId);
   }
 }
