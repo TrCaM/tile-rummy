@@ -12,9 +12,11 @@ import javafx.scene.layout.Pane;
 import project.rummy.entities.PlayerData;
 import project.rummy.main.GameFXMLLoader;
 import project.rummy.main.TileRummyApplication;
+import project.rummy.rigging.ResourceReader;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 class MainMenuView extends Pane {
   private GameFXMLLoader loader;
@@ -128,7 +130,16 @@ class MainMenuView extends Pane {
   }
 
   private void onLoadClicked(MouseEvent mouseEvent) {
-    TileRummyApplication.getInstance().startLoadedGame();
+    ResourceReader reader = new ResourceReader();
+    try {
+      List<String> files = reader.getResourceFiles("load").stream()
+          .filter(name -> name.matches(".+\\.json"))
+          .collect(Collectors.toList());
+      System.out.println(files);
+      TileRummyApplication.getInstance().startLoadedGame(files.get(0));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   private void onCreditsClicked(MouseEvent mouseEvent) {

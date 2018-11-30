@@ -63,8 +63,7 @@ public class TileRummyApplication extends GameApplication {
     game.setUpPlayers();
   }
 
-  public void startLoadedGame() {
-    String fileName="TestCase1";
+  public void startLoadedGame(String fileName) {
     if(!getParameters().getRaw().isEmpty()) {
       fileName = getParameters().getRaw().get(0);
     }
