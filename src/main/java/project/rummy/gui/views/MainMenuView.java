@@ -2,11 +2,9 @@ package project.rummy.gui.views;
 
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import project.rummy.entities.PlayerData;
@@ -55,6 +53,12 @@ class MainMenuView extends Pane {
   private TextField name3;
   @FXML
   private TextField name4;
+  @FXML
+  private Pane loadMenu;
+  @FXML
+  private ScrollPane scroll;
+  @FXML
+  private Pane files;
 
   private Map<String, Pane> menus;
   private List<ToggleGroup> groups;
@@ -81,8 +85,32 @@ class MainMenuView extends Pane {
   private void setup() {
     menus.put("start", startMenu);
     menus.put("setup", gameSetupMenu);
-
+    menus.put("load", loadMenu);
+    scroll.setContent(files);
+    loadLoadGameMenu();
     groups.forEach(group -> group.selectedToggleProperty().addListener(this::onGameOptionChanged));
+  }
+
+  private void loadLoadGameMenu() {
+    ResourceReader reader = new ResourceReader();
+    try {
+      List<String> fileNames = reader.getResourceFiles("load").stream()
+          .filter(name -> name.matches(".+\\.json"))
+          .collect(Collectors.toList());
+      for (String fileName : fileNames) {
+        Button button = FXMLLoader.load(getClass().getResource("/fxml/fileButton.fxml"));
+        button.setText(fileName);
+        button.setOnMouseClicked(event -> startLoadGame(fileName));
+        files.getChildren().add(button);
+      }
+//      TileRummyApplication.getInstance().startLoadedGame(files.get(0));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private void startLoadGame(String fileName) {
+    TileRummyApplication.getInstance().startLoadedGame(fileName);
   }
 
   private void onPlayButtonClicked(MouseEvent mouseEvent) {
@@ -130,16 +158,7 @@ class MainMenuView extends Pane {
   }
 
   private void onLoadClicked(MouseEvent mouseEvent) {
-    ResourceReader reader = new ResourceReader();
-    try {
-      List<String> files = reader.getResourceFiles("load").stream()
-          .filter(name -> name.matches(".+\\.json"))
-          .collect(Collectors.toList());
-      System.out.println(files);
-      TileRummyApplication.getInstance().startLoadedGame(files.get(0));
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    openMenu("load");
   }
 
   private void onCreditsClicked(MouseEvent mouseEvent) {

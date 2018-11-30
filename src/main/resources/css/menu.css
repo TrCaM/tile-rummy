@@ -43,6 +43,21 @@
 
 .playButton:hover {
     -fx-background-color: #9ba810;
-    -fx-font-size: 50;
     -fx-text-fill: #cd4141;
+}
+
+.fileButton {
+    -fx-background-color: white;
+    -fx-font-size: 30;
+    -fx-text-fill: #9ba810;
+    -fx-text-alignment: left;
+}
+
+.fileButton:hover {
+    -fx-background-color: #9ba810;
+    -fx-text-fill: #cd4141;
+}
+
+.scrollPane {
+   -fx-background-color: transparent;
 }
