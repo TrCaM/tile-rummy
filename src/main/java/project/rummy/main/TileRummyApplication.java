@@ -6,12 +6,15 @@ import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.settings.GameSettings;
 import io.netty.channel.Channel;
+import org.json.simple.parser.ParseException;
 import project.rummy.commands.CommandProcessor;
 import project.rummy.entities.PlayerData;
 import project.rummy.game.*;
+import project.rummy.game.GameReader.ReadGameState;
 import project.rummy.gui.views.EntitiesBuilder;
 import project.rummy.networks.ClientGameManager;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -63,9 +66,30 @@ public class TileRummyApplication extends GameApplication {
     processor = CommandProcessor.getInstance();
     processor.setUpGame(game);
     game.setUpPlayers();
-//    game.findFirstPlayer();
-//    this.isStarting = true;
-//    buildGameView();
+  }
+
+  public void startLoadedGame() {
+    String fileName="TestCase1";
+    if(!getParameters().getRaw().isEmpty()) {
+      fileName = getParameters().getRaw().get(0);
+    }
+    ReadGameState gm = new ReadGameState();
+    try {
+      this.state = gm.read(fileName);
+      LoadGameInitializer initializer = new LoadGameInitializer(this.state);
+    } catch (IOException e) {
+      System.out.println("Whoops something went wrong");
+    }
+    catch (ParseException e) {
+      System.out.println("Not working");
+
+    }
+    game = new GameStore(new LoadGameInitializer(state)).initializeGame();
+    processor = CommandProcessor.getInstance();
+    processor.setUpGame(game);
+    buildGameView();
+    game.startGame();
+//    game = gameStore.initializeGame();
   }
 
   private void readyToPlay() {
@@ -124,25 +148,6 @@ public class TileRummyApplication extends GameApplication {
 
   private void startSinglePlayerGame() {
     isGameStarted = true;
-//    String fileName="";
-//    if(!getParameters().getRaw().isEmpty()) {
-//      fileName = getParameters().getRaw().get(0);
-//    }
-//    ReadGameState gm = new ReadGameState();
-//    try {
-//      this.state = gm.read(fileName);
-//      LoadGameInitializer initializer = new LoadGameInitializer(this.state);
-//    }
-//    catch (IOException e) {
-//      System.out.println("Whoops something went wrong");
-//    }
-//    catch (ParseException e) {
-//      System.out.println("Not working");
-//
-//    }
-//    GameStore gameStore1 = new GameStore(new LoadGameInitializer(state));
-//    //game = gameStore1.initializeGame();
-//    game = gameStore.initializeGame();
     GameStart start = new GameStart(game);
     game.setStatus(GameStatus.STARTING);
     int startGamePlayer = start.getPlayerValue();

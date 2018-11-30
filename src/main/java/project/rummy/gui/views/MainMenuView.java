@@ -128,8 +128,7 @@ class MainMenuView extends Pane {
   }
 
   private void onLoadClicked(MouseEvent mouseEvent) {
-    openMenu("load");
-    System.out.println("Load");
+    TileRummyApplication.getInstance().startLoadedGame();
   }
 
   private void onCreditsClicked(MouseEvent mouseEvent) {

@@ -1,7 +1,7 @@
 {
   "Deck": 48,
   "Turn": 0,
-  "CurrentPlayer": 0,
+  "CurrentPlayer": 1,
 
   "MeldsOnTable": [],
 
