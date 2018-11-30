@@ -146,7 +146,7 @@
          </content>
       </ScrollPane>
    </GridPane>
-   <Button fx:id="debugButton" layoutX="413.0" layoutY="173.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="145.0" text="Debug">
+   <Button fx:id="debugButton" layoutX="416.0" layoutY="119.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="153.0" text="Debug">
       <font>
          <Font size="19.0" />
       </font>
@@ -161,4 +161,9 @@
          <Font size="25.0" />
       </font>
    </Label>
+   <Button fx:id="leaveButton" layoutX="416.0" layoutY="214.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="153.0" text="Leave Game">
+      <font>
+         <Font size="19.0" />
+      </font>
+   </Button>
 </AnchorPane>

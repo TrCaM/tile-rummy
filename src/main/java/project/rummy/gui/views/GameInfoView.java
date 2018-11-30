@@ -19,6 +19,7 @@ import project.rummy.entities.TileSource;
 import project.rummy.game.Game;
 import project.rummy.game.GameState;
 import project.rummy.main.GameFXMLLoader;
+import project.rummy.main.TileRummyApplication;
 import project.rummy.observers.Observer;
 
 import java.io.IOException;
@@ -72,6 +73,8 @@ public class GameInfoView extends Pane implements Observer {
   private FlowPane deckView;
   @FXML
   private ScrollPane scrollPane;
+  @FXML
+  private Button leaveButton;
 
   private Timeline timeline;
   private int playerId;
@@ -120,6 +123,7 @@ public class GameInfoView extends Pane implements Observer {
       debugMode = !debugMode;
       debugArea.setVisible(debugMode);
     });
+    this.leaveButton.setOnMouseClicked(event -> TileRummyApplication.getInstance().showMainMenu());
   }
 
   private void loadGameInfoView(GameState gameState) {

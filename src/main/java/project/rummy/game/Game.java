@@ -273,6 +273,10 @@ public class Game extends Component implements Observable {
     }
   }
 
+  public void endGame() {
+    this.status = GameStatus.GAME_END;
+  }
+
   ///////////////////////
   // UPDATE AND NOTIFY //
   ///////////////////////
@@ -333,6 +337,7 @@ public class Game extends Component implements Observable {
     if (winner != -1) {
       this.isGameEnd = true;
       this.winnerName = players[winner].getName();
+      endGame();
       notifyObservers();
     }
   }

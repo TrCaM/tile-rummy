@@ -64,9 +64,6 @@ public class TileRummyApplication extends GameApplication {
   }
 
   public void startLoadedGame(String fileName) {
-    if(!getParameters().getRaw().isEmpty()) {
-      fileName = getParameters().getRaw().get(0);
-    }
     ReadGameState gm = new ReadGameState();
     try {
       this.state = gm.read(fileName);
@@ -82,6 +79,15 @@ public class TileRummyApplication extends GameApplication {
     processor.setUpGame(game);
     buildGameView();
     game.startGame();
+  }
+
+  public void showMainMenu() {
+    if (game != null) {
+      game.endGame();
+    }
+    getGameWorld().clear();
+    Entity mainMenuView = EntitiesBuilder.buildMainMenu();
+    getGameWorld().addEntities(mainMenuView);
   }
 
   private void readyToPlay() {
@@ -106,8 +112,7 @@ public class TileRummyApplication extends GameApplication {
 //      e.printStackTrace();
 //    }
 //    setUpGame(gameStore.initializeGame());
-    Entity mainMenuView = EntitiesBuilder.buildMainMenu();
-    getGameWorld().addEntities(mainMenuView);
+    showMainMenu();
   }
 
   private void startNetWorkGame() {
@@ -186,11 +191,11 @@ public class TileRummyApplication extends GameApplication {
           processor.processNext();
           if (game.isGameEnd()) {
             this.getNotificationService().pushNotification(
-                String.format("Player %s has won", game.getWinnerName()));
-            getGameWorld().clear();
-            CommandProcessor.getInstance().reset();
+                String.format("%s has won", game.getWinnerName()));
           }
           break;
+        case GAME_END:
+          CommandProcessor.getInstance().reset();
       }
     }
   }
