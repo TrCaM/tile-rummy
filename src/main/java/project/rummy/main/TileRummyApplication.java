@@ -206,6 +206,11 @@ public class TileRummyApplication extends GameApplication {
           game.setStatus(GameStatus.WAITING);
           game.startGame(true);
           break;
+        case TURN_END:
+          game.nextTurn();
+          game.setStatus(GameStatus.RUNNING);
+          processor.reset();
+          break;
         case RUNNING:
           processor.processNext();
           if (game.isGameEnd()) {

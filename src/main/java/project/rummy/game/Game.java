@@ -236,7 +236,7 @@ public class Game extends Component implements Observable {
     }
   }
 
-  void nextTurn() {
+  public void nextTurn() {
     turnNumber++;
     this.players[currentPlayer].getController().endTurn();
     commandProcessor.reset();
