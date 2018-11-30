@@ -1,6 +1,5 @@
 package project.rummy.networks;
 
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelId;
 import project.rummy.entities.Meld;
 import project.rummy.game.*;
@@ -18,7 +17,6 @@ public class ClientGameManager implements Observable, Observer {
   private int playerId;
   private String playerName;
   private ChannelId channelId;
-  private PlayerInfo[] playerInfos;
   private boolean isGameStarted;
   private List<Observer> observers;
   private GameState gameState;
@@ -28,14 +26,13 @@ public class ClientGameManager implements Observable, Observer {
     this.observers = new ArrayList<>();
   }
 
-  public void onLobbyJoined(ChannelId channelId, int playerId, String playerName) {
+  void onLobbyJoined(ChannelId channelId, int playerId, String playerName) {
     this.channelId = channelId;
     this.playerId = playerId;
     this.playerName = playerName;
   }
 
-  public void onLobbyUpdated(PlayerInfo[] playerInfos) {
-    this.playerInfos = playerInfos;
+  void onLobbyUpdated(PlayerInfo[] playerInfos) {
     for (int i = 0; i < playerInfos.length; i++) {
       System.out.println("Connected " + playerInfos[i].getName());
       if (playerInfos[i].getChannelId().equals(channelId)) {
@@ -43,9 +40,10 @@ public class ClientGameManager implements Observable, Observer {
         playerName = playerInfos[i].getName();
       }
     }
+    System.out.println();
   }
 
-  public void initializeGame(GameState initialState) {
+  void initializeGame(GameState initialState) {
     System.out.println(playerId);
     Game game =
         new GameStore(new NetworkGameInitializer(initialState, playerId, gameApplication.getChannel(), this))
@@ -55,14 +53,14 @@ public class ClientGameManager implements Observable, Observer {
     isGameStarted = true;
   }
 
-  public void onGameStateUpdated(GameState state) {
+  void onGameStateUpdated(GameState state) {
     this.gameState = state;
     Meld.cleanUpMap(state);
     Meld.syncMeldId(state.getNextMeldId());
     notifyObservers();
   }
 
-  public void endGame() {
+  void endGame() {
     System.exit(0);
   }
 

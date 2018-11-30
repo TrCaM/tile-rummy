@@ -80,7 +80,7 @@ public class GameInfoView extends Pane implements Observer {
 
   private boolean debugMode;
 
-  public GameInfoView(Player controlledPlayer, GameState gameState) {
+  GameInfoView(Player controlledPlayer, GameState gameState) {
     super();
     this.playersCount = gameState.getPlayerData().length;
     this.loader = new GameFXMLLoader("gameInfo");

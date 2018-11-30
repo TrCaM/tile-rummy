@@ -1,11 +1,7 @@
 package project.rummy.strategies;
 
 import project.rummy.ai.HandMeldSeeker;
-import project.rummy.ai.SmartStateAnalyzer;
-import project.rummy.behaviors.ComputerMoveMaker;
-import project.rummy.behaviors.FastIceBreakingMoveMaker;
-import project.rummy.behaviors.PlayAllMeldsMoveMaker;
-import project.rummy.behaviors.PlayOneTileMoveMaker;
+import project.rummy.behaviors.*;
 import project.rummy.commands.Command;
 import project.rummy.commands.PlayDirection;
 import project.rummy.control.ActionHandler;
@@ -21,10 +17,11 @@ public class StrategyAnalyzingTable implements Strategy {
   private ComputerMoveMaker playAllMelds;
   private ComputerMoveMaker playOneTile;
 
-  public StrategyAnalyzingTable(boolean shoudAnalyzeTable) {
-    this.iceBreaking = new FastIceBreakingMoveMaker();
+  StrategyAnalyzingTable(boolean shouldAnalyzeTable) {
+
+    this.iceBreaking = shouldAnalyzeTable ? new FastIceBreakingMoveMaker() : new SlowIceBreakingMoveMaker();
     this.playAllMelds = new PlayAllMeldsMoveMaker();
-    this.playOneTile = new PlayOneTileMoveMaker(shoudAnalyzeTable);
+    this.playOneTile = new PlayOneTileMoveMaker(shouldAnalyzeTable);
   }
 
   @Override

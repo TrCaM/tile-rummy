@@ -9,10 +9,6 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import project.rummy.control.AutoController;
-import project.rummy.control.Controller;
-import project.rummy.control.ManualController;
-import project.rummy.entities.Player;
 import project.rummy.entities.PlayerData;
 import project.rummy.main.GameFXMLLoader;
 import project.rummy.main.TileRummyApplication;
@@ -22,9 +18,6 @@ import java.util.*;
 
 class MainMenuView extends Pane {
   private GameFXMLLoader loader;
-
-  // This disable buttons once a menu is popped up
-  private boolean disableClick;
 
   @FXML
   private Button start;
@@ -77,7 +70,6 @@ class MainMenuView extends Pane {
     this.exit.setOnMouseClicked(this::onExitClicked);
     this.offlineButton.setOnMouseClicked(event -> this.openMenu("setup"));
     this.playButton.setOnMouseClicked(this::onPlayButtonClicked);
-    this.disableClick = false;
     menus = new HashMap<>();
     groups = Arrays.asList(players, players1, players2, players3);
     names = Arrays.asList(name1, name2, name3, name4);
