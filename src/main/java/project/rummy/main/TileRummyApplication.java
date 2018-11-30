@@ -22,30 +22,26 @@ import java.util.TimerTask;
 import static project.rummy.gui.views.EntityType.GAME;
 
 public class TileRummyApplication extends GameApplication {
-  private GameStore gameStore;
-  private GameStore startStore;
 
-
-  private CommandProcessor processor;
-  private Game game;
-  private GameState state;
-  private Channel channel;
+  private CommandProcessor processor = null;
+  private Game game = null;
+  private GameState state = null;
+  private Channel channel = null;
   private boolean isConnected;
-  private boolean isGameStarted;
-  private boolean isStarting;
+  private boolean isGameStarted = false;
+  private boolean isStarting = false;
   private final String PLAYER_NAME = "Tri Tha Thu";
-  private ClientGameManager clientGameManager;
+  private ClientGameManager clientGameManager = null;
 
-  private static TileRummyApplication INSTANCE;
+  private static TileRummyApplication INSTANCE = null;
 
   public static TileRummyApplication getInstance() {
     return INSTANCE;
   }
 
-
   public TileRummyApplication() {
     super();
-    gameStore = new GameStore(new StartGameInitializer());
+    GameStore gameStore = new GameStore(new StartGameInitializer());
     INSTANCE = this;
   }
 
@@ -82,14 +78,12 @@ public class TileRummyApplication extends GameApplication {
     }
     catch (ParseException e) {
       System.out.println("Not working");
-
     }
     game = new GameStore(new LoadGameInitializer(state)).initializeGame();
     processor = CommandProcessor.getInstance();
     processor.setUpGame(game);
     buildGameView();
     game.startGame();
-//    game = gameStore.initializeGame();
   }
 
   private void readyToPlay() {
@@ -202,17 +196,6 @@ public class TileRummyApplication extends GameApplication {
           break;
       }
     }
-////    switch (game.getStatus()) {
-////      //TODO
-////    }
-//    if (isGameStarted) {
-//    } else if (isStarting) {
-//      if (game.isNetworkGame()) {
-//        startNetWorkGame();
-//      } else {
-//        startNetWorkGame();
-//      }
-//    }
   }
 
   @Override
@@ -232,7 +215,5 @@ public class TileRummyApplication extends GameApplication {
 
   public static void main(String[] args) {
     launch(args);
-//    new Thread(() -> launch(args)).start();
-//    new Thread(() -> launch(args)).start();
   }
 }
