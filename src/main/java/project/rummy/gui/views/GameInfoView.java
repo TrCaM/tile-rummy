@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
@@ -67,6 +68,10 @@ public class GameInfoView extends Pane implements Observer {
   private Button debugButton;
   @FXML
   private Label timer;
+  @FXML
+  private FlowPane deckView;
+  @FXML
+  private ScrollPane scrollPane;
 
   private Timeline timeline;
   private int playerId;
@@ -180,11 +185,13 @@ public class GameInfoView extends Pane implements Observer {
     HandData[] data = new HandData[playersCount];
     int current = 1;
     opponentsHand.forEach(view -> view.getChildren().clear());
+    deckView.getChildren().clear();
     for (int i = 0; i < data.length; i++) {
       if (i == playerId) {
         data[0] = status.getHandsData()[i];
       } else {
-        data[current++] = status.getHandsData()[i];
+        data[current] = status.getHandsData()[i];
+        current++;
       }
     }
 
@@ -194,6 +201,10 @@ public class GameInfoView extends Pane implements Observer {
           .map(tile -> new TileView(tile, TileSource.HAND, 0, data[index].tiles.indexOf(tile)))
           .forEach(view -> opponentsHand.get(index-1).getChildren().add(view));
     }
+    status.getTableData().freeTiles.stream()
+        .map(tile -> new TileView(tile, TileSource.HAND, 0, 0))
+        .forEach(view -> deckView.getChildren().add(view));
+    scrollPane.setContent(deckView);
     debugArea.setVisible(debugMode);
   }
 }
