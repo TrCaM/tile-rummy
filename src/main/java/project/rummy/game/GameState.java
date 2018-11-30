@@ -48,7 +48,7 @@ public class GameState extends Component implements Serializable {
         .map(Player::status).toArray(PlayerStatus[]::new);
     gameState.playerData = Stream.of(game.getPlayers())
         .map(Player::toPlayerData).toArray(PlayerData[]::new);
-    gameState.turnStatus = game.turnStatus;
+    gameState.turnStatus = game.getTurnStatus();
     gameState.isGameEnd = game.isGameEnd();
     gameState.status = game.getStatus();
     gameState.nextMeldId = Meld.getNextId() + 100;

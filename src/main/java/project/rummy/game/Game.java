@@ -8,24 +8,25 @@ import project.rummy.observers.Observable;
 import project.rummy.observers.Observer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Game extends Component implements Observable {
-  private Player[] players;
-  private Table table;
-  private int currentPlayer;
+  private Player[] players = null;
+  private Table table = null;
+  private int currentPlayer = 0;
   private List<Observer> observers;
-  private int turnNumber;
+  private int turnNumber = 0;
   private CommandProcessor commandProcessor;
-  private boolean isGameEnd;
-  private String winnerName;
-  TurnStatus turnStatus;
+  private boolean isGameEnd = false;
+  private String winnerName = null;
+  private TurnStatus turnStatus = null;
   private boolean preventUpdate;
-  private int controlledPlayer;
+  private int controlledPlayer = 0;
   private GameStatus status;
   private boolean isNetworkGame;
-  private boolean isTurnStart;
-  private int playersCount;
+  private boolean isTurnStart = false;
+  private int playersCount = 0;
   private List<List<Tile>> findFirstTileList;
   private GameInitializer initializer;
 
@@ -132,8 +133,8 @@ public class Game extends Component implements Observable {
     return playersCount;
   }
 
-  public List<List<Tile>> getFindFirstTileList() {
-    return findFirstTileList;
+  List<List<Tile>> getFindFirstTileList() {
+    return Collections.unmodifiableList(findFirstTileList);
   }
 
   ////////////////
@@ -157,13 +158,17 @@ public class Game extends Component implements Observable {
     int max;
     boolean[] status = new boolean[playersCount];
     int outs = 0;
-    while (outs < 3) {
+    while (outs < playersCount - 1) {
       max = 0;
       for (int i = 0; i < playersCount; i++) {
         if (!status[i]) {
-          Tile tile = table.drawTile();
-          findFirstTileList.get(i).add(tile);
-          max = tile.value() > max ? tile.value() : max;
+          try {
+            Tile tile = table.drawTile();
+            findFirstTileList.get(i).add(tile);
+            max = tile.value() > max ? tile.value() : max;
+          } catch (Exception e) {
+            System.out.println();
+          }
         }
       }
       for (int i = 0; i < playersCount; i++) {
@@ -198,7 +203,7 @@ public class Game extends Component implements Observable {
   private void playTurn() {
     ActionHandler handler = new ActionHandler(players[currentPlayer], table);
     commandProcessor.setUpHandler(handler);
-    this.turnStatus = handler.getTurnStatus();
+    this.setTurnStatus(handler.getTurnStatus());
     handler.backUpTurn();
     this.players[currentPlayer].getController().playTurn();
     isTurnStart = true;
@@ -309,7 +314,7 @@ public class Game extends Component implements Observable {
   }
 
   private void handleTurnStatus(TurnStatus turnStatus) {
-    this.turnStatus = turnStatus;
+    this.setTurnStatus(turnStatus);
     if (turnStatus.goNextTurn) {
       PlayerStatus status = turnStatus.isIceBroken ? PlayerStatus.ICE_BROKEN : PlayerStatus.START;
       players[currentPlayer].setStatus(status);
@@ -330,5 +335,9 @@ public class Game extends Component implements Observable {
       this.winnerName = players[winner].getName();
       notifyObservers();
     }
+  }
+
+  TurnStatus getTurnStatus() {
+    return turnStatus;
   }
 }
