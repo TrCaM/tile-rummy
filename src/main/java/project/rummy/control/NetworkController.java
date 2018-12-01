@@ -47,7 +47,7 @@ public class NetworkController extends Controller implements Observer {
         HandData handData = state.getHandsData()[player.getId()];
         TableData tableData = state.getTableData();
         TurnStatus turnStatus = state.getTurnStatus();
-        send(handler -> handler.updateFromData(tableData, handData, turnStatus));
+        send(handler -> handler.updateFromData(state, playerId));
       }
     }
   }

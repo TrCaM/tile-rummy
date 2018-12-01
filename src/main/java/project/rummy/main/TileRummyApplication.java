@@ -27,8 +27,6 @@ public class TileRummyApplication extends GameApplication {
   private Game game = null;
   private GameState state = null;
   private Channel channel = null;
-  private boolean isConnected;
-  private boolean isStarting = false;
   private final String PLAYER_NAME = "Tri Tha Thu";
   private ClientGameManager clientGameManager = null;
 
@@ -40,7 +38,6 @@ public class TileRummyApplication extends GameApplication {
 
   public TileRummyApplication() {
     super();
-    GameStore gameStore = new GameStore(new StartGameInitializer());
     INSTANCE = this;
   }
 
@@ -67,7 +64,6 @@ public class TileRummyApplication extends GameApplication {
     ReadGameState gm = new ReadGameState();
     try {
       this.state = gm.read(fileName);
-      LoadGameInitializer initializer = new LoadGameInitializer(this.state);
     } catch (IOException e) {
       System.out.println("Whoops something went wrong");
     }
@@ -132,15 +128,6 @@ public class TileRummyApplication extends GameApplication {
     game.registerObserver(clientGameManager);
     processor = CommandProcessor.getInstance();
     processor.setUpGame(game);
-  }
-
-  private void startNetWorkGame() {
-    int startGamePlayer = 0;
-    game.startGame();
-    state.setCurrentPlayer(startGamePlayer);
-    // like the views here works...
-    buildGameView();
-
   }
 
   private void buildGameView() {
@@ -236,7 +223,6 @@ public class TileRummyApplication extends GameApplication {
 
   private void setChannel(Channel channel) {
     this.channel = channel;
-    this.isConnected = true;
   }
 
   public static void main(String[] args) {

@@ -1,5 +1,8 @@
 package project.rummy.entities;
 
+import project.rummy.game.GameState;
+import project.rummy.observers.Observer;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,7 +16,7 @@ import java.util.Comparator;
  * However, when the turn is finished, this table must contain only valid melds that is playable to the
  * table, so that all the melds that a controllers borrows from table to manipulate are returned on the table.
  */
-public class ManipulationTable {
+public class ManipulationTable implements Observer {
   private List<Meld> melds;
 
   /**
@@ -284,4 +287,9 @@ public class ManipulationTable {
     this.melds.clear();
   }
 
+  @Override
+  public void update(GameState status) {
+    melds.clear();
+    melds.addAll(status.getManipulatingMelds());
+  }
 }

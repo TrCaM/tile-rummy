@@ -4,6 +4,8 @@ import com.almasb.fxgl.entity.component.Component;
 import project.rummy.entities.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -24,6 +26,7 @@ public class GameState extends Component implements Serializable {
   private int nextMeldId;
   private boolean isTurnBeginning;
   private List<List<Tile>> findFirstTileList;
+  private List<Meld> manipulatingMelds;
 
   public boolean isTurnBeginning() {
     return isTurnBeginning;
@@ -54,14 +57,8 @@ public class GameState extends Component implements Serializable {
     gameState.nextMeldId = Meld.getNextId() + 100;
     gameState.isTurnBeginning = game.isTurnBeginning();
     gameState.findFirstTileList = game.getFindFirstTileList();
+    gameState.manipulatingMelds = new ArrayList<>(game.getManipulationTable().getMelds());
 
-//    for(int i = 0; i < 4; i++){
-//      System.out.println("player" + gameState.playerData[i].name + gameState.handsData[i].tiles);
-//    }
-//
-//    for(Meld m : gameState.tableData.melds){
-//      System.out.println(m.tiles().toString());
-//    }
     return gameState;
   }
 
@@ -148,5 +145,9 @@ public class GameState extends Component implements Serializable {
 
   public int getNextMeldId() {
     return nextMeldId;
+  }
+
+  public List<Meld> getManipulatingMelds() {
+    return manipulatingMelds;
   }
 }

@@ -225,17 +225,21 @@ public class ActionHandler {
     takeTableMeld(table.toTableData().melds.indexOf(m));
   }
 
-  void updateFromData(TableData tableData, HandData data, TurnStatus status) {
+  void updateFromData(GameState state, int playerId) {
+    TableData tableData = state.getTableData();
+    HandData handData = state.getHandsData()[playerId];
+    TurnStatus turnStatus = state.getTurnStatus();
     table.update(tableData);
-    hand.update(data);
-    if (status != null) {
-      isIceBroken = status.isIceBroken;
-      isTurnEnd = status.isTurnEnd;
-      goNextTurn = status.goNextTurn;
-      canDraw = status.canDraw;
-      canPlay = status.canPlay;
-      canEndTurn = status.canEnd;
+    hand.update(handData);
+    if (turnStatus != null) {
+      isIceBroken = turnStatus.isIceBroken;
+      isTurnEnd = turnStatus.isTurnEnd;
+      goNextTurn = turnStatus.goNextTurn;
+      canDraw = turnStatus.canDraw;
+      canPlay = turnStatus.canPlay;
+      canEndTurn = turnStatus.canEnd;
     }
+    manipulationTable.update(state);
   }
 
   public void takeHandTile(int tileIndex) {

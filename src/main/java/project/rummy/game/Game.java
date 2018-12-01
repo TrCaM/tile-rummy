@@ -29,6 +29,7 @@ public class Game extends Component implements Observable {
   private int playersCount = 0;
   private List<List<Tile>> findFirstTileList;
   private GameInitializer initializer;
+  private ManipulationTable manipulationTable;
 
   public Game(GameInitializer initializer, boolean isNetworkGame) {
     super();
@@ -39,6 +40,8 @@ public class Game extends Component implements Observable {
     this.status = GameStatus.NOT_STARTED;
     this.isNetworkGame = isNetworkGame;
     findFirstTileList = new ArrayList<>();
+    this.manipulationTable = ManipulationTable.getInstance();
+    registerObserver(manipulationTable);
   }
 
   /////////////////
@@ -123,6 +126,10 @@ public class Game extends Component implements Observable {
 
   public GameStatus getStatus() {
     return status;
+  }
+
+  public ManipulationTable getManipulationTable() {
+    return manipulationTable;
   }
 
   boolean isTurnBeginning() {
