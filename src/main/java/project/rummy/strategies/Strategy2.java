@@ -4,22 +4,22 @@ import project.rummy.commands.PlayDirection;
 import project.rummy.game.GameState;
 
 /**
- * Strategy 2 as the specifiation.
+ * Strategy 2 as the specification.
  */
 public class Strategy2 implements Strategy {
-  private Strategy behindStrat;
+  private Strategy behindStrategy;
 
   public Strategy2() {
-    this.behindStrat = new StrategyAnalyzingTable(false);
+    this.behindStrategy = new StrategyAnalyzingTable(false);
   }
 
   @Override
   public PlayDirection iceBreak(GameState state) {
-    return behindStrat.iceBreak(state);
+    return behindStrategy.iceBreak(state);
   }
 
   @Override
   public PlayDirection performFullTurn(GameState state) {
-    return behindStrat.performFullTurn(state);
+    return behindStrategy.performFullTurn(state);
   }
 }

@@ -1,9 +1,7 @@
 package project.rummy.control;
 
 import com.almasb.fxgl.app.FXGL;
-import org.apache.log4j.Logger;
 import project.rummy.ai.PlayerSupporter;
-import project.rummy.commands.CommandProcessor;
 import project.rummy.entities.*;
 import project.rummy.game.Game;
 import project.rummy.game.GameState;
@@ -35,7 +33,6 @@ public class ActionHandler {
   private boolean tryEndTurn;
   private boolean canEndTurn;
 
-  private static Logger logger = Logger.getLogger(ActionHandler.class);
   private boolean goNextTurn;
 
   public ActionHandler(Player player, Table table) {
@@ -53,7 +50,6 @@ public class ActionHandler {
     this.canPlay = true;
     this.turnType = player.status();
     this.isIceBroken = player.status() == ICE_BROKEN;
-    boolean preventUpdate = false;
     this.tryEndTurn = false;
     this.canEndTurn = false;
   }
@@ -91,7 +87,6 @@ public class ActionHandler {
   public void backUpTurn() {
     this.backUpHand = hand.toHandData();
     this.backUpTable = table.toTableData();
-//    manipulationTable.clear();
   }
 
   public void restoreTurn() {
@@ -149,13 +144,7 @@ public class ActionHandler {
   }
 
   private void draw() {
-    Tile tile = table.drawTile();
-    tile.setHightlight(true);
-    hand.addTile(tile);
-    hand.sort();
-    this.canDraw = false;
-    this.canPlay = false;
-    System.out.println(String.format("%s has drawAndEndTurn %s", playerName, tile));
+    draw(1);
   }
 
   /**
@@ -163,7 +152,13 @@ public class ActionHandler {
    */
   private void draw(int times) {
     for (int i = 0 ; i < times; i++) {
-      draw();
+      Tile tile = table.drawTile();
+      tile.setHightlight(true);
+      hand.addTile(tile);
+      hand.sort();
+      this.canDraw = false;
+      this.canPlay = false;
+      System.out.println(String.format("%s has drawAndEndTurn %s", playerName, tile));
     }
   }
 
@@ -189,7 +184,6 @@ public class ActionHandler {
   }
 
   public void playFromHand(int meldIndex) {
-    //TODO: Add a logging infomation here
     if (meldIndex >= 0 && meldIndex < hand.getMelds().size()) {
       manipulationTable.add(hand.removeMeld(meldIndex));
     } else {
@@ -198,7 +192,6 @@ public class ActionHandler {
   }
 
   void playFromHand(Meld meld) {
-    //TODO: Add a logging infomation here
     playFromHand(hand.getMelds().indexOf(meld));
   }
 
@@ -256,15 +249,6 @@ public class ActionHandler {
   public void takeHandTile(Tile t) {
     int index = hand.getTiles().indexOf(t);
     takeHandTile(index);
-  }
-
-
-  public void stash() {
-    CommandProcessor processor = CommandProcessor.getInstance();
-    if (!canEndTurn()) {
-      throw new IllegalStateException("Cannot stash if you cannot end");
-    }
-    processor.reset();
   }
 
   public void endTurn() {

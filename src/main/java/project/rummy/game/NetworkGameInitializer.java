@@ -8,7 +8,6 @@ import project.rummy.entities.Hand;
 import project.rummy.entities.Player;
 import project.rummy.networks.ClientGameManager;
 
-
 public class NetworkGameInitializer extends LoadGameInitializer {
   private ClientGameManager gameManager;
   private int playerId;
@@ -32,7 +31,7 @@ public class NetworkGameInitializer extends LoadGameInitializer {
       if(i == playerId){
         controller = new ManualNetworkController(channel, gameManager);
       } else {
-        controller = new NetworkController(channel, gameManager, i);
+        controller = new NetworkController(gameManager, i);
       }
 
       players[i] = new Player(getState().getPlayerData()[i].name, controller, hand, getState().getPlayerStatuses()[i], i);

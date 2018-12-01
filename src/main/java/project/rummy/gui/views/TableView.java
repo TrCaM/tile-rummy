@@ -10,7 +10,6 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import project.rummy.commands.CommandProcessor;
-import project.rummy.control.ManualController;
 import project.rummy.entities.*;
 import project.rummy.events.TileChooseEvent;
 import project.rummy.game.Game;
@@ -24,7 +23,6 @@ import java.util.*;
 
 public class TableView extends Pane implements Observer {
   private GameFXMLLoader loader;
-  private Node tableView;
 
   @FXML private GridPane setPane1;
   @FXML private GridPane setPane2;
@@ -42,7 +40,7 @@ public class TableView extends Pane implements Observer {
   private List<FlowPane> pregameTiles;
   private TableData tableData;
 
-  public TableView(Player controlledPlayer, GameState gameState) {
+  TableView(Player controlledPlayer, GameState gameState) {
     super();
     this.loader = new GameFXMLLoader("table");
     loader.setController(this);
@@ -58,10 +56,10 @@ public class TableView extends Pane implements Observer {
 
   private void setUpHandlers() {
     this.addEventHandler(TileChooseEvent.TILE_CHOSEN, this::onMeldClick);
-    this.borrowMeldsButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onBorrowMeldsButtonClick);
+    this.borrowMeldsButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> onBorrowMeldsButtonClick());
   }
 
-  private void onBorrowMeldsButtonClick(MouseEvent event) {
+  private void onBorrowMeldsButtonClick() {
     HashSet<Meld> copyOfChosenMelds = new HashSet<>(chosenMelds);
     CommandProcessor.getInstance()
         .enqueueCommand(handler -> handler.takeTableMelds(copyOfChosenMelds));
@@ -120,7 +118,7 @@ public class TableView extends Pane implements Observer {
   }
 
   private void loadTableView(GameState state) {
-    TableData tableData = state.getTableData();
+    Node tableView;
     try {
       tableView = loader.load();
     } catch (IOException e) {
