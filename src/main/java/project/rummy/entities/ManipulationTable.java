@@ -5,7 +5,6 @@ import project.rummy.observers.Observer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Comparator;
 
@@ -135,8 +134,7 @@ public class ManipulationTable implements Observer {
    * support split run, this method is better to detach the tiles from the set. Thus I decided that
    * only set can use this method
    */
-  public List<Integer> detach(int meldIndex, int... tileIndexes) {
-    List<Integer> newMeldIds = new ArrayList<>();
+  public void detach(int meldIndex, int... tileIndexes) {
     if (meldIndex < 0 || meldIndex >= melds.size()) {
       throw new IllegalArgumentException("Invalid meld index");
     }
@@ -173,14 +171,11 @@ public class ManipulationTable implements Observer {
 
     Meld m1 = Meld.createMeld(detachedTiles);
     m1.setSource(MeldSource.MANIPULATION);
-    newMeldIds.add(m1.getId());
 
     Meld m2 = Meld.createMeld(remainingTiles);
     m2.setSource(MeldSource.MANIPULATION);
-    newMeldIds.add(m2.getId());
 
     add(m2, m1);
-    return newMeldIds;
   }
 
   public List<Integer> split(Meld meld, int... tileIndexes) {
@@ -240,7 +235,7 @@ public class ManipulationTable implements Observer {
 
     tilesFromMelds.sort(Comparator.comparing(Tile::value));
 
-    Meld newMeld = Meld.createMeld(tilesFromMelds.toArray(new Tile[tilesFromMelds.size()]));
+    Meld newMeld = Meld.createMeld(tilesFromMelds.toArray(new Tile[0]));
 
     for (int i = meldIndexes.length - 1; i >= 0; i--) {
       melds.remove(meldIndexes[i]);
@@ -272,15 +267,14 @@ public class ManipulationTable implements Observer {
     return true;
   }
 
-  public boolean submit(Meld m, Table table) {
+  public void submit(Meld m, Table table) {
     if (!m.isValidMeld()) {
-      return false;
+      return;
     }
     m.setSource(MeldSource.TABLE);
     m.tiles().forEach(tile -> tile.setHightlight(true));
     table.addMeld(m);
     melds.remove(m);
-    return true;
   }
 
   public void clear() {
