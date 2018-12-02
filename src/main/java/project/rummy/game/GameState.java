@@ -22,6 +22,8 @@ public class GameState extends Component implements Serializable {
   private int currentPlayer;
   private GameStatus status;
   private int nextMeldId;
+  private int playerCount;
+
   private boolean isTurnBeginning;
   private List<List<Tile>> findFirstTileList;
 
@@ -48,6 +50,7 @@ public class GameState extends Component implements Serializable {
         .map(Player::status).toArray(PlayerStatus[]::new);
     gameState.playerData = Stream.of(game.getPlayers())
         .map(Player::toPlayerData).toArray(PlayerData[]::new);
+    gameState.playerCount = game.getPlayersCount();
     gameState.turnStatus = game.getTurnStatus();
     gameState.isGameEnd = game.isGameEnd();
     gameState.status = game.getStatus();
@@ -110,6 +113,10 @@ public class GameState extends Component implements Serializable {
     return status;
   }
 
+  public int getPlayerCount() {
+    return playerCount;
+  }
+
   public void setTurnNumber(int turnNumber) {
     this.turnNumber = turnNumber;
   }
@@ -145,6 +152,11 @@ public class GameState extends Component implements Serializable {
   public void setGameStatus(GameStatus status) {
     this.status = status;
   }
+
+  public void setPlayerCount(int playerCount) {
+    this.playerCount = playerCount;
+  }
+
 
   public int getNextMeldId() {
     return nextMeldId;
