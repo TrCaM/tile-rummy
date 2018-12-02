@@ -32,7 +32,7 @@ public class TileRummyApplication extends GameApplication {
   private final String PLAYER_NAME = "Tri Tha Thu";
   private ClientGameManager clientGameManager = null;
 
-  private static TileRummyApplication INSTANCE = null;
+  private static TileRummyApplication INSTANCE = new TileRummyApplication();
 
   public static TileRummyApplication getInstance() {
     return INSTANCE;
