@@ -29,9 +29,10 @@ public class LoadGameInitializer implements GameInitializer {
     // there are 4 types of controllers {"human", "strategy1", "strategy2", "strategy3", "strategy4"}
 
     Controller controller;
-    Player[] players = new Player[4];
+
+    Player[] players = new Player[state.getPlayerCount()];
     Hand hand;
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < state.getPlayerCount(); i++) {
       hand = new Hand(getState().getHandsData()[i].tiles, getState().getHandsData()[i].melds);
 
       if ("human".equals(getState().getPlayerData()[i].controllerType)) {

@@ -33,6 +33,9 @@ public class ReadGameState extends Component {
         state.setTableData(load.getTableData(jsonObject));
         state.setTurnStatus(load.getTurnStatuses(jsonObject));
 
+        state.setPlayerCount(load.getAmountPlayers());
+ //       state.setCurrentPlayer(load.getAmountPlayers());
+
         return state;
     }
 }

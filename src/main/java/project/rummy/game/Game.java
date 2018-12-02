@@ -51,6 +51,9 @@ public class Game extends Component implements Observable {
     this.players = players;
     this.turnNumber = 0;
     this.currentPlayer = 0;
+
+
+
     this.playersCount = players.length;
   }
 
@@ -123,6 +126,10 @@ public class Game extends Component implements Observable {
 
   public GameStatus getStatus() {
     return status;
+  }
+
+  public void setPlayersCount(int playersCount) {
+    this.playersCount = playersCount;
   }
 
   boolean isTurnBeginning() {
@@ -256,6 +263,9 @@ public class Game extends Component implements Observable {
    * Return -1 if the game is not ended.
    */
   int getWinner() {
+    if (!ManipulationTable.getInstance().isEmpty()) {
+      return -1;
+    }
     if (players[currentPlayer].hand().size() == 0) {
       return currentPlayer;
     } else if (players[currentPlayer].hand().size() != 0 && table.getFreeTiles().isEmpty()) {
