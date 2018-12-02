@@ -92,7 +92,7 @@ public class NetworkGameManager {
 
   private void tryStartGame() {
     if (playersInfo.size() == MAX_PLAYERS) {
-      game = new GameStore(new ServerGameInitializer(toPlayerInfoArray(playersInfo))).initializeGame();
+      game = new GameFactory(new ServerGameInitializer(toPlayerInfoArray(playersInfo))).initializeGame();
       game.setStatus(GameStatus.STARTING);
       GameState gameState = game.generateGameState();
       channels

@@ -59,17 +59,6 @@ public class ActionHandlerTest {
   }
 
   @Test
-  public void timeout_shouldSucceed() {
-    when(table.drawTile()).thenReturn(O5).thenReturn(R3).thenReturn(G3);
-
-    handler.getManipulationTable().add(Meld.createMeld(R3));
-    handler.timeOutEndTurn();
-
-    assertThat(player.hand().getTiles(), contains(R3, G3, O5));
-    verify(table, times(3)).drawTile();
-  }
-
-  @Test
   public void playFromHand_shouldSucceed() {
     player.hand().addTiles(O5, O6, O7, O8, R3, G3, B3);
     player.hand().formMeld(0, 1, 2);

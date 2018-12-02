@@ -40,7 +40,7 @@ public class TileRummyApplication extends GameApplication {
 
   public TileRummyApplication() {
     super();
-    GameStore gameStore = new GameStore(new StartGameInitializer());
+    GameFactory gameFactory = new GameFactory(new StartGameInitializer());
     INSTANCE = this;
   }
 
@@ -74,7 +74,7 @@ public class TileRummyApplication extends GameApplication {
     catch (ParseException e) {
       System.out.println("Not working");
     }
-    game = new GameStore(new LoadGameInitializer(state)).initializeGame();
+    game = new GameFactory(new LoadGameInitializer(state)).initializeGame();
     processor = CommandProcessor.getInstance();
     processor.setUpGame(game);
     buildGameView();
@@ -126,7 +126,7 @@ public class TileRummyApplication extends GameApplication {
   }
 
   public void startNetworkGame(GameState initialState, int playerId) {
-    game = new GameStore(new NetworkGameInitializer(initialState, playerId, channel, clientGameManager))
+    game = new GameFactory(new NetworkGameInitializer(initialState, playerId, channel, clientGameManager))
         .initializeGame();
     game.setStatus(GameStatus.NETWORK_START);
     game.registerObserver(clientGameManager);

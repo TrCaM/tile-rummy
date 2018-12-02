@@ -1,9 +1,9 @@
 package project.rummy.game;
 
-public class GameStore {
+public class GameFactory {
   private GameInitializer initializer;
 
-  public GameStore(GameInitializer initializer) {
+  public GameFactory(GameInitializer initializer) {
     this.initializer = initializer;
   }
 
