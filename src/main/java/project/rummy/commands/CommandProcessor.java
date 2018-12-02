@@ -4,12 +4,13 @@ import project.rummy.control.ActionHandler;
 import project.rummy.game.Game;
 import project.rummy.game.GameState;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class CommandProcessor {
   private Game game;
   private ActionHandler handler;
+  private List<ActionHandler> handlers;
+  private List<Queue<Command>> queues;
   private Queue<Command> commands;
   private Queue<CommandChunks> chunks;
 
@@ -25,6 +26,11 @@ public class CommandProcessor {
     chunks = new LinkedList<>();
     game = null;
     handler = null;
+    handlers = new ArrayList<>();
+    queues = new ArrayList<>();
+    for (int i = 0; i< 4; i++) {
+      queues.add(new LinkedList<>());
+    }
   }
 
   /**
@@ -38,55 +44,44 @@ public class CommandProcessor {
    * Set up the {@link ActionHandler} for processing the commands.
    */
   public void setUpHandler(ActionHandler handler) {
-    this.handler =  handler;
+    this.handler = handler;
   }
 
-
+  public void setUpHandlers(List<ActionHandler> handlers) {
+    this.handlers.addAll(handlers);
+  }
   /**
    * Execute the command. Throw if the action handler used is expired. This is because we want every
    * handler to be used only in one turn.
    */
-  public void apply(Command command) {
+  public void apply(Command command, ActionHandler handler) {
     if (game == null) {
       throw new IllegalStateException("Game was not set up properly");
     }
     if (handler == null || handler.isExpired()) {
       throw new IllegalStateException("ActionHandler was not set up properly before the turn");
     }
-//    try {
-        command.execute(handler);
-//    } catch (Exception e) {
-//      System.out.println(e.getMessage());
-//      handler.backUpTurn();
-//    }
-    game.update(handler.getTurnStatus());
+    command.execute(handler);
+    game.update(handler.getTurnStatus(), handlers.indexOf(handler));
   }
 
   public void processNext() {
-    if (!commands.isEmpty()) {
-      apply(commands.remove());
-    } else if (!chunks.isEmpty()) {
-      applyChunk(chunks.remove());
+    for (int i = 0; i < 4; i++) {
+      if (!queues.get(i).isEmpty()) {
+        apply(queues.get(i).remove(), handlers.get(i));
+      } else if (!chunks.isEmpty()) {
+        applyChunk(chunks.remove());
+      }
     }
   }
 
-  private void applyChunk(CommandChunks chunks)  {
-      GameState gameState = GameState.generateState(game);
-      commands.addAll(chunks.execute(gameState, handler));
-      proccessAllCommands();
+  private void applyChunk(CommandChunks chunks) {
+    GameState gameState = GameState.generateState(game);
+    commands.addAll(chunks.execute(gameState, handler));
   }
 
-  public void proccessAllCommands(){
-    while(!commands.isEmpty()){
-      apply(commands.remove());
-    }
-    while(!chunks.isEmpty()){
-      applyChunk(chunks.remove());
-    }
-  }
-
-  public void enqueueCommand(Command command) {
-    commands.add(command);
+  public void enqueueCommand(Command command, int playerId) {
+    queues.get(playerId).add(command);
   }
 
   public void enqueueChunks(CommandChunks chunk) {
@@ -96,5 +91,6 @@ public class CommandProcessor {
   public void reset() {
     commands.clear();
     chunks.clear();
+    queues.forEach(Collection::clear);
   }
 }

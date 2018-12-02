@@ -72,11 +72,11 @@ public class HandView extends Pane implements Observer {
 
 
   private void onHintsButtonClick() {
-    CommandProcessor.getInstance().enqueueCommand(handler -> handler.displayHints(state));
+    CommandProcessor.getInstance().enqueueCommand(handler -> handler.displayHints(state), playerId);
   }
 
   private void onNextTurnButtonClick() {
-    CommandProcessor.getInstance().enqueueCommand(ActionHandler::tryEndTurn);
+    CommandProcessor.getInstance().enqueueCommand(ActionHandler::tryEndTurn, playerId);
   }
 
   private void onPlayMeldButtonClick() {
@@ -108,11 +108,11 @@ public class HandView extends Pane implements Observer {
           .forEach(meld -> combineMelds.add(meld.getId()));
       Meld newMeld = manipulationTable.combineMelds(combineMelds);
       handler.submit(newMeld);
-    });
+    }, playerId);
   }
 
   private void onUndoButtonClick() {
-    CommandProcessor.getInstance().enqueueCommand(ActionHandler::restoreTurn);
+    CommandProcessor.getInstance().enqueueCommand(ActionHandler::restoreTurn, playerId);
   }
 
   private void onTileClick(TileChooseEvent event) {
@@ -123,11 +123,11 @@ public class HandView extends Pane implements Observer {
     }
     Tile[] tiles = chosenTiles.stream().map(TileView::getTile).toArray(Tile[]::new);
     //formMeldButton.setDisable(!Meld.canFormMeld(tiles));
-    playMeldButton.setDisable(!turnStatus.canPlay || !Meld.canPlayOnTable(tiles));
+    playMeldButton.setDisable(!Meld.canPlayOnTable(tiles));
   }
 
   private void onDrawClick() {
-    CommandProcessor.getInstance().enqueueCommand(ActionHandler::drawAndEndTurn);
+    CommandProcessor.getInstance().enqueueCommand(ActionHandler::draw, playerId);
 
   }
 
@@ -148,23 +148,38 @@ public class HandView extends Pane implements Observer {
     this.state = status;
     HandData data = status.getHandsData()[playerId];
     if (status.getGameStatus() == GameStatus.RUNNING) {
-      this.chosenTiles.clear();
-      tileRack.getChildren().clear();
+      if (status.getSubmitter() != playerId) {
+        this.chosenTiles.stream().filter(tile -> tile.getTileSource() != TileSource.HAND).forEach(tile -> chosenTiles.remove(tile));
+      } else {
+        chosenTiles.clear();
+      }
       meldRack.getChildren().clear();
-      data.tiles.stream()
-          .map(tile -> new TileView(tile, TileSource.HAND, 0, data.tiles.indexOf(tile)))
-          .forEach(view -> tileRack.getChildren().add(view));
+      if (status.getSubmitter() == playerId) {
+        tileRack.getChildren().clear();
+        data.tiles.stream()
+            .map(tile -> new TileView(tile, TileSource.HAND, 0, data.tiles.indexOf(tile)))
+            .forEach(view -> tileRack.getChildren().add(view));
+      }
       List<Meld> manipulatingMelds = ManipulationTable.getInstance().getMelds();
       manipulatingMelds.stream()
           .map(MeldView::new)
           .forEach(view -> meldRack.getChildren().add(view));
       turnStatus = status.getTurnStatus();
-      drawButton.setDisable(!turnStatus.canDraw);
-      playMeldButton.setDisable(true);
-      this.tileRack.setDisable(!turnStatus.canPlay);
-      this.meldRack.setDisable(!turnStatus.canPlay);
-      this.nextTurnButton.setDisable(!turnStatus.canEnd);
-      this.setDisable(status.getCurrentPlayer() != playerId);
+      if (turnStatus != null) {
+        drawButton.setDisable(!turnStatus.canDraw);
+        playMeldButton.setDisable(true);
+        this.tileRack.setDisable(!turnStatus.canPlay);
+        this.meldRack.setDisable(!turnStatus.canPlay);
+        this.nextTurnButton.setDisable(!turnStatus.canEnd);
+        this.setDisable(status.getCurrentPlayer() != playerId);
+      } else {
+        drawButton.setDisable(false);
+        playMeldButton.setDisable(false);
+        this.tileRack.setDisable(false);
+        this.meldRack.setDisable(false);
+        this.nextTurnButton.setDisable(false);
+        this.setDisable(false);
+      }
     } else {
       this.setDisable(true);
     }

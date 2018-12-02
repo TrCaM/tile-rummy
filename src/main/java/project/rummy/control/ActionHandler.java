@@ -37,7 +37,7 @@ public class ActionHandler {
 
   public ActionHandler(Player player, Table table) {
     this.hand = player.hand();
-    this.canUseTable = player.status() != START;
+    this.canUseTable = true;
     this.table = table;
     this.manipulationTable = ManipulationTable.getInstance();
     manipulationTable.clear();
@@ -82,7 +82,7 @@ public class ActionHandler {
 
   public void forceUpdate(){
     Game game = FXGL.getGameWorld().getEntitiesByType(EntityType.GAME).get(0).getComponent(Game.class);
-    game.update(getTurnStatus());
+//    game.update(getTurnStatus(), );
   }
   public void backUpTurn() {
     this.backUpHand = hand.toHandData();
@@ -143,7 +143,7 @@ public class ActionHandler {
     endTurn();
   }
 
-  private void draw() {
+  public void draw() {
     draw(1);
   }
 

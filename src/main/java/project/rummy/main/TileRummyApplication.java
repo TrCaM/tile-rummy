@@ -157,7 +157,7 @@ public class TileRummyApplication extends GameApplication {
           break;
         case STARTING:
           game.setStatus(GameStatus.WAITING);
-          game.startGame(true);
+          game.startAsynchronousGame();
           break;
         case TURN_END:
           game.nextTurn();

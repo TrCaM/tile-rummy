@@ -3,6 +3,7 @@ package project.rummy.control;
 import project.rummy.commands.PlayDirection;
 import project.rummy.entities.PlayerStatus;
 import project.rummy.game.Game;
+import project.rummy.game.GameMode;
 import project.rummy.game.GameState;
 import project.rummy.observers.Observer;
 import project.rummy.strategies.Strategy;
@@ -46,6 +47,14 @@ public class AutoController extends Controller implements Observer {
   public void playTurn() {
     this.activate = true;
     this.hasPlayed = false;
+    timer.scheduleAtFixedRate(
+        new TimerTask() {
+          @Override
+          public void run() {
+            send(ActionHandler::draw);
+          }
+        },
+        10000, 10000);
   }
 
   @Override
@@ -80,14 +89,14 @@ public class AutoController extends Controller implements Observer {
 //    if (state.getMove() != status.getMove()) {
 //      this.state = status;
 //    }
-    int current = status.getCurrentPlayer();
-    if (activate &&
-        (!hasPlayed || state.getHandsData()[current].tiles.size() != status.getHandsData()[current].tiles.size())) {
-      PlayDirection commands =
-          player.status() == PlayerStatus.START ? strategy.iceBreak(status) : strategy.performFullTurn(status);
-      send(commands.getCommands(), commands.getChunks());
-      hasPlayed = true;
-    }
-    this.state = status;
+//    int current = status.getCurrentPlayer() == -1 ? player.getId() : status.getCurrentPlayer();
+//    if (activate &&
+//        (!hasPlayed || state.getHandsData()[current].tiles.size() != status.getHandsData()[current].tiles.size())) {
+//      PlayDirection commands =
+//          player.status() == PlayerStatus.START ? strategy.iceBreak(status) : strategy.performFullTurn(status);
+//      send(commands.getCommands(), commands.getChunks());
+//      hasPlayed = status.getGameMode() == GameMode.TURN_BASED;
+//    }
+//    this.state = status;
   }
 }

@@ -10,6 +10,8 @@ import project.rummy.observers.Observer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Game extends Component implements Observable {
   private Player[] players = null;
@@ -30,6 +32,10 @@ public class Game extends Component implements Observable {
   private List<List<Tile>> findFirstTileList;
   private GameInitializer initializer;
   private ManipulationTable manipulationTable;
+  private GameMode gameMode;
+  private int submitter;
+
+  private int initialScore;
 
   public Game(GameInitializer initializer, boolean isNetworkGame) {
     super();
@@ -128,7 +134,7 @@ public class Game extends Component implements Observable {
     return status;
   }
 
-  public ManipulationTable getManipulationTable() {
+  ManipulationTable getManipulationTable() {
     return manipulationTable;
   }
 
@@ -136,23 +142,21 @@ public class Game extends Component implements Observable {
     return isTurnStart;
   }
 
-  public int getPlayersCount() {
-    return playersCount;
-  }
-
   List<List<Tile>> getFindFirstTileList() {
     return Collections.unmodifiableList(findFirstTileList);
+  }
+
+  public GameMode getGameMode() {
+    return gameMode;
+  }
+
+  TurnStatus getTurnStatus() {
+    return turnStatus;
   }
 
   ////////////////
   // GAME LOGIC //
   ////////////////
-  private void initGameTable() {
-    GameInitializer initializer = new DefaultGameInitializer();
-    initializer.initTable(this);
-    initializer.initializeGameState(players, table);
-  }
-
   public void findFirstPlayer() {
     this.status = GameStatus.FINDING_FIRST;
     initializer.initTable(this);
@@ -161,7 +165,6 @@ public class Game extends Component implements Observable {
       findFirstTileList.add(new ArrayList<>());
     }
     int turn = 1;
-    int count = 0;
     int max;
     boolean[] status = new boolean[playersCount];
     int outs = 0;
@@ -196,24 +199,40 @@ public class Game extends Component implements Observable {
   }
 
   public void startGame(boolean reset) {
-    initializer.initTable(this);
-    initializer.initializeGameState(players, table);
-    turnNumber = 1;
-    this.status = GameStatus.RUNNING;
-    playTurn();
+    if (reset) {
+      initializer.initTable(this);
+      initializer.initializeGameState(players, table);
+    }
+    startGame();
   }
 
   public void startGame() {
+    commandProcessor.setUpHandlers(
+        Stream.of(players).map(player -> new ActionHandler(player, table)).collect(Collectors.toList()));
     turnNumber = 1;
     this.status = GameStatus.RUNNING;
+    this.gameMode = GameMode.TURN_BASED;
     playTurn();
   }
 
+  public void startAsynchronousGame() {
+    initializer.initTable(this);
+    initializer.initializeGameState(players, table);
+    initialScore = players[controlledPlayer].hand().getScore();
+    commandProcessor.setUpHandlers(
+        Stream.of(players).map(player -> new ActionHandler(player, table)).collect(Collectors.toList()));
+    turnNumber = 0;
+    currentPlayer = -1;
+    this.status = GameStatus.RUNNING;
+    this.gameMode = GameMode.ALL_PLAY;
+    isTurnStart = true;
+    for (Player player : players) {
+      player.getController().playTurn();
+    }
+    notifyObservers();
+  }
+
   private void playTurn() {
-    ActionHandler handler = new ActionHandler(players[currentPlayer], table);
-    commandProcessor.setUpHandler(handler);
-    this.setTurnStatus(handler.getTurnStatus());
-    handler.backUpTurn();
     this.players[currentPlayer].getController().playTurn();
     isTurnStart = true;
     notifyObservers();
@@ -222,11 +241,6 @@ public class Game extends Component implements Observable {
   private void resetTileHighlight() {
     players[currentPlayer].resetForNewTurn();
     table.resetForNewTurn();
-  }
-
-  public void restoreTurn(Hand hand, Table table) {
-    players[currentPlayer].setHand(hand);
-    this.table = table;
   }
 
   private void endTurn() {
@@ -263,23 +277,24 @@ public class Game extends Component implements Observable {
    * Return -1 if the game is not ended.
    */
   int getWinner() {
-    if (players[currentPlayer].hand().size() == 0) {
-      return currentPlayer;
-    } else if (players[currentPlayer].hand().size() != 0 && table.getFreeTiles().isEmpty()) {
+    for (int currentPlayer = 0; currentPlayer < playersCount; currentPlayer++) {
+      if (players[currentPlayer].hand().size() == 0) {
+        return currentPlayer;
+      } else if (players[currentPlayer].hand().size() != 0 && table.getFreeTiles().isEmpty()) {
 
-      int leastPoint = players[0].hand().getScore();
-      int winner = 0;
+        int leastPoint = players[0].hand().getScore();
+        int winner = 0;
 
-      for (int i = 0; i < players.length; i++) {
-        if (players[i].hand().getScore() < leastPoint) {
-          leastPoint = players[i].hand().getScore();
-          winner = i;
+        for (int i = 0; i < players.length; i++) {
+          if (players[i].hand().getScore() < leastPoint) {
+            leastPoint = players[i].hand().getScore();
+            winner = i;
+          }
         }
+        return winner;
       }
-      return winner;
-    } else {
-      return -1;
     }
+    return  -1;
   }
 
   public void endGame() {
@@ -314,13 +329,20 @@ public class Game extends Component implements Observable {
   @Override
   public void notifyObservers() {
     GameState state = generateGameState();
+    state.setSubmitter(submitter);
     observers.forEach(observer -> observer.update(state));
   }
 
-  public void update(TurnStatus turnStatus) {
+  public void update(TurnStatus turnStatus, int submitter) {
+    this.submitter = submitter;
     isTurnStart = false;
     hasWinner();
-    handleTurnStatus(turnStatus);
+    if (gameMode == GameMode.TURN_BASED) {
+      handleTurnStatus(turnStatus);
+    }
+    if (players[controlledPlayer].hand().getScore() - initialScore >= 30) {
+      players[controlledPlayer].setStatus(PlayerStatus.ICE_BROKEN);
+    }
     if (!preventUpdate) {
       notifyObservers();
     }
@@ -349,9 +371,5 @@ public class Game extends Component implements Observable {
       endGame();
       notifyObservers();
     }
-  }
-
-  TurnStatus getTurnStatus() {
-    return turnStatus;
   }
 }

@@ -28,12 +28,12 @@ public abstract class Controller {
   public abstract void closeInput();
 
   protected void send(List<Command> commands, List<CommandChunks> chunksList) {
-    commands.forEach(processor::enqueueCommand);
+    commands.forEach(command -> processor.enqueueCommand(command, player.getId()));
     chunksList.forEach(processor::enqueueChunks);
   }
 
   protected void send(Command command) {
-    processor.enqueueCommand(command);
+    processor.enqueueCommand(command, player.getId());
   }
   public Controller setPlayer(Player player) {
     this.player = player;

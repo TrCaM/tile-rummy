@@ -62,7 +62,7 @@ public class TableView extends Pane implements Observer {
   private void onBorrowMeldsButtonClick() {
     HashSet<Meld> copyOfChosenMelds = new HashSet<>(chosenMelds);
     CommandProcessor.getInstance()
-        .enqueueCommand(handler -> handler.takeTableMelds(copyOfChosenMelds));
+        .enqueueCommand(handler -> handler.takeTableMelds(copyOfChosenMelds), playerId);
     chosenMelds.clear();
   }
 
@@ -197,7 +197,8 @@ public class TableView extends Pane implements Observer {
       setPane2.getChildren().clear();
       this.tableData = state.getTableData();
       renderMelds(state);
-      setDisable(state.getCurrentPlayer() != playerId || state.getPlayerStatuses()[state.getCurrentPlayer()] == PlayerStatus.START);
+//      setDisable(state.getPlayerStatuses()[playerId] == PlayerStatus.START);
+      setDisable(false);
       findFirstPane.setVisible(false);
     } else if (state.getGameStatus() == GameStatus.FINDING_FIRST) {
       renderFirstPlayerInfo(state);

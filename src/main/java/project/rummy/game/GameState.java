@@ -5,7 +5,6 @@ import project.rummy.entities.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -27,20 +26,13 @@ public class GameState extends Component implements Serializable {
   private boolean isTurnBeginning;
   private List<List<Tile>> findFirstTileList;
   private List<Meld> manipulatingMelds;
-
-  public boolean isTurnBeginning() {
-    return isTurnBeginning;
-  }
-
-  public void setTurnBeginning(boolean turnBeginning) {
-    isTurnBeginning = turnBeginning;
-  }
-
+  private GameMode gameMode;
   private boolean isGameEnd;
-
+  private int submitter;
 
   public static GameState generateState(Game game) {
     GameState gameState = new GameState();
+    gameState.gameMode = game.getGameMode();
     gameState.turnNumber = game.getTurnNumber();
     gameState.currentPlayer = game.getCurrentPlayer();
     gameState.freeTilesCount = game.getTable().getFreeTiles().size();
@@ -60,6 +52,14 @@ public class GameState extends Component implements Serializable {
     gameState.manipulatingMelds = new ArrayList<>(game.getManipulationTable().getMelds());
 
     return gameState;
+  }
+
+  public int getSubmitter() {
+    return this.submitter;
+  }
+
+  public void setSubmitter(int submitter) {
+    this.submitter = submitter;
   }
 
   public boolean isGameEnd() {
@@ -149,5 +149,13 @@ public class GameState extends Component implements Serializable {
 
   public List<Meld> getManipulatingMelds() {
     return manipulatingMelds;
+  }
+
+  public boolean isTurnBeginning() {
+    return isTurnBeginning;
+  }
+
+  public GameMode getGameMode() {
+    return gameMode;
   }
 }

@@ -150,7 +150,7 @@ public class GameInfoView extends Pane implements Observer {
     }
     // Update the rest
     playerNames.get(playerId).getStyleClass().add("you");
-    playerNames.get(gameState.getCurrentPlayer()).getStyleClass().add("current");
+//    playerNames.get(gameState.getCurrentPlayer()).getStyleClass().add("current");
     freeTiles.setText(Integer.toString(gameState.getFreeTilesCount()));
     turnNum.setText(Integer.toString(gameState.getTurnNumber()));
   }
@@ -175,8 +175,8 @@ public class GameInfoView extends Pane implements Observer {
                 if (timeSeconds <= 0) {
                   timer.setText("0");
                   if (status.getCurrentPlayer() == playerId) {
-                    CommandProcessor.getInstance().enqueueCommand(ActionHandler::timeOutEndTurn);
-                    CommandProcessor.getInstance().enqueueCommand(ActionHandler::tryEndTurn);
+                    CommandProcessor.getInstance().enqueueCommand(ActionHandler::timeOutEndTurn, playerId);
+                    CommandProcessor.getInstance().enqueueCommand(ActionHandler::tryEndTurn, playerId);
                   }
                   timeline.stop();
                 }
