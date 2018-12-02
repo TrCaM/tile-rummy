@@ -191,14 +191,14 @@ public class TableView extends Pane implements Observer {
 
   @Override
   public void update(GameState state) {
-    if (state.getGameStatus() == GameStatus.RUNNING) {
+    if (state.getGameStatus() == GameStatus.RUNNING || state.getGameStatus() == GameStatus.SILENT) {
       runPane.getChildren().clear();
       setPane1.getChildren().clear();
       setPane2.getChildren().clear();
       this.tableData = state.getTableData();
       renderMelds(state);
-//      setDisable(state.getPlayerStatuses()[playerId] == PlayerStatus.START);
-      setDisable(false);
+      setDisable(state.getPlayerStatuses()[playerId] == PlayerStatus.START);
+
       findFirstPane.setVisible(false);
     } else if (state.getGameStatus() == GameStatus.FINDING_FIRST) {
       renderFirstPlayerInfo(state);

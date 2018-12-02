@@ -32,6 +32,7 @@ public class ActionHandler {
   private PlayerStatus turnType;
   private boolean tryEndTurn;
   private boolean canEndTurn;
+  private int initialScore;
 
   private boolean goNextTurn;
 

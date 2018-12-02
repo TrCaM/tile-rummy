@@ -80,7 +80,7 @@ public class ClientGameManager implements Observable, Observer {
 
   @Override
   public void update(GameState status) {
-    if (isGameStarted && (playerId == status.getCurrentPlayer())) {
+    if (status.getGameStatus() != GameStatus.SILENT && isGameStarted && (playerId == status.getSubmitter())) {
       gameApplication.getChannel().writeAndFlush(new GameStateMessage(status));
     }
   }

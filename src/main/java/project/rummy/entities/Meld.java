@@ -65,6 +65,7 @@ public class Meld extends Component implements Serializable {
     Stream.of(state.getHandsData())
         .map(data -> data.melds)
         .forEach(melds -> melds.forEach(meld -> idsToMeldUpdate.put(meld.id, meld)));
+    state.getManipulatingMelds().forEach(meld -> idsToMeldUpdate.put(meld.id, meld));
     idsToMelds = idsToMeldUpdate;
   }
 

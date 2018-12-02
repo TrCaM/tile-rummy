@@ -94,6 +94,7 @@ public class NetworkGameManager {
     if (playersInfo.size() == MAX_PLAYERS) {
       game = new GameStore(new ServerGameInitializer(toPlayerInfoArray(playersInfo))).initializeGame();
       game.setStatus(GameStatus.STARTING);
+      game.setCurrentPlayer(-1);
       GameState gameState = game.generateGameState();
       channels
           .writeAndFlush(new GameStateMessage(gameState))

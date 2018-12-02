@@ -166,22 +166,6 @@ public class GameInfoView extends Pane implements Observer {
       }
       timeSeconds = 120;
       timer.setText(timeSeconds.toString());
-      timeline = new Timeline();
-      timeline.setCycleCount(Timeline.INDEFINITE);
-      timeline.getKeyFrames().add(
-          new KeyFrame(Duration.seconds(1), event -> {
-                timeSeconds--;
-                timer.setText(timeSeconds.toString());
-                if (timeSeconds <= 0) {
-                  timer.setText("0");
-                  if (status.getCurrentPlayer() == playerId) {
-                    CommandProcessor.getInstance().enqueueCommand(ActionHandler::timeOutEndTurn, playerId);
-                    CommandProcessor.getInstance().enqueueCommand(ActionHandler::tryEndTurn, playerId);
-                  }
-                  timeline.stop();
-                }
-              }));
-      timeline.playFromStart();
     }
   }
 

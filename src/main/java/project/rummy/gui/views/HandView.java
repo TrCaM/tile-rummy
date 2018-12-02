@@ -18,6 +18,7 @@ import project.rummy.observers.Observer;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class HandView extends Pane implements Observer {
@@ -35,16 +36,14 @@ public class HandView extends Pane implements Observer {
 
   Set<TileView> chosenTiles;
 
-  @FXML
-  private Button hintsButton;
+  Game game;
+
   @FXML
   private Button playMeldButton;
   @FXML
   private Button drawButton;
   @FXML
-  private Button nextTurnButton;
-  @FXML
-  private Button undoButton;
+  private Button resetButton;
 
   HandView(Player controlledPlayer, GameState state) {
     super();
@@ -56,7 +55,7 @@ public class HandView extends Pane implements Observer {
     loadHandView(state);
     setId("hand");
     setUpHandlers();
-    Game game = FXGL.getGameWorld().getEntitiesByType(EntityType.GAME).get(0).getComponent(Game.class);
+    game = FXGL.getGameWorld().getEntitiesByType(EntityType.GAME).get(0).getComponent(Game.class);
     game.registerObserver(this);
     this.playerId = controlledPlayer.getId();
   }
@@ -65,11 +64,12 @@ public class HandView extends Pane implements Observer {
     this.addEventHandler(TileChooseEvent.TILE_CHOSEN, this::onTileClick);
     this.drawButton.setOnMouseClicked(event -> onDrawClick());
     this.playMeldButton.setOnMouseClicked(mouseEvent2 -> onPlayMeldButtonClick());
-    this.undoButton.setOnMouseClicked(mouseEvent2 -> onUndoButtonClick());
-    this.nextTurnButton.setOnMouseClicked(mouseEvent1 -> onNextTurnButtonClick());
-    this.hintsButton.setOnMouseClicked(mouseEvent -> onHintsButtonClick());
+    this.resetButton.setOnMouseClicked(event -> {
+      game.resetHighlight();
+      game.notifyObservers();
+      game.setStatus(GameStatus.RUNNING);
+    });
   }
-
 
   private void onHintsButtonClick() {
     CommandProcessor.getInstance().enqueueCommand(handler -> handler.displayHints(state), playerId);
@@ -147,14 +147,16 @@ public class HandView extends Pane implements Observer {
   public void update(GameState status) {
     this.state = status;
     HandData data = status.getHandsData()[playerId];
-    if (status.getGameStatus() == GameStatus.RUNNING) {
+    if (status.getGameStatus() == GameStatus.RUNNING || status.getGameStatus() == GameStatus.SILENT) {
       if (status.getSubmitter() != playerId) {
-        this.chosenTiles.stream().filter(tile -> tile.getTileSource() != TileSource.HAND).forEach(tile -> chosenTiles.remove(tile));
+        this.chosenTiles.removeAll(
+            this.chosenTiles.stream().filter(tile -> tile.getTileSource() != TileSource.HAND).collect(Collectors.toSet()));
+//        chosenTiles.clear();
       } else {
         chosenTiles.clear();
       }
       meldRack.getChildren().clear();
-      if (status.getSubmitter() == playerId) {
+      if (status.getSubmitter() == playerId || status.getSubmitter() == -1) {
         tileRack.getChildren().clear();
         data.tiles.stream()
             .map(tile -> new TileView(tile, TileSource.HAND, 0, data.tiles.indexOf(tile)))
@@ -170,14 +172,12 @@ public class HandView extends Pane implements Observer {
         playMeldButton.setDisable(true);
         this.tileRack.setDisable(!turnStatus.canPlay);
         this.meldRack.setDisable(!turnStatus.canPlay);
-        this.nextTurnButton.setDisable(!turnStatus.canEnd);
         this.setDisable(status.getCurrentPlayer() != playerId);
       } else {
         drawButton.setDisable(false);
-        playMeldButton.setDisable(false);
+        playMeldButton.setDisable(true);
         this.tileRack.setDisable(false);
         this.meldRack.setDisable(false);
-        this.nextTurnButton.setDisable(false);
         this.setDisable(false);
       }
     } else {

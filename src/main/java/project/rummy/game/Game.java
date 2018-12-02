@@ -223,6 +223,7 @@ public class Game extends Component implements Observable {
         Stream.of(players).map(player -> new ActionHandler(player, table)).collect(Collectors.toList()));
     turnNumber = 0;
     currentPlayer = -1;
+    submitter = -1;
     this.status = GameStatus.RUNNING;
     this.gameMode = GameMode.ALL_PLAY;
     isTurnStart = true;
@@ -340,8 +341,13 @@ public class Game extends Component implements Observable {
     if (gameMode == GameMode.TURN_BASED) {
       handleTurnStatus(turnStatus);
     }
-    if (players[controlledPlayer].hand().getScore() - initialScore >= 30) {
-      players[controlledPlayer].setStatus(PlayerStatus.ICE_BROKEN);
+    if (players[controlledPlayer].status() == PlayerStatus.START) {
+      if (players[controlledPlayer].hand().getScore() > initialScore) {
+        initialScore = players[controlledPlayer].hand().getScore();
+      }
+      if (initialScore - players[controlledPlayer].hand().getScore() >= 30) {
+        players[controlledPlayer].setStatus(PlayerStatus.ICE_BROKEN);
+      }
     }
     if (!preventUpdate) {
       notifyObservers();
@@ -371,5 +377,13 @@ public class Game extends Component implements Observable {
       endGame();
       notifyObservers();
     }
+  }
+
+  public void resetHighlight() {
+    for (Player player : players) {
+      player.resetForNewTurn();
+    }
+    table.resetForNewTurn();
+    status = GameStatus.SILENT;
   }
 }
