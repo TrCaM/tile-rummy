@@ -14,8 +14,4 @@ public class GameFactory {
     initializer.initializeGameState(game.getPlayers(), game.getTable());
     return game;
   }
-
-  public void setInitializer(GameInitializer initializer) {
-    this.initializer = initializer;
-  }
 }
