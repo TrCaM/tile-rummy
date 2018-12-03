@@ -13,18 +13,17 @@ import reactor.core.publisher.Mono;
 import java.net.InetSocketAddress;
 
 public class GameClientTask {
-  static final String HOST = System.getProperty("host", "127.0.0.1");
-  static final int PORT = Integer.parseInt(System.getProperty("port", "8080"));
-  static final int SIZE = Integer.parseInt(System.getProperty("size", "256"));
+  private static final String HOST = System.getProperty("host", "127.0.0.1");
+  private static final int PORT = Integer.parseInt(System.getProperty("port", "8080"));
   private final String playerName;
-  private ClientGameManager mananger;
+  private ClientGameManager manager;
 
   public GameClientTask(String playerName, ClientGameManager gameManager) {
     this.playerName = playerName;
-    this.mananger = gameManager;
+    this.manager = gameManager;
   }
 
-  public Mono<Channel> connectToServer() throws Exception {
+  public Mono<Channel> connectToServer() {
     return Mono.fromCallable(() -> {
       EventLoopGroup group = new NioEventLoopGroup();
       Bootstrap b = new Bootstrap();
@@ -33,13 +32,13 @@ public class GameClientTask {
           .remoteAddress(new InetSocketAddress(HOST, PORT))
           .handler(new ChannelInitializer<SocketChannel>() {
             @Override
-            public void initChannel(SocketChannel ch) throws Exception {
+            public void initChannel(SocketChannel ch) {
               ChannelPipeline p = ch.pipeline();
               p.addLast(
                   new ObjectEncoder(),
                   new ObjectDecoder(Integer.MAX_VALUE, ClassResolvers.cacheDisabled(null)),
                   new MessageFilterHandler(),
-                  new ClientMessageHandler(playerName, new ClientProcessor(mananger)));
+                  new ClientMessageHandler(playerName, new ClientProcessor(manager)));
             }
           });
       ChannelFuture f = b.connect();

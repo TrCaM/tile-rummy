@@ -10,7 +10,7 @@ import project.rummy.messages.PlayerInfo;
 public class ServerGameInitializer extends DefaultGameInitializer {
   private PlayerInfo[] playerInfos;
 
-  public ServerGameInitializer(PlayerInfo[] playerInfos) {
+  ServerGameInitializer(PlayerInfo[] playerInfos) {
     this.playerInfos = playerInfos;
   }
 

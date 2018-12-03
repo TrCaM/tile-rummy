@@ -18,7 +18,7 @@ public class ConnectionData implements Serializable {
     this.isDisconnecting = false;
   }
 
-  public ConnectionData(String name, int id, ChannelId channelId, boolean isApproved) {
+  ConnectionData(String name, int id, ChannelId channelId, boolean isApproved) {
     this.name = name;
     this.playerId = id;
     this.channelId = channelId;

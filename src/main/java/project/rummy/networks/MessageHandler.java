@@ -9,23 +9,23 @@ public class MessageHandler extends SimpleChannelInboundHandler<Message> {
   private MessageProcessor processor;
   private NetworkGameManager gameManager = NetworkGameManager.getInstance();
 
-  public MessageHandler(MessageProcessor processor) {
+  MessageHandler(MessageProcessor processor) {
     this.processor = processor;
   }
 
   @Override
-  protected void channelRead0(ChannelHandlerContext channelHandlerContext, Message message) throws Exception {
+  protected void channelRead0(ChannelHandlerContext channelHandlerContext, Message message) {
     message.handleBy(channelHandlerContext.channel(), processor);
   }
 
   @Override
-  public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+  public void channelInactive(ChannelHandlerContext ctx) {
     gameManager.onChannelDisconnect(ctx.channel());
   }
 
 
   @Override
-  public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+  public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
     System.out.println(cause.getMessage());
   }
 }
