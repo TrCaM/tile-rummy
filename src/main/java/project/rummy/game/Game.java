@@ -81,7 +81,7 @@ public class Game extends Component implements Observable {
     this.table = table;
   }
 
-  public void setCurrentPlayer(int player) {
+  void setCurrentPlayer(int player) {
     this.currentPlayer = player;
   }
 
@@ -115,10 +115,6 @@ public class Game extends Component implements Observable {
 
   int getTurnNumber() {
     return turnNumber;
-  }
-
-  public boolean isNetworkGame() {
-    return isNetworkGame;
   }
 
   public boolean isGameEnd() {

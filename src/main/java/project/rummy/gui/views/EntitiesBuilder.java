@@ -4,7 +4,6 @@ import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
 
 import project.rummy.entities.*;
-import project.rummy.game.Game;
 import project.rummy.game.GameState;
 
 public class EntitiesBuilder {
@@ -37,7 +36,7 @@ public class EntitiesBuilder {
 
   public static Entity buildMainMenu() {
     return Entities.builder()
-        .type(EntityType.MainMenu)
+        .type(EntityType.MAIN_MENU)
         .viewFromNode(new MainMenuView())
         .build();
   }
