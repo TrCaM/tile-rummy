@@ -10,7 +10,6 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import project.rummy.commands.CommandProcessor;
-import project.rummy.control.ManualController;
 import project.rummy.entities.*;
 import project.rummy.events.TileChooseEvent;
 import project.rummy.game.Game;
@@ -193,7 +192,7 @@ public class TableView extends Pane implements Observer {
 
   @Override
   public void update(GameState state) {
-    this.playerId = state.getControllPlayer();
+    this.playerId = state.getControlledPlayer();
     if (state.getGameStatus() == GameStatus.RUNNING) {
       runPane.getChildren().clear();
       setPane1.getChildren().clear();
