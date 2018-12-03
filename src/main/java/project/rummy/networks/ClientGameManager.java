@@ -15,7 +15,6 @@ import java.util.List;
 public class ClientGameManager implements Observable, Observer {
   private TileRummyApplication gameApplication;
   private int playerId;
-  private String playerName;
   private ChannelId channelId;
   private boolean isGameStarted;
   private List<Observer> observers;
@@ -26,10 +25,9 @@ public class ClientGameManager implements Observable, Observer {
     this.observers = new ArrayList<>();
   }
 
-  void onLobbyJoined(ChannelId channelId, int playerId, String playerName) {
+  void onLobbyJoined(ChannelId channelId, int playerId) {
     this.channelId = channelId;
     this.playerId = playerId;
-    this.playerName = playerName;
   }
 
   void onLobbyUpdated(PlayerInfo[] playerInfos) {
@@ -37,7 +35,6 @@ public class ClientGameManager implements Observable, Observer {
       System.out.println("Connected " + playerInfos[i].getName());
       if (playerInfos[i].getChannelId().equals(channelId)) {
         playerId = i;
-        playerName = playerInfos[i].getName();
       }
     }
     System.out.println();
@@ -57,10 +54,6 @@ public class ClientGameManager implements Observable, Observer {
 
   void endGame() {
     System.exit(0);
-  }
-
-  public boolean isGameStarted() {
-    return isGameStarted;
   }
 
   @Override
