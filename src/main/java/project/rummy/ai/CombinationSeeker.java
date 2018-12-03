@@ -65,31 +65,35 @@ public class CombinationSeeker {
     Map<Meld, Integer> map = new HashMap<>();
 
     int rightValue = tileValue + 1;
-    while (rightValue <= 13) {
-      int meldid = TableMeldSeeker.findDetachableIdenticalTile(rightValue, tileColor, copyMelds);
-      if (meldid != 0) {
-        Meld m = Meld.getMeldFromId(meldid, copyMelds);
-        for (int i = 0; i < m.tiles().size(); i++) {
-          if (m.tiles().get(i).canFillToRun(tileColor, rightValue)) {
-            map.put(m, i);
-            copyMelds.remove(m);
-            if (!m.tiles().get(i).isJoker()) {
-              break;
-            }
-          }
-        }
-        rightValue++;
-      } else {
-        break;
-      }
-    }
     int leftValue = tileValue - 1;
-    while (leftValue >= 1) {
-      int meldid = TableMeldSeeker.findDetachableIdenticalTile(leftValue, tileColor, copyMelds);
+
+    boolean hasLeft = true;
+    boolean hasRight = true;
+
+    while (hasLeft || hasRight) {
+      int meldid = 0;
+      int neededValue = 0;
+
+      if (hasRight) {
+        meldid = TableMeldSeeker.findDetachableIdenticalTile(rightValue, tileColor, copyMelds);
+        neededValue = rightValue;
+        if (hasRight = meldid != 0) {
+          rightValue++;
+        }
+      }
+
+      if (hasLeft && !hasRight) {
+        meldid = TableMeldSeeker.findDetachableIdenticalTile(leftValue, tileColor, copyMelds);
+        neededValue = leftValue;
+        if (hasLeft = meldid != 0) {
+          leftValue--;
+        }
+      }
+
       if (meldid != 0) {
         Meld m = Meld.getMeldFromId(meldid, copyMelds);
         for (int i = 0; i < m.tiles().size(); i++) {
-          if (m.tiles().get(i).canFillToRun(tileColor, leftValue)) {
+          if (m.tiles().get(i).canFillToRun(tileColor, neededValue)) {
             map.put(m, i);
             copyMelds.remove(m);
             if (!m.tiles().get(i).isJoker()) {
@@ -97,13 +101,12 @@ public class CombinationSeeker {
             }
           }
         }
-        leftValue--;
-      } else {
-        break;
+
       }
     }
 
-    return map;
+      return map;
+
   }
 
 
