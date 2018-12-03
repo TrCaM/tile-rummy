@@ -15,77 +15,44 @@ public class PlayerLoad {
 
     public HandData[] configHandData(JSONObject object)
     {
-        List<Tile> tiles = new ArrayList<>();
-        Color color;
-        int tile_num;
-        Tile tile;
-        Hand hand;
         int size = 0;
-
         data = new HandData[4];
 
-
-        JsonElement parser;
-        JsonObject jsonObject;
-
         if (object.get("HUMAN") != null) {
-            parser = new JsonParser().parse(object.get("HUMAN").toString());
-            jsonObject = parser.getAsJsonObject();
-            for (JsonElement element : jsonObject.get("Tiles").getAsJsonArray()) {
-                color = getColor(element.getAsString().charAt(0));
-                tile_num = Integer.parseInt(element.getAsString().substring(1));
-                tile = Tile.createTile(color, tile_num);
-                tiles.add(tile);
-            }
-            ArrayList<Meld> test = new ArrayList<Meld>();
-            // write the melds to be played or make it stay empity
-            data[size++] = new HandData(new Hand(tiles, test));
+            data[size++] = getHandData(object, "HUMAN");
         }
 
-
-
         if (object.get("Player 1") != null) {
-            parser = new JsonParser().parse(object.get("Player 1").toString());
-            jsonObject = parser.getAsJsonObject();
-            tiles = new ArrayList<>();
-            for (JsonElement element : jsonObject.get("Tiles").getAsJsonArray()) {
-                color = getColor(element.getAsString().charAt(0));
-                tile_num = Integer.parseInt(element.getAsString().substring(1));
-                tile = Tile.createTile(color, tile_num);
-                tiles.add(tile);
-            }
-
-            data[size++] = new HandData(new Hand(tiles, new ArrayList<Meld>()));
+            data[size++] = getHandData(object, "Player 1");
         }
 
         if (object.get("Player 2") != null) {
-            parser = new JsonParser().parse(object.get("Player 2").toString());
-            jsonObject = parser.getAsJsonObject();
-            tiles = new ArrayList<>();
-
-            for (JsonElement element : jsonObject.get("Tiles").getAsJsonArray()) {
-                color = getColor(element.getAsString().charAt(0));
-                tile_num = Integer.parseInt(element.getAsString().substring(1));
-                tile = Tile.createTile(color, tile_num);
-                tiles.add(tile);
-            }
-            data[size++] = new HandData(new Hand(tiles, new ArrayList<Meld>()));
+            data[size++] = getHandData(object, "Player 2");
         }
 
 
         if (object.get("Player 3") != null) {
-            parser = new JsonParser().parse(object.get("Player 3").toString());
-            jsonObject = parser.getAsJsonObject();
-            tiles = new ArrayList<>();
-            for (JsonElement element : jsonObject.get("Tiles").getAsJsonArray()) {
-                color = getColor(element.getAsString().charAt(0));
-                tile_num = Integer.parseInt(element.getAsString().substring(1));
-                tile = Tile.createTile(color, tile_num);
-                tiles.add(tile);
-            }
-            data[size++] = new HandData(new Hand(tiles, new ArrayList<Meld>()));
+            data[size++] = getHandData(object, "Player 3");
         }
         return data;
+    }
+
+
+    private HandData getHandData(JSONObject object, String player) {
+        JsonElement  parser = new JsonParser().parse(object.get(player).toString());
+        JsonObject  jsonObject = parser.getAsJsonObject();
+        List<Tile> tiles = new ArrayList<>();
+        Color color;
+        int tile_num;
+        Tile tile;
+
+        for (JsonElement element : jsonObject.get("Tiles").getAsJsonArray()) {
+            color = getColor(element.getAsString().charAt(0));
+            tile_num = Integer.parseInt(element.getAsString().substring(1));
+            tile = Tile.createTile(color, tile_num);
+            tiles.add(tile);
+        }
+        return new HandData(new Hand(tiles, new ArrayList<>()));
     }
 
     private Color getColor(char c) {
@@ -104,43 +71,38 @@ public class PlayerLoad {
         if (c == 'A') {
             return Color.ANY;
         }
-
-
         // color is not detected
         return null;
     }
 
     public PlayerStatus[] getStatuses(JSONObject object) {
-        JsonElement parser;
-        JsonObject jsonObject;
         int size = 0;
         PlayerStatus status[] = new PlayerStatus[4];
 
         if (object.get("HUMAN") != null) {
-            parser = new JsonParser().parse(object.get("HUMAN").toString());
-            jsonObject = parser.getAsJsonObject();
-            status[size++] = check(jsonObject.get(FileLoadTypes.Status.name()).getAsString());
+            status[size++] = getSingleStatus(object, "HUMAN");
         }
 
 
         if (object.get("Player 1") != null) {
-            parser = new JsonParser().parse(object.get("Player 1").toString());
-            jsonObject = parser.getAsJsonObject();
-            status[size++] = check(jsonObject.get(FileLoadTypes.Status.name()).getAsString());
+            status[size++] = getSingleStatus(object, "Player 1");
         }
 
         if (object.get("Player 2") != null) {
-            parser = new JsonParser().parse(object.get("Player 2").toString());
-            jsonObject = parser.getAsJsonObject();
-            status[size++] = check(jsonObject.get(FileLoadTypes.Status.name()).getAsString());
+            status[size++] = getSingleStatus(object, "Player 2");
         }
 
         if (object.get("Player 3") != null) {
-            parser = new JsonParser().parse(object.get("Player 3").toString());
-            jsonObject = parser.getAsJsonObject();
-            status[size++] = check(jsonObject.get(FileLoadTypes.Status.name()).getAsString());
+            status[size++] = getSingleStatus(object, "Player 3");
         }
         return status;
+    }
+
+    private PlayerStatus getSingleStatus(JSONObject object, String player) {
+        JsonElement parser = new JsonParser().parse(object.get(player).toString());
+        JsonObject jsonObject = parser.getAsJsonObject();
+        return check(jsonObject.get(FileLoadTypes.Status.name()).getAsString());
+
     }
 
     private PlayerStatus check(String str) {
@@ -154,36 +116,32 @@ public class PlayerLoad {
     }
 
     public  PlayerData [] getPlayerDatas(JSONObject object) {
-        JsonElement parser;
-        JsonObject jsonObject;
         int size;
         playerData = new PlayerData[4];
         if (object.get("HUMAN") != null) {
-            parser = new JsonParser().parse(object.get("HUMAN").toString());
-            jsonObject = parser.getAsJsonObject();
-            playerData[amountPlayers++] = new PlayerData(jsonObject.get(FileLoadTypes.Name.name()).getAsString(), jsonObject.get(FileLoadTypes.Controller.name()).getAsString());
+            playerData[amountPlayers++] = getSinglePlayer(object, "HUMAN");
         }
 
 
         if (object.get("Player 1") != null) {
-            parser = new JsonParser().parse(object.get("Player 1").toString());
-            jsonObject = parser.getAsJsonObject();
-            playerData[amountPlayers++] = new PlayerData(jsonObject.get(FileLoadTypes.Name.name()).getAsString(), jsonObject.get(FileLoadTypes.Controller.name()).getAsString());
+            playerData[amountPlayers++] = getSinglePlayer(object, "Player 1");
         }
 
 
         if (object.get("Player 2") != null) {
-            parser = new JsonParser().parse(object.get("Player 2").toString());
-            jsonObject = parser.getAsJsonObject();
-            playerData[amountPlayers++] = new PlayerData(jsonObject.get(FileLoadTypes.Name.name()).getAsString(), jsonObject.get(FileLoadTypes.Controller.name()).getAsString());
+            playerData[amountPlayers++] = getSinglePlayer(object, "Player 2");
         }
 
         if (object.get("Player 3") != null) {
-            parser = new JsonParser().parse(object.get("Player 3").toString());
-            jsonObject = parser.getAsJsonObject();
-            playerData[amountPlayers++] = new PlayerData(jsonObject.get(FileLoadTypes.Name.name()).getAsString(), jsonObject.get(FileLoadTypes.Controller.name()).getAsString());
+            playerData[amountPlayers++] = getSinglePlayer(object, "Player 3");
         }
         return this.playerData;
+    }
+
+    private PlayerData getSinglePlayer(JSONObject object, String player) {
+        JsonElement parser = new JsonParser().parse(object.get(player).toString());
+        JsonObject jsonObject = parser.getAsJsonObject();
+        return new PlayerData(jsonObject.get(FileLoadTypes.Name.name()).getAsString(), jsonObject.get(FileLoadTypes.Controller.name()).getAsString());
     }
 
     public int getAmountPlayers() {
@@ -222,7 +180,6 @@ public class PlayerLoad {
 
 
             }
-            // fix this later
             meld = Meld.createMeld(tiles);
 
             data.melds.add(meld);
@@ -244,8 +201,6 @@ public class PlayerLoad {
 
         return status;
     }
-
-    public  void getMeldOnTable() {}
 
 
 

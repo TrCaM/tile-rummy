@@ -13,7 +13,4 @@ public abstract class Message implements Serializable {
 
   public abstract void handleBy(Channel channel, MessageProcessor processor);
 
-  public Object getPayload() {
-    return payload;
-  }
 }
