@@ -161,22 +161,4 @@ public class CombinationSeekerTest {
         assertEquals(0, map4.size());
     }
 
-
-    @Test
-    public void formRunBySplitLeft_test() {
-        melds.add(Meld.createMeld(O4, O5, O6, O7, O8, O9));
-        melds.add(Meld.createMeld(R4, G4, B4, O4));
-        melds.add(Meld.createMeld(R11, G11, B11, O11));
-        melds.add(Meld.createMeld(G5, B5, O5));
-
-        Map<Meld, Integer> map = CombinationSeeker.formRunBySplitLeft(8, Color.ORANGE, melds);
-        assertEquals(0,map.size());
-
-        Map<Meld, Integer> map2 = CombinationSeeker.formRunBySplitLeft(7, Color.ORANGE, melds);
-        assertEquals(1,map2.size());
-        assertTrue(map2.get(melds.get(0))==3);
-
-        Map<Meld, Integer> map3 = CombinationSeeker.formRunBySplitLeft(5, Color.ORANGE, melds);
-        assertEquals(0, map3.size());
-    }
 }
