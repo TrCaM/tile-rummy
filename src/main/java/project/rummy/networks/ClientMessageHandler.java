@@ -11,7 +11,7 @@ public class ClientMessageHandler extends SimpleChannelInboundHandler<Message> {
   private MessageProcessor processor;
   private String playerName;
 
-  public ClientMessageHandler(String playerName, MessageProcessor processor) {
+  ClientMessageHandler(String playerName, MessageProcessor processor) {
     this.processor = processor;
     this.playerName = playerName;
   }
@@ -19,17 +19,17 @@ public class ClientMessageHandler extends SimpleChannelInboundHandler<Message> {
 
 
   @Override
-  protected void channelRead0(ChannelHandlerContext channelHandlerContext, Message message) throws Exception {
+  protected void channelRead0(ChannelHandlerContext channelHandlerContext, Message message) {
     message.handleBy(channelHandlerContext.channel(), processor);
   }
 
   @Override
-  public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+  public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
     System.out.println(cause.getMessage());
   }
 
   @Override
-  public void channelActive(ChannelHandlerContext ctx) throws Exception {
+  public void channelActive(ChannelHandlerContext ctx) {
     ConnectionData connectionData = new ConnectionData(playerName, 0, ctx.channel().id());
     ctx.writeAndFlush(new ConnectionMessage(connectionData));
   }

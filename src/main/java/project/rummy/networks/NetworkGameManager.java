@@ -24,7 +24,7 @@ public class NetworkGameManager {
   private GameState gameState;
   private boolean isGameRunning;
 
-  public static NetworkGameManager INSTANCE;
+  private static NetworkGameManager INSTANCE;
 
   public static NetworkGameManager getInstance() {
     if (INSTANCE == null) {
@@ -39,7 +39,7 @@ public class NetworkGameManager {
     isGameRunning = false;
   }
 
-  public void onChannelConnected(Channel channel) {
+  void onChannelConnected(Channel channel) {
     if(channels.size() < MAX_PLAYERS) {
       initChannel(channel);
     } else {
@@ -47,7 +47,7 @@ public class NetworkGameManager {
     }
   }
 
-  public void onChannelDisconnect(Channel channel) {
+  void onChannelDisconnect(Channel channel) {
     System.out.println("Channel Disconnected");
     for (PlayerInfo info : playersInfo) {
       if (channel.id().equals(info.getChannelId())) {
@@ -72,7 +72,7 @@ public class NetworkGameManager {
     isGameRunning = false;
   }
 
-  public void initChannel(Channel channel) {
+  private void initChannel(Channel channel) {
     ChannelPipeline pipeline = channel.pipeline();
     pipeline.addLast(
         new ObjectEncoder(),
@@ -81,7 +81,7 @@ public class NetworkGameManager {
         new MessageHandler(new ServerProcessor()));
   }
 
-  public void onConnectionDataReceived(Channel channel, ConnectionData data) {
+  void onConnectionDataReceived(Channel channel, ConnectionData data) {
     channels.add(channel);
     playersInfo.add(new PlayerInfo(data.getChannelId(), data));
     channel
@@ -92,7 +92,7 @@ public class NetworkGameManager {
 
   private void tryStartGame() {
     if (playersInfo.size() == MAX_PLAYERS) {
-      game = new GameFactory(new ServerGameInitializer(toPlayerInfoArray(playersInfo))).initializeGame();
+      game = new GameFactory(new ServerGameInitializer(toPlayerInfoArray())).initializeGame();
       game.setStatus(GameStatus.STARTING);
       GameState gameState = game.generateGameState();
       channels
@@ -101,27 +101,23 @@ public class NetworkGameManager {
     }
   }
   
-  private PlayerInfo[] toPlayerInfoArray(List<PlayerInfo> infos) {
+  private PlayerInfo[] toPlayerInfoArray() {
     return playersInfo.toArray(new PlayerInfo[0]);
   }
 
   private void notifyPlayerConnected() {
-    channels.writeAndFlush(new LobbyMessage(toPlayerInfoArray(playersInfo)));
+    channels.writeAndFlush(new LobbyMessage(toPlayerInfoArray()));
   }
 
-  public void goNextTurn() {
+  void goNextTurn() {
     gameState.setGameStatus(GameStatus.TURN_END);
     channels.writeAndFlush(new GameStateMessage(gameState));
   }
 
-  public void onGameUpdate(ChannelId channelId, GameState state) {
+  void onGameUpdate(ChannelId channelId, GameState state) {
     if (state.getGameStatus() != GameStatus.RUNNING && state.getGameStatus() != GameStatus.TURN_END) {
       throw new IllegalStateException("The game should running now");
     }
-//    if (state.getCurrentPlayer() != 0) {
-//      System.out.println("Need go next");
-//      state.setCurrentPlayer(state.getCurrentPlayer() + 1);
-//    }
     this.gameState = state;
     if (state.getGameStatus() == GameStatus.TURN_END) {
       channels.writeAndFlush(new GameStateMessage(state));
