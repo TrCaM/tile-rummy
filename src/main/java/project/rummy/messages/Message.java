@@ -7,7 +7,7 @@ import java.io.Serializable;
 public abstract class Message implements Serializable {
   Object payload;
 
-  public Message(Object payload) {
+  Message(Object payload) {
     this.payload = payload;
   }
 
