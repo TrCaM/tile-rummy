@@ -2,7 +2,7 @@ package project.rummy.commands;
 
 import project.rummy.control.ActionHandler;
 
-public class PlayMeldCommand implements Command{
+public class PlayMeldCommand implements Command {
   private int index;
 
   public PlayMeldCommand(int index) {

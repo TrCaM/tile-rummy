@@ -27,7 +27,7 @@ public class TileView extends Pane {
   @FXML private ImageView face;
   @FXML private Rectangle border;
 
-  public TileView(Tile tile, TileSource tileSource, int row, int col) {
+  TileView(Tile tile, TileSource tileSource, int row, int col) {
     super();
     this.tile = tile;
     this.tileSource = tileSource;
@@ -42,10 +42,6 @@ public class TileView extends Pane {
 
   public Tile getTile() {
     return tile;
-  }
-
-  public boolean isChosen() {
-    return isChosen;
   }
 
   private void setUpHandlers() {
@@ -106,7 +102,7 @@ public class TileView extends Pane {
     event.consume();
   }
 
-  public void toggleChosen(boolean isChosen) {
+  void toggleChosen(boolean isChosen) {
     this.isChosen = isChosen;
     if (isChosen) {
       border.getStyleClass().add("chosen");
@@ -115,15 +111,15 @@ public class TileView extends Pane {
     }
   }
 
-  public TileSource getTileSource() {
+  TileSource getTileSource() {
     return tileSource;
   }
 
-  public int getRow() {
+  int getRow() {
     return row;
   }
 
-  public int getCol() {
+  int getCol() {
     return col;
   }
 

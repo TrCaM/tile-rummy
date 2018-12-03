@@ -27,12 +27,9 @@ public class TileRummyApplication extends GameApplication {
   private Game game = null;
   private GameState state = null;
   private Channel channel = null;
-  private boolean isConnected;
-  private boolean isStarting = false;
-  private final String PLAYER_NAME = "Tri Tha Thu";
   private ClientGameManager clientGameManager = null;
 
-  private static TileRummyApplication INSTANCE = new TileRummyApplication();
+  private static TileRummyApplication INSTANCE;
 
   public static TileRummyApplication getInstance() {
     return INSTANCE;
@@ -40,7 +37,6 @@ public class TileRummyApplication extends GameApplication {
 
   public TileRummyApplication() {
     super();
-    GameFactory gameFactory = new GameFactory(new StartGameInitializer());
     INSTANCE = this;
   }
 
@@ -67,7 +63,6 @@ public class TileRummyApplication extends GameApplication {
     ReadGameState gm = new ReadGameState();
     try {
       this.state = gm.read(fileName);
-      LoadGameInitializer initializer = new LoadGameInitializer(this.state);
     } catch (IOException e) {
       System.out.println("Whoops something went wrong");
     }
@@ -105,19 +100,13 @@ public class TileRummyApplication extends GameApplication {
 
   @Override
   protected void initGame() {
-//    clientGameManager = new ClientGameManager(this);
-//    try {
-//      new GameClientTask(PLAYER_NAME, clientGameManager).connectToServer().subscribe(this::setChannel);
-//    } catch (Exception e) {
-//      e.printStackTrace();
-//    }
-//    setUpGame(gameStore.initializeGame());
     showMainMenu();
   }
 
   public void startNetworkClient() {
     clientGameManager = new ClientGameManager();
     try {
+      String PLAYER_NAME = "Tri Tha Thu";
       new GameClientTask(PLAYER_NAME, clientGameManager).connectToServer().subscribe(this::setChannel);
     } catch (Exception e) {
       e.printStackTrace();
@@ -134,15 +123,6 @@ public class TileRummyApplication extends GameApplication {
     processor.setUpGame(game);
   }
 
-  private void startNetWorkGame() {
-    int startGamePlayer = 0;
-    game.startGame();
-    state.setCurrentPlayer(startGamePlayer);
-    // like the views here works...
-    buildGameView();
-
-  }
-
   private void buildGameView() {
     getGameWorld().clear();
     state = game.generateGameState();
@@ -157,33 +137,6 @@ public class TileRummyApplication extends GameApplication {
     gameInfoView.setX(1150);
 
     getGameWorld().addEntities(handView, tableView, gameInfoView);
-  }
-
-  private void startSinglePlayerGame() {
-    GameStart start = new GameStart(game);
-    game.setStatus(GameStatus.STARTING);
-    int startGamePlayer = start.getPlayerValue();
-    game.startGame();
-    state = GameState.generateState(game);
-    state.setCurrentPlayer(startGamePlayer);
-
-    // like the views here works...
-
-    buildGameView();
-
-    Entity startView = EntitiesBuilder.buildGameStart(game, state, startGamePlayer);
-    startView.setX(500);
-    startView.setY(500);
-
-    getGameWorld().addEntity(startView);
-
-//    SaveGame saveGame = new SaveGame();
-//    try {
-//      saveGame.save(state);
-//    }
-//    catch (IOException e) {
-//      System.out.println("Whoops something went wrong");
-//    }
   }
 
   @Override
@@ -236,7 +189,6 @@ public class TileRummyApplication extends GameApplication {
 
   private void setChannel(Channel channel) {
     this.channel = channel;
-    this.isConnected = true;
   }
 
   public static void main(String[] args) {

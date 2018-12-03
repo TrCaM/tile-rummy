@@ -10,14 +10,14 @@ import project.rummy.messages.PlayerInfo;
 public class ClientProcessor implements MessageProcessor {
   private ClientGameManager manager;
 
-  public ClientProcessor(ClientGameManager manager) {
+  ClientProcessor(ClientGameManager manager) {
     this.manager = manager;
   }
 
   @Override
   public void processConnection(Channel channel, ConnectionData data) {
     if (data.isApproved()) {
-      manager.onLobbyJoined(data.getChannelId(), data.getPlayerId(), data.getName());
+      manager.onLobbyJoined(data.getChannelId(), data.getPlayerId());
     } else if (data.isDisconnecting()){
       manager.endGame();
       channel.close();

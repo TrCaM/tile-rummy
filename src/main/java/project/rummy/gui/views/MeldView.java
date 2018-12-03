@@ -13,7 +13,7 @@ public class MeldView extends HBox {
 
   private Meld meld;
 
-  public MeldView(Meld meld) {
+  MeldView(Meld meld) {
     super();
     this.meld = meld;
     loadMeldView(meld);

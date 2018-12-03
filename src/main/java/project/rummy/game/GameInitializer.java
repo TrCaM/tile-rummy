@@ -21,8 +21,6 @@ public interface GameInitializer {
 
     /**
      * Initialize an empty table for testing
-     *
-     * @param game
      */
     void initEmptyTable(Game game);
 

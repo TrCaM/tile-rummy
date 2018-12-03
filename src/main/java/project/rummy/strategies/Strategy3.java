@@ -1,18 +1,7 @@
 package project.rummy.strategies;
 
-import project.rummy.behaviors.ComputerMoveMaker;
-import project.rummy.behaviors.FastIceBreakingMoveMaker;
-import project.rummy.behaviors.PlayAllMeldsMoveMaker;
-import project.rummy.behaviors.PlayOneTileMoveMaker;
-import project.rummy.commands.Command;
 import project.rummy.commands.PlayDirection;
-import project.rummy.control.ActionHandler;
-import project.rummy.game.Game;
 import project.rummy.game.GameState;
-import project.rummy.observers.Observer;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.IntStream;
 
 
@@ -22,12 +11,10 @@ import java.util.stream.IntStream;
 public class Strategy3 implements Strategy {
   private Strategy strategy1;
   private Strategy strategy2;
-  private Strategy activeStrategy;
-  private int turn;
+  protected int turn;
 
   public Strategy3() {
     strategy1 = new Strategy1();
-    activeStrategy = strategy1;
     strategy2 = new Strategy2();
   }
 
@@ -39,11 +26,16 @@ public class Strategy3 implements Strategy {
 
   @Override
   public PlayDirection performFullTurn(GameState gameState) {
+    return  getPlayFullTurnStrategy(gameState, strategy1, strategy2).performFullTurn(gameState);
+  }
+
+  Strategy getPlayFullTurnStrategy(GameState gameState, Strategy strategy1, Strategy strategy2) {
+    Strategy activeStrategy = strategy1;
     if (gameState.getTurnNumber() > turn) {
       activeStrategy = shouldPlayAggressive(gameState) ? strategy1 : strategy2;
       this.turn = gameState.getTurnNumber();
     }
-    return  activeStrategy.performFullTurn(gameState);
+    return activeStrategy;
   }
 
   private boolean shouldPlayAggressive(GameState gameState) {

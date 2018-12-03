@@ -11,7 +11,7 @@ public class ManualController extends Controller {
   }
 
   @Override
-  public String getControllerType(){
+  public String getControllerType() {
     return "human";
   }
 

@@ -38,16 +38,6 @@ public class ConnectionData implements Serializable {
     return isApproved;
   }
 
-  public boolean isReady() {
-    return isReady;
-  }
-
-  private boolean isReady;
-
-  public void setPlayerId(int playerId) {
-    this.playerId = playerId;
-  }
-
   public boolean isDisconnecting() {
     return isDisconnecting;
   }

@@ -8,15 +8,13 @@ import project.rummy.entities.*;
 import project.rummy.game.Game;
 import project.rummy.game.GameState;
 import project.rummy.gui.views.EntityType;
+
 import java.util.Collection;
 import java.util.List;
 
 import static project.rummy.entities.PlayerStatus.ICE_BROKEN;
 import static project.rummy.entities.PlayerStatus.START;
 
-/**
- * This class handles all controllers's interaction with the game.
- */
 public class ActionHandler {
   private Hand hand;
   private boolean canUseTable;
@@ -84,14 +82,14 @@ public class ActionHandler {
     game.enableUpdate();
   }
 
-  public void forceUpdate(){
+  public void forceUpdate() {
     Game game = FXGL.getGameWorld().getEntitiesByType(EntityType.GAME).get(0).getComponent(Game.class);
     game.update(getTurnStatus());
   }
+
   public void backUpTurn() {
     this.backUpHand = hand.toHandData();
     this.backUpTable = table.toTableData();
-//    manipulationTable.clear();
   }
 
   public void restoreTurn() {
@@ -129,13 +127,13 @@ public class ActionHandler {
     int newTableScore = table.getPlayingMelds().stream().mapToInt(Meld::getScore).sum();
 
     if (turnType == START) {
-      return (newTableScore-tableStartPoint >= 30 || hand.getScore() > startPoint)
+      return (newTableScore - tableStartPoint >= 30 || hand.getScore() > startPoint)
           && manipulationTable.isEmpty();
     }
     return hand.getScore() != startPoint && manipulationTable.isEmpty();
   }
 
-  public void displayHints(GameState state){
+  public void displayHints(GameState state) {
     new PlayerSupporter(state).displayHints_4();
   }
 
@@ -162,7 +160,7 @@ public class ActionHandler {
    * The player drawAndEndTurn 3 cards on penalties
    */
   private void draw(int times) {
-    for (int i = 0 ; i < times; i++) {
+    for (int i = 0; i < times; i++) {
       draw();
     }
   }
@@ -189,7 +187,6 @@ public class ActionHandler {
   }
 
   public void playFromHand(int meldIndex) {
-    //TODO: Add a logging infomation here
     if (meldIndex >= 0 && meldIndex < hand.getMelds().size()) {
       manipulationTable.add(hand.removeMeld(meldIndex));
     } else {
@@ -198,7 +195,6 @@ public class ActionHandler {
   }
 
   void playFromHand(Meld meld) {
-    //TODO: Add a logging infomation here
     playFromHand(hand.getMelds().indexOf(meld));
   }
 
@@ -221,6 +217,7 @@ public class ActionHandler {
       throw new IllegalArgumentException("Invalid meld index");
     }
   }
+
   public void takeTableMeld(Meld m) {
     takeTableMeld(table.toTableData().melds.indexOf(m));
   }
