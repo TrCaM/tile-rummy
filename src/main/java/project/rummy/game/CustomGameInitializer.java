@@ -3,7 +3,6 @@ package project.rummy.game;
 import project.rummy.control.AutoController;
 import project.rummy.control.Controller;
 import project.rummy.control.ManualController;
-import project.rummy.entities.Hand;
 import project.rummy.entities.Player;
 import project.rummy.entities.PlayerData;
 import project.rummy.strategies.Strategy1;
@@ -25,7 +24,6 @@ public class CustomGameInitializer extends DefaultGameInitializer {
   public void initPlayers(Game game) {
     Controller controller;
     Player[] players = new Player[playerDataList.size()];
-    Hand hand;
     for (int i = 0; i < playerDataList.size(); i++) {
       switch (playerDataList.get(i).controllerType) {
         case "human":

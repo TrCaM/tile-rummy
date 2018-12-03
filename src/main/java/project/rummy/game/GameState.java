@@ -23,6 +23,7 @@ public class GameState extends Component implements Serializable {
   private GameStatus status;
   private int nextMeldId;
   private int playerCount;
+  private int controlledPlayer;
 
   private boolean isTurnBeginning;
   private List<List<Tile>> findFirstTileList;
@@ -31,11 +32,6 @@ public class GameState extends Component implements Serializable {
     return isTurnBeginning;
   }
 
-  public void setTurnBeginning(boolean turnBeginning) {
-    isTurnBeginning = turnBeginning;
-  }
-
-  private boolean isGameEnd;
 
 
   public static GameState generateState(Game game) {
@@ -52,30 +48,21 @@ public class GameState extends Component implements Serializable {
         .map(Player::toPlayerData).toArray(PlayerData[]::new);
     gameState.playerCount = game.getPlayersCount();
     gameState.turnStatus = game.getTurnStatus();
-    gameState.isGameEnd = game.isGameEnd();
     gameState.status = game.getStatus();
     gameState.nextMeldId = Meld.getNextId() + 100;
     gameState.isTurnBeginning = game.isTurnBeginning();
     gameState.findFirstTileList = game.getFindFirstTileList();
-
-//    for(int i = 0; i < 4; i++){
-//      System.out.println("player" + gameState.playerData[i].name + gameState.handsData[i].tiles);
-//    }
-//
-//    for(Meld m : gameState.tableData.melds){
-//      System.out.println(m.tiles().toString());
-//    }
+    gameState.controlledPlayer = game.getControlledPlayerIndex();
     return gameState;
   }
 
-  public boolean isGameEnd() {
-    return isGameEnd;
+  public int getControlledPlayer() {
+    return controlledPlayer;
   }
 
   public PlayerData[] getPlayerData() {
     return playerData;
   }
-
 
   public int getFreeTilesCount() {
     return freeTilesCount;
@@ -113,7 +100,7 @@ public class GameState extends Component implements Serializable {
     return status;
   }
 
-  public int getPlayerCount() {
+  int getPlayerCount() {
     return playerCount;
   }
 

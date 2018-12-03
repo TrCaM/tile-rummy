@@ -4,7 +4,6 @@ import com.almasb.fxgl.app.FXGL;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import project.rummy.commands.CommandProcessor;
@@ -24,7 +23,6 @@ import java.util.stream.IntStream;
 public class HandView extends Pane implements Observer {
   private GameFXMLLoader loader;
 
-  private Node handView;
   private TurnStatus turnStatus;
   private int playerId;
   private GameState state;
@@ -36,7 +34,6 @@ public class HandView extends Pane implements Observer {
   @FXML
 
   Set<TileView> chosenTiles;
-  Set<Meld> chosenMelds;
 
   @FXML
   private Button hintsButton;
@@ -49,7 +46,7 @@ public class HandView extends Pane implements Observer {
   @FXML
   private Button undoButton;
 
-  public HandView(Player controlledPlayer, GameState state) {
+  HandView(Player controlledPlayer, GameState state) {
     super();
     this.state = state;
     this.loader = new GameFXMLLoader("hand");
@@ -66,23 +63,23 @@ public class HandView extends Pane implements Observer {
 
   private void setUpHandlers() {
     this.addEventHandler(TileChooseEvent.TILE_CHOSEN, this::onTileClick);
-    this.drawButton.setOnMouseClicked(this::onDrawClick);
-    this.playMeldButton.setOnMouseClicked(this::onPlayMeldButtonClick);
-    this.undoButton.setOnMouseClicked(this::onUndoButtonClick);
-    this.nextTurnButton.setOnMouseClicked(this::onNextTurnButtonClick);
-    this.hintsButton.setOnMouseClicked(this::onHintsButtonClick);
+    this.drawButton.setOnMouseClicked(event -> onDrawClick());
+    this.playMeldButton.setOnMouseClicked(mouseEvent2 -> onPlayMeldButtonClick());
+    this.undoButton.setOnMouseClicked(mouseEvent2 -> onUndoButtonClick());
+    this.nextTurnButton.setOnMouseClicked(mouseEvent1 -> onNextTurnButtonClick());
+    this.hintsButton.setOnMouseClicked(mouseEvent -> onHintsButtonClick());
   }
 
 
-  private void onHintsButtonClick(MouseEvent mouseEvent) {
+  private void onHintsButtonClick() {
     CommandProcessor.getInstance().enqueueCommand(handler -> handler.displayHints(state));
   }
 
-  private void onNextTurnButtonClick(MouseEvent mouseEvent) {
+  private void onNextTurnButtonClick() {
     CommandProcessor.getInstance().enqueueCommand(ActionHandler::tryEndTurn);
   }
 
-  private void onPlayMeldButtonClick(MouseEvent mouseEvent) {
+  private void onPlayMeldButtonClick() {
     int[] handTileIndexes = chosenTiles.stream()
         .filter(tileView -> tileView.getTileSource() == TileSource.HAND)
         .mapToInt(TileView::getCol)
@@ -114,7 +111,7 @@ public class HandView extends Pane implements Observer {
     });
   }
 
-  private void onUndoButtonClick(MouseEvent mouseEvent) {
+  private void onUndoButtonClick() {
     CommandProcessor.getInstance().enqueueCommand(ActionHandler::restoreTurn);
   }
 
@@ -125,16 +122,16 @@ public class HandView extends Pane implements Observer {
       chosenTiles.remove(event.getTarget());
     }
     Tile[] tiles = chosenTiles.stream().map(TileView::getTile).toArray(Tile[]::new);
-    //formMeldButton.setDisable(!Meld.canFormMeld(tiles));
     playMeldButton.setDisable(!turnStatus.canPlay || !Meld.canPlayOnTable(tiles));
   }
 
-  private void onDrawClick(MouseEvent event) {
+  private void onDrawClick() {
     CommandProcessor.getInstance().enqueueCommand(ActionHandler::drawAndEndTurn);
 
   }
 
   private void loadHandView(GameState state) {
+    Node handView;
     try {
       handView = loader.load();
     } catch (IOException e) {
@@ -148,6 +145,7 @@ public class HandView extends Pane implements Observer {
   @Override
   public void update(GameState status) {
     this.state = status;
+    this.playerId = status.getControlledPlayer();
     HandData data = status.getHandsData()[playerId];
     if (status.getGameStatus() == GameStatus.RUNNING) {
       this.chosenTiles.clear();

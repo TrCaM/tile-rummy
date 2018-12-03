@@ -29,7 +29,7 @@ public class TileRummyServer {
     return future;
   }
 
-  protected ChannelInitializer<SocketChannel> createInitializer() {
+  private ChannelInitializer<SocketChannel> createInitializer() {
     return new GameServerInitializer();
   }
 

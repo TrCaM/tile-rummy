@@ -85,9 +85,6 @@ public class SmartStateAnalyzer {
   }
 
   public boolean isPartOfSet(Tile tile) {
-//    if(tile.isJoker()){
-//      return true;
-//    }
     int value = tile.value();
     int tileCount = 0;
     for (int i = 0; i < 4; i++) {
@@ -101,9 +98,6 @@ public class SmartStateAnalyzer {
 
   public boolean shouldWaitForSet(Tile tile) {
     Set<Integer> set = new HashSet<>();
-//    if(tile.isJoker()){
-//      return true;
-//    }
 
     int value = tile.value();
     for (int i = 0; i < 4; i++) {
@@ -123,7 +117,7 @@ public class SmartStateAnalyzer {
           tablePoints += tableTileCounts[pos];
         }
       }
-//      return tablePoints  <= 2;
+
       return tablePoints +tableTileCounts[52]  <= 3;
     }
     return true;

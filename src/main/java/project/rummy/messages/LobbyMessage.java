@@ -3,11 +3,9 @@ package project.rummy.messages;
 import io.netty.channel.Channel;
 
 public class LobbyMessage extends Message {
-  private PlayerInfo[] playerInfos;
 
   public LobbyMessage(PlayerInfo[] playerInfos) {
     super(playerInfos);
-    this.playerInfos = playerInfos;
   }
 
   @Override

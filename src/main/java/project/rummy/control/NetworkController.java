@@ -43,7 +43,7 @@ public class NetworkController extends Controller implements Observer {
     if (isPlaying) {
       if (state.getGameStatus() == GameStatus.TURN_END && state.getCurrentPlayer() == playerId) {
         send(handler -> handler.nextTurn(false));
-      } else if (state.getCurrentPlayer() == player.getId()){
+      } else if (state.getCurrentPlayer() == player.getId()) {
         HandData handData = state.getHandsData()[player.getId()];
         TableData tableData = state.getTableData();
         TurnStatus turnStatus = state.getTurnStatus();

@@ -77,8 +77,6 @@ public class TableMeldSeeker {
                 }
             }
         }
-
-        //return the meld with give the max number of detachable tiles
         return meldsFound.isEmpty() ? 0 : Collections.max(meldsFound, Comparator.comparing(meld -> meld.tiles().size())).getId();
     }
 
@@ -97,23 +95,14 @@ public class TableMeldSeeker {
                 }
                 if(!exist){ return m.getId(); }
             }else if(m.type()==MeldType.RUN){
-                int first = 0;
-                if(!m.tiles().get(0).isJoker()){
-                    first = m.tiles().get(0).value();
-                }else{
-                    if(m.tiles().get(1).isJoker()) {
-                        first = m.tiles().get(2).value() - 2;
-                    }else {
-                        first = m.tiles().get(1).value() - 1;
-                    }
-                }
+                List<Tile> meldTiles = new ArrayList<>(m.tiles());
+                meldTiles.sort(Comparator.comparing(Tile::value));
 
-
-
-                int last = first + m.tiles().size() - 1;
+                int index = m.tiles().indexOf(meldTiles.get(0));
+                int first = m.tiles().get(index).value() - index;
 
                 if ((m.tiles().get(0).color() == tileColor || tileColor == Color.ANY)
-                        && (tileValue == first - 1 || tileValue == last + 1)) {
+                        && (tileValue == first - 1 || tileValue == first + m.tiles().size())) {
                     return m.getId();
                 }
             }

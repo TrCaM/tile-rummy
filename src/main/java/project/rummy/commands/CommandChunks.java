@@ -6,5 +6,5 @@ import project.rummy.game.GameState;
 import java.util.List;
 
 public interface CommandChunks {
-    List<Command> execute(GameState state, ActionHandler handler);
+  List<Command> execute(GameState state, ActionHandler handler);
 }

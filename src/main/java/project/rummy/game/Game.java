@@ -3,6 +3,7 @@ package project.rummy.game;
 import com.almasb.fxgl.entity.component.Component;
 import project.rummy.commands.CommandProcessor;
 import project.rummy.control.ActionHandler;
+import project.rummy.control.ManualController;
 import project.rummy.entities.*;
 import project.rummy.observers.Observable;
 import project.rummy.observers.Observer;
@@ -80,7 +81,7 @@ public class Game extends Component implements Observable {
     this.table = table;
   }
 
-  public void setCurrentPlayer(int player) {
+  void setCurrentPlayer(int player) {
     this.currentPlayer = player;
   }
 
@@ -90,6 +91,10 @@ public class Game extends Component implements Observable {
 
   public Player getControlledPlayer() {
     return players[controlledPlayer];
+  }
+
+  int getControlledPlayerIndex() {
+    return controlledPlayer;
   }
 
   public Player getCurrentPlayerObject() {
@@ -112,10 +117,6 @@ public class Game extends Component implements Observable {
     return turnNumber;
   }
 
-  public boolean isNetworkGame() {
-    return isNetworkGame;
-  }
-
   public boolean isGameEnd() {
     return isGameEnd;
   }
@@ -128,15 +129,11 @@ public class Game extends Component implements Observable {
     return status;
   }
 
-  public void setPlayersCount(int playersCount) {
-    this.playersCount = playersCount;
-  }
-
   boolean isTurnBeginning() {
     return isTurnStart;
   }
 
-  public int getPlayersCount() {
+  int getPlayersCount() {
     return playersCount;
   }
 
@@ -147,12 +144,6 @@ public class Game extends Component implements Observable {
   ////////////////
   // GAME LOGIC //
   ////////////////
-  private void initGameTable() {
-    GameInitializer initializer = new DefaultGameInitializer();
-    initializer.initTable(this);
-    initializer.initializeGameState(players, table);
-  }
-
   public void findFirstPlayer() {
     this.status = GameStatus.FINDING_FIRST;
     initializer.initTable(this);
@@ -161,7 +152,6 @@ public class Game extends Component implements Observable {
       findFirstTileList.add(new ArrayList<>());
     }
     int turn = 1;
-    int count = 0;
     int max;
     boolean[] status = new boolean[playersCount];
     int outs = 0;
@@ -196,11 +186,11 @@ public class Game extends Component implements Observable {
   }
 
   public void startGame(boolean reset) {
-    initializer.initTable(this);
-    initializer.initializeGameState(players, table);
-    turnNumber = 1;
-    this.status = GameStatus.RUNNING;
-    playTurn();
+    if (reset) {
+      initializer.initTable(this);
+      initializer.initializeGameState(players, table);
+    }
+    startGame();
   }
 
   public void startGame() {
@@ -215,6 +205,9 @@ public class Game extends Component implements Observable {
     this.setTurnStatus(handler.getTurnStatus());
     handler.backUpTurn();
     this.players[currentPlayer].getController().playTurn();
+    if (players[currentPlayer].getController() instanceof ManualController) {
+      controlledPlayer = currentPlayer;
+    }
     isTurnStart = true;
     notifyObservers();
   }
@@ -224,14 +217,8 @@ public class Game extends Component implements Observable {
     table.resetForNewTurn();
   }
 
-  public void restoreTurn(Hand hand, Table table) {
-    players[currentPlayer].setHand(hand);
-    this.table = table;
-  }
-
   private void endTurn() {
     this.players[currentPlayer].getController().closeInput();
-    //commandProcessor.reset();
   }
 
   private void tryEndTurn() {

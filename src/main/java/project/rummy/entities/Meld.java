@@ -76,17 +76,6 @@ public class Meld extends Component implements Serializable {
     this.source = source;
   }
 
-  public void setTableRow(int row) {
-    if (!isValidMeld() || source != MeldSource.TABLE) {
-      throw new IllegalStateException("not a valid table meld");
-    }
-    this.tableRow = row;
-  }
-
-  public int getTableRow() {
-    return this.tableRow;
-  }
-
   public Tile getTile(int index) {
     return tiles.get(index);
   }
@@ -146,7 +135,7 @@ public class Meld extends Component implements Serializable {
     return tiles.length >= 3 && (isRun(tiles) || isSet(tiles));
   }
 
-  public static boolean canFormMeld(Tile... tiles) {
+ public static boolean canFormMeld(Tile... tiles) {
     if (tiles.length == 0) {
       return false;
     }
@@ -159,7 +148,7 @@ public class Meld extends Component implements Serializable {
    * Check if a meld is a RUN
    * Assume that the array of Tiles has been sorted (Joker is always at the end)
    */
-  //ToDo: update to use joker
+
   private static boolean isRun(Tile[] tiles) {
     //Initialize first tile colour and value to compare
     if (tiles.length > 13) {
@@ -168,11 +157,11 @@ public class Meld extends Component implements Serializable {
     int startValue = 30;
     int startIndex = 0;
 
-    while (startValue > 13){
-      startValue =  tiles[startIndex].value - startIndex;
-      startIndex ++;
+    while (startValue > 13) {
+      startValue = tiles[startIndex].value - startIndex;
+      startIndex++;
     }
-    Color color = tiles[startIndex-1].color();
+    Color color = tiles[startIndex - 1].color();
     int currentIndex = 0;
     int jokerIndex = tiles.length - 1;
     //Check if two consecutive tiles have the same colour and increasing in value
@@ -188,18 +177,6 @@ public class Meld extends Component implements Serializable {
     }
     return true;
   }
-
-//    private static boolean isJokerRun(Tile[] tiles) {
-//        //Initialize first tile colour and value to compare
-//        Color color = tiles[0].color();
-//        int startValue = tiles[0].value();
-//        //Check if two consecutive tiles have the same colour and increasing in value
-//        for (int i = 0; i < tiles.length; i++) {
-//            if (tiles[i].color() != color || tiles[i].value() != startValue + i) {
-//                return false;
-//            }
-//        }
-//        return true;
 
   /**
    * Check if a meld is a SET
@@ -248,21 +225,21 @@ public class Meld extends Component implements Serializable {
   public int getScore() {
     int score = 0;
 
-    if(isSet(tiles.toArray(new Tile[0]))){
-        score = tiles.get(0).value * tiles.size();
-    }else if(isRun(tiles.toArray(new Tile[0]))){
-        int firstTile = 0;
-        for(int i=0; i<tiles.size(); i++){
-            if(!tiles.get(i).isJoker()){
-                firstTile = tiles.get(i).value - i;
-                break;
-            }
+    if (isSet(tiles.toArray(new Tile[0]))) {
+      score = tiles.get(0).value * tiles.size();
+    } else if (isRun(tiles.toArray(new Tile[0]))) {
+      int firstTile = 0;
+      for (int i = 0; i < tiles.size(); i++) {
+        if (!tiles.get(i).isJoker()) {
+          firstTile = tiles.get(i).value - i;
+          break;
         }
-        for(int k=firstTile; k<firstTile+tiles.size(); k++){
-            score += k;
-        }
-    }else {
-        throw new IllegalArgumentException("Invalid meld");
+      }
+      for (int k = firstTile; k < firstTile + tiles.size(); k++) {
+        score += k;
+      }
+    } else {
+      throw new IllegalArgumentException("Invalid meld");
     }
 
     return score;

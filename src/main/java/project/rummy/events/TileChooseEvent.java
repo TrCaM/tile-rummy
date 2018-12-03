@@ -38,10 +38,6 @@ public class TileChooseEvent extends Event {
     return isChoosing;
   }
 
-  public String getParameter() {
-    return this.parameter;
-  }
-
   public Tile getTile() {
     return tile;
   }
@@ -50,7 +46,4 @@ public class TileChooseEvent extends Event {
     return tileSource;
   }
 
-  public TileChooseEvent(EventType<? extends Event> eventType) {
-    super(eventType);
-  }
 }

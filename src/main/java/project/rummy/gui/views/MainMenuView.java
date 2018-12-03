@@ -1,11 +1,9 @@
 package project.rummy.gui.views;
 
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import project.rummy.entities.PlayerData;
 import project.rummy.main.GameFXMLLoader;
@@ -70,13 +68,13 @@ class MainMenuView extends Pane {
     loader.setController(this);
     loadMainMenuView();
 
-    this.start.setOnMouseClicked(this::onStartClicked);
-    this.load.setOnMouseClicked(this::onLoadClicked);
-    this.credits.setOnMouseClicked(this::onCreditsClicked);
-    this.exit.setOnMouseClicked(this::onExitClicked);
+    this.start.setOnMouseClicked(mouseEvent1 -> onStartClicked());
+    this.load.setOnMouseClicked(mouseEvent1 -> onLoadClicked());
+    this.credits.setOnMouseClicked(mouseEvent1 -> onCreditsClicked());
+    this.exit.setOnMouseClicked(mouseEvent1 -> onExitClicked());
     this.offlineButton.setOnMouseClicked(event -> this.openMenu("setup"));
     this.onlineButton.setOnMouseClicked(event -> this.startNetworkGame());
-    this.playButton.setOnMouseClicked(this::onPlayButtonClicked);
+    this.playButton.setOnMouseClicked(mouseEvent -> onPlayButtonClicked());
     menus = new HashMap<>();
     groups = Arrays.asList(players, players1, players2, players3);
     names = Arrays.asList(name1, name2, name3, name4);
@@ -89,7 +87,9 @@ class MainMenuView extends Pane {
     menus.put("load", loadMenu);
     scroll.setContent(files);
     loadLoadGameMenu();
-    groups.forEach(group -> group.selectedToggleProperty().addListener(this::onGameOptionChanged));
+    groups.forEach(group -> group.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+      onGameOptionChanged();
+    }));
   }
 
   private void loadLoadGameMenu() {
@@ -104,7 +104,6 @@ class MainMenuView extends Pane {
         button.setOnMouseClicked(event -> startLoadGame(fileName));
         files.getChildren().add(button);
       }
-//      TileRummyApplication.getInstance().startLoadedGame(files.get(0));
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -118,7 +117,7 @@ class MainMenuView extends Pane {
     TileRummyApplication.getInstance().startNetworkClient();
   }
 
-  private void onPlayButtonClicked(MouseEvent mouseEvent) {
+  private void onPlayButtonClicked() {
     List<PlayerData> playerDataList = new ArrayList<>();
     for (int i = 0; i < 4; i++) {
       int index = groups.get(i).getToggles().indexOf(groups.get(i).getSelectedToggle());
@@ -146,12 +145,12 @@ class MainMenuView extends Pane {
       mainMenuView = loader.load();
     } catch (IOException e) {
       e.printStackTrace();
-      throw new IllegalStateException("Can not load hand");
+      throw new IllegalStateException("Can not load main menu");
     }
     getChildren().setAll(mainMenuView);
   }
 
-  private void onStartClicked(MouseEvent mouseEvent) {
+  private void onStartClicked() {
     openMenu("start");
   }
 
@@ -162,24 +161,22 @@ class MainMenuView extends Pane {
     }
   }
 
-  private void onLoadClicked(MouseEvent mouseEvent) {
+  private void onLoadClicked() {
     openMenu("load");
   }
 
-  private void onCreditsClicked(MouseEvent mouseEvent) {
+  private void onCreditsClicked() {
     openMenu("credits");
     System.out.println("Credits");
   }
 
-  private void onExitClicked(MouseEvent mouseEvent) {
+  private void onExitClicked() {
     System.exit(0);
   }
 
-  private void onGameOptionChanged(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-    long humanCounts =
-        groups.stream().filter(group -> group.getToggles().indexOf(group.getSelectedToggle()) == 0).count();
+  private void onGameOptionChanged() {
     long disableCounts =
         groups.stream().filter(group -> group.getToggles().indexOf(group.getSelectedToggle()) == 4).count();
-    playButton.setDisable(humanCounts > 1 || disableCounts > 2);
+    playButton.setDisable(disableCounts > 2);
   }
 }

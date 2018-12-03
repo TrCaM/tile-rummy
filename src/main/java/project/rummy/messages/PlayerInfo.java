@@ -1,6 +1,5 @@
 package project.rummy.messages;
 
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelId;
 
 import java.io.Serializable;
@@ -24,10 +23,6 @@ public class PlayerInfo implements Serializable {
     return name;
   }
 
-  public int getPlayerId() {
-    return playerId;
-  }
-
   public ChannelId getChannelId() {
     return channelId;
   }
@@ -37,8 +32,4 @@ public class PlayerInfo implements Serializable {
     return new ConnectionMessage(data);
   }
 
-  public ConnectionMessage getDisconnectMessage() {
-    ConnectionData data = new ConnectionData(name, playerId, channelId, false);
-    return new ConnectionMessage(data);
-  }
 }

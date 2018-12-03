@@ -157,6 +157,7 @@ public class GameInfoView extends Pane implements Observer {
 
   @Override
   public void update(GameState status) {
+    playerId = status.getControlledPlayer();
     renderGameInfo(status);
     loadOpponentHand(status);
     if (status.isTurnBeginning()) {

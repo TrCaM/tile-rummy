@@ -77,7 +77,6 @@ public class PlayerSupporter {
   private boolean suggestManipulationRun(Tile tile) {
     clearHints();
 
-
     Map<Meld, Integer> map = CombinationSeeker.formRunBySplitRight(tile.value(), tile.color(), tableMelds);
 
     if (!map.isEmpty()) {
@@ -115,7 +114,6 @@ public class PlayerSupporter {
 
 
   private boolean manipulate_hint() {
-
     for (Tile tile : handTiles) {
       clearHints();
       if(!shouldAnalyze){
@@ -135,30 +133,17 @@ public class PlayerSupporter {
   }
 
   public boolean displayHints_1() {
-
-    if(formMeld_hint()){
-      return true;
-    }
-
-    return manipulate_hint();
-
-
+    return formMeld_hint() ? true : manipulate_hint();
   }
 
 
   public boolean displayHints_4() {
-
 
     if (state.getPlayerStatuses()[state.getCurrentPlayer()] == PlayerStatus.START) {
       return formMeld_hint();
     }
     List<Tile> handTiles = HandMeldSeeker.findRemainingTiles(state.getHandsData()[state.getCurrentPlayer()].tiles);
 
-    if (handTiles.isEmpty()) {
-      return formMeld_hint();
-    } else {
-      return manipulate_hint();
-    }
-
+    return handTiles.isEmpty() ? formMeld_hint() : manipulate_hint();
   }
 }
