@@ -27,20 +27,13 @@ public class CommandProcessor {
     handler = null;
   }
 
-  /**
-   * Set up the {@link Game} for processing the commands.
-   */
   public void setUpGame(Game game) {
     this.game = game;
   }
 
-  /**
-   * Set up the {@link ActionHandler} for processing the commands.
-   */
   public void setUpHandler(ActionHandler handler) {
-    this.handler =  handler;
+    this.handler = handler;
   }
-
 
   /**
    * Execute the command. Throw if the action handler used is expired. This is because we want every
@@ -53,12 +46,9 @@ public class CommandProcessor {
     if (handler == null || handler.isExpired()) {
       throw new IllegalStateException("ActionHandler was not set up properly before the turn");
     }
-//    try {
-        command.execute(handler);
-//    } catch (Exception e) {
-//      System.out.println(e.getMessage());
-//      handler.backUpTurn();
-//    }
+
+    command.execute(handler);
+
     game.update(handler.getTurnStatus());
   }
 
@@ -70,17 +60,17 @@ public class CommandProcessor {
     }
   }
 
-  private void applyChunk(CommandChunks chunks)  {
-      GameState gameState = GameState.generateState(game);
-      commands.addAll(chunks.execute(gameState, handler));
-      proccessAllCommands();
+  private void applyChunk(CommandChunks chunks) {
+    GameState gameState = GameState.generateState(game);
+    commands.addAll(chunks.execute(gameState, handler));
+    proccessAllCommands();
   }
 
-  public void proccessAllCommands(){
-    while(!commands.isEmpty()){
+  public void proccessAllCommands() {
+    while (!commands.isEmpty()) {
       apply(commands.remove());
     }
-    while(!chunks.isEmpty()){
+    while (!chunks.isEmpty()) {
       applyChunk(chunks.remove());
     }
   }
