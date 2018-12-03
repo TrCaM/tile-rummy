@@ -135,7 +135,7 @@ public class Meld extends Component implements Serializable {
     return tiles.length >= 3 && (isRun(tiles) || isSet(tiles));
   }
 
-  private static boolean canFormMeld(Tile... tiles) {
+ public static boolean canFormMeld(Tile... tiles) {
     if (tiles.length == 0) {
       return false;
     }
