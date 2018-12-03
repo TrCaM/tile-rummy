@@ -3,6 +3,7 @@ package project.rummy.game;
 import com.almasb.fxgl.entity.component.Component;
 import project.rummy.commands.CommandProcessor;
 import project.rummy.control.ActionHandler;
+import project.rummy.control.ManualController;
 import project.rummy.entities.*;
 import project.rummy.observers.Observable;
 import project.rummy.observers.Observer;
@@ -90,6 +91,10 @@ public class Game extends Component implements Observable {
 
   public Player getControlledPlayer() {
     return players[controlledPlayer];
+  }
+
+  public int getControlledPlayerIndex() {
+    return controlledPlayer;
   }
 
   public Player getCurrentPlayerObject() {
@@ -215,6 +220,9 @@ public class Game extends Component implements Observable {
     this.setTurnStatus(handler.getTurnStatus());
     handler.backUpTurn();
     this.players[currentPlayer].getController().playTurn();
+    if (players[currentPlayer].getController() instanceof ManualController) {
+      controlledPlayer = currentPlayer;
+    }
     isTurnStart = true;
     notifyObservers();
   }

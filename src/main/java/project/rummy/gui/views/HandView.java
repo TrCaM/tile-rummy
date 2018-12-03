@@ -148,6 +148,7 @@ public class HandView extends Pane implements Observer {
   @Override
   public void update(GameState status) {
     this.state = status;
+    this.playerId = status.getControllPlayer();
     HandData data = status.getHandsData()[playerId];
     if (status.getGameStatus() == GameStatus.RUNNING) {
       this.chosenTiles.clear();

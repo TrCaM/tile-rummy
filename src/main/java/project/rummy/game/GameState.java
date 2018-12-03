@@ -23,6 +23,7 @@ public class GameState extends Component implements Serializable {
   private GameStatus status;
   private int nextMeldId;
   private int playerCount;
+  private int controllPlayer;
 
   private boolean isTurnBeginning;
   private List<List<Tile>> findFirstTileList;
@@ -57,6 +58,7 @@ public class GameState extends Component implements Serializable {
     gameState.nextMeldId = Meld.getNextId() + 100;
     gameState.isTurnBeginning = game.isTurnBeginning();
     gameState.findFirstTileList = game.getFindFirstTileList();
+    gameState.controllPlayer = game.getControlledPlayerIndex();
 
 //    for(int i = 0; i < 4; i++){
 //      System.out.println("player" + gameState.playerData[i].name + gameState.handsData[i].tiles);
@@ -66,6 +68,10 @@ public class GameState extends Component implements Serializable {
 //      System.out.println(m.tiles().toString());
 //    }
     return gameState;
+  }
+
+  public int getControllPlayer() {
+    return controllPlayer;
   }
 
   public boolean isGameEnd() {
