@@ -93,7 +93,7 @@ public class Game extends Component implements Observable {
     return players[controlledPlayer];
   }
 
-  public int getControlledPlayerIndex() {
+  int getControlledPlayerIndex() {
     return controlledPlayer;
   }
 
@@ -133,15 +133,11 @@ public class Game extends Component implements Observable {
     return status;
   }
 
-  public void setPlayersCount(int playersCount) {
-    this.playersCount = playersCount;
-  }
-
   boolean isTurnBeginning() {
     return isTurnStart;
   }
 
-  public int getPlayersCount() {
+  int getPlayersCount() {
     return playersCount;
   }
 
@@ -152,12 +148,6 @@ public class Game extends Component implements Observable {
   ////////////////
   // GAME LOGIC //
   ////////////////
-  private void initGameTable() {
-    GameInitializer initializer = new DefaultGameInitializer();
-    initializer.initTable(this);
-    initializer.initializeGameState(players, table);
-  }
-
   public void findFirstPlayer() {
     this.status = GameStatus.FINDING_FIRST;
     initializer.initTable(this);
@@ -166,7 +156,6 @@ public class Game extends Component implements Observable {
       findFirstTileList.add(new ArrayList<>());
     }
     int turn = 1;
-    int count = 0;
     int max;
     boolean[] status = new boolean[playersCount];
     int outs = 0;
@@ -201,11 +190,11 @@ public class Game extends Component implements Observable {
   }
 
   public void startGame(boolean reset) {
-    initializer.initTable(this);
-    initializer.initializeGameState(players, table);
-    turnNumber = 1;
-    this.status = GameStatus.RUNNING;
-    playTurn();
+    if (reset) {
+      initializer.initTable(this);
+      initializer.initializeGameState(players, table);
+    }
+    startGame();
   }
 
   public void startGame() {
@@ -232,14 +221,8 @@ public class Game extends Component implements Observable {
     table.resetForNewTurn();
   }
 
-  public void restoreTurn(Hand hand, Table table) {
-    players[currentPlayer].setHand(hand);
-    this.table = table;
-  }
-
   private void endTurn() {
     this.players[currentPlayer].getController().closeInput();
-    //commandProcessor.reset();
   }
 
   private void tryEndTurn() {
