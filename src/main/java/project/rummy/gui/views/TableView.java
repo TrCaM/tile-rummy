@@ -193,6 +193,7 @@ public class TableView extends Pane implements Observer {
 
   @Override
   public void update(GameState state) {
+    this.playerId = state.getControllPlayer();
     if (state.getGameStatus() == GameStatus.RUNNING) {
       runPane.getChildren().clear();
       setPane1.getChildren().clear();

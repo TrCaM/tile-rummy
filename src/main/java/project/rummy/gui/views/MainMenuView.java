@@ -180,6 +180,7 @@ class MainMenuView extends Pane {
         groups.stream().filter(group -> group.getToggles().indexOf(group.getSelectedToggle()) == 0).count();
     long disableCounts =
         groups.stream().filter(group -> group.getToggles().indexOf(group.getSelectedToggle()) == 4).count();
-    playButton.setDisable(humanCounts > 1 || disableCounts > 2);
+//    playButton.setDisable(humanCounts > 1 || disableCounts > 2);
+    playButton.setDisable(disableCounts > 2);
   }
 }
