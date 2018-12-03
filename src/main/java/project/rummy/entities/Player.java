@@ -31,6 +31,7 @@ public class Player {
     hand.getTiles().forEach(tile -> tile.setHightlight(false));
     hand.getTiles().forEach(tile -> tile.setSuggestion(false));
   }
+
   public Controller getController() {
     return this.controller;
   }
@@ -63,7 +64,7 @@ public class Player {
     return id;
   }
 
-  public PlayerData toPlayerData(){
+  public PlayerData toPlayerData() {
     return new PlayerData(name, controller.getControllerType());
   }
 }

@@ -152,7 +152,8 @@ public class Table {
     return true;
   }
 
-  /** Set position when add a new meld into the table. If the meld contains Joker, it should be added
+  /**
+   * Set position when add a new meld into the table. If the meld contains Joker, it should be added
    * at the last 2 rows of the run grid
    */
   private void setPosition(Meld meld) {
