@@ -17,10 +17,6 @@ public abstract class Controller {
 
   public abstract String getControllerType();
 
-  /**
-   * play the turn. the method contains all the logic to play a turn, and it should be able to
-   * effect the player's hand and the table itself
-   */
   public abstract void playTurn();
 
   public abstract void endTurn();
@@ -35,6 +31,7 @@ public abstract class Controller {
   protected void send(Command command) {
     processor.enqueueCommand(command);
   }
+
   public Controller setPlayer(Player player) {
     this.player = player;
     return this;
