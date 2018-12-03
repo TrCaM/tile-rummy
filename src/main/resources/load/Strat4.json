@@ -13,12 +13,16 @@
   },
     {
       "Id": 0,
-      "Meld" :  ["B11", "G11", "O11"]
+      "Meld" :  ["G2", "G3", "G4"]
+    },
+    {
+      "Id": 0,
+      "Meld" :  ["R11", "G11", "O11"]
     }
   ],
   "HUMAN": {
     "Tiles": [
-      "B5", "R5", "G6"
+      "G5", "R5", "B11", "B12","R2","O2","G2"
     ],
     "Name" : "",
     "Controller" : "human",
@@ -26,7 +30,7 @@
   },
   "Player 1": {
     "Tiles": [
-      "O4", "O4", "G4", "G5", "G6"
+      "O4", "O4", "G4", "G5", "G6", "G7", "O7"
     ],
     "Name" : "",
     "Controller" : "strategy1",
@@ -50,7 +54,7 @@
     "Status": "ICE BROKEN"
   },
 
-  "FreeTiles": [ "G7", "G1", "B10", "R1", "R12", "O13"],
+  "FreeTiles": [ "O1","O2","R11","G12","G7", "B10", "B10", "R1", "R12", "B9"],
   "canEnd": false,
   "canDraw": true,
   "canPlay": true,
