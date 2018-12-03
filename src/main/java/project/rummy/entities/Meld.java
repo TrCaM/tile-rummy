@@ -76,17 +76,6 @@ public class Meld extends Component implements Serializable {
     this.source = source;
   }
 
-  public void setTableRow(int row) {
-    if (!isValidMeld() || source != MeldSource.TABLE) {
-      throw new IllegalStateException("not a valid table meld");
-    }
-    this.tableRow = row;
-  }
-
-  public int getTableRow() {
-    return this.tableRow;
-  }
-
   public Tile getTile(int index) {
     return tiles.get(index);
   }
@@ -146,7 +135,7 @@ public class Meld extends Component implements Serializable {
     return tiles.length >= 3 && (isRun(tiles) || isSet(tiles));
   }
 
-  public static boolean canFormMeld(Tile... tiles) {
+ public static boolean canFormMeld(Tile... tiles) {
     if (tiles.length == 0) {
       return false;
     }
