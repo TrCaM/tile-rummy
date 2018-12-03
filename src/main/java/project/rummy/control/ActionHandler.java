@@ -169,6 +169,9 @@ public class ActionHandler {
     if (canEndTurn()) {
       endTurn();
     } else if (manipulationTable.getMelds().isEmpty()) {
+      if (turnType == START) {
+        restoreTurn();
+      }
       drawAndEndTurn();
     } else {
       // Penalty if player leaves a invalid state

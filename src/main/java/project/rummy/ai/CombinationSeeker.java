@@ -104,8 +104,7 @@ public class CombinationSeeker {
 
       }
     }
-
-      return map;
+    return map;
 
   }
 
