@@ -122,7 +122,6 @@ public class HandView extends Pane implements Observer {
       chosenTiles.remove(event.getTarget());
     }
     Tile[] tiles = chosenTiles.stream().map(TileView::getTile).toArray(Tile[]::new);
-    //formMeldButton.setDisable(!Meld.canFormMeld(tiles));
     playMeldButton.setDisable(!turnStatus.canPlay || !Meld.canPlayOnTable(tiles));
   }
 
