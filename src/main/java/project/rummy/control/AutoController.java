@@ -28,8 +28,8 @@ public class AutoController extends Controller implements Observer {
   }
 
   @Override
-  public String getControllerType(){
-    if(strategy instanceof Strategy1){
+  public String getControllerType() {
+    if (strategy instanceof Strategy1) {
       return "strategy1";
     }
     if (strategy instanceof Strategy2) {
@@ -59,10 +59,6 @@ public class AutoController extends Controller implements Observer {
     endTurnIn(3000);
   }
 
-  /**
-   * End this turn after a fixed duration
-   * @param milliseconds the duration in milliseconds
-   */
   private void endTurnIn(int milliseconds) {
     timer.schedule(
         new TimerTask() {
@@ -77,9 +73,6 @@ public class AutoController extends Controller implements Observer {
 
   @Override
   public void update(GameState status) {
-//    if (state.getMove() != status.getMove()) {
-//      this.state = status;
-//    }
     int current = status.getCurrentPlayer();
     if (activate &&
         (!hasPlayed || state.getHandsData()[current].tiles.size() != status.getHandsData()[current].tiles.size())) {
