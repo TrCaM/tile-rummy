@@ -20,7 +20,7 @@ public class TableMeldSeeker {
 
         for(Meld m: meldsFound){
             for(Tile t: m.tiles()){
-                if(t.canFillToRun(tileColor, tileValue)){
+                if(t.canFillToRun(tileColor, tileValue) ){
                     if(m.type() == MeldType.SET
                             || m.tiles().indexOf(t) == 0
                             || m.tiles().indexOf(t) == m.tiles().size()-1){
