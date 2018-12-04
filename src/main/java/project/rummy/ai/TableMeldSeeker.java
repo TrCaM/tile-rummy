@@ -34,29 +34,6 @@ public class TableMeldSeeker {
     }
 
 
-    /**
-     * find meld that can split and give:
-     * on the left: tiles that can be added to the left of the given tile
-     * on the right: a valid meld
-     */
-    public static int findLeftDetachableTiles (int tileValue, Color tileColor, List<Meld> melds){
-        List<Meld> meldsFound = new ArrayList<>();
-
-        if(tileValue < 1 || tileValue > 11){ return 0;}
-        for(Meld m: melds){
-            for(Tile t: m.tiles()){
-                if(t.canFillToRun(tileColor,tileValue)
-                        && m.type() == MeldType.RUN
-                        && m.tiles().indexOf(t) > 0
-                        && m.tiles().size() - m.tiles().indexOf(t) >= 3){
-                    meldsFound.add(m);
-                }
-            }
-        }
-        //return the meld with give the max number of detachable tiles
-        return meldsFound.isEmpty() ? 0 : Collections.max(meldsFound, Comparator.comparing(meld -> meld.tiles().size())).getId();
-    }
-
 
     /**
      * find meld that can split and give:
@@ -67,9 +44,18 @@ public class TableMeldSeeker {
         List<Meld> meldsFound = new ArrayList<>();
 
         if(tileValue > 12 || tileValue < 3){ return 0;}
+
         for(Meld m: melds){
+            List<Tile> temp = new ArrayList<>(m.tiles());
             for(Tile t: m.tiles()){
-                if(t.canFillToRun(tileColor, tileValue)
+                temp.sort(Comparator.comparing(Tile::value));
+
+                int index = m.tiles().indexOf(temp.get(0));
+                int first = m.tiles().get(index).value() - index;
+
+                Color actualColor = temp.get(0).color();
+                int actualValue = first + m.tiles().indexOf(t);;
+                if(actualColor==tileColor && actualValue== tileValue
                         && m.type() == MeldType.RUN
                         && m.tiles().indexOf(t) != m.tiles().size()-1
                         && m.tiles().indexOf(t) >= 2){
@@ -101,7 +87,7 @@ public class TableMeldSeeker {
                 int index = m.tiles().indexOf(meldTiles.get(0));
                 int first = m.tiles().get(index).value() - index;
 
-                if ((m.tiles().get(0).color() == tileColor || tileColor == Color.ANY)
+                if ((meldTiles.get(0).color() == tileColor || tileColor == Color.ANY)
                         && (tileValue == first - 1 || tileValue == first + m.tiles().size())) {
                     return m.getId();
                 }

@@ -151,7 +151,6 @@ public class CombinationSeeker {
 
     if (rightMeld != null) {
       for (Tile t : rightMeld.tiles()) {
-
         List<Tile> temp = new ArrayList<>(rightMeld.tiles());
         temp.sort(Comparator.comparing(Tile::value));
         int firstValue = temp.get(0).value() - rightMeld.tiles().indexOf(temp.get(0));
