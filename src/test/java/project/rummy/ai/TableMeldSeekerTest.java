@@ -65,20 +65,6 @@ public class TableMeldSeekerTest {
     }
 
 
-    @Test
-    public void findLeftDetachableTiles_test(){
-        melds.add(Meld.createMeld(O4, O5, O6, O7, O8, O9));
-        melds.add(Meld.createMeld(R4, G4, B4, O4));
-        melds.add(Meld.createMeld(G5, B5, O5));
-
-        assertEquals(0, TableMeldSeeker.findLeftDetachableTiles(8, Color.ORANGE, melds));
-        assertEquals (0, TableMeldSeeker.findLeftDetachableTiles(4, Color.GREEN, melds));
-        assertEquals(0, TableMeldSeeker.findLeftDetachableTiles(4, Color.ORANGE, melds));
-        assertEquals(melds.get(0).getId(), TableMeldSeeker.findLeftDetachableTiles(6, Color.ORANGE, melds));
-        assertEquals(melds.get(0).getId(), TableMeldSeeker.findLeftDetachableTiles(7, Color.ORANGE, melds));
-        assertEquals(melds.get(0).getId(), TableMeldSeeker.findLeftDetachableTiles(5, Color.ORANGE, melds));
-    }
-
 
     @Test
     public void findRightDetachableTiles_test(){
