@@ -18,6 +18,7 @@ public class CombinationSeekerTest {
     private static final Tile O7 = Tile.createTile(Color.ORANGE, 7);
     private static final Tile O8 = Tile.createTile(Color.ORANGE, 8);
     private static final Tile O9 = Tile.createTile(Color.ORANGE, 9);
+    private static final Tile O10 = Tile.createTile(Color.ORANGE, 10);
     private static final Tile R4 = Tile.createTile(Color.RED, 4);
     private static final Tile G4 = Tile.createTile(Color.GREEN, 4);
     private static final Tile B4 = Tile.createTile(Color.BLACK, 4);
@@ -48,10 +49,13 @@ public class CombinationSeekerTest {
 
 
     private List<Meld> melds;
+    private List<Tile> tiles;
 
     @Before
     public void setUp() {
         melds = new ArrayList<>();
+        tiles = new ArrayList<>();
+
     }
 
     @Test
@@ -62,7 +66,7 @@ public class CombinationSeekerTest {
 
         List<Tile> t = new ArrayList<>();
         t.add(R4);
-        Map<Meld, Integer> map = CombinationSeeker.formSet(t, melds);
+        Map<Meld, Integer> map = new CombinationSeeker(tiles,melds).formSet(t);
 
         assertEquals(2,map.size());
         assertTrue(map.containsKey(melds.get(0)));
@@ -78,12 +82,12 @@ public class CombinationSeekerTest {
 
         List<Tile> t2 = new ArrayList<>();
         t2.add(R10);
-        Map<Meld, Integer> map2 = CombinationSeeker.formSet(t2, melds);
+        Map<Meld, Integer> map2 = new CombinationSeeker(tiles,melds).formSet(t2);
         assertEquals(0,map2.size());
 
         List<Tile> t3 = new ArrayList<>();
         t3.add(O5);
-        Map<Meld, Integer> map3 = CombinationSeeker.formSet(t3, melds);
+        Map<Meld, Integer> map3 = new CombinationSeeker(tiles,melds).formSet(t3);
         assertEquals(0, map3.size());
     }
     @Test
@@ -93,7 +97,7 @@ public class CombinationSeekerTest {
 
         List<Tile> t = new ArrayList<>();
         t.add(R5);
-        Map<Meld, Integer> map = CombinationSeeker.formRunByDetaching(5, Color.RED, melds);
+        Map<Meld, Integer> map = new CombinationSeeker(tiles,melds).formRunByDetaching(t);
         assertEquals(1,map.size());
     }
 
@@ -106,7 +110,7 @@ public class CombinationSeekerTest {
         List<Tile> t = new ArrayList<>();
         t.add(R4);
 
-        Map<Meld, Integer> map = CombinationSeeker.formSet(t, melds);
+        Map<Meld, Integer> map = new CombinationSeeker(tiles,melds).formSet(t);
     assertEquals(3,map.size());
     assertEquals(map.get(melds.get(1)).intValue(), 1);
     assertEquals(map.get(melds.get(0)).intValue(), 5);
@@ -121,7 +125,10 @@ public class CombinationSeekerTest {
         melds.add(Meld.createMeld(R11, G11, B11, O11));
         melds.add(Meld.createMeld(G5, B5, O5));
 
-        Map<Meld, Integer> map = CombinationSeeker.formRunByDetaching(10, Color.ORANGE, melds);
+        List<Tile> t = new ArrayList<>();
+        t.add(O10);
+
+        Map<Meld, Integer> map = new CombinationSeeker(tiles,melds).formRunByDetaching(t);
 
         assertEquals(2,map.size());
         assertTrue(map.containsKey(melds.get(0)));
@@ -129,11 +136,17 @@ public class CombinationSeekerTest {
         assertEquals(3, (int) map.get(melds.get(2)));
         assertEquals(5, (int) map.get(melds.get(0)));
 
-        Map<Meld, Integer> map2 = CombinationSeeker.formRunByDetaching(10, Color.RED, melds);
+        List<Tile> t1 = new ArrayList<>();
+        t1.add(R10);
+
+        Map<Meld, Integer> map2 = new CombinationSeeker(t1,melds).formRunByDetaching(t1);
         assertEquals(1,map2.size());
         assertEquals(0, (int) map2.get(melds.get(2)));
 
-        Map<Meld, Integer> map3 = CombinationSeeker.formRunByDetaching(5, Color.ORANGE, melds);
+
+        List<Tile> t2 = new ArrayList<>();
+        t2.add(O5);
+        Map<Meld, Integer> map3 = new CombinationSeeker(t2,melds).formRunByDetaching(t2);
         assertEquals(1, map3.size());
         assertTrue(map3.get(melds.get(0))==0);
     }
@@ -146,18 +159,18 @@ public class CombinationSeekerTest {
         melds.add(Meld.createMeld(R11, G11, B11, O11));
         melds.add(Meld.createMeld(G5, B5, O5));
 
-        Map<Meld, Integer> map = CombinationSeeker.formRunBySplitRight(10, Color.ORANGE, melds);
+        Map<Meld, Integer> map = new CombinationSeeker(tiles,melds).formRunBySplitRight(10, Color.ORANGE);
 
         assertEquals(0,map.size());
 
-        Map<Meld, Integer> map2 = CombinationSeeker.formRunBySplitRight(7, Color.ORANGE, melds);
+        Map<Meld, Integer> map2 = new CombinationSeeker(tiles,melds).formRunBySplitRight(7, Color.ORANGE);
         assertEquals(1,map2.size());
         assertTrue(map2.get(melds.get(0))==3);
 
-        Map<Meld, Integer> map3 = CombinationSeeker.formRunBySplitRight(5, Color.ORANGE, melds);
+        Map<Meld, Integer> map3 = new CombinationSeeker(tiles,melds).formRunBySplitRight(5, Color.ORANGE);
         assertEquals(0, map3.size());
 
-        Map<Meld, Integer> map4 = CombinationSeeker.formRunBySplitRight(8, Color.ORANGE, melds);
+        Map<Meld, Integer> map4 = new CombinationSeeker(tiles,melds).formRunBySplitRight(8, Color.ORANGE);
         assertEquals(0, map4.size());
     }
 

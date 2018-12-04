@@ -11,26 +11,40 @@ import java.util.List;
 import java.util.Map;
 
 public class CombinationSeeker {
+  private List<Tile> handTiles;
+  private List<Meld> tableMelds;
+
+  public CombinationSeeker(List<Tile> handTiles, List<Meld> tableMelds){
+    this.handTiles = handTiles;
+    this.tableMelds  = tableMelds;
+  }
 
   /**
    * find all possible melds from which tiles can be detached
    * and form a new set with given tiles
    */
-  public static Map<Meld, Integer> formSet(List<Tile> tiles, List<Meld> tableMelds) {
+  public  Map<Meld, Integer> formSet(List<Tile> collectedTiles) {
     List<Meld> copyMelds = new ArrayList<>(tableMelds);
+    List<Tile> remainingTiles = HandMeldSeeker.findRemainingTiles(handTiles);
+    int tileValue = collectedTiles.get(0).value();
+    Color tileColor = collectedTiles.get(0).color();
 
     //key is meld and value is tile index
     Map<Meld, Integer> map = new HashMap<>();
 
-    int tileValue = tiles.get(0).value();
     for (Color c : Color.values()) {
-      if (c != Color.ANY) {
-        boolean color2 = true;
-        if (tiles.size() > 1) {
-          color2 = c != tiles.get(1).color();
+      if (c != Color.ANY && c!= tileColor) {
+        boolean tileInHand = false;
+        for(Tile t: remainingTiles){
+          if(t.canFillToRun(c, tileValue) && !collectedTiles.contains(t)){
+            collectedTiles.add(t);
+            tileInHand = true;
+            break;
+          }
         }
-        if (c != tiles.get(0).color() && color2) {
-          int id = TableMeldSeeker.findDetachableIdenticalTile(tiles.get(0).value(), c, copyMelds);
+
+        if(!tileInHand) {
+          int id = TableMeldSeeker.findDetachableIdenticalTile(tileValue, c, copyMelds);
           if (id != 0) {
             Meld m = Meld.getMeldFromId(id, copyMelds);
             for (int i = 0; i < m.tiles().size(); i++) {
@@ -41,31 +55,46 @@ public class CombinationSeeker {
                   copyMelds.remove(m);
                 }
               } else if (m.tiles().get(i).isJoker()
-                  || m.tiles().get(i).canFillToRun(c, tiles.get(0).value())) {
+                  || m.tiles().get(i).canFillToRun(c, tileValue)) {
                 map.put(m, i);
                 copyMelds.remove(m);
               }
             }
           }
         }
+
       }
     }
 
     return map;
   }
 
+
+  private int fillToRun(List<Tile> collectedTiles, int value, Color color, List<Meld> melds){
+    List<Tile> remainingTiles = HandMeldSeeker.findRemainingTiles(handTiles);
+
+    for(Tile t: remainingTiles){
+      if(t.canFillToRun(color,value) && !collectedTiles.contains(t)){
+        collectedTiles.add(t);
+        return 0;
+      }
+    }
+    return TableMeldSeeker.findDetachableIdenticalTile(value, color, melds);
+  }
+
   /**
    * find all possible melds from which tiles can be detached
    * and form a new run with given tiles
    */
-  public static Map<Meld, Integer> formRunByDetaching(int tileValue, Color tileColor, List<Meld> tableMelds) {
-
+  public  Map<Meld, Integer> formRunByDetaching(List<Tile> collectedTiles) {
     List<Meld> copyMelds = new ArrayList<>(tableMelds);
-    //key is meld and value is tile index
+
+    Color tileColor = collectedTiles.get(0).color();
+
     Map<Meld, Integer> map = new HashMap<>();
 
-    int rightValue = tileValue + 1;
-    int leftValue = tileValue - 1;
+    int rightValue = collectedTiles.get(0).value() + 1;
+    int leftValue = collectedTiles.get(0).value() - 1;
 
     boolean hasLeft = true;
     boolean hasRight = true;
@@ -74,28 +103,37 @@ public class CombinationSeeker {
       int meldid = 0;
       int neededValue = 0;
 
+      hasRight = rightValue<=13;
+      hasLeft = leftValue >=1;
+
       if (hasRight) {
-        meldid = TableMeldSeeker.findDetachableIdenticalTile(rightValue, tileColor, copyMelds);
-        neededValue = rightValue;
-        if (hasRight = meldid != 0) {
-          rightValue++;
+        int previousSize = collectedTiles.size();
+        meldid = fillToRun(collectedTiles,rightValue,tileColor, copyMelds);
+        if(meldid == 0 && collectedTiles.size()-previousSize==0 ){
+          hasRight = false;
+        }else{
+          neededValue = rightValue;
+          rightValue ++;
         }
       }
 
       if (hasLeft && !hasRight) {
-        meldid = TableMeldSeeker.findDetachableIdenticalTile(leftValue, tileColor, copyMelds);
-        neededValue = leftValue;
-        if (hasLeft = meldid != 0) {
+        int previousSize = collectedTiles.size();
+        meldid = fillToRun(collectedTiles,leftValue,tileColor, copyMelds);
+        if(meldid == 0 && collectedTiles.size()-previousSize==0 ){
+          hasLeft = false;
+        }else{
+          neededValue = leftValue;
           leftValue--;
         }
       }
 
       if (meldid != 0) {
-        Meld m = Meld.getMeldFromId(meldid, copyMelds);
+        Meld m = Meld.getMeldFromId(meldid, tableMelds);
+        copyMelds.remove(m);
         for (int i = 0; i < m.tiles().size(); i++) {
           if (m.tiles().get(i).canFillToRun(tileColor, neededValue)) {
             map.put(m, i);
-            copyMelds.remove(m);
             if (!m.tiles().get(i).isJoker()) {
               break;
             }
@@ -108,8 +146,7 @@ public class CombinationSeeker {
 
   }
 
-
-  public static Map<Meld, Integer> formRunBySplitRight(int tileValue, Color tileColor, List<Meld> tableMelds) {
+  public  Map<Meld, Integer> formRunBySplitRight(int tileValue, Color tileColor) {
 
     Map<Meld, Integer> map = new HashMap<>();
     int rightId = TableMeldSeeker.findRightDetachableTiles(tileValue, tileColor, tableMelds);

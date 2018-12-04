@@ -17,6 +17,7 @@ public class PlayerSupporter {
   private List<Tile> handTiles;
   private List<Meld> tableMelds;
   private GameState state;
+  private CombinationSeeker seeker;
   private boolean shouldAnalyze;
 
   public PlayerSupporter(List<Tile> tiles, List<Meld> melds) {
@@ -24,6 +25,7 @@ public class PlayerSupporter {
     this.handTiles = tiles;
     this.tableMelds = melds;
     this.shouldAnalyze = false;
+    this.seeker = new CombinationSeeker(handTiles, tableMelds);
   }
 
   public PlayerSupporter(GameState state) {
@@ -31,6 +33,7 @@ public class PlayerSupporter {
     this.handTiles = state.getHandsData()[state.getCurrentPlayer()].tiles;
     this.tableMelds = state.getTableData().melds;
     this.shouldAnalyze = true;
+    this.seeker = new CombinationSeeker(handTiles, tableMelds);
   }
 
   private void clearHints() {
@@ -58,13 +61,7 @@ public class PlayerSupporter {
     Map<Meld, Integer> map;
     goodTiles.add(tile);
 
-    for (Tile t : handTiles) {
-      if (t.value() == tile.value() && t.color() != tile.color()) {
-        goodTiles.add(t);
-        break;
-      }
-    }
-    map = CombinationSeeker.formSet(goodTiles, tableMelds);
+    map = seeker.formSet(goodTiles);
     if (goodTiles.size() + map.size() >= 3) {
       goodTiles.stream().forEach(tile1 -> tile1.setSuggestion(true));
       map.keySet().stream().forEach(meld -> meld.tiles().get(map.get(meld)).setSuggestion(true));
@@ -77,7 +74,7 @@ public class PlayerSupporter {
   private boolean suggestManipulationRun(Tile tile) {
     clearHints();
 
-    Map<Meld, Integer> map = CombinationSeeker.formRunBySplitRight(tile.value(), tile.color(), tableMelds);
+    Map<Meld, Integer> map = seeker.formRunBySplitRight(tile.value(), tile.color());
 
     if (!map.isEmpty()) {
       tile.setSuggestion(true);
@@ -89,10 +86,13 @@ public class PlayerSupporter {
       return true;
     }
 
-    Map<Meld, Integer> map2 = CombinationSeeker.formRunByDetaching(tile.value(), tile.color(), tableMelds);
+    List<Tile> goodTiles = new ArrayList<>();
+    goodTiles.add(tile);
 
-    if (map2.size() >= 2) {
-      tile.setSuggestion(true);
+    Map<Meld, Integer> map2 = seeker.formRunByDetaching(goodTiles);
+
+    if (map2.size() + goodTiles.size()>= 3) {
+      goodTiles.stream().forEach(tile1 -> tile1.setSuggestion(true));
       map2.keySet().stream().forEach(meld -> meld.tiles().get(map2.get(meld)).setSuggestion(true));
       return true;
     }
