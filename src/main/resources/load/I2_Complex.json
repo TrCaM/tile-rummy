@@ -22,12 +22,16 @@
     },
     {
       "Id": 0,
-      "Meld" :  ["G3", "G4", "G5", "G6"]
+      "Meld" :  ["G2","G3", "G4", "G5", "G6"]
+    },
+    {
+      "Id": 0,
+      "Meld" :  ["R6", "B6","O6"]
     }],
 
   "HUMAN": {
     "Tiles": [
-      "B4", "G4", "O5", "O13"
+      "R1","B4", "G4", "O5","O13"
     ],
     "Name" : "Human",
     "Controller" : "human",

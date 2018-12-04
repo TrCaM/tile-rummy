@@ -26,7 +26,7 @@
     "Tiles": [
       "B3" , "B7", "B10", "G6", "G7", "G12", "O3", "O5", "O7", "O10"
     ],
-    "Name" : "",
+    "Name" : "human",
     "Controller" : "human",
     "Status": "ICE BROKEN"
   },
