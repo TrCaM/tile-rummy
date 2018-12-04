@@ -17,217 +17,213 @@ import java.util.List;
 import java.util.Map;
 
 public class PlayOneTileMoveMaker implements ComputerMoveMaker {
-    private boolean shouldAnalyzeTable;
-    private SmartStateAnalyzer analyzer;
-    private List<Tile> handTiles;
-    private  List<Meld> tableMelds;
-    private String playerName;
-    private  CombinationSeeker seeker;
+  private boolean shouldAnalyzeTable;
+  private SmartStateAnalyzer analyzer;
+  private List<Tile> handTiles;
+  private List<Meld> tableMelds;
+  private String playerName;
+  private CombinationSeeker seeker;
 
 
-    public PlayOneTileMoveMaker() {
-        this.shouldAnalyzeTable = false;
-        this.analyzer = new SmartStateAnalyzer();
-        this.handTiles = new ArrayList<>();
-        this.tableMelds = new ArrayList<>();
-    }
+  public PlayOneTileMoveMaker() {
+    this.shouldAnalyzeTable = false;
+    this.analyzer = new SmartStateAnalyzer();
+    this.handTiles = new ArrayList<>();
+    this.tableMelds = new ArrayList<>();
+  }
 
-    public PlayOneTileMoveMaker(boolean shouldAnalyzeTable) {
-        this.shouldAnalyzeTable = shouldAnalyzeTable;
-        this.analyzer = new SmartStateAnalyzer();
-        this.handTiles = new ArrayList<>();
-        this.tableMelds = new ArrayList<>();
-    }
+  public PlayOneTileMoveMaker(boolean shouldAnalyzeTable) {
+    this.shouldAnalyzeTable = shouldAnalyzeTable;
+    this.analyzer = new SmartStateAnalyzer();
+    this.handTiles = new ArrayList<>();
+    this.tableMelds = new ArrayList<>();
+  }
 
-    /**
-     * add tile to a meld directly
-     */
-    private List<Command> tryAddDirectly(Tile tile) {
-        List<Command> commands = new ArrayList<>();
+  private List<Command> handleJoker(Tile joker) {
+    List<Command> commands = new ArrayList<>();
 
-        int meldid = TableMeldSeeker.findDirectMeld(tile.value(), tile.color(), tableMelds);
-        if (meldid != 0) {
-            Meld m = Meld.getMeldFromId(meldid, tableMelds);
-            System.out.println(playerName + " adds {" + tile.toString() + "} to " + m.tiles().toString());
-            commands.add(handler -> {
-                handler.takeTableMeld(tableMelds.indexOf(m));
-                handler.takeHandTile(tile);
-                handler.getManipulationTable().combineMelds(0, 1);
-                handler.submit();
-            });
+    if (joker.isJoker()) {
+      for (Meld m : tableMelds) {
+        if (m.type() == MeldType.RUN || m.tiles().size() == 3) {
+          commands.add(handler -> {
+            handler.takeTableMeld(tableMelds.indexOf(m));
+            handler.takeHandTile(joker);
+            handler.getManipulationTable().combineMelds(0, 1);
+            handler.submit();
+          });
+          return commands;
         }
-        return commands;
+      }
+
+
+    }
+    return commands;
+  }
+
+  /**
+   * add tile to a meld directly
+   */
+  private List<Command> tryAddDirectly(Tile tile) {
+    List<Command> commands = new ArrayList<>();
+
+
+    int meldid = TableMeldSeeker.findDirectMeld(tile.value(), tile.color(), tableMelds);
+    if (meldid != 0) {
+      Meld m = Meld.getMeldFromId(meldid, tableMelds);
+      System.out.println(playerName + " adds {" + tile.toString() + "} to " + m.tiles().toString());
+      commands.add(handler -> {
+        handler.takeTableMeld(tableMelds.indexOf(m));
+        handler.takeHandTile(tile);
+        handler.getManipulationTable().combineMelds(0, 1);
+        handler.submit();
+      });
+    }
+    return commands;
+  }
+
+
+  private void manipulateCommand(Map<Meld, Integer> map, List<Tile> goodTiles, ActionHandler handler) {
+    List<Command> commands = new ArrayList<>();
+    ManipulationTable manip = handler.getManipulationTable();
+    List<Integer> id = new ArrayList<>();
+
+    goodTiles.forEach(tile1 -> {
+      handler.takeHandTile(tile1);
+      id.add(manip.getMelds().get(manip.getMelds().size() - 1).getId());
+    });
+
+    for (Meld m : map.keySet()) {
+      handler.takeTableMeld(m);
+      if (m.type() == MeldType.SET) {
+        manip.detach(manip.getMelds().indexOf(m), map.get(m));
+        id.add(manip.getMelds().get(manip.getMelds().size() - 1).getId());
+      } else {
+        if (map.get(m) == 0) {
+          manip.split(manip.getMelds().indexOf(m), 1);
+          id.add(manip.getMelds().get(manip.getMelds().size() - 2).getId());
+        } else {
+          manip.split(manip.getMelds().indexOf(m), map.get(m));
+          id.add(manip.getMelds().get(manip.getMelds().size() - 1).getId());
+        }
+      }
     }
 
+      manip.combineMelds(id);
+      handler.submit();
 
-    private List<Integer> findMeldIdToCombine(Map<Meld, Integer> map, ActionHandler handler) {
+
+  }
+
+
+  private List<Command> tryFormRun_splitMiddle(Tile tile) {
+    List<Command> commands = new ArrayList<>();
+
+    //try to form new meld by split other meld and take the right split tiles
+    Map<Meld, Integer> map = seeker.formRunBySplitRight(tile.value(), tile.color());
+    if (!map.isEmpty()) {
+      System.out.print(playerName + " use {" + tile.toString() + "} to form run with ");
+      map.keySet().forEach(meld -> System.out.print(meld.tiles().toString()));
+      System.out.println();
+
+      commands.add(handler -> {
         ManipulationTable manip = handler.getManipulationTable();
-        List<Integer> id = new ArrayList<>();
+        handler.takeHandTile(tile);
+        Meld m = map.keySet().stream().findFirst().get();
+        handler.takeTableMeld(m);
+        manip.split(manip.getMelds().size() - 1, map.get(m) + 1);
+        manip.combineMelds(0, 2);
+        handler.submit();
+      });
+    }
+    return commands;
 
-        for (Meld m : map.keySet()) {
-            handler.takeTableMeld(m);
-            if (m.type() == MeldType.SET) {
-                manip.detach(manip.getMelds().indexOf(m), map.get(m));
-                id.add(manip.getMelds().get(manip.getMelds().size() - 1).getId());
-            } else {
-                if (map.get(m) == 0) {
-                    manip.split(manip.getMelds().indexOf(m), 1);
-                    id.add(manip.getMelds().get(manip.getMelds().size() - 2).getId());
-                } else {
-                    manip.split(manip.getMelds().indexOf(m), map.get(m));
-                    id.add(manip.getMelds().get(manip.getMelds().size() - 1).getId());
-                }
-            }
-        }
-        return id;
+  }
+
+  private List<Command> tryFormRun_detachMelds(Tile tile) {
+    List<Command> commands = new ArrayList<>();
+    List<Tile> goodTiles = new ArrayList<>();
+    goodTiles.add(tile);
+
+    Map<Meld, Integer> map = seeker.formRunByDetaching(goodTiles);
+
+    if (map.size() + goodTiles.size() >= 3) {
+      //console
+      System.out.print(playerName + " uses ");
+      goodTiles.forEach(tile1 -> System.out.print("[" + tile1.toString() + "] "));
+      System.out.print("to form run with ");
+      map.keySet().forEach(meld -> System.out.print(meld.tiles().toString()));
+      System.out.println();
+
+      commands.add(handler -> manipulateCommand(map, goodTiles, handler));
+    }
+    return commands;
+  }
+
+
+  private List<Command> tryFormRun(Tile tile) {
+    List<Command> commands = new ArrayList<>(tryFormRun_splitMiddle(tile));
+    return !commands.isEmpty() ? commands : tryFormRun_detachMelds(tile);
+
+  }
+
+  private List<Command> tryFormSet(Tile tile) {
+    List<Command> commands = new ArrayList<>();
+
+    List<Tile> goodTiles = new ArrayList<>();
+    goodTiles.add(tile);
+
+    Map<Meld, Integer> map = seeker.formSet(goodTiles);
+
+    if (goodTiles.size() + map.size() >= 3) {
+
+      //console
+      System.out.print(playerName + " uses ");
+      goodTiles.forEach(tile1 -> System.out.print("[" + tile1.toString() + "] "));
+      System.out.print("to form set with ");
+      map.keySet().forEach(meld -> System.out.print(meld.tiles().toString()));
+      System.out.println();
+
+      commands.add(handler -> manipulateCommand(map, goodTiles, handler));
     }
 
 
-    private List<Command> tryFormRun_splitMiddle(Tile tile) {
-        List<Command> commands = new ArrayList<>();
+    return commands;
+  }
 
-        //try to form new meld by split other meld and take the right split tiles
-        Map<Meld, Integer> map = seeker.formRunBySplitRight(tile.value(), tile.color());
-        if (!map.isEmpty()) {
-            System.out.print(playerName + " use {" + tile.toString() + "} to form run with ");
-            map.keySet().stream().forEach(meld -> System.out.print(meld.tiles().toString()));
-            System.out.println();
 
-            commands.add(handler -> {
-                ManipulationTable manip = handler.getManipulationTable();
-                handler.takeHandTile(tile);
-                Meld m = map.keySet().stream().findFirst().get();
-                handler.takeTableMeld(m);
-                manip.split(manip.getMelds().size() - 1, map.get(m) + 1);
-                manip.combineMelds(0, 2);
-                handler.submit();
-            });
-        }
-        return commands;
+  /**
+   * play a first playable tile from hand
+   */
+  @Override
+  public List<Command> calculateMove(GameState state) {
+    List<Command> commands = new ArrayList<>();
+    handTiles = state.getHandsData()[state.getCurrentPlayer()].tiles;
+    tableMelds = state.getTableData().melds;
+    playerName = state.getPlayerData()[state.getCurrentPlayer()].name;
+    seeker = new CombinationSeeker(handTiles, tableMelds);
 
+    List<Tile> remainingTiles = HandMeldSeeker.findRemainingTiles(handTiles);
+
+    if (shouldAnalyzeTable) {
+      analyzer.setState(state);
     }
 
-    private List<Command> tryFormRun_detachMelds(Tile tile) {
-        List<Command> commands = new ArrayList<>();
-        List<Tile> goodTiles = new ArrayList<>();
-        goodTiles.add(tile);
-
-
-        Map<Meld, Integer> map = seeker.formRunByDetaching(goodTiles);
-
-        if (map.size() + goodTiles.size() < 3) {
-            return commands;
+    for (Tile t : remainingTiles) {
+      if (analyzer.shouldPlay(t)) {
+        if (!(commands = handleJoker(t)).isEmpty()) {
+          break;
         }
-
-        //console
-        System.out.print(playerName + " uses ");
-        goodTiles.stream().forEach(tile1 -> System.out.print("[" + tile1.toString() + "] "));
-        System.out.print("to form run with ");
-        map.keySet().stream().forEach(meld -> System.out.print(meld.tiles().toString()));
-        System.out.println();
-
-        commands.add(handler -> {
-            ManipulationTable manip = handler.getManipulationTable();
-            List<Integer> id = new ArrayList<>();
-
-            goodTiles.stream().forEach(tile1 -> {
-                handler.takeHandTile(tile1);
-                id.add(manip.getMelds().get(manip.getMelds().size() - 1).getId());
-            });
-
-            id.addAll(findMeldIdToCombine(map, handler));
-            manip.combineMelds(id);
-            handler.submit();
-        });
-
-        return commands;
-    }
-
-
-
-    /**
-     * try to form a run with that tile
-     */
-
-    private List<Command> tryFormRun(Tile tile) {
-
-        List<Command> commands = new ArrayList<>();
-        commands.addAll(tryFormRun_splitMiddle(tile));
-        return !commands.isEmpty() ? commands : tryFormRun_detachMelds(tile);
-
-    }
-
-
-    /**
-     *
-     */
-    private List<Command> tryFormSet(Tile tile) {
-        List<Command> commands = new ArrayList<>();
-
-        List<Tile> goodTiles = new ArrayList<>();
-        goodTiles.add(tile);
-
-        Map<Meld, Integer> map = seeker.formSet(goodTiles);
-
-        if (goodTiles.size() + map.size() < 3) {
-            return commands;
+        if (!(commands = tryAddDirectly(t)).isEmpty()) {
+          break;
         }
-        //console
-        System.out.print(playerName + " uses ");
-        goodTiles.stream().forEach(tile1 -> System.out.print("[" + tile1.toString() + "] "));
-        System.out.print("to form set with ");
-        map.keySet().stream().forEach(meld -> System.out.print(meld.tiles().toString()));
-        System.out.println();
-
-        commands.add(handler -> {
-            ManipulationTable manip = handler.getManipulationTable();
-            List<Integer> id = new ArrayList<>();
-
-            goodTiles.stream().forEach(tile1 -> {
-                handler.takeHandTile(tile1);
-                id.add(manip.getMelds().get(manip.getMelds().size() - 1).getId());
-            });
-
-            id.addAll(findMeldIdToCombine(map, handler));
-            manip.combineMelds(id);
-            handler.submit();
-        });
-
-
-        return commands;
-    }
-
-
-    /**
-     * play a first playable tile from hand
-     */
-    @Override
-    public List<Command> calculateMove(GameState state) {
-        List<Command> commands = new ArrayList<>();
-        handTiles = state.getHandsData()[state.getCurrentPlayer()].tiles;
-        tableMelds = state.getTableData().melds;
-        playerName = state.getPlayerData()[state.getCurrentPlayer()].name;
-        seeker = new CombinationSeeker(handTiles,tableMelds);
-
-        List<Tile> remainingTiles = HandMeldSeeker.findRemainingTiles(handTiles);
-
-        if (shouldAnalyzeTable) {
-            analyzer.setState(state);
+        if (!(commands = tryFormSet(t)).isEmpty()) {
+          break;
         }
-
-        for (Tile t : remainingTiles) {
-            if (analyzer.shouldPlay(t)) {
-                if (!(commands = tryAddDirectly(t)).isEmpty()) {
-                    break;
-                }
-                if (!(commands = tryFormSet(t)).isEmpty()) {
-                    break;
-                }
-                if (!(commands = tryFormRun(t)).isEmpty()) {
-                    break;
-                }
-            }
+        if (!(commands = tryFormRun(t)).isEmpty()) {
+          break;
         }
-        return commands;
+      }
     }
+    return commands;
+  }
 }
